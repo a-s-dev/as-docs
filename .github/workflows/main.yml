@@ -24,9 +24,9 @@ jobs:
           export NSS_STATIC=1
           git clone https://chromium.googlesource.com/external/gyp.git tools/gyp
           cd tools/gyp
-          python setup.py install
+          sudo python setup.py install
           cd ..
-          apt-get install ninja-build
+          sudo apt-get install ninja-build
           bash ./libs/verify-desktop-environment.sh
           cargo doc --no-deps --document-private-items
 
