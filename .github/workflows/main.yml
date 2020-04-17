@@ -18,6 +18,7 @@ jobs:
           git init .
           git remote add origin https://github.com/mozilla/application-services.git
           git pull origin master
+          bash ./libs/verify-desktop-environment.sh
           cargo doc --no-deps --document-private-items
 
       - name: Deploy 🚀
