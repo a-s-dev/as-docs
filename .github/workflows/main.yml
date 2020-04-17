@@ -5,7 +5,6 @@ jobs:
     runs-on: ubuntu-latest
     name: Check
     steps:
-      - uses: actions/checkout@v2
       - uses: actions-rs/toolchain@v1
         with:
           profile: minimal
@@ -16,7 +15,9 @@ jobs:
             
       - name: Install and Build
         run: |
-          git clone https://github.com/mozilla/application-services.git .
+          git init .
+          git remote add origin https://github.com/mozilla/application-services.git
+          git pull origin master
           cargo doc --no-deps --document-private-items
 
       - name: Deploy 🚀
