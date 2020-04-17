@@ -22,6 +22,11 @@ jobs:
           export SQLCIPHER_INCLUDE_DIR=/home/runner/work/as-docs/as-docs/libs/desktop/linux-x86-64/sqlcipher/include
           export NSS_DIR=/home/runner/work/as-docs/as-docs/libs/desktop/linux-x86-64/nss
           export NSS_STATIC=1
+          git clone https://chromium.googlesource.com/external/gyp.git tools/gyp
+          cd tools/gyp
+          python setup.py install
+          cd ..
+          apt-get install ninja-build
           bash ./libs/verify-desktop-environment.sh
           cargo doc --no-deps --document-private-items
 
