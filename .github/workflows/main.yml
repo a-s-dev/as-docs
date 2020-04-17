@@ -25,7 +25,7 @@ jobs:
           git clone https://chromium.googlesource.com/external/gyp.git tools/gyp
           cd tools/gyp
           sudo python setup.py install
-          cd ..
+          cd ../..
           sudo apt-get install ninja-build
           bash ./libs/verify-desktop-environment.sh
           cargo doc --no-deps --document-private-items
