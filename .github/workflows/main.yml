@@ -11,11 +11,13 @@ jobs:
           profile: minimal
           toolchain: stable
           override: true
+          
       - uses: actions-rs/cargo@v1
-        with:
-          command: |
-            git clone https://github.com/mozilla/application-services.git .
-            cargo doc --no-deps --document-private-items
+            
+      - name: Install and Build
+        run: |
+          git clone https://github.com/mozilla/application-services.git .
+          cargo doc --no-deps --document-private-items
 
       - name: Deploy 🚀
         uses: JamesIves/github-pages-deploy-action@releases/v3
