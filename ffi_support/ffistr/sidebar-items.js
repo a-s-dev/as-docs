@@ -1,0 +1,1 @@
+initSidebarItems({"struct":[["FfiStr","`FfiStr<'a>` is a safe (`#[repr(transparent)]`) wrapper around a nul-terminated `*const c_char` (e.g. a C string). Conceptually, it is similar to [`std::ffi::CStr`], except that it may be used in the signatures of extern \"C\" functions."]]});

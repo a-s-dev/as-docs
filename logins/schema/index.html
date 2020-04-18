@@ -1,0 +1,93 @@
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="API documentation for the Rust `schema` mod in crate `logins`."><meta name="keywords" content="rust, rustlang, rust-lang, schema"><title>logins::schema - Rust</title><link rel="stylesheet" type="text/css" href="../../normalize.css"><link rel="stylesheet" type="text/css" href="../../rustdoc.css" id="mainThemeStyle"><link rel="stylesheet" type="text/css" href="../../dark.css"><link rel="stylesheet" type="text/css" href="../../light.css" id="themeStyle"><script src="../../storage.js"></script><noscript><link rel="stylesheet" href="../../noscript.css"></noscript><link rel="shortcut icon" href="../../favicon.ico"><style type="text/css">#crate-search{background-image:url("../../down-arrow.svg");}</style></head><body class="rustdoc mod"><!--[if lte IE 8]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="sidebar"><div class="sidebar-menu">&#9776;</div><a href='../../logins/index.html'><div class='logo-container'><img src='../../rust-logo.png' alt='logo'></div></a><p class='location'>Module schema</p><div class="sidebar-elems"><div class="block items"><ul><li><a href="#structs">Structs</a></li><li><a href="#constants">Constants</a></li><li><a href="#statics">Statics</a></li><li><a href="#functions">Functions</a></li></ul></div><p class='location'><a href='../index.html'>logins</a></p><script>window.sidebarCurrent = {name: 'schema', ty: 'mod', relpath: '../'};</script><script defer src="../sidebar-items.js"></script></div></nav><div class="theme-picker"><button id="theme-picker" aria-label="Pick another theme!"><img src="../../brush.svg" width="18" alt="Pick another theme!"></button><div id="theme-choices"></div></div><script src="../../theme.js"></script><nav class="sub"><form class="search-form"><div class="search-container"><div><select id="crate-search"><option value="All crates">All crates</option></select><input class="search-input" name="search" disabled autocomplete="off" spellcheck="false" placeholder="Click or press ‘S’ to search, ‘?’ for more options…" type="search"></div><a id="settings-menu" href="../../settings.html"><img src="../../wheel.svg" width="18" alt="Change settings"></a></div></form></nav><section id="main" class="content"><h1 class='fqn'><span class='out-of-band'><span id='render-detail'><a id="toggle-all-docs" href="javascript:void(0)" title="collapse all docs">[<span class='inner'>&#x2212;</span>]</a></span><a class='srclink' href='../../src/logins/schema.rs.html#5-308' title='goto source code'>[src]</a></span><span class='in-band'>Module <a href='../index.html'>logins</a>::<wbr><a class="mod" href=''>schema</a></span></h1><div class='docblock'><h1 id="logins-schema-v4" class="section-header"><a href="#logins-schema-v4">Logins Schema v4</a></h1>
+<p>The schema we use is a evolution of the firefox-ios logins database format.
+There are three tables:</p>
+<ul>
+<li><code>loginsL</code>: The local table.</li>
+<li><code>loginsM</code>: The mirror table.</li>
+<li><code>loginsSyncMeta</code>: The table used to to store various sync metadata.</li>
+</ul>
+<h2 id="loginsl" class="section-header"><a href="#loginsl"><code>loginsL</code></a></h2>
+<p>This stores local login information, also known as the &quot;overlay&quot;.</p>
+<p><code>loginsL</code> is essentially unchanged from firefox-ios, however note the
+semantic change v4 makes to timestamp fields (which is explained in more
+detail in the [COMMON_COLS] documentation).</p>
+<p>It is important to note that <code>loginsL</code> is not guaranteed to be present for
+all records. Synced records may only exist in <code>loginsM</code> (although this is
+not guaranteed). In either case, queries should read from both <code>loginsL</code> and
+<code>loginsM</code>.</p>
+<h3 id="loginsl-columns" class="section-header"><a href="#loginsl-columns"><code>loginsL</code> Columns</a></h3>
+<p>Contains all fields in [COMMON_COLS], as well as the following additional
+columns:</p>
+<ul>
+<li>
+<p><code>local_modified</code>: A millisecond local timestamp indicating when the record
+was changed locally, or NULL if the record has never been changed locally.</p>
+</li>
+<li>
+<p><code>is_deleted</code>: A boolean indicating whether or not this record is a
+tombstone.</p>
+</li>
+<li>
+<p><code>sync_status</code>: A <code>SyncStatus</code> enum value, one of</p>
+<ul>
+<li>
+<p><code>0</code> (<code>SyncStatus::Synced</code>): Indicating that the record has been synced</p>
+</li>
+<li>
+<p><code>1</code> (<code>SyncStatus::Changed</code>): Indicating that the record should be
+has changed locally and is known to exist on the server.</p>
+</li>
+<li>
+<p><code>2</code> (<code>SyncStatus::New</code>): Indicating that the record has never been
+synced, or we have been reset since the last time it synced.</p>
+</li>
+</ul>
+</li>
+</ul>
+<h2 id="loginsm" class="section-header"><a href="#loginsm"><code>loginsM</code></a></h2>
+<p>This stores server-side login information, also known as the &quot;mirror&quot;.</p>
+<p>Like <code>loginsL</code>, <code>loginM</code> has not changed from firefox-ios, beyond the
+change to store timestamps as milliseconds explained in [COMMON_COLS].</p>
+<p>Also like <code>loginsL</code>, <code>loginsM</code> is not guaranteed to have rows for all
+records. It should not have rows for records which were not synced!</p>
+<p>It is important to note that <code>loginsL</code> is not guaranteed to be present for
+all records. Synced records may only exist in <code>loginsM</code>! Queries should
+test against both!</p>
+<h3 id="loginsm-columns" class="section-header"><a href="#loginsm-columns"><code>loginsM</code> Columns</a></h3>
+<p>Contains all fields in [COMMON_COLS], as well as the following additional
+columns:</p>
+<ul>
+<li>
+<p><code>server_modified</code>: the most recent server-modification timestamp
+([sync15::ServerTimestamp]) we've seen for this record. Stored as
+a millisecond value.</p>
+</li>
+<li>
+<p><code>is_overridden</code>: A boolean indicating whether or not the mirror contents
+are invalid, and that we should defer to the data stored in <code>loginsL</code>.</p>
+</li>
+</ul>
+<h2 id="loginssyncmeta" class="section-header"><a href="#loginssyncmeta"><code>loginsSyncMeta</code></a></h2>
+<p>This is a simple key-value table based on the <code>moz_meta</code> table in places.
+This table was added (by this rust crate) in version 4, and so is not
+present in firefox-ios.</p>
+<p>Currently it is used to store two items:</p>
+<ol>
+<li>
+<p>The last sync timestamp is stored under [LAST_SYNC_META_KEY], a
+<code>sync15::ServerTimestamp</code> stored in integer milliseconds.</p>
+</li>
+<li>
+<p>The persisted sync state machine information is stored under
+[GLOBAL_STATE_META_KEY]. This is a <code>sync15::GlobalState</code> stored as
+JSON.</p>
+</li>
+</ol>
+</div><h2 id='structs' class='section-header'><a href="#structs">Structs</a></h2>
+<table><tr class='module-item'><td><a class="struct" href="struct.CREATE_LOCAL_TABLE_SQL.html" title='logins::schema::CREATE_LOCAL_TABLE_SQL struct'>CREATE_LOCAL_TABLE_SQL</a></td><td class='docblock-short'></td></tr><tr class='module-item'><td><a class="struct" href="struct.CREATE_MIRROR_TABLE_SQL.html" title='logins::schema::CREATE_MIRROR_TABLE_SQL struct'>CREATE_MIRROR_TABLE_SQL</a></td><td class='docblock-short'></td></tr><tr class='module-item'><td><a class="struct" href="struct.SET_VERSION_SQL.html" title='logins::schema::SET_VERSION_SQL struct'>SET_VERSION_SQL</a></td><td class='docblock-short'></td></tr></table><h2 id='constants' class='section-header'><a href="#constants">Constants</a></h2>
+<table><tr class='module-item'><td><a class="constant" href="constant.COMMON_COLS.html" title='logins::schema::COMMON_COLS constant'>COMMON_COLS</a></td><td class='docblock-short'><p>Every column shared by both tables except for <code>id</code></p>
+</td></tr><tr class='module-item'><td><a class="constant" href="constant.COMMON_SQL.html" title='logins::schema::COMMON_SQL constant'>COMMON_SQL</a></td><td class='docblock-short'></td></tr><tr class='module-item'><td><a class="constant" href="constant.CREATE_DELETED_HOSTNAME_INDEX_SQL.html" title='logins::schema::CREATE_DELETED_HOSTNAME_INDEX_SQL constant'>CREATE_DELETED_HOSTNAME_INDEX_SQL</a></td><td class='docblock-short'></td></tr><tr class='module-item'><td><a class="constant" href="constant.CREATE_META_TABLE_SQL.html" title='logins::schema::CREATE_META_TABLE_SQL constant'>CREATE_META_TABLE_SQL</a></td><td class='docblock-short'></td></tr><tr class='module-item'><td><a class="constant" href="constant.CREATE_OVERRIDE_HOSTNAME_INDEX_SQL.html" title='logins::schema::CREATE_OVERRIDE_HOSTNAME_INDEX_SQL constant'>CREATE_OVERRIDE_HOSTNAME_INDEX_SQL</a></td><td class='docblock-short'></td></tr><tr class='module-item'><td><a class="constant" href="constant.UPDATE_LOCAL_TIMESTAMPS_TO_MILLIS_SQL.html" title='logins::schema::UPDATE_LOCAL_TIMESTAMPS_TO_MILLIS_SQL constant'>UPDATE_LOCAL_TIMESTAMPS_TO_MILLIS_SQL</a></td><td class='docblock-short'></td></tr><tr class='module-item'><td><a class="constant" href="constant.UPDATE_MIRROR_TIMESTAMPS_TO_MILLIS_SQL.html" title='logins::schema::UPDATE_MIRROR_TIMESTAMPS_TO_MILLIS_SQL constant'>UPDATE_MIRROR_TIMESTAMPS_TO_MILLIS_SQL</a></td><td class='docblock-short'></td></tr><tr class='module-item'><td><a class="constant" href="constant.VERSION.html" title='logins::schema::VERSION constant'>VERSION</a></td><td class='docblock-short'><p>Note that firefox-ios is currently on version 3. Version 4 is this version,
+which adds a metadata table and changes timestamps to be in milliseconds</p>
+</td></tr></table><h2 id='statics' class='section-header'><a href="#statics">Statics</a></h2>
+<table><tr class='module-item'><td><a class="static" href="static.COLLECTION_SYNCID_META_KEY.html" title='logins::schema::COLLECTION_SYNCID_META_KEY static'>COLLECTION_SYNCID_META_KEY</a></td><td class='docblock-short'></td></tr><tr class='module-item'><td><a class="static" href="static.GLOBAL_STATE_META_KEY.html" title='logins::schema::GLOBAL_STATE_META_KEY static'>GLOBAL_STATE_META_KEY</a></td><td class='docblock-short'></td></tr><tr class='module-item'><td><a class="static" href="static.GLOBAL_SYNCID_META_KEY.html" title='logins::schema::GLOBAL_SYNCID_META_KEY static'>GLOBAL_SYNCID_META_KEY</a></td><td class='docblock-short'></td></tr><tr class='module-item'><td><a class="static" href="static.LAST_SYNC_META_KEY.html" title='logins::schema::LAST_SYNC_META_KEY static'>LAST_SYNC_META_KEY</a></td><td class='docblock-short'></td></tr></table><h2 id='functions' class='section-header'><a href="#functions">Functions</a></h2>
+<table><tr class='module-item'><td><a class="fn" href="fn.create.html" title='logins::schema::create fn'>create</a></td><td class='docblock-short'></td></tr><tr class='module-item'><td><a class="fn" href="fn.drop.html" title='logins::schema::drop fn'>drop</a></td><td class='docblock-short'></td></tr><tr class='module-item'><td><a class="fn" href="fn.init.html" title='logins::schema::init fn'>init</a></td><td class='docblock-short'></td></tr><tr class='module-item'><td><a class="fn" href="fn.upgrade.html" title='logins::schema::upgrade fn'>upgrade</a></td><td class='docblock-short'></td></tr></table></section><section id="search" class="content hidden"></section><section class="footer"></section><script>window.rootPath = "../../";window.currentCrate = "logins";</script><script src="../../aliases.js"></script><script src="../../main.js"></script><script defer src="../../search-index.js"></script></body></html>

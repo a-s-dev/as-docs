@@ -1,0 +1,1 @@
+initSidebarItems({"mod":[["desc",""],["error",""],["json","This module is concerned primarially with schema parsing (from RawSchema, e.g. the schema represented as JSON), and validation. It's a little bit hairy, and for the definitive documentation, you should refer to the `docs/design/remerge/schema-format.md` docs."],["merge_kinds",""]]});

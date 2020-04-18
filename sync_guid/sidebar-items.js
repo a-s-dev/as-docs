@@ -1,0 +1,1 @@
+initSidebarItems({"constant":[["BASE64URL_BYTES",""],["MAX_FAST_GUID_LEN",""]],"enum":[["Repr",""]],"fn":[["can_use_fast",""]],"mod":[["rusqlite_support",""],["serde_support",""]],"struct":[["FastGuid","Invariants:"],["Guid","This is a type intended to be used to represent the guids used by sync. It has several benefits over using a `String`:"]]});

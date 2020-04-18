@@ -1,0 +1,1 @@
+initSidebarItems({"struct":[["BookmarkUpdateInfo","We don't require bookmark type for updates on the other side of the FFI, since the type is immutable, and iOS wants to be able to move bookmarks by GUID. We also don't/can't enforce as much in the Kotlin/Swift type system as we can/do in Rust."]]});

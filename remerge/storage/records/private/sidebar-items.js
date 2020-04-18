@@ -1,0 +1,1 @@
+initSidebarItems({"trait":[["Sealed","Sealed trait to prevent code from outside from implementing RecordFormat for anything other than the implementations here."]]});

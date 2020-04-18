@@ -1,0 +1,1 @@
+initSidebarItems({"constant":[["CREATE_SCHEMA_SQL",""],["VERSION",""]],"fn":[["create",""],["get_current_schema_version",""],["init",""]]});

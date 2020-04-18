@@ -1,0 +1,1 @@
+initSidebarItems({"fn":[["ensure_valid_salt",""],["sqlcipher_3_compat",""]],"struct":[["CLONE_ENTIRE_MIRROR_SQL",""],["CLONE_SINGLE_MIRROR_SQL",""],["GET_ALL_SQL",""],["GET_BY_GUID_SQL",""],["LoginDb",""],["LoginStore",""],["MigrationMetrics",""],["MigrationPhaseMetrics",""]]});

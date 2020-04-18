@@ -1,0 +1,1 @@
+initSidebarItems({"enum":[["DeviceType","The type of a client. Please keep these variants in sync with the device types in the FxA client and sync manager."]],"mod":[["error",""],["ffi",""],["msg_types",""],["storage",""],["sync",""]],"struct":[["ClientRemoteTabs",""],["RemoteTab",""],["TabsEngine",""],["TabsStore",""]]});

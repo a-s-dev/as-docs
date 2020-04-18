@@ -1,0 +1,1 @@
+initSidebarItems({"fn":[["aes_gcm",""],["open",""],["seal",""]],"static":[["AES_128_GCM","AES-128 in GCM mode with 128-bit tags and 96 bit nonces."],["AES_256_GCM","AES-256 in GCM mode with 128-bit tags and 96 bit nonces."]]});

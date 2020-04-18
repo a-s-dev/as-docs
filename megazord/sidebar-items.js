@@ -1,0 +1,1 @@
+initSidebarItems({"fn":[["full_megazord_get_version","In order to support the use case of consumers who don't know about megazords and don't need our e.g. networking or logging, we consider initialization optional for the default (full) megazord."]],"static":[["VERSION",""]],"struct":[["StaticCStringPtr",""],["VERSION_PTR",""]]});

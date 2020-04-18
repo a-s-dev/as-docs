@@ -1,0 +1,1 @@
+initSidebarItems({"enum":[["SearchResultReason","Protobuf allows nesting these, but prost behaves weirdly if we do."]],"struct":[["BookmarkNode",""],["BookmarkNodeList",""],["HistoryVisitInfo",""],["HistoryVisitInfos",""],["HistoryVisitInfosWithBound",""],["SearchResultList",""],["SearchResultMessage",""]]});

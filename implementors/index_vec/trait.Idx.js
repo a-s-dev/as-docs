@@ -1,0 +1,3 @@
+(function() {var implementors = {};
+implementors["remerge"] = [{"text":"impl Idx for <a class=\"struct\" href=\"remerge/schema/desc/struct.FieldIndex.html\" title=\"struct remerge::schema::desc::FieldIndex\">FieldIndex</a>","synthetic":false,"types":["remerge::schema::desc::FieldIndex"]}];
+if (window.register_implementors) {window.register_implementors(implementors);} else {window.pending_implementors = implementors;}})()

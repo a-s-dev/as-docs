@@ -1,0 +1,1 @@
+initSidebarItems({"struct":[["ClientRecord","The serialized form of a client record."],["CommandRecord","The serialized form of a client command."]]});

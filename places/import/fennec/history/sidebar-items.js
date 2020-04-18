@@ -1,0 +1,1 @@
+initSidebarItems({"constant":[["FENNEC_DB_VERSION",""]],"fn":[["define_sql_functions",""],["do_import",""],["import",""],["select_count",""]],"struct":[["COUNT_FENIX_HISTORY_VISITS",""],["COUNT_FENNEC_HISTORY_VISITS",""],["CREATE_STAGING_TABLE",""],["FILL_MOZ_PLACES",""],["FILL_STAGING",""],["HistoryMigrationResult",""],["INSERT_HISTORY_VISITS",""]]});

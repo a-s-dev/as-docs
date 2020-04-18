@@ -1,0 +1,1 @@
+initSidebarItems({"constant":[["MAX_VARIABLE_NUMBER",""]],"fn":[["define_functions",""]],"mod":[["sql_fns",""]],"struct":[["PlacesDb",""]]});

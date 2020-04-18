@@ -1,0 +1,1 @@
+initSidebarItems({"fn":[["hkdf_expand",""],["import_sym_key","Safe wrapper around PK11_ImportSymKey that de-allocates memory when the key goes out of scope."]]});

@@ -1,0 +1,1 @@
+initSidebarItems({"constant":[["DEFAULT_FRECENCY_SETTINGS",""]],"enum":[["RedirectBonus",""]],"fn":[["calculate_frecency",""]],"struct":[["FrecencyComputation",""],["FrecencySettings",""]]});

@@ -1,0 +1,1 @@
+initSidebarItems({"enum":[["ToLocalReason","Reason for converting a native record to a local record. Essentially a typesafe `is_creation: bool`. Exists just to be passed to `native_to_local`, see that function's docs for more info."]],"struct":[["SchemaBundle",""]]});

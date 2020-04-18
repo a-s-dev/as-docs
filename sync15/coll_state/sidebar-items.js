@@ -1,0 +1,1 @@
+initSidebarItems({"enum":[["LocalCollState",""],["StoreSyncAssociation","Defines how a store is associated with Sync."]],"struct":[["CollState","Holds state for a collection. In general, only the CollState is needed to sync a collection (but a valid GlobalState is needed to obtain a CollState)"],["CollSyncIds",""],["LocalCollStateMachine",""]]});

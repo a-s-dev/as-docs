@@ -1,0 +1,220 @@
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="API documentation for the Rust `login` mod in crate `logins`."><meta name="keywords" content="rust, rustlang, rust-lang, login"><title>logins::login - Rust</title><link rel="stylesheet" type="text/css" href="../../normalize.css"><link rel="stylesheet" type="text/css" href="../../rustdoc.css" id="mainThemeStyle"><link rel="stylesheet" type="text/css" href="../../dark.css"><link rel="stylesheet" type="text/css" href="../../light.css" id="themeStyle"><script src="../../storage.js"></script><noscript><link rel="stylesheet" href="../../noscript.css"></noscript><link rel="shortcut icon" href="../../favicon.ico"><style type="text/css">#crate-search{background-image:url("../../down-arrow.svg");}</style></head><body class="rustdoc mod"><!--[if lte IE 8]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="sidebar"><div class="sidebar-menu">&#9776;</div><a href='../../logins/index.html'><div class='logo-container'><img src='../../rust-logo.png' alt='logo'></div></a><p class='location'>Module login</p><div class="sidebar-elems"><div class="block items"><ul><li><a href="#structs">Structs</a></li><li><a href="#enums">Enums</a></li><li><a href="#functions">Functions</a></li></ul></div><p class='location'><a href='../index.html'>logins</a></p><script>window.sidebarCurrent = {name: 'login', ty: 'mod', relpath: '../'};</script><script defer src="../sidebar-items.js"></script></div></nav><div class="theme-picker"><button id="theme-picker" aria-label="Pick another theme!"><img src="../../brush.svg" width="18" alt="Pick another theme!"></button><div id="theme-choices"></div></div><script src="../../theme.js"></script><nav class="sub"><form class="search-form"><div class="search-container"><div><select id="crate-search"><option value="All crates">All crates</option></select><input class="search-input" name="search" disabled autocomplete="off" spellcheck="false" placeholder="Click or press ‘S’ to search, ‘?’ for more options…" type="search"></div><a id="settings-menu" href="../../settings.html"><img src="../../wheel.svg" width="18" alt="Change settings"></a></div></form></nav><section id="main" class="content"><h1 class='fqn'><span class='out-of-band'><span id='render-detail'><a id="toggle-all-docs" href="javascript:void(0)" title="collapse all docs">[<span class='inner'>&#x2212;</span>]</a></span><a class='srclink' href='../../src/logins/login.rs.html#14-1432' title='goto source code'>[src]</a></span><span class='in-band'>Module <a href='../index.html'>logins</a>::<wbr><a class="mod" href=''>login</a></span></h1><div class='docblock'><h1 id="login-records" class="section-header"><a href="#login-records">Login Records</a></h1>
+<p>The core datatype managed by this component is a &quot;login record&quot;, which contains the following fields:</p>
+<ul>
+<li>
+<p><code>id</code>:  A unique string identifier for this record.</p>
+<p>Consumers may assume that <code>id</code> contains only &quot;safe&quot; ASCII characters but should otherwise
+treat this it as an opaque identifier. It should be left blank when adding a new record,
+in which case a new id will be automatically generated.</p>
+</li>
+<li>
+<p><code>hostname</code>:  The origin at which this login can be used, as a string.</p>
+<p>The login should only be used on sites that match this origin (for whatever definition
+of &quot;matches&quot; makes sense at the application level, e.g. eTLD+1 matching).
+This field is required, must be a valid origin in punycode format, and must not be
+set to the empty string.</p>
+<p><strong>YES, THIS FIELD IS CONFUSINGLY NAMED. IT SHOULD BE A FULL ORIGIN, NOT A HOSTNAME.
+WE INTEND TO RENAME THIS TO <code>origin</code> IN A FUTURE RELEASE.</strong></p>
+<p>Examples of valid <code>hostname</code> values include:</p>
+<ul>
+<li>&quot;https://site.com&quot;</li>
+<li>&quot;http://site.com:1234&quot;</li>
+<li>&quot;ftp://ftp.site.com&quot;</li>
+<li>&quot;moz-proxy://127.0.0.1:8888&quot;</li>
+<li>&quot;chrome://MyLegacyExtension&quot;</li>
+<li>&quot;file://&quot;</li>
+<li>&quot;https://[::1]&quot;</li>
+</ul>
+<p>If invalid data is received in this field (either from the application, or via sync)
+then the logins store will attempt to coerce it into valid data by:</p>
+<ul>
+<li>truncating full URLs to just their origin component, if it is not an opaque origin</li>
+<li>converting values with non-ascii characters into punycode</li>
+</ul>
+<p><strong>XXX TODO:</strong></p>
+<ul>
+<li>return a &quot;display&quot; field (exact name TBD) in the serialized
+version, which will be the unicode version of punycode urls.</li>
+<li>the great renaming</li>
+</ul>
+</li>
+<li>
+<p><code>password</code>:  The saved password, as a string.</p>
+<p>This field is required, and must not be set to the empty string. It must not contain
+null bytes, but can otherwise be an arbitrary unicode string.</p>
+</li>
+<li>
+<p><code>username</code>:  The username associated with this login, if any, as a string.</p>
+<p>This field is required, but may be set to the empty string if no username is associated
+with the login. It must not contain null bytes, but can otherwise be an arbitrary unicode
+string.</p>
+</li>
+<li>
+<p><code>httpRealm</code>:  The challenge string for HTTP Basic authentication, if any.</p>
+<p>If present, the login should only be used in response to a HTTP Basic Auth
+challenge that specifies a matching realm. For legacy reasons this string may not
+contain null bytes, carriage returns or newlines.</p>
+<p>If this field is set to the empty string, this indicates a wildcard match on realm.</p>
+<p>This field must not be present if <code>formSubmitURL</code> is set, since they indicate different types
+of login (HTTP-Auth based versus form-based). Exactly one of <code>httpRealm</code> and <code>formSubmitURL</code>
+must be present.</p>
+</li>
+<li>
+<p><code>formSubmitURL</code>:  The target origin of forms in which this login can be used, if any, as a string.</p>
+<p>If present, the login should only be used in forms whose target submission URL matches this origin.
+This field must be a valid origin or one of the following special cases:</p>
+<ul>
+<li>An empty string, which is a wildcard match for any origin.</li>
+<li>The single character &quot;.&quot;, which is equivalent to the empty string</li>
+<li>The string &quot;javascript:&quot;, which matches any form with javascript target URL.</li>
+</ul>
+<p><strong>YES, THIS FIELD IS CONFUSINGLY NAMED. IT SHOULD BE AN ORIGIN, NOT A FULL URL. WE INTEND TO
+RENAME THIS TO <code>formActionOrigin</code> IN A FUTURE RELEASE.</strong></p>
+<p>This field must not be present if <code>httpRealm</code> is set, since they indicate different types of login
+(HTTP-Auth based versus form-based). Exactly one of <code>httpRealm</code> and <code>formSubmitURL</code> must be present.</p>
+<p>If invalid data is received in this field (either from the application, or via sync) then the
+logins store will attempt to coerce it into valid data by:</p>
+<ul>
+<li>truncating full URLs to just their origin component</li>
+<li>converting origins with non-ascii characters into punycode</li>
+<li>replacing invalid values with null if a valid 'httpRealm' field is present</li>
+</ul>
+<p><strong>XXX TODO</strong>:</p>
+<ul>
+<li>return a &quot;display&quot; field (exact name TBD) in the serialized
+version, which will be the unicode version of punycode urls.</li>
+<li>the great renaming (maybe we can do the punycode thing at the same time?)</li>
+</ul>
+</li>
+<li>
+<p><code>usernameField</code>:  The name of the form field into which the 'username' should be filled, if any.</p>
+<p>This value is stored if provided by the application, but does not imply any restrictions on
+how the login may be used in practice. For legacy reasons this string may not contain null
+bytes, carriage returns or newlines. This field must be empty unless <code>formSubmitURL</code> is set.</p>
+<p>If invalid data is received in this field (either from the application, or via sync)
+then the logins store will attempt to coerce it into valid data by:</p>
+<ul>
+<li>setting to the empty string if 'formSubmitURL' is not present</li>
+</ul>
+</li>
+<li>
+<p><code>passwordField</code>:  The name of the form field into which the 'password' should be filled, if any.</p>
+<p>This value is stored if provided by the application, but does not imply any restrictions on
+how the login may be used in practice. For legacy reasons this string may not contain null
+bytes, carriage returns or newlines. This field must be empty unless <code>formSubmitURL</code> is set.</p>
+<p>If invalid data is received in this field (either from the application, or via sync)
+then the logins store will attempt to coerce it into valid data by:</p>
+<ul>
+<li>setting to the empty string if 'formSubmitURL' is not present</li>
+</ul>
+</li>
+<li>
+<p><code>timesUsed</code>:  A lower bound on the number of times the password from this record has been used, as an integer.</p>
+<p>Applications should use the <code>touch()</code> method of the logins store to indicate when a password
+has been used, and should ensure that they only count uses of the actual <code>password</code> field
+(so for example, copying the <code>password</code> field to the clipboard should count as a &quot;use&quot;, but
+copying just the <code>username</code> field should not).</p>
+<p>This number may not record uses that occurred on other devices, since some legacy
+sync clients do not record this information. It may be zero for records obtained
+via sync that have never been used locally.</p>
+<p>When merging duplicate records, the two usage counts are summed.</p>
+<p>This field is managed internally by the logins store by default and does not need to
+be set explicitly, although any application-provided value will be preserved when creating
+a new record.</p>
+<p>If invalid data is received in this field (either from the application, or via sync)
+then the logins store will attempt to coerce it into valid data by:</p>
+<ul>
+<li>replacing missing or negative values with 0</li>
+</ul>
+<p><strong>XXX TODO:</strong></p>
+<ul>
+<li>test that we prevent this counter from moving backwards.</li>
+<li>test fixups of missing or negative values</li>
+<li>test that we correctly merge dupes</li>
+</ul>
+</li>
+<li>
+<p><code>timeCreated</code>: An upper bound on the time of creation of this login, in integer milliseconds from the unix epoch.</p>
+<p>This is an upper bound because some legacy sync clients do not record this information.</p>
+<p>Note that this field is typically a timestamp taken from the local machine clock, so it
+may be wildly inaccurate if the client does not have an accurate clock.</p>
+<p>This field is managed internally by the logins store by default and does not need to
+be set explicitly, although any application-provided value will be preserved when creating
+a new record.</p>
+<p>When merging duplicate records, the smallest non-zero value is taken.</p>
+<p>If invalid data is received in this field (either from the application, or via sync)
+then the logins store will attempt to coerce it into valid data by:</p>
+<ul>
+<li>replacing missing or negative values with the current time</li>
+</ul>
+<p><strong>XXX TODO:</strong></p>
+<ul>
+<li>test that we prevent this timestamp from moving backwards.</li>
+<li>test fixups of missing or negative values</li>
+<li>test that we correctly merge dupes</li>
+</ul>
+</li>
+<li>
+<p><code>timeLastUsed</code>: A lower bound on the time of last use of this login, in integer milliseconds from the unix epoch.</p>
+<p>This is a lower bound because some legacy sync clients do not record this information;
+in that case newer clients set <code>timeLastUsed</code> when they use the record for the first time.</p>
+<p>Note that this field is typically a timestamp taken from the local machine clock, so it
+may be wildly inaccurate if the client does not have an accurate clock.</p>
+<p>This field is managed internally by the logins store by default and does not need to
+be set explicitly, although any application-provided value will be preserved when creating
+a new record.</p>
+<p>When merging duplicate records, the largest non-zero value is taken.</p>
+<p>If invalid data is received in this field (either from the application, or via sync)
+then the logins store will attempt to coerce it into valid data by:</p>
+<ul>
+<li>removing negative values</li>
+</ul>
+<p><strong>XXX TODO:</strong></p>
+<ul>
+<li>test that we prevent this timestamp from moving backwards.</li>
+<li>test fixups of missing or negative values</li>
+<li>test that we correctly merge dupes</li>
+</ul>
+</li>
+<li>
+<p><code>timePasswordChanged</code>: A lower bound on the time that the <code>password</code> field was last changed, in integer
+milliseconds from the unix epoch.</p>
+<p>Changes to other fields (such as <code>username</code>) are not reflected in this timestamp.
+This is a lower bound because some legacy sync clients do not record this information;
+in that case newer clients set <code>timePasswordChanged</code> when they change the <code>password</code> field.</p>
+<p>Note that this field is typically a timestamp taken from the local machine clock, so it
+may be wildly inaccurate if the client does not have an accurate clock.</p>
+<p>This field is managed internally by the logins store by default and does not need to
+be set explicitly, although any application-provided value will be preserved when creating
+a new record.</p>
+<p>When merging duplicate records, the largest non-zero value is taken.</p>
+<p>If invalid data is received in this field (either from the application, or via sync)
+then the logins store will attempt to coerce it into valid data by:</p>
+<ul>
+<li>removing negative values</li>
+</ul>
+<p><strong>XXX TODO:</strong></p>
+<ul>
+<li>test that we prevent this timestamp from moving backwards.</li>
+<li>test that we don't set this for changes to other fields.</li>
+<li>test that we correctly merge dupes</li>
+</ul>
+</li>
+</ul>
+<p>In order to deal with data from legacy clients in a robust way, it is necessary to be able to build
+and manipulate <code>Login</code> structs that contain invalid data.  The following methods can be used by callers
+to ensure that they're only working with valid records:</p>
+<ul>
+<li>
+<p><code>Login::check_valid()</code>:    Checks valdity of a login record, returning <code>()</code> if it is valid
+or an error if it is not.</p>
+</li>
+<li>
+<p><code>Login::fixup()</code>:   Returns either the existing login if it is valid, a clone with invalid fields
+fixed up if it was safe to do so, or an error if the login is irreparably invalid.</p>
+</li>
+</ul>
+</div><h2 id='structs' class='section-header'><a href="#structs">Structs</a></h2>
+<table><tr class='module-item'><td><a class="struct" href="struct.LocalLogin.html" title='logins::login::LocalLogin struct'>LocalLogin</a></td><td class='docblock-short'></td></tr><tr class='module-item'><td><a class="struct" href="struct.Login.html" title='logins::login::Login struct'>Login</a></td><td class='docblock-short'></td></tr><tr class='module-item'><td><a class="struct" href="struct.LoginDelta.html" title='logins::login::LoginDelta struct'>LoginDelta</a></td><td class='docblock-short'></td></tr><tr class='module-item'><td><a class="struct" href="struct.MirrorLogin.html" title='logins::login::MirrorLogin struct'>MirrorLogin</a></td><td class='docblock-short'></td></tr><tr class='module-item'><td><a class="struct" href="struct.SyncLoginData.html" title='logins::login::SyncLoginData struct'>SyncLoginData</a></td><td class='docblock-short'></td></tr></table><h2 id='enums' class='section-header'><a href="#enums">Enums</a></h2>
+<table><tr class='module-item'><td><a class="enum" href="enum.SyncStatus.html" title='logins::login::SyncStatus enum'>SyncStatus</a></td><td class='docblock-short'></td></tr></table><h2 id='functions' class='section-header'><a href="#functions">Functions</a></h2>
+<table><tr class='module-item'><td><a class="fn" href="fn.deserialize_timestamp.html" title='logins::login::deserialize_timestamp fn'>deserialize_timestamp</a></td><td class='docblock-short'></td></tr><tr class='module-item'><td><a class="fn" href="fn.string_or_default.html" title='logins::login::string_or_default fn'>string_or_default</a></td><td class='docblock-short'></td></tr></table></section><section id="search" class="content hidden"></section><section class="footer"></section><script>window.rootPath = "../../";window.currentCrate = "logins";</script><script src="../../aliases.js"></script><script src="../../main.js"></script><script defer src="../../search-index.js"></script></body></html>

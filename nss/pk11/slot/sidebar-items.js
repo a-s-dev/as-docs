@@ -1,0 +1,1 @@
+initSidebarItems({"fn":[["generate_random",""],["get_internal_slot","Safe wrapper around `PK11_GetInternalSlot` that de-allocates memory when the slot goes out of scope."]]});

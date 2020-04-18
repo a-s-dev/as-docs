@@ -1,0 +1,1 @@
+initSidebarItems({"enum":[["PersistedState",""]],"fn":[["state_from_json",""],["state_to_json",""],["upgrade_state",""]],"struct":[["StateV1",""],["StateV2",""],["V1AuthInfo",""],["V1Config",""]],"type":[["State",""]]});

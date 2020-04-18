@@ -1,0 +1,1 @@
+initSidebarItems({"enum":[["CollisionHandling",""],["OnCollision",""]],"struct":[["UntypedMap",""]],"type":[["MapData",""]]});

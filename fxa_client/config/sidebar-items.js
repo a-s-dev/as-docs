@@ -1,0 +1,1 @@
+initSidebarItems({"constant":[["CONTENT_URL_RELEASE",""]],"struct":[["ClientConfigurationResponse",""],["Config",""],["OpenIdConfigurationResponse",""],["RemoteConfig","`RemoteConfig` struct stores configuration values from the FxA `/.well-known/fxa-client-configuration` and the `/.well-known/openid-configuration` endpoints."]]});

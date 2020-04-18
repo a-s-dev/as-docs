@@ -1,0 +1,1 @@
+initSidebarItems({"enum":[["BookmarkItemRecord",""]],"fn":[["de_maybe_stringified_timestamp",""]],"struct":[["BookmarkRecord",""],["BookmarkRecordId","A bookmark record ID. Bookmark record IDs are the same as Places GUIDs, except for:"],["FolderRecord",""],["LivemarkRecord",""],["QueryRecord",""],["SeparatorRecord",""]]});

@@ -1,0 +1,1 @@
+initSidebarItems({"struct":[["TestGroup",""]],"type":[["Test",""]]});

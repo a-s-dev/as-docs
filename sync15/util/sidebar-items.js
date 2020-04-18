@@ -1,0 +1,1 @@
+initSidebarItems({"fn":[["atomic_update_max","Finds the maximum of the current value and the argument `val`, and sets the new value to the result."],["partition_by_value",""],["set_difference",""],["set_intersection",""],["set_union",""]],"struct":[["ServerTimestamp","Typesafe way to manage server timestamps without accidentally mixing them up with local ones."]]});

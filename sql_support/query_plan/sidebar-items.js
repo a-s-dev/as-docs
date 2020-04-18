@@ -1,0 +1,1 @@
+initSidebarItems({"fn":[["maybe_log_plan","Log a query plan if the `log_query_plans` feature is enabled and it hasn't been logged yet."]],"struct":[["QueryPlan",""],["QueryPlanStep",""]]});

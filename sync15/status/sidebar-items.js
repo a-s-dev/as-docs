@@ -1,0 +1,1 @@
+initSidebarItems({"enum":[["ServiceStatus","The general status of sync - should probably be moved to the \"sync manager\" once we have one!"]],"fn":[["advance_backoff",""]],"struct":[["SyncResult","The result of a sync request. This too is from the \"sync manager\", but only has a fraction of the things it will have when we actually build that."]]});

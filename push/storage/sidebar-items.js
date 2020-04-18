@@ -1,0 +1,1 @@
+initSidebarItems({"mod":[["db",""],["record",""],["schema",""],["types",""]],"struct":[["PushRecord",""],["Store",""]],"trait":[["Storage",""]]});

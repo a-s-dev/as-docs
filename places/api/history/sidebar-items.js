@@ -1,0 +1,1 @@
+initSidebarItems({"enum":[["RedirectSourceType",""]],"fn":[["add_recently_visited",""],["can_add_url",""],["insert",""],["is_recently_visited",""],["visit_uri",""]],"struct":[["AddablePlaceInfo",""],["AddableVisit",""]]});

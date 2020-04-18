@@ -1,0 +1,1 @@
+initSidebarItems({"fn":[["ensure_nss_initialized",""],["get_last_error","Retrieve and wrap the last NSS/NSPR error in the current thread."],["map_nss_secstatus",""],["sec_item_as_slice",""]],"static":[["NSS_INIT",""]],"trait":[["ScopedPtr",""]]});

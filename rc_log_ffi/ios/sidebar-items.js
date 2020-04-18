@@ -1,0 +1,1 @@
+initSidebarItems({"struct":[["LogAdapterState",""],["Logger",""]],"type":[["LogCallback","Type of the log callback provided to us by swift. Takes the following arguments:"]]});

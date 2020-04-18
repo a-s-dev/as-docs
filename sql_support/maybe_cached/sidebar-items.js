@@ -1,0 +1,1 @@
+initSidebarItems({"enum":[["MaybeCached","MaybeCached is a type that can be used to help abstract over cached and uncached rusqlite statements in a transparent manner."]]});

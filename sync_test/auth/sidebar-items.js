@@ -1,0 +1,1 @@
+initSidebarItems({"constant":[["CLIENT_ID",""],["REDIRECT_URI",""],["SYNC_SCOPE",""]],"enum":[["FxaConfigUrl",""]],"fn":[["cleanup_server",""],["run_helper_command",""]],"struct":[["HELPER_SCRIPT_DIR",""],["TestAccount",""],["TestClient",""],["TestUser",""]]});

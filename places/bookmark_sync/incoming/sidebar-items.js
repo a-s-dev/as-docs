@@ -1,0 +1,1 @@
+initSidebarItems({"constant":[["RESULTS_AS_TAG_CONTENTS",""]],"fn":[["set_replace",""],["set_reupload",""],["unpack_id",""],["unpack_optional_i64",""],["unpack_optional_id",""],["unpack_optional_keyword",""],["unpack_optional_str",""]],"struct":[["IncomingApplicator","Manages the application of incoming records into the moz_bookmarks_synced and related tables."]]});

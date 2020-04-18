@@ -1,0 +1,1 @@
+initSidebarItems({"fn":[["synchronize",""],["synchronize_with_clients_engine",""]],"trait":[["Store","Low-level store functionality. Stores that need custom reconciliation logic should use this."]],"type":[["IncomingChangeset",""]]});

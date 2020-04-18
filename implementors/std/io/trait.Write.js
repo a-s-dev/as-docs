@@ -1,0 +1,4 @@
+(function() {var implementors = {};
+implementors["remerge"] = [{"text":"impl&lt;'a, 'b&gt; <a class=\"trait\" href=\"https://doc.rust-lang.org/nightly/std/io/trait.Write.html\" title=\"trait std::io::Write\">Write</a> for <a class=\"struct\" href=\"remerge/util/struct.FormatWriter.html\" title=\"struct remerge::util::FormatWriter\">FormatWriter</a>&lt;'a, 'b&gt;","synthetic":false,"types":["remerge::util::FormatWriter"]}];
+implementors["sync15"] = [{"text":"impl <a class=\"trait\" href=\"https://doc.rust-lang.org/nightly/std/io/trait.Write.html\" title=\"trait std::io::Write\">Write</a> for <a class=\"struct\" href=\"sync15/clients/ser/struct.WriteCount.html\" title=\"struct sync15::clients::ser::WriteCount\">WriteCount</a>","synthetic":false,"types":["sync15::clients::ser::WriteCount"]}];
+if (window.register_implementors) {window.register_implementors(implementors);} else {window.pending_implementors = implementors;}})()

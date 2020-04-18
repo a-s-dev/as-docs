@@ -1,0 +1,1 @@
+initSidebarItems({"fn":[["disconnect",""],["reset",""],["reset_all",""],["set_logins",""],["set_places",""],["set_tabs",""],["sync",""],["wipe",""],["wipe_all",""]],"mod":[["error",""],["ffi",""],["manager",""],["msg_types",""]],"struct":[["MANAGER",""]]});
