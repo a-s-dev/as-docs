@@ -465,7 +465,7 @@
     <span class="comment">// 1. Create EC params</span>
     <span class="kw">let</span> <span class="ident">params_buf</span> <span class="op">=</span> <span class="ident">create_ec_params_for_curve</span>(<span class="ident">curve</span>)<span class="question-mark">?</span>;
     <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">params</span> <span class="op">=</span> <span class="ident">nss_sys</span>::<span class="ident">SECItem</span> {
-        <span class="ident">type_</span>: <span class="ident">nss_sys</span>::<span class="ident">SECItemType</span>::<span class="ident">siBuffer</span>,
+        <span class="ident">type_</span>: <span class="ident">nss_sys</span>::<span class="ident">SECItemType</span>::<span class="ident">siBuffer</span> <span class="kw">as</span> <span class="ident">u32</span>,
         <span class="ident">data</span>: <span class="ident">params_buf</span>.<span class="ident">as_ptr</span>() <span class="kw">as</span> <span class="kw-2">*</span><span class="kw-2">mut</span> <span class="ident">c_uchar</span>,
         <span class="ident">len</span>: <span class="ident">c_uint</span>::<span class="ident">try_from</span>(<span class="ident">params_buf</span>.<span class="ident">len</span>())<span class="question-mark">?</span>,
     };
@@ -687,27 +687,27 @@
         <span class="comment">// https://searchfox.org/mozilla-central/rev/ec489aa170b6486891cf3625717d6fa12bcd11c1/dom/crypto/CryptoKey.cpp#1078</span>
         <span class="ident">check_pub_key_bytes</span>(<span class="ident">bytes</span>, <span class="ident">curve</span>)<span class="question-mark">?</span>;
         <span class="kw">let</span> <span class="ident">key_data</span> <span class="op">=</span> <span class="ident">nss_sys</span>::<span class="ident">SECItem</span> {
-            <span class="ident">type_</span>: <span class="ident">nss_sys</span>::<span class="ident">SECItemType</span>::<span class="ident">siBuffer</span>,
+            <span class="ident">type_</span>: <span class="ident">nss_sys</span>::<span class="ident">SECItemType</span>::<span class="ident">siBuffer</span> <span class="kw">as</span> <span class="ident">u32</span>,
             <span class="ident">data</span>: <span class="ident">bytes</span>.<span class="ident">as_ptr</span>() <span class="kw">as</span> <span class="kw-2">*</span><span class="kw-2">mut</span> <span class="ident">c_uchar</span>,
             <span class="ident">len</span>: <span class="ident">c_uint</span>::<span class="ident">try_from</span>(<span class="ident">bytes</span>.<span class="ident">len</span>())<span class="question-mark">?</span>,
         };
         <span class="kw">let</span> <span class="ident">params_buf</span> <span class="op">=</span> <span class="ident">create_ec_params_for_curve</span>(<span class="ident">curve</span>)<span class="question-mark">?</span>;
         <span class="kw">let</span> <span class="ident">params</span> <span class="op">=</span> <span class="ident">nss_sys</span>::<span class="ident">SECItem</span> {
-            <span class="ident">type_</span>: <span class="ident">nss_sys</span>::<span class="ident">SECItemType</span>::<span class="ident">siBuffer</span>,
+            <span class="ident">type_</span>: <span class="ident">nss_sys</span>::<span class="ident">SECItemType</span>::<span class="ident">siBuffer</span> <span class="kw">as</span> <span class="ident">u32</span>,
             <span class="ident">data</span>: <span class="ident">params_buf</span>.<span class="ident">as_ptr</span>() <span class="kw">as</span> <span class="kw-2">*</span><span class="kw-2">mut</span> <span class="ident">c_uchar</span>,
             <span class="ident">len</span>: <span class="ident">c_uint</span>::<span class="ident">try_from</span>(<span class="ident">params_buf</span>.<span class="ident">len</span>())<span class="question-mark">?</span>,
         };
 
         <span class="kw">let</span> <span class="ident">pub_key</span> <span class="op">=</span> <span class="ident">nss_sys</span>::<span class="ident">SECKEYPublicKey</span> {
             <span class="ident">arena</span>: <span class="ident">ptr</span>::<span class="ident">null_mut</span>(),
-            <span class="ident">keyType</span>: <span class="ident">nss_sys</span>::<span class="ident">KeyType</span>::<span class="ident">ecKey</span>,
+            <span class="ident">keyType</span>: <span class="ident">nss_sys</span>::<span class="ident">KeyType</span>::<span class="ident">ecKey</span> <span class="kw">as</span> <span class="ident">u32</span>,
             <span class="ident">pkcs11Slot</span>: <span class="ident">ptr</span>::<span class="ident">null_mut</span>(),
             <span class="ident">pkcs11ID</span>: <span class="ident">nss_sys</span>::<span class="ident">CK_INVALID_HANDLE</span>.<span class="ident">into</span>(),
-            <span class="ident">u</span>: <span class="ident">nss_sys</span>::<span class="ident">SECKEYPublicKeyStr__bindgen_ty_1</span> {
+            <span class="ident">u</span>: <span class="ident">nss_sys</span>::<span class="ident">SECKEYPublicKeyStr_u</span> {
                 <span class="ident">ec</span>: <span class="ident">nss_sys</span>::<span class="ident">SECKEYECPublicKey</span> {
                     <span class="ident">DEREncodedParams</span>: <span class="ident">params</span>,
                     <span class="ident">publicValue</span>: <span class="ident">key_data</span>,
-                    <span class="ident">encoding</span>: <span class="ident">nss_sys</span>::<span class="ident">ECPointEncoding_ECPoint_Uncompressed</span>,
+                    <span class="ident">encoding</span>: <span class="ident">nss_sys</span>::<span class="ident">ECPointEncoding</span>::<span class="ident">ECPoint_Uncompressed</span> <span class="kw">as</span> <span class="ident">u32</span>,
                     <span class="ident">size</span>: <span class="number">0</span>,
                 },
             },
@@ -741,7 +741,7 @@
         <span class="ident">Curve</span>::<span class="ident">P256</span> <span class="op">=</span><span class="op">&gt;</span> <span class="ident">nss_sys</span>::<span class="ident">SECOidTag</span>::<span class="ident">SEC_OID_ANSIX962_EC_PRIME256V1</span>,
     };
     <span class="comment">// Retrieve curve data by OID tag.</span>
-    <span class="kw">let</span> <span class="ident">oid_data</span> <span class="op">=</span> <span class="kw">unsafe</span> { <span class="ident">nss_sys</span>::<span class="ident">SECOID_FindOIDByTag</span>(<span class="ident">curve_oid_tag</span>) };
+    <span class="kw">let</span> <span class="ident">oid_data</span> <span class="op">=</span> <span class="kw">unsafe</span> { <span class="ident">nss_sys</span>::<span class="ident">SECOID_FindOIDByTag</span>(<span class="ident">curve_oid_tag</span> <span class="kw">as</span> <span class="ident">u32</span>) };
     <span class="kw">if</span> <span class="ident">oid_data</span>.<span class="ident">is_null</span>() {
         <span class="kw">return</span> <span class="prelude-val">Err</span>(<span class="ident">ErrorKind</span>::<span class="ident">InternalError</span>.<span class="ident">into</span>());
     }

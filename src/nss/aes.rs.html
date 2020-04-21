@@ -151,7 +151,7 @@
         <span class="ident">ulTagBits</span>: <span class="ident">nss_sys</span>::<span class="ident">CK_ULONG</span>::<span class="ident">try_from</span>(<span class="ident">AES_GCM_TAG_LENGTH</span> <span class="op">*</span> <span class="number">8</span>)<span class="question-mark">?</span>,
     };
     <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">params</span> <span class="op">=</span> <span class="ident">nss_sys</span>::<span class="ident">SECItem</span> {
-        <span class="ident">type_</span>: <span class="ident">nss_sys</span>::<span class="ident">SECItemType</span>::<span class="ident">siBuffer</span>,
+        <span class="ident">type_</span>: <span class="ident">nss_sys</span>::<span class="ident">SECItemType</span>::<span class="ident">siBuffer</span> <span class="kw">as</span> <span class="ident">u32</span>,
         <span class="ident">data</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">gcm_params</span> <span class="kw">as</span> <span class="kw-2">*</span><span class="kw-2">mut</span> <span class="kw">_</span> <span class="kw">as</span> <span class="kw-2">*</span><span class="kw-2">mut</span> <span class="ident">c_uchar</span>,
         <span class="ident">len</span>: <span class="ident">c_uint</span>::<span class="ident">try_from</span>(<span class="ident">mem</span>::<span class="ident">size_of</span>::<span class="op">&lt;</span><span class="ident">nss_sys</span>::<span class="ident">CK_GCM_PARAMS</span><span class="op">&gt;</span>())<span class="question-mark">?</span>,
     };
@@ -172,7 +172,7 @@
     <span class="ident">operation</span>: <span class="ident">Operation</span>,
 ) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">Vec</span><span class="op">&lt;</span><span class="ident">u8</span><span class="op">&gt;</span><span class="op">&gt;</span> {
     <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">params</span> <span class="op">=</span> <span class="ident">nss_sys</span>::<span class="ident">SECItem</span> {
-        <span class="ident">type_</span>: <span class="ident">nss_sys</span>::<span class="ident">SECItemType</span>::<span class="ident">siBuffer</span>,
+        <span class="ident">type_</span>: <span class="ident">nss_sys</span>::<span class="ident">SECItemType</span>::<span class="ident">siBuffer</span> <span class="kw">as</span> <span class="ident">u32</span>,
         <span class="ident">data</span>: <span class="ident">nonce</span>.<span class="ident">as_ptr</span>() <span class="kw">as</span> <span class="kw-2">*</span><span class="kw-2">mut</span> <span class="ident">c_uchar</span>,
         <span class="ident">len</span>: <span class="ident">c_uint</span>::<span class="ident">try_from</span>(<span class="ident">nonce</span>.<span class="ident">len</span>())<span class="question-mark">?</span>,
     };

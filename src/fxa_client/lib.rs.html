@@ -549,6 +549,15 @@
 <span id="549">549</span>
 <span id="550">550</span>
 <span id="551">551</span>
+<span id="552">552</span>
+<span id="553">553</span>
+<span id="554">554</span>
+<span id="555">555</span>
+<span id="556">556</span>
+<span id="557">557</span>
+<span id="558">558</span>
+<span id="559">559</span>
+<span id="560">560</span>
 </pre><div class="example-wrap"><pre class="rust ">
 <span class="comment">/* This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
@@ -791,20 +800,29 @@
     }
 }
 
+<span class="attribute">#[<span class="ident">derive</span>(<span class="ident">Debug</span>, <span class="ident">Serialize</span>)]</span>
+<span class="attribute">#[<span class="ident">serde</span>(<span class="ident">tag</span> <span class="op">=</span> <span class="string">&quot;eventType&quot;</span>, <span class="ident">content</span> <span class="op">=</span> <span class="string">&quot;data&quot;</span>)]</span>
+<span class="attribute">#[<span class="ident">serde</span>(<span class="ident">rename_all</span> <span class="op">=</span> <span class="string">&quot;camelCase&quot;</span>)]</span>
 <span class="kw">pub</span> <span class="kw">enum</span> <span class="ident">AccountEvent</span> {
     <span class="ident">IncomingDeviceCommand</span>(<span class="ident">Box</span><span class="op">&lt;</span><span class="ident">IncomingDeviceCommand</span><span class="op">&gt;</span>),
     <span class="ident">ProfileUpdated</span>,
     <span class="ident">AccountAuthStateChanged</span>,
     <span class="ident">AccountDestroyed</span>,
+    <span class="comment">// Can be removed when https://github.com/serde-rs/serde/pull/1695 lands.</span>
+    <span class="attribute">#[<span class="ident">serde</span>(<span class="ident">rename_all</span> <span class="op">=</span> <span class="string">&quot;camelCase&quot;</span>)]</span>
     <span class="ident">DeviceConnected</span> {
         <span class="ident">device_name</span>: <span class="ident">String</span>,
     },
+    <span class="attribute">#[<span class="ident">serde</span>(<span class="ident">rename_all</span> <span class="op">=</span> <span class="string">&quot;camelCase&quot;</span>)]</span>
     <span class="ident">DeviceDisconnected</span> {
         <span class="ident">device_id</span>: <span class="ident">String</span>,
         <span class="ident">is_local_device</span>: <span class="ident">bool</span>,
     },
 }
 
+<span class="attribute">#[<span class="ident">derive</span>(<span class="ident">Debug</span>, <span class="ident">Serialize</span>)]</span>
+<span class="attribute">#[<span class="ident">serde</span>(<span class="ident">tag</span> <span class="op">=</span> <span class="string">&quot;commandType&quot;</span>, <span class="ident">content</span> <span class="op">=</span> <span class="string">&quot;data&quot;</span>)]</span>
+<span class="attribute">#[<span class="ident">serde</span>(<span class="ident">rename_all</span> <span class="op">=</span> <span class="string">&quot;camelCase&quot;</span>)]</span>
 <span class="kw">pub</span> <span class="kw">enum</span> <span class="ident">IncomingDeviceCommand</span> {
     <span class="ident">TabReceived</span> {
         <span class="ident">sender</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">Device</span><span class="op">&gt;</span>,

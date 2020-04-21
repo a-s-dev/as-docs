@@ -28,6 +28,7 @@ ALIASES["sync_guid"] = {};
 ALIASES["sync_manager"] = {};
 ALIASES["sync_manager_ffi"] = {};
 ALIASES["sync_test"] = {};
+ALIASES["systest"] = {};
 ALIASES["tabs"] = {};
 ALIASES["tabs_ffi"] = {};
 ALIASES["viaduct"] = {};

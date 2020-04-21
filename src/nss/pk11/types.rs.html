@@ -207,10 +207,6 @@
 <span id="207">207</span>
 <span id="208">208</span>
 <span id="209">209</span>
-<span id="210">210</span>
-<span id="211">211</span>
-<span id="212">212</span>
-<span id="213">213</span>
 </pre><div class="example-wrap"><pre class="rust ">
 <span class="comment">/* This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
@@ -255,7 +251,7 @@
 <span class="comment">// Trait for types that have PCKS#11 attributes that are readable. See</span>
 <span class="comment">// https://searchfox.org/mozilla-central/rev/8ed8474757695cdae047150a0eaf94a5f1c96dbe/security/nss/lib/pk11wrap/pk11pub.h#842-864</span>
 <span class="kw">pub</span>(<span class="kw">crate</span>) <span class="kw">unsafe</span> <span class="kw">trait</span> <span class="ident">Pkcs11Object</span>: <span class="ident">ScopedPtr</span> {
-    <span class="kw">const</span> <span class="ident">PK11_OBJECT_TYPE</span>: <span class="ident">nss_sys</span>::<span class="ident">PK11ObjectType</span>::<span class="ident">Type</span>;
+    <span class="kw">const</span> <span class="ident">PK11_OBJECT_TYPE</span>: <span class="ident">nss_sys</span>::<span class="ident">PK11ObjectType</span>;
     <span class="kw">fn</span> <span class="ident">read_raw_attribute</span>(
         <span class="kw-2">&amp;</span><span class="self">self</span>,
         <span class="ident">attribute_type</span>: <span class="ident">nss_sys</span>::<span class="ident">CK_ATTRIBUTE_TYPE</span>,
@@ -263,7 +259,7 @@
         <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">out_sec</span> <span class="op">=</span> <span class="ident">ScopedSECItem</span>::<span class="ident">empty</span>(<span class="ident">nss_sys</span>::<span class="ident">SECItemType</span>::<span class="ident">siBuffer</span>);
         <span class="ident">map_nss_secstatus</span>(<span class="op">|</span><span class="op">|</span> <span class="kw">unsafe</span> {
             <span class="ident">nss_sys</span>::<span class="ident">PK11_ReadRawAttribute</span>(
-                <span class="self">Self</span>::<span class="ident">PK11_OBJECT_TYPE</span>,
+                <span class="self">Self</span>::<span class="ident">PK11_OBJECT_TYPE</span> <span class="kw">as</span> <span class="ident">u32</span>,
                 <span class="self">self</span>.<span class="ident">as_mut_ptr</span>() <span class="kw">as</span> <span class="kw-2">*</span><span class="kw-2">mut</span> <span class="ident">c_void</span>,
                 <span class="ident">attribute_type</span>,
                 <span class="ident">out_sec</span>.<span class="ident">as_mut_ref</span>(),
@@ -274,20 +270,16 @@
 }
 
 <span class="kw">unsafe</span> <span class="kw">impl</span> <span class="ident">Pkcs11Object</span> <span class="kw">for</span> <span class="ident">GenericObject</span> {
-    <span class="kw">const</span> <span class="ident">PK11_OBJECT_TYPE</span>: <span class="ident">nss_sys</span>::<span class="ident">PK11ObjectType</span>::<span class="ident">Type</span> <span class="op">=</span>
-        <span class="ident">nss_sys</span>::<span class="ident">PK11ObjectType</span>::<span class="ident">PK11_TypeGeneric</span>;
+    <span class="kw">const</span> <span class="ident">PK11_OBJECT_TYPE</span>: <span class="ident">nss_sys</span>::<span class="ident">PK11ObjectType</span> <span class="op">=</span> <span class="ident">nss_sys</span>::<span class="ident">PK11ObjectType</span>::<span class="ident">PK11_TypeGeneric</span>;
 }
 <span class="kw">unsafe</span> <span class="kw">impl</span> <span class="ident">Pkcs11Object</span> <span class="kw">for</span> <span class="ident">PrivateKey</span> {
-    <span class="kw">const</span> <span class="ident">PK11_OBJECT_TYPE</span>: <span class="ident">nss_sys</span>::<span class="ident">PK11ObjectType</span>::<span class="ident">Type</span> <span class="op">=</span>
-        <span class="ident">nss_sys</span>::<span class="ident">PK11ObjectType</span>::<span class="ident">PK11_TypePrivKey</span>;
+    <span class="kw">const</span> <span class="ident">PK11_OBJECT_TYPE</span>: <span class="ident">nss_sys</span>::<span class="ident">PK11ObjectType</span> <span class="op">=</span> <span class="ident">nss_sys</span>::<span class="ident">PK11ObjectType</span>::<span class="ident">PK11_TypePrivKey</span>;
 }
 <span class="kw">unsafe</span> <span class="kw">impl</span> <span class="ident">Pkcs11Object</span> <span class="kw">for</span> <span class="ident">PublicKey</span> {
-    <span class="kw">const</span> <span class="ident">PK11_OBJECT_TYPE</span>: <span class="ident">nss_sys</span>::<span class="ident">PK11ObjectType</span>::<span class="ident">Type</span> <span class="op">=</span>
-        <span class="ident">nss_sys</span>::<span class="ident">PK11ObjectType</span>::<span class="ident">PK11_TypePubKey</span>;
+    <span class="kw">const</span> <span class="ident">PK11_OBJECT_TYPE</span>: <span class="ident">nss_sys</span>::<span class="ident">PK11ObjectType</span> <span class="op">=</span> <span class="ident">nss_sys</span>::<span class="ident">PK11ObjectType</span>::<span class="ident">PK11_TypePubKey</span>;
 }
 <span class="kw">unsafe</span> <span class="kw">impl</span> <span class="ident">Pkcs11Object</span> <span class="kw">for</span> <span class="ident">SymKey</span> {
-    <span class="kw">const</span> <span class="ident">PK11_OBJECT_TYPE</span>: <span class="ident">nss_sys</span>::<span class="ident">PK11ObjectType</span>::<span class="ident">Type</span> <span class="op">=</span>
-        <span class="ident">nss_sys</span>::<span class="ident">PK11ObjectType</span>::<span class="ident">PK11_TypeSymKey</span>;
+    <span class="kw">const</span> <span class="ident">PK11_OBJECT_TYPE</span>: <span class="ident">nss_sys</span>::<span class="ident">PK11ObjectType</span> <span class="op">=</span> <span class="ident">nss_sys</span>::<span class="ident">PK11ObjectType</span>::<span class="ident">PK11_TypeSymKey</span>;
 }
 
 <span class="comment">// From https://developer.mozilla.org/en-US/docs/Mozilla/Projects/NSS/NSS_API_Guidelines#Thread_Safety:</span>
@@ -311,7 +303,7 @@
         <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">obj_id_buf</span> <span class="op">=</span> <span class="macro">vec</span><span class="macro">!</span>[<span class="number">0u8</span>; <span class="number">160</span> <span class="op">/</span> <span class="number">8</span>];
         <span class="ident">generate_random</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">obj_id_buf</span>)<span class="question-mark">?</span>;
         <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">obj_id</span> <span class="op">=</span> <span class="ident">nss_sys</span>::<span class="ident">SECItem</span> {
-            <span class="ident">type_</span>: <span class="ident">nss_sys</span>::<span class="ident">SECItemType</span>::<span class="ident">siBuffer</span>,
+            <span class="ident">type_</span>: <span class="ident">nss_sys</span>::<span class="ident">SECItemType</span>::<span class="ident">siBuffer</span> <span class="kw">as</span> <span class="ident">u32</span>,
             <span class="ident">data</span>: <span class="ident">obj_id_buf</span>.<span class="ident">as_ptr</span>() <span class="kw">as</span> <span class="kw-2">*</span><span class="kw-2">mut</span> <span class="ident">c_uchar</span>,
             <span class="ident">len</span>: <span class="ident">c_uint</span>::<span class="ident">try_from</span>(<span class="ident">obj_id_buf</span>.<span class="ident">len</span>())<span class="question-mark">?</span>,
         };
@@ -380,10 +372,10 @@
 }
 
 <span class="kw">impl</span> <span class="ident">ScopedSECItem</span> {
-    <span class="kw">pub</span>(<span class="kw">crate</span>) <span class="kw">fn</span> <span class="ident">empty</span>(<span class="ident">r#type</span>: <span class="ident">nss_sys</span>::<span class="ident">SECItemType</span>::<span class="ident">Type</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="self">Self</span> {
+    <span class="kw">pub</span>(<span class="kw">crate</span>) <span class="kw">fn</span> <span class="ident">empty</span>(<span class="ident">r#type</span>: <span class="ident">nss_sys</span>::<span class="ident">SECItemType</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="self">Self</span> {
         <span class="ident">ScopedSECItem</span> {
             <span class="ident">wrapped</span>: <span class="ident">nss_sys</span>::<span class="ident">SECItem</span> {
-                <span class="ident">type_</span>: <span class="ident">r#type</span>,
+                <span class="ident">type_</span>: <span class="ident">r#type</span> <span class="kw">as</span> <span class="ident">u32</span>,
                 <span class="ident">data</span>: <span class="ident">ptr</span>::<span class="ident">null_mut</span>(),
                 <span class="ident">len</span>: <span class="number">0</span>,
             },
