@@ -301,6 +301,7 @@
 <span id="301">301</span>
 <span id="302">302</span>
 <span id="303">303</span>
+<span id="304">304</span>
 </pre><div class="example-wrap"><pre class="rust ">
 <span class="comment">/* This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
@@ -465,6 +466,7 @@
                 ),
                 <span class="ident">scopes</span>: <span class="ident">HashSet</span>::<span class="ident">from_iter</span>(<span class="ident">token</span>.<span class="ident">scopes</span>.<span class="ident">iter</span>().<span class="ident">map</span>(<span class="ident">ToString</span>::<span class="ident">to_string</span>)),
             });
+        <span class="kw">let</span> <span class="ident">introspection_endpoint</span> <span class="op">=</span> <span class="macro">format</span><span class="macro">!</span>(<span class="string">&quot;{}/v1/introspect&quot;</span>, <span class="kw-2">&amp;</span><span class="ident">state</span>.<span class="ident">config</span>.<span class="ident">oauth_url</span>);
         <span class="prelude-val">Ok</span>(<span class="ident">StateV2</span> {
             <span class="ident">config</span>: <span class="ident">Config</span>::<span class="ident">init</span>(
                 <span class="ident">state</span>.<span class="ident">config</span>.<span class="ident">content_url</span>,
@@ -477,7 +479,7 @@
                 <span class="ident">state</span>.<span class="ident">config</span>.<span class="ident">jwks_uri</span>,
                 <span class="ident">state</span>.<span class="ident">config</span>.<span class="ident">token_endpoint</span>,
                 <span class="ident">state</span>.<span class="ident">config</span>.<span class="ident">userinfo_endpoint</span>,
-                <span class="prelude-val">None</span>,
+                <span class="ident">introspection_endpoint</span>,
                 <span class="ident">state</span>.<span class="ident">client_id</span>,
                 <span class="ident">state</span>.<span class="ident">redirect_uri</span>,
                 <span class="prelude-val">None</span>,
@@ -595,7 +597,7 @@
 
     <span class="attribute">#[<span class="ident">test</span>]</span>
     <span class="kw">fn</span> <span class="ident">test_v2_creates_an_empty_access_token_cache_if_its_missing</span>() {
-        <span class="kw">let</span> <span class="ident">state_v2_json</span> <span class="op">=</span> <span class="string">&quot;{\&quot;schema_version\&quot;:\&quot;V2\&quot;,\&quot;config\&quot;:{\&quot;client_id\&quot;:\&quot;98adfa37698f255b\&quot;,\&quot;redirect_uri\&quot;:\&quot;https://lockbox.firefox.com/fxa/ios-redirect.html\&quot;,\&quot;content_url\&quot;:\&quot;https://accounts.firefox.com\&quot;, \&quot;remote_config\&quot;:{\&quot;auth_url\&quot;:\&quot;https://api.accounts.firefox.com/\&quot;,\&quot;oauth_url\&quot;:\&quot;https://oauth.accounts.firefox.com/\&quot;,\&quot;profile_url\&quot;:\&quot;https://profile.accounts.firefox.com/\&quot;,\&quot;token_server_endpoint_url\&quot;:\&quot;https://token.services.mozilla.com/1.0/sync/1.5\&quot;,\&quot;authorization_endpoint\&quot;:\&quot;https://accounts.firefox.com/authorization\&quot;,\&quot;issuer\&quot;:\&quot;https://accounts.firefox.com\&quot;,\&quot;jwks_uri\&quot;:\&quot;https://oauth.accounts.firefox.com/v1/jwks\&quot;,\&quot;token_endpoint\&quot;:\&quot;https://oauth.accounts.firefox.com/v1/token\&quot;,\&quot;userinfo_endpoint\&quot;:\&quot;https://profile.accounts.firefox.com/v1/profile\&quot;}},\&quot;refresh_token\&quot;:{\&quot;token\&quot;:\&quot;bed5532f4fea7e39c5c4f609f53603ee7518fd1c103cc4034da3618f786ed188\&quot;,\&quot;scopes\&quot;:[\&quot;https://identity.mozilla.com/apps/oldysnc\&quot;]},\&quot;scoped_keys\&quot;:{\&quot;https://identity.mozilla.com/apps/oldsync\&quot;:{\&quot;kty\&quot;:\&quot;oct\&quot;,\&quot;scope\&quot;:\&quot;https://identity.mozilla.com/apps/oldsync\&quot;,\&quot;k\&quot;:\&quot;kMtwpVC0ZaYFJymPza8rXK_0CgCp3KMwRStwGfBRBDtL6hXRDVJgQFaoOQ2dimw0Bko5WVv2gNTy7RX5zFYZHg\&quot;,\&quot;kid\&quot;:\&quot;1542236016429-Ox1FbJfFfwTe5t-xq4v2hQ\&quot;}},\&quot;login_state\&quot;:{\&quot;Unknown\&quot;:null}}&quot;</span>;
+        <span class="kw">let</span> <span class="ident">state_v2_json</span> <span class="op">=</span> <span class="string">&quot;{\&quot;schema_version\&quot;:\&quot;V2\&quot;,\&quot;config\&quot;:{\&quot;client_id\&quot;:\&quot;98adfa37698f255b\&quot;,\&quot;redirect_uri\&quot;:\&quot;https://lockbox.firefox.com/fxa/ios-redirect.html\&quot;,\&quot;content_url\&quot;:\&quot;https://accounts.firefox.com\&quot;},\&quot;refresh_token\&quot;:{\&quot;token\&quot;:\&quot;bed5532f4fea7e39c5c4f609f53603ee7518fd1c103cc4034da3618f786ed188\&quot;,\&quot;scopes\&quot;:[\&quot;https://identity.mozilla.com/apps/oldysnc\&quot;]},\&quot;scoped_keys\&quot;:{\&quot;https://identity.mozilla.com/apps/oldsync\&quot;:{\&quot;kty\&quot;:\&quot;oct\&quot;,\&quot;scope\&quot;:\&quot;https://identity.mozilla.com/apps/oldsync\&quot;,\&quot;k\&quot;:\&quot;kMtwpVC0ZaYFJymPza8rXK_0CgCp3KMwRStwGfBRBDtL6hXRDVJgQFaoOQ2dimw0Bko5WVv2gNTy7RX5zFYZHg\&quot;,\&quot;kid\&quot;:\&quot;1542236016429-Ox1FbJfFfwTe5t-xq4v2hQ\&quot;}},\&quot;login_state\&quot;:{\&quot;Unknown\&quot;:null}}&quot;</span>;
         <span class="kw">let</span> <span class="ident">state</span> <span class="op">=</span> <span class="ident">state_from_json</span>(<span class="ident">state_v2_json</span>).<span class="ident">unwrap</span>();
         <span class="kw">let</span> <span class="ident">refresh_token</span> <span class="op">=</span> <span class="ident">state</span>.<span class="ident">refresh_token</span>.<span class="ident">unwrap</span>();
         <span class="macro">assert_eq</span><span class="macro">!</span>(

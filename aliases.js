@@ -20,7 +20,6 @@ ALIASES["push"] = {};
 ALIASES["push_ffi"] = {};
 ALIASES["rc_crypto"] = {};
 ALIASES["rc_log_ffi"] = {};
-ALIASES["remerge"] = {};
 ALIASES["sql_support"] = {};
 ALIASES["sync15"] = {};
 ALIASES["sync15_traits"] = {};

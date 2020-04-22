@@ -20,7 +20,6 @@ sourcesIndex["push"] = {"name":"","dirs":[{"name":"storage","files":["db.rs","mo
 sourcesIndex["push_ffi"] = {"name":"","files":["lib.rs"]};
 sourcesIndex["rc_crypto"] = {"name":"","dirs":[{"name":"aead","files":["aes_cbc.rs","aes_gcm.rs"]}],"files":["aead.rs","agreement.rs","constant_time.rs","digest.rs","ece_crypto.rs","error.rs","hawk_crypto.rs","hkdf.rs","hmac.rs","lib.rs","rand.rs"]};
 sourcesIndex["rc_log_ffi"] = {"name":"","files":["ios.rs","lib.rs","settable_log.rs"]};
-sourcesIndex["remerge"] = {"name":"","dirs":[{"name":"schema","files":["desc.rs","error.rs","json.rs","merge_kinds.rs","mod.rs"]},{"name":"storage","files":["bootstrap.rs","bundle.rs","db.rs","meta.rs","mod.rs","records.rs","schema.rs"]}],"files":["engine.rs","error.rs","lib.rs","ms_time.rs","untyped_map.rs","util.rs","vclock.rs"]};
 sourcesIndex["sql_support"] = {"name":"","files":["conn_ext.rs","each_chunk.rs","interrupt.rs","lib.rs","maybe_cached.rs","query_plan.rs","repeat.rs"]};
 sourcesIndex["sync15"] = {"name":"","dirs":[{"name":"clients","files":["engine.rs","mod.rs","record.rs","ser.rs"]}],"files":["bso_record.rs","changeset.rs","client.rs","coll_state.rs","collection_keys.rs","error.rs","key_bundle.rs","lib.rs","migrate_state.rs","record_types.rs","request.rs","state.rs","status.rs","sync.rs","sync_multiple.rs","telemetry.rs","token.rs","util.rs"]};
 sourcesIndex["sync15_traits"] = {"name":"","files":["changeset.rs","client.rs","lib.rs","payload.rs","request.rs","server_timestamp.rs","store.rs","telemetry.rs"]};

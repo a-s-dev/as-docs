@@ -205,6 +205,7 @@
 <span id="205">205</span>
 <span id="206">206</span>
 <span id="207">207</span>
+<span id="208">208</span>
 </pre><div class="example-wrap"><pre class="rust ">
 <span class="comment">/* This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
@@ -221,8 +222,9 @@
 <span class="kw">use</span> <span class="ident">std</span>::<span class="ident">time</span>::<span class="ident">Instant</span>;
 <span class="kw">use</span> <span class="ident">url</span>::<span class="ident">Url</span>;
 
-<span class="comment">// From https://searchfox.org/mozilla-central/rev/597a69c70a5cce6f42f159eb54ad1ef6745f5432/mobile/android/base/java/org/mozilla/gecko/db/BrowserDatabaseHelper.java#73.</span>
-<span class="kw">const</span> <span class="ident">FENNEC_DB_VERSION</span>: <span class="ident">i64</span> <span class="op">=</span> <span class="number">39</span>;
+<span class="comment">// Fennec&#39;s history schema didn&#39;t meaningfully change since 34, so this could go as low as that version.</span>
+<span class="comment">// However, 36 was quite easy to obtain test databases for, and it shipped with quite an old ESR version (52).</span>
+<span class="kw">const</span> <span class="ident">FENNEC_DB_VERSION</span>: <span class="ident">i64</span> <span class="op">=</span> <span class="number">34</span>;
 
 <span class="attribute">#[<span class="ident">derive</span>(<span class="ident">Serialize</span>, <span class="ident">Deserialize</span>, <span class="ident">PartialEq</span>, <span class="ident">Debug</span>, <span class="ident">Clone</span>, <span class="ident">Default</span>)]</span>
 <span class="kw">pub</span> <span class="kw">struct</span> <span class="ident">HistoryMigrationResult</span> {
@@ -263,7 +265,7 @@
     <span class="kw">let</span> <span class="ident">auto_detach</span> <span class="op">=</span> <span class="ident">attached_database</span>(<span class="kw-2">&amp;</span><span class="ident">conn</span>, <span class="kw-2">&amp;</span><span class="ident">android_db_file_url</span>, <span class="string">&quot;fennec&quot;</span>)<span class="question-mark">?</span>;
 
     <span class="kw">let</span> <span class="ident">db_version</span> <span class="op">=</span> <span class="ident">conn</span>.<span class="ident">db</span>.<span class="ident">query_one</span>::<span class="op">&lt;</span><span class="ident">i64</span><span class="op">&gt;</span>(<span class="string">&quot;PRAGMA fennec.user_version&quot;</span>)<span class="question-mark">?</span>;
-    <span class="kw">if</span> <span class="ident">db_version</span> <span class="op">!</span><span class="op">=</span> <span class="ident">FENNEC_DB_VERSION</span> {
+    <span class="kw">if</span> <span class="ident">db_version</span> <span class="op">&lt;</span> <span class="ident">FENNEC_DB_VERSION</span> {
         <span class="kw">return</span> <span class="prelude-val">Err</span>(<span class="ident">ErrorKind</span>::<span class="ident">UnsupportedDatabaseVersion</span>(<span class="ident">db_version</span>).<span class="ident">into</span>());
     }
 
