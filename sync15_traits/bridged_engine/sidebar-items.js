@@ -1,0 +1,1 @@
+initSidebarItems({"struct":[["ApplyResults",""]],"trait":[["BridgedEngine","A bridged Sync engine implements all the methods needed to support Desktop Sync."]]});

@@ -169,7 +169,7 @@
     <span class="ident">UrlParseError</span>(<span class="attribute">#[<span class="ident">fail</span>(<span class="ident">cause</span>)]</span> <span class="ident">url</span>::<span class="ident">ParseError</span>),
 
     <span class="attribute">#[<span class="ident">fail</span>(<span class="ident">display</span> <span class="op">=</span> <span class="string">&quot;{}&quot;</span>, <span class="ident">_0</span>)]</span>
-    <span class="ident">Interrupted</span>(<span class="attribute">#[<span class="ident">fail</span>(<span class="ident">cause</span>)]</span> <span class="ident">interrupt</span>::<span class="ident">Interrupted</span>),
+    <span class="ident">Interrupted</span>(<span class="attribute">#[<span class="ident">fail</span>(<span class="ident">cause</span>)]</span> <span class="ident">interrupt_support</span>::<span class="ident">Interrupted</span>),
 
     <span class="attribute">#[<span class="ident">fail</span>(<span class="ident">display</span> <span class="op">=</span> <span class="string">&quot;Protobuf decode error: {}&quot;</span>, <span class="ident">_0</span>)]</span>
     <span class="ident">ProtobufDecodeError</span>(<span class="attribute">#[<span class="ident">fail</span>(<span class="ident">cause</span>)]</span> <span class="ident">prost</span>::<span class="ident">DecodeError</span>),
@@ -182,7 +182,7 @@
         (<span class="ident">UrlParseError</span>, <span class="ident">url</span>::<span class="ident">ParseError</span>),
         (<span class="ident">SqlError</span>, <span class="ident">rusqlite</span>::<span class="ident">Error</span>),
         (<span class="ident">InvalidLogin</span>, <span class="ident">InvalidLogin</span>),
-        (<span class="ident">Interrupted</span>, <span class="ident">interrupt</span>::<span class="ident">Interrupted</span>),
+        (<span class="ident">Interrupted</span>, <span class="ident">interrupt_support</span>::<span class="ident">Interrupted</span>),
         (<span class="ident">ProtobufDecodeError</span>, <span class="ident">prost</span>::<span class="ident">DecodeError</span>),
     }
 }

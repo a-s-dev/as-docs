@@ -22,12 +22,15 @@
 <span id="22">22</span>
 <span id="23">23</span>
 <span id="24">24</span>
+<span id="25">25</span>
+<span id="26">26</span>
 </pre><div class="example-wrap"><pre class="rust ">
 <span class="comment">/* This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at http://mozilla.org/MPL/2.0/. */</span>
 
 <span class="attribute">#![<span class="ident">warn</span>(<span class="ident">rust_2018_idioms</span>)]</span>
+<span class="kw">mod</span> <span class="ident">bridged_engine</span>;
 <span class="kw">mod</span> <span class="ident">changeset</span>;
 <span class="kw">pub</span> <span class="kw">mod</span> <span class="ident">client</span>;
 <span class="kw">mod</span> <span class="ident">payload</span>;
@@ -36,6 +39,7 @@
 <span class="kw">mod</span> <span class="ident">store</span>;
 <span class="kw">pub</span> <span class="kw">mod</span> <span class="ident">telemetry</span>;
 
+<span class="kw">pub</span> <span class="kw">use</span> <span class="ident">bridged_engine</span>::{<span class="ident">ApplyResults</span>, <span class="ident">BridgedEngine</span>};
 <span class="kw">pub</span> <span class="kw">use</span> <span class="ident">changeset</span>::{<span class="ident">IncomingChangeset</span>, <span class="ident">OutgoingChangeset</span>, <span class="ident">RecordChangeset</span>};
 <span class="kw">pub</span> <span class="kw">use</span> <span class="ident">payload</span>::<span class="ident">Payload</span>;
 <span class="kw">pub</span> <span class="kw">use</span> <span class="ident">request</span>::{<span class="ident">CollectionRequest</span>, <span class="ident">RequestOrder</span>};

@@ -212,7 +212,6 @@
 <span id="212">212</span>
 <span id="213">213</span>
 <span id="214">214</span>
-<span id="215">215</span>
 </pre><div class="example-wrap"><pre class="rust ">
 <span class="comment">/* This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
@@ -230,7 +229,6 @@
 <span class="doccomment">/// contains the tab to send and finally forms the `EncryptedSendTabPayload` that is</span>
 <span class="doccomment">/// then sent to the target device.</span>
 <span class="kw">use</span> <span class="kw">crate</span>::{<span class="ident">device</span>::<span class="ident">Device</span>, <span class="ident">error</span>::<span class="kw-2">*</span>, <span class="ident">scoped_keys</span>::<span class="ident">ScopedKey</span>, <span class="ident">scopes</span>};
-<span class="kw">use</span> <span class="ident">hex</span>;
 <span class="kw">use</span> <span class="ident">rc_crypto</span>::<span class="ident">ece</span>::{<span class="self">self</span>, <span class="ident">Aes128GcmEceWebPush</span>, <span class="ident">EcKeyComponents</span>, <span class="ident">WebPushParams</span>};
 <span class="kw">use</span> <span class="ident">rc_crypto</span>::<span class="ident">ece_crypto</span>::{<span class="ident">RcCryptoLocalKeyPair</span>, <span class="ident">RcCryptoRemotePublicKey</span>};
 <span class="kw">use</span> <span class="ident">serde_derive</span>::<span class="kw-2">*</span>;

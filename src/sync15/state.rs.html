@@ -1143,7 +1143,7 @@
 <span class="kw">use</span> <span class="kw">crate</span>::<span class="ident">record_types</span>::{<span class="ident">MetaGlobalEngine</span>, <span class="ident">MetaGlobalRecord</span>};
 <span class="kw">use</span> <span class="kw">crate</span>::<span class="ident">request</span>::{<span class="ident">InfoCollections</span>, <span class="ident">InfoConfiguration</span>};
 <span class="kw">use</span> <span class="kw">crate</span>::<span class="ident">util</span>::<span class="ident">ServerTimestamp</span>;
-<span class="kw">use</span> <span class="ident">interrupt</span>::<span class="ident">Interruptee</span>;
+<span class="kw">use</span> <span class="ident">interrupt_support</span>::<span class="ident">Interruptee</span>;
 <span class="kw">use</span> <span class="ident">serde_derive</span>::<span class="kw-2">*</span>;
 <span class="kw">use</span> <span class="ident">sync_guid</span>::<span class="ident">Guid</span>;
 
@@ -1797,7 +1797,7 @@
 
     <span class="kw">use</span> <span class="kw">crate</span>::<span class="ident">bso_record</span>::{<span class="ident">BsoRecord</span>, <span class="ident">EncryptedBso</span>, <span class="ident">EncryptedPayload</span>, <span class="ident">Payload</span>};
     <span class="kw">use</span> <span class="kw">crate</span>::<span class="ident">record_types</span>::<span class="ident">CryptoKeysRecord</span>;
-    <span class="kw">use</span> <span class="ident">interrupt</span>::<span class="ident">NeverInterrupts</span>;
+    <span class="kw">use</span> <span class="ident">interrupt_support</span>::<span class="ident">NeverInterrupts</span>;
 
     <span class="kw">struct</span> <span class="ident">InMemoryClient</span> {
         <span class="ident">info_configuration</span>: <span class="ident">error</span>::<span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">Sync15ClientResponse</span><span class="op">&lt;</span><span class="ident">InfoConfiguration</span><span class="op">&gt;</span><span class="op">&gt;</span>,

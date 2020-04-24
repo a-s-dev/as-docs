@@ -164,7 +164,6 @@
 <span id="164">164</span>
 <span id="165">165</span>
 <span id="166">166</span>
-<span id="167">167</span>
 </pre><div class="example-wrap"><pre class="rust ">
 <span class="comment">/* This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
@@ -172,9 +171,8 @@
 
 <span class="kw">use</span> <span class="kw">crate</span>::<span class="ident">storage</span>::<span class="ident">bookmarks</span>::<span class="ident">BookmarkRootGuid</span>;
 <span class="kw">use</span> <span class="kw">crate</span>::<span class="ident">types</span>::<span class="ident">BookmarkType</span>;
-<span class="kw">use</span> <span class="ident">dogear</span>;
 <span class="kw">use</span> <span class="ident">failure</span>::<span class="ident">Fail</span>;
-<span class="kw">use</span> <span class="ident">interrupt</span>::<span class="ident">Interrupted</span>;
+<span class="kw">use</span> <span class="ident">interrupt_support</span>::<span class="ident">Interrupted</span>;
 <span class="kw">use</span> <span class="ident">serde_json</span>::<span class="ident">Value</span> <span class="kw">as</span> <span class="ident">JsonValue</span>;
 
 <span class="comment">// Note: If you add new error types that should be returned to consumers on the other side of the</span>

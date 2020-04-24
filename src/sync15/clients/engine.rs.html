@@ -707,9 +707,6 @@
 <span id="707">707</span>
 <span id="708">708</span>
 <span id="709">709</span>
-<span id="710">710</span>
-<span id="711">711</span>
-<span id="712">712</span>
 </pre><div class="example-wrap"><pre class="rust ">
 <span class="comment">/* This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
@@ -727,7 +724,7 @@
     <span class="ident">request</span>::{<span class="ident">CollectionRequest</span>, <span class="ident">InfoConfiguration</span>},
     <span class="ident">state</span>::<span class="ident">GlobalState</span>,
 };
-<span class="kw">use</span> <span class="ident">interrupt</span>::<span class="ident">Interruptee</span>;
+<span class="kw">use</span> <span class="ident">interrupt_support</span>::<span class="ident">Interruptee</span>;
 <span class="kw">use</span> <span class="ident">sync15_traits</span>::<span class="ident">client</span>::<span class="ident">ClientData</span>;
 
 <span class="kw">use</span> <span class="kw">super</span>::{
@@ -1058,14 +1055,11 @@
 
 <span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">test</span>)]</span>
 <span class="kw">mod</span> <span class="ident">tests</span> {
-    <span class="kw">use</span> <span class="ident">std</span>::<span class="ident">result</span>;
-
-    <span class="kw">use</span> <span class="ident">failure</span>;
-    <span class="kw">use</span> <span class="ident">interrupt</span>::<span class="ident">NeverInterrupts</span>;
-    <span class="kw">use</span> <span class="ident">serde_json</span>::{<span class="ident">json</span>, <span class="ident">Value</span>};
-
     <span class="kw">use</span> <span class="kw">crate</span>::<span class="ident">clients</span>::{<span class="ident">CommandStatus</span>, <span class="ident">DeviceType</span>, <span class="ident">Settings</span>};
     <span class="kw">use</span> <span class="kw">crate</span>::<span class="ident">util</span>::<span class="ident">ServerTimestamp</span>;
+    <span class="kw">use</span> <span class="ident">interrupt_support</span>::<span class="ident">NeverInterrupts</span>;
+    <span class="kw">use</span> <span class="ident">serde_json</span>::{<span class="ident">json</span>, <span class="ident">Value</span>};
+    <span class="kw">use</span> <span class="ident">std</span>::<span class="ident">result</span>;
 
     <span class="kw">use</span> <span class="kw">super</span>::<span class="kw-2">*</span>;
 
