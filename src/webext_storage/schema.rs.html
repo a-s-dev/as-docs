@@ -69,7 +69,6 @@
 <span id="69">69</span>
 <span id="70">70</span>
 <span id="71">71</span>
-<span id="72">72</span>
 </pre><div class="example-wrap"><pre class="rust ">
 <span class="comment">/* This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
@@ -138,8 +137,7 @@
     <span class="attribute">#[<span class="ident">test</span>]</span>
     <span class="kw">fn</span> <span class="ident">test_create_schema_twice</span>() {
         <span class="kw">let</span> <span class="ident">db</span> <span class="op">=</span> <span class="ident">new_mem_db</span>();
-        <span class="kw">let</span> <span class="ident">conn</span> <span class="op">=</span> <span class="ident">db</span>.<span class="ident">writer</span>.<span class="ident">lock</span>().<span class="ident">unwrap</span>();
-        <span class="ident">conn</span>.<span class="ident">execute_batch</span>(<span class="ident">CREATE_SCHEMA_SQL</span>)
+        <span class="ident">db</span>.<span class="ident">execute_batch</span>(<span class="ident">CREATE_SCHEMA_SQL</span>)
             .<span class="ident">expect</span>(<span class="string">&quot;should allow running twice&quot;</span>);
     }
 }
