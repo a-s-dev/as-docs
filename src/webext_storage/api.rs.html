@@ -473,6 +473,70 @@
 <span id="473">473</span>
 <span id="474">474</span>
 <span id="475">475</span>
+<span id="476">476</span>
+<span id="477">477</span>
+<span id="478">478</span>
+<span id="479">479</span>
+<span id="480">480</span>
+<span id="481">481</span>
+<span id="482">482</span>
+<span id="483">483</span>
+<span id="484">484</span>
+<span id="485">485</span>
+<span id="486">486</span>
+<span id="487">487</span>
+<span id="488">488</span>
+<span id="489">489</span>
+<span id="490">490</span>
+<span id="491">491</span>
+<span id="492">492</span>
+<span id="493">493</span>
+<span id="494">494</span>
+<span id="495">495</span>
+<span id="496">496</span>
+<span id="497">497</span>
+<span id="498">498</span>
+<span id="499">499</span>
+<span id="500">500</span>
+<span id="501">501</span>
+<span id="502">502</span>
+<span id="503">503</span>
+<span id="504">504</span>
+<span id="505">505</span>
+<span id="506">506</span>
+<span id="507">507</span>
+<span id="508">508</span>
+<span id="509">509</span>
+<span id="510">510</span>
+<span id="511">511</span>
+<span id="512">512</span>
+<span id="513">513</span>
+<span id="514">514</span>
+<span id="515">515</span>
+<span id="516">516</span>
+<span id="517">517</span>
+<span id="518">518</span>
+<span id="519">519</span>
+<span id="520">520</span>
+<span id="521">521</span>
+<span id="522">522</span>
+<span id="523">523</span>
+<span id="524">524</span>
+<span id="525">525</span>
+<span id="526">526</span>
+<span id="527">527</span>
+<span id="528">528</span>
+<span id="529">529</span>
+<span id="530">530</span>
+<span id="531">531</span>
+<span id="532">532</span>
+<span id="533">533</span>
+<span id="534">534</span>
+<span id="535">535</span>
+<span id="536">536</span>
+<span id="537">537</span>
+<span id="538">538</span>
+<span id="539">539</span>
 </pre><div class="example-wrap"><pre class="rust ">
 <span class="comment">/* This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
@@ -540,17 +604,16 @@
 
 <span class="comment">// This is a &quot;helper struct&quot; for the callback part of the chrome.storage spec,</span>
 <span class="comment">// but shaped in a way to make it more convenient from the rust side of the</span>
-<span class="comment">// world. The strings are all json, we keeping them as strings here makes</span>
-<span class="comment">// various things easier and avoid a round-trip to/from json/string.</span>
+<span class="comment">// world.</span>
 <span class="attribute">#[<span class="ident">derive</span>(<span class="ident">Debug</span>, <span class="ident">Clone</span>, <span class="ident">PartialEq</span>, <span class="ident">Serialize</span>)]</span>
 <span class="attribute">#[<span class="ident">serde</span>(<span class="ident">rename_all</span> <span class="op">=</span> <span class="string">&quot;camelCase&quot;</span>)]</span>
 <span class="kw">pub</span> <span class="kw">struct</span> <span class="ident">StorageValueChange</span> {
     <span class="attribute">#[<span class="ident">serde</span>(<span class="ident">skip_serializing</span>)]</span>
     <span class="ident">key</span>: <span class="ident">String</span>,
     <span class="attribute">#[<span class="ident">serde</span>(<span class="ident">skip_serializing_if</span> <span class="op">=</span> <span class="string">&quot;Option::is_none&quot;</span>)]</span>
-    <span class="ident">old_value</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">String</span><span class="op">&gt;</span>,
+    <span class="ident">old_value</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">JsonValue</span><span class="op">&gt;</span>,
     <span class="attribute">#[<span class="ident">serde</span>(<span class="ident">skip_serializing_if</span> <span class="op">=</span> <span class="string">&quot;Option::is_none&quot;</span>)]</span>
-    <span class="ident">new_value</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">String</span><span class="op">&gt;</span>,
+    <span class="ident">new_value</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">JsonValue</span><span class="op">&gt;</span>,
 }
 
 <span class="comment">// This is, largely, a helper so that this serializes correctly as per the</span>
@@ -617,18 +680,15 @@
         <span class="kw">if</span> <span class="ident">current</span>.<span class="ident">len</span>() <span class="op">&gt;</span><span class="op">=</span> <span class="ident">MAX_ITEMS</span> {
             <span class="kw">return</span> <span class="prelude-val">Err</span>(<span class="ident">ErrorKind</span>::<span class="ident">QuotaError</span>(<span class="ident">QuotaReason</span>::<span class="ident">MaxItems</span>).<span class="ident">into</span>());
         }
-        <span class="comment">// Setup the change entry for this key, and we can leverage it to check</span>
-        <span class="comment">// for the quota.</span>
-        <span class="kw">let</span> <span class="ident">new_value_s</span> <span class="op">=</span> <span class="ident">v</span>.<span class="ident">to_string</span>();
         <span class="comment">// Reading the chrome docs literally re the quota, the length of the key</span>
         <span class="comment">// is just the string len, but the value is the json val, as bytes</span>
-        <span class="kw">if</span> <span class="ident">k</span>.<span class="ident">len</span>() <span class="op">+</span> <span class="ident">new_value_s</span>.<span class="ident">len</span>() <span class="op">&gt;</span><span class="op">=</span> <span class="ident">QUOTA_BYTES_PER_ITEM</span> {
+        <span class="kw">if</span> <span class="ident">k</span>.<span class="ident">len</span>() <span class="op">+</span> <span class="ident">v</span>.<span class="ident">to_string</span>().<span class="ident">len</span>() <span class="op">&gt;</span><span class="op">=</span> <span class="ident">QUOTA_BYTES_PER_ITEM</span> {
             <span class="kw">return</span> <span class="prelude-val">Err</span>(<span class="ident">ErrorKind</span>::<span class="ident">QuotaError</span>(<span class="ident">QuotaReason</span>::<span class="ident">ItemBytes</span>).<span class="ident">into</span>());
         }
         <span class="kw">let</span> <span class="ident">change</span> <span class="op">=</span> <span class="ident">StorageValueChange</span> {
             <span class="ident">key</span>: <span class="ident">k</span>.<span class="ident">clone</span>(),
-            <span class="ident">old_value</span>: <span class="ident">old_value</span>.<span class="ident">map</span>(<span class="op">|</span><span class="ident">ov</span><span class="op">|</span> <span class="ident">ov</span>.<span class="ident">to_string</span>()),
-            <span class="ident">new_value</span>: <span class="prelude-val">Some</span>(<span class="ident">new_value_s</span>),
+            <span class="ident">old_value</span>,
+            <span class="ident">new_value</span>: <span class="prelude-val">Some</span>(<span class="ident">v</span>.<span class="ident">clone</span>()),
         };
         <span class="ident">changes</span>.<span class="ident">push</span>(<span class="ident">change</span>);
         <span class="ident">current</span>.<span class="ident">insert</span>(<span class="ident">k</span>, <span class="ident">v</span>);
@@ -702,7 +762,7 @@
         <span class="kw">if</span> <span class="kw">let</span> <span class="prelude-val">Some</span>(<span class="ident">v</span>) <span class="op">=</span> <span class="ident">existing</span>.<span class="ident">remove</span>(<span class="kw-2">&amp;</span><span class="ident">key</span>) {
             <span class="ident">result</span>.<span class="ident">push</span>(<span class="ident">StorageValueChange</span> {
                 <span class="ident">key</span>,
-                <span class="ident">old_value</span>: <span class="prelude-val">Some</span>(<span class="ident">v</span>.<span class="ident">to_string</span>()),
+                <span class="ident">old_value</span>: <span class="prelude-val">Some</span>(<span class="ident">v</span>),
                 <span class="ident">new_value</span>: <span class="prelude-val">None</span>,
             });
         }
@@ -726,11 +786,26 @@
         <span class="ident">result</span>.<span class="ident">push</span>(<span class="ident">StorageValueChange</span> {
             <span class="ident">key</span>: <span class="ident">key</span>.<span class="ident">to_string</span>(),
             <span class="ident">new_value</span>: <span class="prelude-val">None</span>,
-            <span class="ident">old_value</span>: <span class="prelude-val">Some</span>(<span class="ident">val</span>.<span class="ident">to_string</span>()),
+            <span class="ident">old_value</span>: <span class="prelude-val">Some</span>(<span class="ident">val</span>),
         });
     }
     <span class="ident">remove_from_db</span>(<span class="ident">tx</span>, <span class="ident">ext_id</span>)<span class="question-mark">?</span>;
     <span class="prelude-val">Ok</span>(<span class="ident">result</span>)
+}
+
+<span class="doccomment">/// While this API isn&#39;t available to extensions, Firefox wants a way to wipe</span>
+<span class="doccomment">/// all data for all addons but not sync the deletions. We also don&#39;t report</span>
+<span class="doccomment">/// the changes caused by the deletion.</span>
+<span class="doccomment">/// That means that after doing this, the next sync is likely to drag some data</span>
+<span class="doccomment">/// back in - which is fine.</span>
+<span class="doccomment">/// This is much like what the sync support for other components calls a &quot;wipe&quot;,</span>
+<span class="doccomment">/// so we name it similarly.</span>
+<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">wipe_all</span>(<span class="ident">tx</span>: <span class="kw-2">&amp;</span><span class="ident">Transaction</span><span class="op">&lt;</span><span class="lifetime">&#39;_</span><span class="op">&gt;</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span>()<span class="op">&gt;</span> {
+    <span class="comment">// We assume the meta table is only used by sync.</span>
+    <span class="ident">tx</span>.<span class="ident">execute_batch</span>(
+        <span class="string">&quot;DELETE FROM storage_sync_data; DELETE FROM storage_sync_mirror; DELETE FROM meta;&quot;</span>,
+    )<span class="question-mark">?</span>;
+    <span class="prelude-val">Ok</span>(())
 }
 
 <span class="comment">// TODO - get_bytes_in_use()</span>
@@ -746,11 +821,22 @@
         <span class="kw">let</span> <span class="ident">c</span> <span class="op">=</span> <span class="ident">StorageChanges</span> {
             <span class="ident">changes</span>: <span class="macro">vec</span><span class="macro">!</span>[<span class="ident">StorageValueChange</span> {
                 <span class="ident">key</span>: <span class="string">&quot;key&quot;</span>.<span class="ident">to_string</span>(),
-                <span class="ident">old_value</span>: <span class="prelude-val">Some</span>(<span class="string">&quot;old&quot;</span>.<span class="ident">to_string</span>()),
+                <span class="ident">old_value</span>: <span class="prelude-val">Some</span>(<span class="macro">json</span><span class="macro">!</span>(<span class="string">&quot;old&quot;</span>)),
                 <span class="ident">new_value</span>: <span class="prelude-val">None</span>,
             }],
         };
         <span class="macro">assert_eq</span><span class="macro">!</span>(<span class="ident">serde_json</span>::<span class="ident">to_string</span>(<span class="kw-2">&amp;</span><span class="ident">c</span>)<span class="question-mark">?</span>, <span class="string">r#&quot;{&quot;key&quot;:{&quot;oldValue&quot;:&quot;old&quot;}}&quot;#</span>);
+        <span class="kw">let</span> <span class="ident">c</span> <span class="op">=</span> <span class="ident">StorageChanges</span> {
+            <span class="ident">changes</span>: <span class="macro">vec</span><span class="macro">!</span>[<span class="ident">StorageValueChange</span> {
+                <span class="ident">key</span>: <span class="string">&quot;key&quot;</span>.<span class="ident">to_string</span>(),
+                <span class="ident">old_value</span>: <span class="prelude-val">None</span>,
+                <span class="ident">new_value</span>: <span class="prelude-val">Some</span>(<span class="macro">json</span><span class="macro">!</span>({<span class="string">&quot;foo&quot;</span>: <span class="string">&quot;bar&quot;</span>})),
+            }],
+        };
+        <span class="macro">assert_eq</span><span class="macro">!</span>(
+            <span class="ident">serde_json</span>::<span class="ident">to_string</span>(<span class="kw-2">&amp;</span><span class="ident">c</span>)<span class="question-mark">?</span>,
+            <span class="string">r#&quot;{&quot;key&quot;:{&quot;newValue&quot;:{&quot;foo&quot;:&quot;bar&quot;}}}&quot;#</span>
+        );
         <span class="prelude-val">Ok</span>(())
     }
 
@@ -759,8 +845,8 @@
         <span class="kw">for</span> (<span class="ident">name</span>, <span class="ident">old_value</span>, <span class="ident">new_value</span>) <span class="kw">in</span> <span class="ident">changes</span> {
             <span class="ident">r</span>.<span class="ident">push</span>(<span class="ident">StorageValueChange</span> {
                 <span class="ident">key</span>: (<span class="kw-2">*</span><span class="ident">name</span>).<span class="ident">to_string</span>(),
-                <span class="ident">old_value</span>: <span class="ident">old_value</span>.<span class="ident">as_ref</span>().<span class="ident">map</span>(<span class="op">|</span><span class="ident">v</span><span class="op">|</span> <span class="ident">v</span>.<span class="ident">to_string</span>()),
-                <span class="ident">new_value</span>: <span class="ident">new_value</span>.<span class="ident">as_ref</span>().<span class="ident">map</span>(<span class="op">|</span><span class="ident">v</span><span class="op">|</span> <span class="ident">v</span>.<span class="ident">to_string</span>()),
+                <span class="ident">old_value</span>: <span class="ident">old_value</span>.<span class="ident">clone</span>(),
+                <span class="ident">new_value</span>: <span class="ident">new_value</span>.<span class="ident">clone</span>(),
             });
         }
         <span class="ident">r</span>
@@ -825,11 +911,20 @@
             <span class="ident">remove</span>(<span class="kw-2">&amp;</span><span class="ident">tx</span>, <span class="kw-2">&amp;</span><span class="ident">ext_id</span>, <span class="macro">json</span><span class="macro">!</span>(<span class="string">&quot;foo&quot;</span>))<span class="question-mark">?</span>,
             <span class="ident">make_changes</span>(<span class="kw-2">&amp;</span>[(<span class="string">&quot;foo&quot;</span>, <span class="prelude-val">Some</span>(<span class="macro">json</span><span class="macro">!</span>(<span class="string">&quot;new&quot;</span>)), <span class="prelude-val">None</span>)]),
         );
+
+        <span class="macro">assert_eq</span><span class="macro">!</span>(
+            <span class="ident">set</span>(<span class="kw-2">&amp;</span><span class="ident">tx</span>, <span class="kw-2">&amp;</span><span class="ident">ext_id</span>, <span class="macro">json</span><span class="macro">!</span>({<span class="string">&quot;foo&quot;</span>: {<span class="string">&quot;sub-object&quot;</span>: <span class="string">&quot;sub-value&quot;</span>}}))<span class="question-mark">?</span>,
+            <span class="ident">make_changes</span>(<span class="kw-2">&amp;</span>[(<span class="string">&quot;foo&quot;</span>, <span class="prelude-val">None</span>, <span class="prelude-val">Some</span>(<span class="macro">json</span><span class="macro">!</span>({<span class="string">&quot;sub-object&quot;</span>: <span class="string">&quot;sub-value&quot;</span>}))),])
+        );
+
         <span class="comment">// XXX - other variants.</span>
 
         <span class="macro">assert_eq</span><span class="macro">!</span>(
             <span class="ident">clear</span>(<span class="kw-2">&amp;</span><span class="ident">tx</span>, <span class="kw-2">&amp;</span><span class="ident">ext_id</span>)<span class="question-mark">?</span>,
-            <span class="ident">make_changes</span>(<span class="kw-2">&amp;</span>[(<span class="string">&quot;other&quot;</span>, <span class="prelude-val">Some</span>(<span class="macro">json</span><span class="macro">!</span>(<span class="string">&quot;also new&quot;</span>)), <span class="prelude-val">None</span>)]),
+            <span class="ident">make_changes</span>(<span class="kw-2">&amp;</span>[
+                (<span class="string">&quot;foo&quot;</span>, <span class="prelude-val">Some</span>(<span class="macro">json</span><span class="macro">!</span>({<span class="string">&quot;sub-object&quot;</span>: <span class="string">&quot;sub-value&quot;</span>})), <span class="prelude-val">None</span>),
+                (<span class="string">&quot;other&quot;</span>, <span class="prelude-val">Some</span>(<span class="macro">json</span><span class="macro">!</span>(<span class="string">&quot;also new&quot;</span>)), <span class="prelude-val">None</span>),
+            ]),
         );
         <span class="macro">assert_eq</span><span class="macro">!</span>(<span class="ident">get</span>(<span class="kw-2">&amp;</span><span class="ident">tx</span>, <span class="kw-2">&amp;</span><span class="ident">ext_id</span>, <span class="ident">JsonValue</span>::<span class="ident">Null</span>)<span class="question-mark">?</span>, <span class="macro">json</span><span class="macro">!</span>({}));
 
@@ -946,6 +1041,39 @@
             <span class="ident">ErrorKind</span>::<span class="ident">QuotaError</span>(<span class="ident">QuotaReason</span>::<span class="ident">ItemBytes</span>) <span class="op">=</span><span class="op">&gt;</span> {}
             <span class="kw">_</span> <span class="op">=</span><span class="op">&gt;</span> <span class="macro">panic</span><span class="macro">!</span>(<span class="string">&quot;unexpected error type&quot;</span>),
         };
+        <span class="prelude-val">Ok</span>(())
+    }
+
+    <span class="kw">fn</span> <span class="ident">query_count</span>(<span class="ident">conn</span>: <span class="kw-2">&amp;</span><span class="ident">Connection</span>, <span class="ident">table</span>: <span class="kw-2">&amp;</span><span class="ident">str</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">u32</span> {
+        <span class="ident">conn</span>.<span class="ident">query_row_and_then</span>(
+            <span class="kw-2">&amp;</span><span class="macro">format</span><span class="macro">!</span>(<span class="string">&quot;SELECT COUNT(*) FROM {};&quot;</span>, <span class="ident">table</span>),
+            <span class="ident">rusqlite</span>::<span class="ident">NO_PARAMS</span>,
+            <span class="op">|</span><span class="ident">row</span><span class="op">|</span> <span class="ident">row</span>.<span class="ident">get</span>::<span class="op">&lt;</span><span class="kw">_</span>, <span class="ident">u32</span><span class="op">&gt;</span>(<span class="number">0</span>),
+        )
+        .<span class="ident">expect</span>(<span class="string">&quot;should work&quot;</span>)
+    }
+
+    <span class="attribute">#[<span class="ident">test</span>]</span>
+    <span class="kw">fn</span> <span class="ident">test_wipe</span>() <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span>()<span class="op">&gt;</span> {
+        <span class="kw">use</span> <span class="kw">crate</span>::<span class="ident">db</span>::<span class="ident">put_meta</span>;
+
+        <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">db</span> <span class="op">=</span> <span class="ident">new_mem_db</span>();
+        <span class="kw">let</span> <span class="ident">tx</span> <span class="op">=</span> <span class="ident">db</span>.<span class="ident">transaction</span>()<span class="question-mark">?</span>;
+        <span class="ident">set</span>(<span class="kw-2">&amp;</span><span class="ident">tx</span>, <span class="string">&quot;ext-a&quot;</span>, <span class="macro">json</span><span class="macro">!</span>({ <span class="string">&quot;x&quot;</span>: <span class="string">&quot;y&quot;</span> }))<span class="question-mark">?</span>;
+        <span class="ident">set</span>(<span class="kw-2">&amp;</span><span class="ident">tx</span>, <span class="string">&quot;ext-b&quot;</span>, <span class="macro">json</span><span class="macro">!</span>({ <span class="string">&quot;y&quot;</span>: <span class="string">&quot;x&quot;</span> }))<span class="question-mark">?</span>;
+        <span class="ident">put_meta</span>(<span class="kw-2">&amp;</span><span class="ident">tx</span>, <span class="string">&quot;meta&quot;</span>, <span class="kw-2">&amp;</span><span class="string">&quot;meta-meta&quot;</span>.<span class="ident">to_string</span>())<span class="question-mark">?</span>;
+        <span class="ident">tx</span>.<span class="ident">execute</span>(
+            <span class="string">&quot;INSERT INTO storage_sync_mirror (guid, ext_id, data)
+                    VALUES (&#39;guid&#39;, &#39;ext-a&#39;, null)&quot;</span>,
+            <span class="ident">rusqlite</span>::<span class="ident">NO_PARAMS</span>,
+        )<span class="question-mark">?</span>;
+        <span class="macro">assert_eq</span><span class="macro">!</span>(<span class="ident">query_count</span>(<span class="kw-2">&amp;</span><span class="ident">tx</span>, <span class="string">&quot;storage_sync_data&quot;</span>), <span class="number">2</span>);
+        <span class="macro">assert_eq</span><span class="macro">!</span>(<span class="ident">query_count</span>(<span class="kw-2">&amp;</span><span class="ident">tx</span>, <span class="string">&quot;storage_sync_mirror&quot;</span>), <span class="number">1</span>);
+        <span class="macro">assert_eq</span><span class="macro">!</span>(<span class="ident">query_count</span>(<span class="kw-2">&amp;</span><span class="ident">tx</span>, <span class="string">&quot;meta&quot;</span>), <span class="number">1</span>);
+        <span class="ident">wipe_all</span>(<span class="kw-2">&amp;</span><span class="ident">tx</span>)<span class="question-mark">?</span>;
+        <span class="macro">assert_eq</span><span class="macro">!</span>(<span class="ident">query_count</span>(<span class="kw-2">&amp;</span><span class="ident">tx</span>, <span class="string">&quot;storage_sync_data&quot;</span>), <span class="number">0</span>);
+        <span class="macro">assert_eq</span><span class="macro">!</span>(<span class="ident">query_count</span>(<span class="kw-2">&amp;</span><span class="ident">tx</span>, <span class="string">&quot;storage_sync_mirror&quot;</span>), <span class="number">0</span>);
+        <span class="macro">assert_eq</span><span class="macro">!</span>(<span class="ident">query_count</span>(<span class="kw-2">&amp;</span><span class="ident">tx</span>, <span class="string">&quot;meta&quot;</span>), <span class="number">0</span>);
         <span class="prelude-val">Ok</span>(())
     }
 }
