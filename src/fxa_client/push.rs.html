@@ -204,6 +204,8 @@
 <span id="204">204</span>
 <span id="205">205</span>
 <span id="206">206</span>
+<span id="207">207</span>
+<span id="208">208</span>
 </pre><div class="example-wrap"><pre class="rust ">
 <span class="comment">/* This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
@@ -242,6 +244,7 @@
                 <span class="prelude-val">Ok</span>(<span class="macro">vec</span><span class="macro">!</span>[<span class="ident">AccountEvent</span>::<span class="ident">ProfileUpdated</span>])
             }
             <span class="ident">PushPayload</span>::<span class="ident">DeviceConnected</span>(<span class="ident">DeviceConnectedPushPayload</span> { <span class="ident">device_name</span> }) <span class="op">=</span><span class="op">&gt;</span> {
+                <span class="self">self</span>.<span class="ident">attached_clients_cache</span> <span class="op">=</span> <span class="prelude-val">None</span>;
                 <span class="prelude-val">Ok</span>(<span class="macro">vec</span><span class="macro">!</span>[<span class="ident">AccountEvent</span>::<span class="ident">DeviceConnected</span> { <span class="ident">device_name</span> }])
             }
             <span class="ident">PushPayload</span>::<span class="ident">DeviceDisconnected</span>(<span class="ident">DeviceDisconnectedPushPayload</span> { <span class="ident">device_id</span> }) <span class="op">=</span><span class="op">&gt;</span> {
@@ -251,6 +254,7 @@
                     <span class="prelude-val">Ok</span>(<span class="ident">id</span>) <span class="op">=</span><span class="op">&gt;</span> <span class="ident">id</span> <span class="op">=</span><span class="op">=</span> <span class="ident">device_id</span>,
                 };
                 <span class="kw">if</span> <span class="ident">is_local_device</span> {
+                    <span class="comment">// Note: self.disconnect calls self.start_over which clears the state for the FirefoxAccount instance</span>
                     <span class="self">self</span>.<span class="ident">disconnect</span>();
                 }
                 <span class="prelude-val">Ok</span>(<span class="macro">vec</span><span class="macro">!</span>[<span class="ident">AccountEvent</span>::<span class="ident">DeviceDisconnected</span> {

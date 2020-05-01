@@ -558,6 +558,9 @@
 <span id="558">558</span>
 <span id="559">559</span>
 <span id="560">560</span>
+<span id="561">561</span>
+<span id="562">562</span>
+<span id="563">563</span>
 </pre><div class="example-wrap"><pre class="rust ">
 <span class="comment">/* This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
@@ -622,6 +625,7 @@
     <span class="ident">client</span>: <span class="ident">Arc</span><span class="op">&lt;</span><span class="ident">FxAClient</span><span class="op">&gt;</span>,
     <span class="ident">state</span>: <span class="ident">State</span>,
     <span class="ident">flow_store</span>: <span class="ident">HashMap</span><span class="op">&lt;</span><span class="ident">String</span>, <span class="ident">OAuthFlow</span><span class="op">&gt;</span>,
+    <span class="ident">attached_clients_cache</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">CachedResponse</span><span class="op">&lt;</span><span class="ident">Vec</span><span class="op">&lt;</span><span class="ident">http_client</span>::<span class="ident">GetAttachedClientResponse</span><span class="op">&gt;</span><span class="op">&gt;</span><span class="op">&gt;</span>,
 }
 
 <span class="kw">impl</span> <span class="ident">FirefoxAccount</span> {
@@ -630,6 +634,7 @@
             <span class="ident">client</span>: <span class="ident">Arc</span>::<span class="ident">new</span>(<span class="ident">http_client</span>::<span class="ident">Client</span>::<span class="ident">new</span>()),
             <span class="ident">state</span>,
             <span class="ident">flow_store</span>: <span class="ident">HashMap</span>::<span class="ident">new</span>(),
+            <span class="ident">attached_clients_cache</span>: <span class="prelude-val">None</span>,
         }
     }
 
@@ -698,6 +703,7 @@
     <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">start_over</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>) {
         <span class="self">self</span>.<span class="ident">state</span> <span class="op">=</span> <span class="self">self</span>.<span class="ident">state</span>.<span class="ident">start_over</span>();
         <span class="self">self</span>.<span class="ident">flow_store</span>.<span class="ident">clear</span>();
+        <span class="self">self</span>.<span class="ident">attached_clients_cache</span> <span class="op">=</span> <span class="prelude-val">None</span>;
     }
 
     <span class="doccomment">/// Get the Sync Token Server endpoint URL.</span>

@@ -768,6 +768,39 @@
 <span id="768">768</span>
 <span id="769">769</span>
 <span id="770">770</span>
+<span id="771">771</span>
+<span id="772">772</span>
+<span id="773">773</span>
+<span id="774">774</span>
+<span id="775">775</span>
+<span id="776">776</span>
+<span id="777">777</span>
+<span id="778">778</span>
+<span id="779">779</span>
+<span id="780">780</span>
+<span id="781">781</span>
+<span id="782">782</span>
+<span id="783">783</span>
+<span id="784">784</span>
+<span id="785">785</span>
+<span id="786">786</span>
+<span id="787">787</span>
+<span id="788">788</span>
+<span id="789">789</span>
+<span id="790">790</span>
+<span id="791">791</span>
+<span id="792">792</span>
+<span id="793">793</span>
+<span id="794">794</span>
+<span id="795">795</span>
+<span id="796">796</span>
+<span id="797">797</span>
+<span id="798">798</span>
+<span id="799">799</span>
+<span id="800">800</span>
+<span id="801">801</span>
+<span id="802">802</span>
+<span id="803">803</span>
 </pre><div class="example-wrap"><pre class="rust ">
 <span class="comment">/* This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
@@ -862,6 +895,11 @@
         <span class="ident">update</span>: <span class="ident">DeviceUpdateRequest</span><span class="op">&lt;</span><span class="lifetime">&#39;_</span><span class="op">&gt;</span>,
     ) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">UpdateDeviceResponse</span><span class="op">&gt;</span>;
     <span class="kw">fn</span> <span class="ident">destroy_device</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">config</span>: <span class="kw-2">&amp;</span><span class="ident">Config</span>, <span class="ident">refresh_token</span>: <span class="kw-2">&amp;</span><span class="ident">str</span>, <span class="ident">id</span>: <span class="kw-2">&amp;</span><span class="ident">str</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span>()<span class="op">&gt;</span>;
+    <span class="kw">fn</span> <span class="ident">attached_clients</span>(
+        <span class="kw-2">&amp;</span><span class="self">self</span>,
+        <span class="ident">config</span>: <span class="kw-2">&amp;</span><span class="ident">Config</span>,
+        <span class="ident">session_token</span>: <span class="kw-2">&amp;</span><span class="ident">str</span>,
+    ) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">Vec</span><span class="op">&lt;</span><span class="ident">GetAttachedClientResponse</span><span class="op">&gt;</span><span class="op">&gt;</span>;
     <span class="kw">fn</span> <span class="ident">scoped_key_data</span>(
         <span class="kw-2">&amp;</span><span class="self">self</span>,
         <span class="ident">config</span>: <span class="kw-2">&amp;</span><span class="ident">Config</span>,
@@ -1112,6 +1150,17 @@
 
         <span class="self">Self</span>::<span class="ident">make_request</span>(<span class="ident">request</span>)<span class="question-mark">?</span>;
         <span class="prelude-val">Ok</span>(())
+    }
+
+    <span class="kw">fn</span> <span class="ident">attached_clients</span>(
+        <span class="kw-2">&amp;</span><span class="self">self</span>,
+        <span class="ident">config</span>: <span class="kw-2">&amp;</span><span class="ident">Config</span>,
+        <span class="ident">session_token</span>: <span class="kw-2">&amp;</span><span class="ident">str</span>,
+    ) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">Vec</span><span class="op">&lt;</span><span class="ident">GetAttachedClientResponse</span><span class="op">&gt;</span><span class="op">&gt;</span> {
+        <span class="kw">let</span> <span class="ident">url</span> <span class="op">=</span> <span class="ident">config</span>.<span class="ident">auth_url_path</span>(<span class="string">&quot;v1/account/attached_clients&quot;</span>)<span class="question-mark">?</span>;
+        <span class="kw">let</span> <span class="ident">key</span> <span class="op">=</span> <span class="ident">derive_auth_key_from_session_token</span>(<span class="ident">session_token</span>)<span class="question-mark">?</span>;
+        <span class="kw">let</span> <span class="ident">request</span> <span class="op">=</span> <span class="ident">HawkRequestBuilder</span>::<span class="ident">new</span>(<span class="ident">Method</span>::<span class="ident">Get</span>, <span class="ident">url</span>, <span class="kw-2">&amp;</span><span class="ident">key</span>).<span class="ident">build</span>()<span class="question-mark">?</span>;
+        <span class="prelude-val">Ok</span>(<span class="self">Self</span>::<span class="ident">make_request</span>(<span class="ident">request</span>)<span class="question-mark">?</span>.<span class="ident">json</span>()<span class="question-mark">?</span>)
     }
 
     <span class="kw">fn</span> <span class="ident">scoped_key_data</span>(
@@ -1428,6 +1477,23 @@
     <span class="kw">pub</span> <span class="ident">available_commands</span>: <span class="ident">HashMap</span><span class="op">&lt;</span><span class="ident">String</span>, <span class="ident">String</span><span class="op">&gt;</span>,
     <span class="attribute">#[<span class="ident">serde</span>(<span class="ident">rename</span> <span class="op">=</span> <span class="string">&quot;pushEndpointExpired&quot;</span>)]</span>
     <span class="kw">pub</span> <span class="ident">push_endpoint_expired</span>: <span class="ident">bool</span>,
+}
+
+<span class="attribute">#[<span class="ident">derive</span>(<span class="ident">Clone</span>, <span class="ident">Debug</span>, <span class="ident">Serialize</span>, <span class="ident">Deserialize</span>)]</span>
+<span class="attribute">#[<span class="ident">serde</span>(<span class="ident">rename_all</span> <span class="op">=</span> <span class="string">&quot;camelCase&quot;</span>)]</span>
+<span class="kw">pub</span> <span class="kw">struct</span> <span class="ident">GetAttachedClientResponse</span> {
+    <span class="kw">pub</span> <span class="ident">client_id</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">String</span><span class="op">&gt;</span>,
+    <span class="kw">pub</span> <span class="ident">session_token_id</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">String</span><span class="op">&gt;</span>,
+    <span class="kw">pub</span> <span class="ident">refresh_token_id</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">String</span><span class="op">&gt;</span>,
+    <span class="kw">pub</span> <span class="ident">device_id</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">String</span><span class="op">&gt;</span>,
+    <span class="kw">pub</span> <span class="ident">device_type</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">DeviceType</span><span class="op">&gt;</span>,
+    <span class="kw">pub</span> <span class="ident">is_current_session</span>: <span class="ident">bool</span>,
+    <span class="kw">pub</span> <span class="ident">name</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">String</span><span class="op">&gt;</span>,
+    <span class="kw">pub</span> <span class="ident">created_time</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">u64</span><span class="op">&gt;</span>,
+    <span class="kw">pub</span> <span class="ident">last_access_time</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">u64</span><span class="op">&gt;</span>,
+    <span class="kw">pub</span> <span class="ident">scope</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">Vec</span><span class="op">&lt;</span><span class="ident">String</span><span class="op">&gt;</span><span class="op">&gt;</span>,
+    <span class="kw">pub</span> <span class="ident">user_agent</span>: <span class="ident">String</span>,
+    <span class="kw">pub</span> <span class="ident">os</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">String</span><span class="op">&gt;</span>,
 }
 
 <span class="comment">// We model the OAuthTokenRequest according to the up to date</span>

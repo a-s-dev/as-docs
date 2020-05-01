@@ -2,7 +2,7 @@ var N = null;var sourcesIndex = {};
 sourcesIndex["cli_support"] = {"name":"","files":["fxa_creds.rs","lib.rs","prompt.rs"]};
 sourcesIndex["error_support"] = {"name":"","files":["lib.rs"]};
 sourcesIndex["ffi_support"] = {"name":"","files":["error.rs","ffistr.rs","handle_map.rs","into_ffi.rs","lib.rs","macros.rs","string.rs"]};
-sourcesIndex["fxa_client"] = {"name":"","dirs":[{"name":"commands","files":["mod.rs","send_tab.rs"]}],"files":["config.rs","device.rs","error.rs","ffi.rs","http_client.rs","lib.rs","migrator.rs","mozilla.appservices.fxaclient.protobuf.rs","oauth.rs","profile.rs","push.rs","scoped_keys.rs","scopes.rs","send_tab.rs","state_persistence.rs","util.rs"]};
+sourcesIndex["fxa_client"] = {"name":"","dirs":[{"name":"commands","files":["mod.rs","send_tab.rs"]},{"name":"oauth","files":["attached_clients.rs"]}],"files":["config.rs","device.rs","error.rs","ffi.rs","http_client.rs","lib.rs","migrator.rs","mozilla.appservices.fxaclient.protobuf.rs","oauth.rs","profile.rs","push.rs","scoped_keys.rs","scopes.rs","send_tab.rs","state_persistence.rs","util.rs"]};
 sourcesIndex["fxaclient_ffi"] = {"name":"","files":["lib.rs"]};
 sourcesIndex["interrupt_support"] = {"name":"","files":["lib.rs"]};
 sourcesIndex["lockbox"] = {"name":"","files":["lib.rs"]};
