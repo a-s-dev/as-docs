@@ -537,6 +537,47 @@
 <span id="537">537</span>
 <span id="538">538</span>
 <span id="539">539</span>
+<span id="540">540</span>
+<span id="541">541</span>
+<span id="542">542</span>
+<span id="543">543</span>
+<span id="544">544</span>
+<span id="545">545</span>
+<span id="546">546</span>
+<span id="547">547</span>
+<span id="548">548</span>
+<span id="549">549</span>
+<span id="550">550</span>
+<span id="551">551</span>
+<span id="552">552</span>
+<span id="553">553</span>
+<span id="554">554</span>
+<span id="555">555</span>
+<span id="556">556</span>
+<span id="557">557</span>
+<span id="558">558</span>
+<span id="559">559</span>
+<span id="560">560</span>
+<span id="561">561</span>
+<span id="562">562</span>
+<span id="563">563</span>
+<span id="564">564</span>
+<span id="565">565</span>
+<span id="566">566</span>
+<span id="567">567</span>
+<span id="568">568</span>
+<span id="569">569</span>
+<span id="570">570</span>
+<span id="571">571</span>
+<span id="572">572</span>
+<span id="573">573</span>
+<span id="574">574</span>
+<span id="575">575</span>
+<span id="576">576</span>
+<span id="577">577</span>
+<span id="578">578</span>
+<span id="579">579</span>
+<span id="580">580</span>
 </pre><div class="example-wrap"><pre class="rust ">
 <span class="comment">/* This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
@@ -578,28 +619,69 @@
 }
 
 <span class="kw">fn</span> <span class="ident">save_to_db</span>(<span class="ident">tx</span>: <span class="kw-2">&amp;</span><span class="ident">Transaction</span><span class="op">&lt;</span><span class="lifetime">&#39;_</span><span class="op">&gt;</span>, <span class="ident">ext_id</span>: <span class="kw-2">&amp;</span><span class="ident">str</span>, <span class="ident">val</span>: <span class="kw-2">&amp;</span><span class="ident">JsonValue</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span>()<span class="op">&gt;</span> {
-    <span class="comment">// The quota is enforced on the byte count, which is what .len() returns.</span>
-    <span class="kw">let</span> <span class="ident">sval</span> <span class="op">=</span> <span class="ident">val</span>.<span class="ident">to_string</span>();
-    <span class="kw">if</span> <span class="ident">sval</span>.<span class="ident">len</span>() <span class="op">&gt;</span> <span class="ident">QUOTA_BYTES</span> {
-        <span class="kw">return</span> <span class="prelude-val">Err</span>(<span class="ident">ErrorKind</span>::<span class="ident">QuotaError</span>(<span class="ident">QuotaReason</span>::<span class="ident">TotalBytes</span>).<span class="ident">into</span>());
+    <span class="comment">// This function also handles removals. Either an empty map or explicit null</span>
+    <span class="comment">// is a removal. If there&#39;s a mirror record for this extension ID, then we</span>
+    <span class="comment">// must leave a tombstone behind for syncing.</span>
+    <span class="kw">let</span> <span class="ident">is_delete</span> <span class="op">=</span> <span class="kw">match</span> <span class="ident">val</span> {
+        <span class="ident">JsonValue</span>::<span class="ident">Null</span> <span class="op">=</span><span class="op">&gt;</span> <span class="bool-val">true</span>,
+        <span class="ident">JsonValue</span>::<span class="ident">Object</span>(<span class="ident">m</span>) <span class="op">=</span><span class="op">&gt;</span> <span class="ident">m</span>.<span class="ident">is_empty</span>(),
+        <span class="kw">_</span> <span class="op">=</span><span class="op">&gt;</span> <span class="bool-val">false</span>,
+    };
+    <span class="kw">if</span> <span class="ident">is_delete</span> {
+        <span class="kw">let</span> <span class="ident">in_mirror</span> <span class="op">=</span> <span class="ident">tx</span>
+            .<span class="ident">try_query_one</span>(
+                <span class="string">&quot;SELECT EXISTS(SELECT 1 FROM storage_sync_mirror WHERE ext_id = :ext_id);&quot;</span>,
+                <span class="ident">rusqlite</span>::<span class="macro">named_params</span><span class="macro">!</span> {
+                    <span class="string">&quot;:ext_id&quot;</span>: <span class="ident">ext_id</span>,
+                },
+                <span class="bool-val">true</span>,
+            )<span class="question-mark">?</span>
+            .<span class="ident">unwrap_or_default</span>();
+        <span class="kw">if</span> <span class="ident">in_mirror</span> {
+            <span class="ident">log</span>::<span class="macro">trace</span><span class="macro">!</span>(<span class="string">&quot;saving data for &#39;{}&#39;: leaving a tombstone&quot;</span>, <span class="ident">ext_id</span>);
+            <span class="ident">tx</span>.<span class="ident">execute_named_cached</span>(
+                <span class="string">&quot;
+                INSERT INTO storage_sync_data(ext_id, data, sync_change_counter)
+                VALUES (:ext_id, NULL, 1)
+                ON CONFLICT (ext_id) DO UPDATE
+                SET data = NULL, sync_change_counter = sync_change_counter + 1&quot;</span>,
+                <span class="ident">rusqlite</span>::<span class="macro">named_params</span><span class="macro">!</span> {
+                    <span class="string">&quot;:ext_id&quot;</span>: <span class="ident">ext_id</span>,
+                },
+            )<span class="question-mark">?</span>;
+        } <span class="kw">else</span> {
+            <span class="ident">log</span>::<span class="macro">trace</span><span class="macro">!</span>(<span class="string">&quot;saving data for &#39;{}&#39;: removing the row&quot;</span>, <span class="ident">ext_id</span>);
+            <span class="ident">tx</span>.<span class="ident">execute_named_cached</span>(
+                <span class="string">&quot;
+                DELETE FROM storage_sync_data WHERE ext_id = :ext_id&quot;</span>,
+                <span class="ident">rusqlite</span>::<span class="macro">named_params</span><span class="macro">!</span> {
+                    <span class="string">&quot;:ext_id&quot;</span>: <span class="ident">ext_id</span>,
+                },
+            )<span class="question-mark">?</span>;
+        }
+    } <span class="kw">else</span> {
+        <span class="comment">// Convert to bytes so we can enforce the quota.</span>
+        <span class="kw">let</span> <span class="ident">sval</span> <span class="op">=</span> <span class="ident">val</span>.<span class="ident">to_string</span>();
+        <span class="kw">if</span> <span class="ident">sval</span>.<span class="ident">len</span>() <span class="op">&gt;</span> <span class="ident">QUOTA_BYTES</span> {
+            <span class="kw">return</span> <span class="prelude-val">Err</span>(<span class="ident">ErrorKind</span>::<span class="ident">QuotaError</span>(<span class="ident">QuotaReason</span>::<span class="ident">TotalBytes</span>).<span class="ident">into</span>());
+        }
+        <span class="ident">log</span>::<span class="macro">trace</span><span class="macro">!</span>(<span class="string">&quot;saving data for &#39;{}&#39;: writing&quot;</span>, <span class="ident">ext_id</span>);
+        <span class="ident">tx</span>.<span class="ident">execute_named_cached</span>(
+            <span class="string">&quot;INSERT INTO storage_sync_data(ext_id, data, sync_change_counter)
+                VALUES (:ext_id, :data, 1)
+                ON CONFLICT (ext_id) DO UPDATE
+                set data=:data, sync_change_counter = sync_change_counter + 1&quot;</span>,
+            <span class="ident">rusqlite</span>::<span class="macro">named_params</span><span class="macro">!</span> {
+                <span class="string">&quot;:ext_id&quot;</span>: <span class="ident">ext_id</span>,
+                <span class="string">&quot;:data&quot;</span>: <span class="kw-2">&amp;</span><span class="ident">sval</span>,
+            },
+        )<span class="question-mark">?</span>;
     }
-    <span class="comment">// XXX - sync support will need to do the change_counter thing here.</span>
-    <span class="ident">tx</span>.<span class="ident">execute_named</span>(
-        <span class="string">&quot;INSERT OR REPLACE INTO storage_sync_data(ext_id, data)
-            VALUES (:ext_id, :data)&quot;</span>,
-        <span class="kw-2">&amp;</span>[(<span class="string">&quot;:ext_id&quot;</span>, <span class="kw-2">&amp;</span><span class="ident">ext_id</span>), (<span class="string">&quot;:data&quot;</span>, <span class="kw-2">&amp;</span><span class="ident">sval</span>)],
-    )<span class="question-mark">?</span>;
     <span class="prelude-val">Ok</span>(())
 }
 
 <span class="kw">fn</span> <span class="ident">remove_from_db</span>(<span class="ident">tx</span>: <span class="kw-2">&amp;</span><span class="ident">Transaction</span><span class="op">&lt;</span><span class="lifetime">&#39;_</span><span class="op">&gt;</span>, <span class="ident">ext_id</span>: <span class="kw-2">&amp;</span><span class="ident">str</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span>()<span class="op">&gt;</span> {
-    <span class="comment">// XXX - sync support will need to do the tombstone thing here.</span>
-    <span class="ident">tx</span>.<span class="ident">execute_named</span>(
-        <span class="string">&quot;DELETE FROM storage_sync_data
-        WHERE ext_id = :ext_id&quot;</span>,
-        <span class="kw-2">&amp;</span>[(<span class="string">&quot;:ext_id&quot;</span>, <span class="kw-2">&amp;</span><span class="ident">ext_id</span>)],
-    )<span class="question-mark">?</span>;
-    <span class="prelude-val">Ok</span>(())
+    <span class="ident">save_to_db</span>(<span class="ident">tx</span>, <span class="ident">ext_id</span>, <span class="kw-2">&amp;</span><span class="ident">JsonValue</span>::<span class="ident">Null</span>)
 }
 
 <span class="comment">// This is a &quot;helper struct&quot; for the callback part of the chrome.storage spec,</span>

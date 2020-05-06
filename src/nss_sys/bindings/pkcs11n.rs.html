@@ -23,6 +23,8 @@
 <span id="23">23</span>
 <span id="24">24</span>
 <span id="25">25</span>
+<span id="26">26</span>
+<span id="27">27</span>
 </pre><div class="example-wrap"><pre class="rust ">
 <span class="comment">/* This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
@@ -32,10 +34,12 @@
 
 <span class="kw">pub</span> <span class="kw">const</span> <span class="ident">CKM_NSS_HKDF_SHA256</span>: <span class="ident">u32</span> <span class="op">=</span> <span class="number">3_461_563_220</span>; <span class="comment">// (CKM_NSS + 4)</span>
 
+<span class="kw">pub</span> <span class="kw">type</span> <span class="ident">CK_GCM_PARAMS</span> <span class="op">=</span> <span class="ident">CK_GCM_PARAMS_V3</span>;
 <span class="attribute">#[<span class="ident">repr</span>(<span class="ident">C</span>)]</span>
-<span class="kw">pub</span> <span class="kw">struct</span> <span class="ident">CK_GCM_PARAMS</span> {
+<span class="kw">pub</span> <span class="kw">struct</span> <span class="ident">CK_GCM_PARAMS_V3</span> {
     <span class="kw">pub</span> <span class="ident">pIv</span>: <span class="ident">CK_BYTE_PTR</span>,
     <span class="kw">pub</span> <span class="ident">ulIvLen</span>: <span class="ident">CK_ULONG</span>,
+    <span class="kw">pub</span> <span class="ident">ulIvBits</span>: <span class="ident">CK_ULONG</span>,
     <span class="kw">pub</span> <span class="ident">pAAD</span>: <span class="ident">CK_BYTE_PTR</span>,
     <span class="kw">pub</span> <span class="ident">ulAADLen</span>: <span class="ident">CK_ULONG</span>,
     <span class="kw">pub</span> <span class="ident">ulTagBits</span>: <span class="ident">CK_ULONG</span>,

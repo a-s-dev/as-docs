@@ -152,6 +152,16 @@
 <span id="152">152</span>
 <span id="153">153</span>
 <span id="154">154</span>
+<span id="155">155</span>
+<span id="156">156</span>
+<span id="157">157</span>
+<span id="158">158</span>
+<span id="159">159</span>
+<span id="160">160</span>
+<span id="161">161</span>
+<span id="162">162</span>
+<span id="163">163</span>
+<span id="164">164</span>
 </pre><div class="example-wrap"><pre class="rust ">
 <span class="comment">/* This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
@@ -240,7 +250,6 @@
                 <span class="string">&quot;certhi&quot;</span>,
                 <span class="string">&quot;cryptohi&quot;</span>,
                 <span class="string">&quot;freebl_static&quot;</span>,
-                <span class="string">&quot;hw-acc-crypto&quot;</span>,
                 <span class="string">&quot;nspr4&quot;</span>,
                 <span class="string">&quot;nss_static&quot;</span>,
                 <span class="string">&quot;nssb&quot;</span>,
@@ -255,18 +264,29 @@
             <span class="comment">// Hardware specific libs.</span>
             <span class="kw">let</span> <span class="ident">target_arch</span> <span class="op">=</span> <span class="ident">env</span>::<span class="ident">var</span>(<span class="string">&quot;CARGO_CFG_TARGET_ARCH&quot;</span>).<span class="ident">unwrap</span>();
             <span class="kw">let</span> <span class="ident">target_os</span> <span class="op">=</span> <span class="ident">env</span>::<span class="ident">var</span>(<span class="string">&quot;CARGO_CFG_TARGET_OS&quot;</span>).<span class="ident">unwrap</span>();
-            <span class="comment">// https://searchfox.org/mozilla-central/rev/1eb05019f47069172ba81a6c108a584a409a24ea/security/nss/lib/freebl/freebl.gyp#159-168</span>
+            <span class="comment">// https://searchfox.org/nss/rev/08c4d05078d00089f8d7540651b0717a9d66f87e/lib/freebl/freebl.gyp#278-296</span>
+            <span class="kw">if</span> <span class="ident">target_arch</span> <span class="op">=</span><span class="op">=</span> <span class="string">&quot;arm&quot;</span> <span class="op">|</span><span class="op">|</span> <span class="ident">target_arch</span> <span class="op">=</span><span class="op">=</span> <span class="string">&quot;aarch64&quot;</span> {
+                <span class="ident">static_libs</span>.<span class="ident">push</span>(<span class="string">&quot;armv8_c_lib&quot;</span>);
+            }
             <span class="kw">if</span> <span class="ident">target_arch</span> <span class="op">=</span><span class="op">=</span> <span class="string">&quot;x86_64&quot;</span> <span class="op">|</span><span class="op">|</span> <span class="ident">target_arch</span> <span class="op">=</span><span class="op">=</span> <span class="string">&quot;x86&quot;</span> {
                 <span class="ident">static_libs</span>.<span class="ident">push</span>(<span class="string">&quot;gcm-aes-x86_c_lib&quot;</span>);
-            } <span class="kw">else</span> <span class="kw">if</span> <span class="ident">target_arch</span> <span class="op">=</span><span class="op">=</span> <span class="string">&quot;aarch64&quot;</span> {
+            }
+            <span class="kw">if</span> <span class="ident">target_arch</span> <span class="op">=</span><span class="op">=</span> <span class="string">&quot;arm&quot;</span> {
+                <span class="ident">static_libs</span>.<span class="ident">push</span>(<span class="string">&quot;gcm-aes-arm32-neon_c_lib&quot;</span>)
+            }
+            <span class="kw">if</span> <span class="ident">target_arch</span> <span class="op">=</span><span class="op">=</span> <span class="string">&quot;aarch64&quot;</span> {
                 <span class="ident">static_libs</span>.<span class="ident">push</span>(<span class="string">&quot;gcm-aes-aarch64_c_lib&quot;</span>);
             }
-            <span class="comment">// https://searchfox.org/mozilla-central/rev/1eb05019f47069172ba81a6c108a584a409a24ea/security/nss/lib/freebl/freebl.gyp#224-233</span>
+            <span class="kw">if</span> <span class="ident">target_arch</span> <span class="op">=</span><span class="op">=</span> <span class="string">&quot;x86_64&quot;</span> {
+                <span class="ident">static_libs</span>.<span class="ident">push</span>(<span class="string">&quot;hw-acc-crypto-avx&quot;</span>);
+                <span class="ident">static_libs</span>.<span class="ident">push</span>(<span class="string">&quot;hw-acc-crypto-avx2&quot;</span>);
+            }
+            <span class="comment">// https://searchfox.org/nss/rev/08c4d05078d00089f8d7540651b0717a9d66f87e/lib/freebl/freebl.gyp#315-324</span>
             <span class="kw">if</span> ((<span class="ident">target_os</span> <span class="op">=</span><span class="op">=</span> <span class="string">&quot;android&quot;</span> <span class="op">|</span><span class="op">|</span> <span class="ident">target_os</span> <span class="op">=</span><span class="op">=</span> <span class="string">&quot;linux&quot;</span>) <span class="kw-2">&amp;</span><span class="op">&amp;</span> <span class="ident">target_arch</span> <span class="op">=</span><span class="op">=</span> <span class="string">&quot;x86_64&quot;</span>)
                 <span class="op">|</span><span class="op">|</span> <span class="ident">target_os</span> <span class="op">=</span><span class="op">=</span> <span class="string">&quot;windows&quot;</span>
             {
                 <span class="ident">static_libs</span>.<span class="ident">push</span>(<span class="string">&quot;intel-gcm-wrap_c_lib&quot;</span>);
-                <span class="comment">// https://searchfox.org/mozilla-central/rev/1eb05019f47069172ba81a6c108a584a409a24ea/security/nss/lib/freebl/freebl.gyp#43-47</span>
+                <span class="comment">// https://searchfox.org/nss/rev/08c4d05078d00089f8d7540651b0717a9d66f87e/lib/freebl/freebl.gyp#43-47</span>
                 <span class="kw">if</span> (<span class="ident">target_os</span> <span class="op">=</span><span class="op">=</span> <span class="string">&quot;android&quot;</span> <span class="op">|</span><span class="op">|</span> <span class="ident">target_os</span> <span class="op">=</span><span class="op">=</span> <span class="string">&quot;linux&quot;</span>) <span class="kw-2">&amp;</span><span class="op">&amp;</span> <span class="ident">target_arch</span> <span class="op">=</span><span class="op">=</span> <span class="string">&quot;x86_64&quot;</span> {
                     <span class="ident">static_libs</span>.<span class="ident">push</span>(<span class="string">&quot;intel-gcm-s_lib&quot;</span>);
                 }

@@ -125,10 +125,6 @@
 <span id="125">125</span>
 <span id="126">126</span>
 <span id="127">127</span>
-<span id="128">128</span>
-<span id="129">129</span>
-<span id="130">130</span>
-<span id="131">131</span>
 </pre><div class="example-wrap"><pre class="rust ">
 <span class="comment">/* This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
@@ -181,10 +177,6 @@
     <span class="kw">use</span> <span class="kw">super</span>::<span class="kw-2">*</span>;
     <span class="kw">use</span> <span class="kw">crate</span>::<span class="ident">digest</span>;
 
-    <span class="comment">// NSS limits the size of derived key material to 576 bytes due to fixed-size `key_block` buffer here:</span>
-    <span class="comment">// https://dxr.mozilla.org/mozilla-central/rev/3c0f78074b727fbae112b6eda111d4c4d30cc3ec/security/nss/lib/softoken/pkcs11c.c#7758</span>
-    <span class="kw">const</span> <span class="ident">NSS_MAX_DERIVED_KEY_MATERIAL</span>: <span class="ident">usize</span> <span class="op">=</span> <span class="number">576</span>;
-
     <span class="attribute">#[<span class="ident">test</span>]</span>
     <span class="kw">fn</span> <span class="ident">hkdf_produces_correct_result</span>() {
         <span class="kw">let</span> <span class="ident">secret</span> <span class="op">=</span> <span class="ident">hex</span>::<span class="ident">decode</span>(<span class="string">&quot;0b0b0b0b0b0b0b0b0b0b0b0b0b0b0b0b0b0b0b0b0b0b&quot;</span>).<span class="ident">unwrap</span>();
@@ -229,7 +221,7 @@
     <span class="attribute">#[<span class="ident">test</span>]</span>
     <span class="kw">fn</span> <span class="ident">hkdf_rejects_gigantic_output_buffers</span>() {
         <span class="kw">let</span> <span class="ident">salt</span> <span class="op">=</span> <span class="ident">hmac</span>::<span class="ident">SigningKey</span>::<span class="ident">new</span>(<span class="kw-2">&amp;</span><span class="ident">digest</span>::<span class="ident">SHA256</span>, <span class="string">b&quot;salt&quot;</span>);
-        <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">out</span> <span class="op">=</span> <span class="macro">vec</span><span class="macro">!</span>[<span class="number">0u8</span>; <span class="ident">NSS_MAX_DERIVED_KEY_MATERIAL</span> <span class="op">+</span> <span class="number">1</span>];
+        <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">out</span> <span class="op">=</span> <span class="macro">vec</span><span class="macro">!</span>[<span class="number">0u8</span>; <span class="number">8160</span> <span class="op">+</span> <span class="number">1</span>]; <span class="comment">// RFC maximum (hashlen * 255) + 1</span>
         <span class="macro">assert</span><span class="macro">!</span>(<span class="ident">extract_and_expand</span>(<span class="kw-2">&amp;</span><span class="ident">salt</span>, <span class="string">b&quot;secret&quot;</span>, <span class="string">b&quot;info&quot;</span>, <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">out</span>).<span class="ident">is_err</span>());
     }
 

@@ -194,28 +194,22 @@
 <span id="194">194</span>
 <span id="195">195</span>
 <span id="196">196</span>
-<span id="197">197</span>
 </pre><div class="example-wrap"><pre class="rust ">
 <span class="comment">/* This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at http://mozilla.org/MPL/2.0/. */</span>
 
-<span class="kw">use</span> <span class="ident">std</span>::{<span class="ident">sync</span>::<span class="ident">Mutex</span>, <span class="ident">sync</span>::<span class="ident">MutexGuard</span>, <span class="ident">sync</span>::<span class="ident">PoisonError</span>};
+<span class="kw">use</span> <span class="ident">std</span>::{<span class="ident">error</span>::<span class="ident">Error</span>, <span class="ident">fmt</span>};
 
-<span class="kw">use</span> <span class="ident">interrupt_support</span>::<span class="ident">Interruptee</span>;
+<span class="kw">use</span> <span class="ident">serde</span>::{<span class="ident">Deserialize</span>, <span class="ident">Serialize</span>};
+
+<span class="kw">use</span> <span class="kw">super</span>::{<span class="ident">Guid</span>, <span class="ident">Payload</span>, <span class="ident">ServerTimestamp</span>};
 
 <span class="doccomment">/// A bridged Sync engine implements all the methods needed to support</span>
 <span class="doccomment">/// Desktop Sync.</span>
 <span class="kw">pub</span> <span class="kw">trait</span> <span class="ident">BridgedEngine</span> {
     <span class="doccomment">/// The type returned for errors.</span>
     <span class="kw">type</span> <span class="ident">Error</span>;
-
-    <span class="doccomment">/// Initializes the engine. This is called once, when the engine is first</span>
-    <span class="doccomment">/// created, and guaranteed to be called before any of the other methods.</span>
-    <span class="doccomment">/// The default implementation does nothing.</span>
-    <span class="kw">fn</span> <span class="ident">initialize</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span>(), <span class="self">Self</span>::<span class="ident">Error</span><span class="op">&gt;</span> {
-        <span class="prelude-val">Ok</span>(())
-    }
 
     <span class="doccomment">/// Returns the last sync time, in milliseconds, for this engine&#39;s</span>
     <span class="doccomment">/// collection. This is called before each sync, to determine the lower</span>
@@ -245,35 +239,30 @@
     <span class="doccomment">/// sync.</span>
     <span class="kw">fn</span> <span class="ident">ensure_current_sync_id</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">new_sync_id</span>: <span class="kw-2">&amp;</span><span class="ident">str</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">String</span>, <span class="self">Self</span>::<span class="ident">Error</span><span class="op">&gt;</span>;
 
+    <span class="doccomment">/// Indicates that the engine is about to start syncing. This is called</span>
+    <span class="doccomment">/// once per sync, and always before `store_incoming`.</span>
+    <span class="kw">fn</span> <span class="ident">sync_started</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span>(), <span class="self">Self</span>::<span class="ident">Error</span><span class="op">&gt;</span>;
+
     <span class="doccomment">/// Stages a batch of incoming Sync records. This is called multiple</span>
     <span class="doccomment">/// times per sync, once for each batch. Implementations can use the</span>
     <span class="doccomment">/// signal to check if the operation was aborted, and cancel any</span>
     <span class="doccomment">/// pending work.</span>
-    <span class="kw">fn</span> <span class="ident">store_incoming</span>(
-        <span class="kw-2">&amp;</span><span class="self">self</span>,
-        <span class="ident">incoming_cleartexts</span>: <span class="kw-2">&amp;</span>[<span class="ident">String</span>],
-        <span class="ident">signal</span>: <span class="kw-2">&amp;</span><span class="kw">dyn</span> <span class="ident">Interruptee</span>,
-    ) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span>(), <span class="self">Self</span>::<span class="ident">Error</span><span class="op">&gt;</span>;
+    <span class="kw">fn</span> <span class="ident">store_incoming</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">incoming_cleartexts</span>: <span class="kw-2">&amp;</span>[<span class="ident">IncomingEnvelope</span>]) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span>(), <span class="self">Self</span>::<span class="ident">Error</span><span class="op">&gt;</span>;
 
     <span class="doccomment">/// Applies all staged records, reconciling changes on both sides and</span>
     <span class="doccomment">/// resolving conflicts. Returns a list of records to upload.</span>
-    <span class="kw">fn</span> <span class="ident">apply</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">signal</span>: <span class="kw-2">&amp;</span><span class="kw">dyn</span> <span class="ident">Interruptee</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">ApplyResults</span>, <span class="self">Self</span>::<span class="ident">Error</span><span class="op">&gt;</span>;
+    <span class="kw">fn</span> <span class="ident">apply</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">ApplyResults</span>, <span class="self">Self</span>::<span class="ident">Error</span><span class="op">&gt;</span>;
 
     <span class="doccomment">/// Indicates that the given record IDs were uploaded successfully to the</span>
     <span class="doccomment">/// server. This is called multiple times per sync, once for each batch</span>
     <span class="doccomment">/// upload.</span>
-    <span class="kw">fn</span> <span class="ident">set_uploaded</span>(
-        <span class="kw-2">&amp;</span><span class="self">self</span>,
-        <span class="ident">server_modified_millis</span>: <span class="ident">i64</span>,
-        <span class="ident">ids</span>: <span class="kw-2">&amp;</span>[<span class="ident">String</span>],
-        <span class="ident">signal</span>: <span class="kw-2">&amp;</span><span class="kw">dyn</span> <span class="ident">Interruptee</span>,
-    ) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span>(), <span class="self">Self</span>::<span class="ident">Error</span><span class="op">&gt;</span>;
+    <span class="kw">fn</span> <span class="ident">set_uploaded</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">server_modified_millis</span>: <span class="ident">i64</span>, <span class="ident">ids</span>: <span class="kw-2">&amp;</span>[<span class="ident">Guid</span>]) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span>(), <span class="self">Self</span>::<span class="ident">Error</span><span class="op">&gt;</span>;
 
     <span class="doccomment">/// Indicates that all records have been uploaded. At this point, any record</span>
     <span class="doccomment">/// IDs marked for upload that haven&#39;t been passed to `set_uploaded`, can be</span>
     <span class="doccomment">/// assumed to have failed: for example, because the server rejected a record</span>
     <span class="doccomment">/// with an invalid TTL or sort index.</span>
-    <span class="kw">fn</span> <span class="ident">sync_finished</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">signal</span>: <span class="kw-2">&amp;</span><span class="kw">dyn</span> <span class="ident">Interruptee</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span>(), <span class="self">Self</span>::<span class="ident">Error</span><span class="op">&gt;</span>;
+    <span class="kw">fn</span> <span class="ident">sync_finished</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span>(), <span class="self">Self</span>::<span class="ident">Error</span><span class="op">&gt;</span>;
 
     <span class="doccomment">/// Resets all local Sync state, including any change flags, mirrors, and</span>
     <span class="doccomment">/// the last sync time, such that the next sync is treated as a first sync</span>
@@ -283,19 +272,12 @@
     <span class="doccomment">/// Erases all local user data for this collection, and any Sync metadata.</span>
     <span class="doccomment">/// This method is destructive, and unused for most collections.</span>
     <span class="kw">fn</span> <span class="ident">wipe</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span>(), <span class="self">Self</span>::<span class="ident">Error</span><span class="op">&gt;</span>;
-
-    <span class="doccomment">/// Tears down the engine. The opposite of `initialize`, `finalize` is</span>
-    <span class="doccomment">/// called when an engine is disabled, or otherwise no longer needed. The</span>
-    <span class="doccomment">/// default implementation does nothing.</span>
-    <span class="kw">fn</span> <span class="ident">finalize</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span>(), <span class="self">Self</span>::<span class="ident">Error</span><span class="op">&gt;</span> {
-        <span class="prelude-val">Ok</span>(())
-    }
 }
 
 <span class="attribute">#[<span class="ident">derive</span>(<span class="ident">Clone</span>, <span class="ident">Debug</span>, <span class="ident">Default</span>)]</span>
 <span class="kw">pub</span> <span class="kw">struct</span> <span class="ident">ApplyResults</span> {
     <span class="doccomment">/// List of records</span>
-    <span class="kw">pub</span> <span class="ident">records</span>: <span class="ident">Vec</span><span class="op">&lt;</span><span class="ident">String</span><span class="op">&gt;</span>,
+    <span class="kw">pub</span> <span class="ident">envelopes</span>: <span class="ident">Vec</span><span class="op">&lt;</span><span class="ident">OutgoingEnvelope</span><span class="op">&gt;</span>,
     <span class="doccomment">/// The number of incoming records whose contents were merged because they</span>
     <span class="doccomment">/// changed on both sides. None indicates we aren&#39;t reporting this</span>
     <span class="doccomment">/// information.</span>
@@ -303,94 +285,110 @@
 }
 
 <span class="kw">impl</span> <span class="ident">ApplyResults</span> {
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">new</span>(<span class="ident">records</span>: <span class="ident">Vec</span><span class="op">&lt;</span><span class="ident">String</span><span class="op">&gt;</span>, <span class="ident">num_reconciled</span>: <span class="kw">impl</span> <span class="ident">Into</span><span class="op">&lt;</span><span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">usize</span><span class="op">&gt;</span><span class="op">&gt;</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="self">Self</span> {
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">new</span>(<span class="ident">envelopes</span>: <span class="ident">Vec</span><span class="op">&lt;</span><span class="ident">OutgoingEnvelope</span><span class="op">&gt;</span>, <span class="ident">num_reconciled</span>: <span class="kw">impl</span> <span class="ident">Into</span><span class="op">&lt;</span><span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">usize</span><span class="op">&gt;</span><span class="op">&gt;</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="self">Self</span> {
         <span class="self">Self</span> {
-            <span class="ident">records</span>,
+            <span class="ident">envelopes</span>,
             <span class="ident">num_reconciled</span>: <span class="ident">num_reconciled</span>.<span class="ident">into</span>(),
         }
     }
 }
 
 <span class="comment">// Shorthand for engines that don&#39;t care.</span>
-<span class="kw">impl</span> <span class="ident">From</span><span class="op">&lt;</span><span class="ident">Vec</span><span class="op">&lt;</span><span class="ident">String</span><span class="op">&gt;</span><span class="op">&gt;</span> <span class="kw">for</span> <span class="ident">ApplyResults</span> {
-    <span class="kw">fn</span> <span class="ident">from</span>(<span class="ident">records</span>: <span class="ident">Vec</span><span class="op">&lt;</span><span class="ident">String</span><span class="op">&gt;</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="self">Self</span> {
+<span class="kw">impl</span> <span class="ident">From</span><span class="op">&lt;</span><span class="ident">Vec</span><span class="op">&lt;</span><span class="ident">OutgoingEnvelope</span><span class="op">&gt;</span><span class="op">&gt;</span> <span class="kw">for</span> <span class="ident">ApplyResults</span> {
+    <span class="kw">fn</span> <span class="ident">from</span>(<span class="ident">envelopes</span>: <span class="ident">Vec</span><span class="op">&lt;</span><span class="ident">OutgoingEnvelope</span><span class="op">&gt;</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="self">Self</span> {
         <span class="self">Self</span> {
-            <span class="ident">records</span>,
+            <span class="ident">envelopes</span>,
             <span class="ident">num_reconciled</span>: <span class="prelude-val">None</span>,
         }
     }
 }
 
-<span class="doccomment">/// A blanket implementation of `BridgedEngine` for any `Mutex&lt;BridgedEngine&gt;`.</span>
-<span class="doccomment">/// This is provided for convenience, since we expect most bridges to hold</span>
-<span class="doccomment">/// their engines in an `Arc&lt;Mutex&lt;impl BridgedEngine&gt;&gt;`.</span>
-<span class="kw">impl</span><span class="op">&lt;</span><span class="ident">E</span><span class="op">&gt;</span> <span class="ident">BridgedEngine</span> <span class="kw">for</span> <span class="ident">Mutex</span><span class="op">&lt;</span><span class="ident">E</span><span class="op">&gt;</span>
-<span class="kw">where</span>
-    <span class="ident">E</span>: <span class="ident">BridgedEngine</span>,
-    <span class="ident">E</span>::<span class="ident">Error</span>: <span class="kw">for</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span><span class="op">&gt;</span> <span class="ident">From</span><span class="op">&lt;</span><span class="ident">PoisonError</span><span class="op">&lt;</span><span class="ident">MutexGuard</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span>, <span class="ident">E</span><span class="op">&gt;</span><span class="op">&gt;</span><span class="op">&gt;</span>,
-{
-    <span class="kw">type</span> <span class="ident">Error</span> <span class="op">=</span> <span class="ident">E</span>::<span class="ident">Error</span>;
+<span class="doccomment">/// An envelope for an incoming item, passed to `BridgedEngine::store_incoming`.</span>
+<span class="doccomment">/// Envelopes are a halfway point between BSOs, the format used for all items on</span>
+<span class="doccomment">/// the Sync server, and records, which are specific to each engine.</span>
+<span class="doccomment">///</span>
+<span class="doccomment">/// A BSO is a JSON object with metadata fields (`id`, `modifed`, `sortindex`),</span>
+<span class="doccomment">/// and a BSO payload that is itself a JSON string. For encrypted records, the</span>
+<span class="doccomment">/// BSO payload has a ciphertext, which must be decrypted to yield a cleartext.</span>
+<span class="doccomment">/// The cleartext is a JSON string (that&#39;s three levels of JSON wrapping, if</span>
+<span class="doccomment">/// you&#39;re keeping score: the BSO itself, BSO payload, and cleartext) with the</span>
+<span class="doccomment">/// actual record payload.</span>
+<span class="doccomment">///</span>
+<span class="doccomment">/// An envelope combines the metadata fields from the BSO, and the cleartext</span>
+<span class="doccomment">/// from the encrypted BSO payload.</span>
+<span class="attribute">#[<span class="ident">derive</span>(<span class="ident">Clone</span>, <span class="ident">Debug</span>, <span class="ident">Deserialize</span>)]</span>
+<span class="kw">pub</span> <span class="kw">struct</span> <span class="ident">IncomingEnvelope</span> {
+    <span class="kw">pub</span> <span class="ident">id</span>: <span class="ident">Guid</span>,
+    <span class="kw">pub</span> <span class="ident">modified</span>: <span class="ident">ServerTimestamp</span>,
+    <span class="attribute">#[<span class="ident">serde</span>(<span class="ident">default</span>)]</span>
+    <span class="kw">pub</span> <span class="ident">sortindex</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">i32</span><span class="op">&gt;</span>,
+    <span class="comment">// Don&#39;t provide access to the cleartext directly. We want all callers to</span>
+    <span class="comment">// use `IncomingEnvelope::payload`, so that we can validate the cleartext.</span>
+    <span class="ident">cleartext</span>: <span class="ident">String</span>,
+}
 
-    <span class="kw">fn</span> <span class="ident">initialize</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span>(), <span class="self">Self</span>::<span class="ident">Error</span><span class="op">&gt;</span> {
-        <span class="self">self</span>.<span class="ident">lock</span>()<span class="question-mark">?</span>.<span class="ident">initialize</span>()
+<span class="kw">impl</span> <span class="ident">IncomingEnvelope</span> {
+    <span class="doccomment">/// Parses and returns the record payload from this envelope. Returns an</span>
+    <span class="doccomment">/// error if the envelope&#39;s cleartext isn&#39;t valid JSON, or the payload is</span>
+    <span class="doccomment">/// invalid.</span>
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">payload</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">Payload</span>, <span class="ident">PayloadError</span><span class="op">&gt;</span> {
+        <span class="kw">let</span> <span class="ident">payload</span>: <span class="ident">Payload</span> <span class="op">=</span> <span class="ident">serde_json</span>::<span class="ident">from_str</span>(<span class="kw-2">&amp;</span><span class="self">self</span>.<span class="ident">cleartext</span>)<span class="question-mark">?</span>;
+        <span class="kw">if</span> <span class="ident">payload</span>.<span class="ident">id</span> <span class="op">!</span><span class="op">=</span> <span class="self">self</span>.<span class="ident">id</span> {
+            <span class="kw">return</span> <span class="prelude-val">Err</span>(<span class="ident">PayloadError</span>::<span class="ident">MismatchedId</span> {
+                <span class="ident">envelope</span>: <span class="self">self</span>.<span class="ident">id</span>.<span class="ident">clone</span>(),
+                <span class="ident">payload</span>: <span class="ident">payload</span>.<span class="ident">id</span>,
+            });
+        }
+        <span class="prelude-val">Ok</span>(<span class="ident">payload</span>)
     }
+}
 
-    <span class="kw">fn</span> <span class="ident">last_sync</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">i64</span>, <span class="self">Self</span>::<span class="ident">Error</span><span class="op">&gt;</span> {
-        <span class="self">self</span>.<span class="ident">lock</span>()<span class="question-mark">?</span>.<span class="ident">last_sync</span>()
+<span class="doccomment">/// An envelope for an outgoing item, returned from `BridgedEngine::apply`. This</span>
+<span class="doccomment">/// is similar to `IncomingEnvelope`, but omits fields that are only set by the</span>
+<span class="doccomment">/// server, like `modified`.</span>
+<span class="attribute">#[<span class="ident">derive</span>(<span class="ident">Clone</span>, <span class="ident">Debug</span>, <span class="ident">Serialize</span>)]</span>
+<span class="kw">pub</span> <span class="kw">struct</span> <span class="ident">OutgoingEnvelope</span> {
+    <span class="ident">id</span>: <span class="ident">Guid</span>,
+    <span class="ident">cleartext</span>: <span class="ident">String</span>,
+}
+
+<span class="kw">impl</span> <span class="ident">From</span><span class="op">&lt;</span><span class="ident">Payload</span><span class="op">&gt;</span> <span class="kw">for</span> <span class="ident">OutgoingEnvelope</span> {
+    <span class="kw">fn</span> <span class="ident">from</span>(<span class="ident">payload</span>: <span class="ident">Payload</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="self">Self</span> {
+        <span class="kw">let</span> <span class="ident">id</span> <span class="op">=</span> <span class="ident">payload</span>.<span class="ident">id</span>.<span class="ident">clone</span>();
+        <span class="ident">OutgoingEnvelope</span> {
+            <span class="ident">id</span>,
+            <span class="ident">cleartext</span>: <span class="ident">payload</span>.<span class="ident">into_json_string</span>(),
+        }
     }
+}
 
-    <span class="kw">fn</span> <span class="ident">set_last_sync</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">millis</span>: <span class="ident">i64</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span>(), <span class="self">Self</span>::<span class="ident">Error</span><span class="op">&gt;</span> {
-        <span class="self">self</span>.<span class="ident">lock</span>()<span class="question-mark">?</span>.<span class="ident">set_last_sync</span>(<span class="ident">millis</span>)
+<span class="doccomment">/// An error that indicates a payload is invalid.</span>
+<span class="attribute">#[<span class="ident">derive</span>(<span class="ident">Debug</span>)]</span>
+<span class="kw">pub</span> <span class="kw">enum</span> <span class="ident">PayloadError</span> {
+    <span class="doccomment">/// The payload contains invalid JSON.</span>
+    <span class="ident">Invalid</span>(<span class="ident">serde_json</span>::<span class="ident">Error</span>),
+    <span class="doccomment">/// The ID of the BSO in the envelope doesn&#39;t match the ID in the payload.</span>
+    <span class="ident">MismatchedId</span> { <span class="ident">envelope</span>: <span class="ident">Guid</span>, <span class="ident">payload</span>: <span class="ident">Guid</span> },
+}
+
+<span class="kw">impl</span> <span class="ident">Error</span> <span class="kw">for</span> <span class="ident">PayloadError</span> {}
+
+<span class="kw">impl</span> <span class="ident">From</span><span class="op">&lt;</span><span class="ident">serde_json</span>::<span class="ident">Error</span><span class="op">&gt;</span> <span class="kw">for</span> <span class="ident">PayloadError</span> {
+    <span class="kw">fn</span> <span class="ident">from</span>(<span class="ident">err</span>: <span class="ident">serde_json</span>::<span class="ident">Error</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">PayloadError</span> {
+        <span class="ident">PayloadError</span>::<span class="ident">Invalid</span>(<span class="ident">err</span>)
     }
+}
 
-    <span class="kw">fn</span> <span class="ident">store_incoming</span>(
-        <span class="kw-2">&amp;</span><span class="self">self</span>,
-        <span class="ident">incoming_cleartexts</span>: <span class="kw-2">&amp;</span>[<span class="ident">String</span>],
-        <span class="ident">signal</span>: <span class="kw-2">&amp;</span><span class="kw">dyn</span> <span class="ident">Interruptee</span>,
-    ) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span>(), <span class="self">Self</span>::<span class="ident">Error</span><span class="op">&gt;</span> {
-        <span class="self">self</span>.<span class="ident">lock</span>()<span class="question-mark">?</span>.<span class="ident">store_incoming</span>(<span class="ident">incoming_cleartexts</span>, <span class="ident">signal</span>)
-    }
-
-    <span class="kw">fn</span> <span class="ident">apply</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">signal</span>: <span class="kw-2">&amp;</span><span class="kw">dyn</span> <span class="ident">Interruptee</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">ApplyResults</span>, <span class="self">Self</span>::<span class="ident">Error</span><span class="op">&gt;</span> {
-        <span class="self">self</span>.<span class="ident">lock</span>()<span class="question-mark">?</span>.<span class="ident">apply</span>(<span class="ident">signal</span>)
-    }
-
-    <span class="kw">fn</span> <span class="ident">set_uploaded</span>(
-        <span class="kw-2">&amp;</span><span class="self">self</span>,
-        <span class="ident">server_modified_millis</span>: <span class="ident">i64</span>,
-        <span class="ident">ids</span>: <span class="kw-2">&amp;</span>[<span class="ident">String</span>],
-        <span class="ident">signal</span>: <span class="kw-2">&amp;</span><span class="kw">dyn</span> <span class="ident">Interruptee</span>,
-    ) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span>(), <span class="self">Self</span>::<span class="ident">Error</span><span class="op">&gt;</span> {
-        <span class="self">self</span>.<span class="ident">lock</span>()<span class="question-mark">?</span>
-            .<span class="ident">set_uploaded</span>(<span class="ident">server_modified_millis</span>, <span class="ident">ids</span>, <span class="ident">signal</span>)
-    }
-
-    <span class="kw">fn</span> <span class="ident">sync_finished</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">signal</span>: <span class="kw-2">&amp;</span><span class="kw">dyn</span> <span class="ident">Interruptee</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span>(), <span class="self">Self</span>::<span class="ident">Error</span><span class="op">&gt;</span> {
-        <span class="self">self</span>.<span class="ident">lock</span>()<span class="question-mark">?</span>.<span class="ident">sync_finished</span>(<span class="ident">signal</span>)
-    }
-
-    <span class="kw">fn</span> <span class="ident">reset</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span>(), <span class="self">Self</span>::<span class="ident">Error</span><span class="op">&gt;</span> {
-        <span class="self">self</span>.<span class="ident">lock</span>()<span class="question-mark">?</span>.<span class="ident">reset</span>()
-    }
-
-    <span class="kw">fn</span> <span class="ident">wipe</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span>(), <span class="self">Self</span>::<span class="ident">Error</span><span class="op">&gt;</span> {
-        <span class="self">self</span>.<span class="ident">lock</span>()<span class="question-mark">?</span>.<span class="ident">wipe</span>()
-    }
-
-    <span class="kw">fn</span> <span class="ident">finalize</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span>(), <span class="self">Self</span>::<span class="ident">Error</span><span class="op">&gt;</span> {
-        <span class="self">self</span>.<span class="ident">lock</span>()<span class="question-mark">?</span>.<span class="ident">finalize</span>()
-    }
-
-    <span class="kw">fn</span> <span class="ident">sync_id</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">String</span><span class="op">&gt;</span>, <span class="self">Self</span>::<span class="ident">Error</span><span class="op">&gt;</span> {
-        <span class="self">self</span>.<span class="ident">lock</span>()<span class="question-mark">?</span>.<span class="ident">sync_id</span>()
-    }
-
-    <span class="kw">fn</span> <span class="ident">reset_sync_id</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">String</span>, <span class="self">Self</span>::<span class="ident">Error</span><span class="op">&gt;</span> {
-        <span class="self">self</span>.<span class="ident">lock</span>()<span class="question-mark">?</span>.<span class="ident">reset_sync_id</span>()
-    }
-
-    <span class="kw">fn</span> <span class="ident">ensure_current_sync_id</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">new_sync_id</span>: <span class="kw-2">&amp;</span><span class="ident">str</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">String</span>, <span class="self">Self</span>::<span class="ident">Error</span><span class="op">&gt;</span> {
-        <span class="self">self</span>.<span class="ident">lock</span>()<span class="question-mark">?</span>.<span class="ident">ensure_current_sync_id</span>(<span class="ident">new_sync_id</span>)
+<span class="kw">impl</span> <span class="ident">fmt</span>::<span class="ident">Display</span> <span class="kw">for</span> <span class="ident">PayloadError</span> {
+    <span class="kw">fn</span> <span class="ident">fmt</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">f</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">fmt</span>::<span class="ident">Formatter</span><span class="op">&lt;</span><span class="lifetime">&#39;_</span><span class="op">&gt;</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">fmt</span>::<span class="prelude-ty">Result</span> {
+        <span class="kw">match</span> <span class="self">self</span> {
+            <span class="ident">PayloadError</span>::<span class="ident">Invalid</span>(<span class="ident">err</span>) <span class="op">=</span><span class="op">&gt;</span> <span class="ident">err</span>.<span class="ident">fmt</span>(<span class="ident">f</span>),
+            <span class="ident">PayloadError</span>::<span class="ident">MismatchedId</span> { <span class="ident">envelope</span>, <span class="ident">payload</span> } <span class="op">=</span><span class="op">&gt;</span> <span class="macro">write</span><span class="macro">!</span>(
+                <span class="ident">f</span>,
+                <span class="string">&quot;ID `{}` in envelope doesn&#39;t match `{}` in payload&quot;</span>,
+                <span class="ident">envelope</span>, <span class="ident">payload</span>
+            ),
+        }
     }
 }
 </pre></div>

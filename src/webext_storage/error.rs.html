@@ -63,6 +63,14 @@
 <span id="63">63</span>
 <span id="64">64</span>
 <span id="65">65</span>
+<span id="66">66</span>
+<span id="67">67</span>
+<span id="68">68</span>
+<span id="69">69</span>
+<span id="70">70</span>
+<span id="71">71</span>
+<span id="72">72</span>
+<span id="73">73</span>
 </pre><div class="example-wrap"><pre class="rust ">
 <span class="comment">/* This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
@@ -70,6 +78,7 @@
 
 <span class="kw">use</span> <span class="ident">failure</span>::<span class="ident">Fail</span>;
 <span class="kw">use</span> <span class="ident">interrupt_support</span>::<span class="ident">Interrupted</span>;
+<span class="kw">use</span> <span class="ident">sync15_traits</span>::<span class="ident">bridged_engine</span>;
 
 <span class="attribute">#[<span class="ident">derive</span>(<span class="ident">Debug</span>)]</span>
 <span class="kw">pub</span> <span class="kw">enum</span> <span class="ident">QuotaReason</span> {
@@ -118,6 +127,12 @@
 
     <span class="attribute">#[<span class="ident">fail</span>(<span class="ident">display</span> <span class="op">=</span> <span class="string">&quot;Database version {} is not supported&quot;</span>, <span class="ident">_0</span>)]</span>
     <span class="ident">UnsupportedDatabaseVersion</span>(<span class="ident">i64</span>),
+
+    <span class="attribute">#[<span class="ident">fail</span>(<span class="ident">display</span> <span class="op">=</span> <span class="string">&quot;{}&quot;</span>, <span class="ident">_0</span>)]</span>
+    <span class="ident">IncomingPayloadError</span>(<span class="attribute">#[<span class="ident">fail</span>(<span class="ident">cause</span>)]</span> <span class="ident">bridged_engine</span>::<span class="ident">PayloadError</span>),
+
+    <span class="attribute">#[<span class="ident">fail</span>(<span class="ident">display</span> <span class="op">=</span> <span class="string">&quot;This operation isn&#39;t implemented yet&quot;</span>)]</span>
+    <span class="ident">NotImplemented</span>,
 }
 
 <span class="ident">error_support</span>::<span class="macro">define_error</span><span class="macro">!</span> {
@@ -127,6 +142,7 @@
         (<span class="ident">IoError</span>, <span class="ident">std</span>::<span class="ident">io</span>::<span class="ident">Error</span>),
         (<span class="ident">InterruptedError</span>, <span class="ident">Interrupted</span>),
         (<span class="ident">Utf8Error</span>, <span class="ident">std</span>::<span class="ident">str</span>::<span class="ident">Utf8Error</span>),
+        (<span class="ident">IncomingPayloadError</span>, <span class="ident">bridged_engine</span>::<span class="ident">PayloadError</span>)
     }
 }
 </pre></div>

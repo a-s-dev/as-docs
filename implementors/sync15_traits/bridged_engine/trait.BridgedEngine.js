@@ -1,3 +1,3 @@
 (function() {var implementors = {};
-implementors["sync15_traits"] = [];
+implementors["webext_storage"] = [{"text":"impl&lt;'a&gt; <a class=\"trait\" href=\"sync15_traits/bridged_engine/trait.BridgedEngine.html\" title=\"trait sync15_traits::bridged_engine::BridgedEngine\">BridgedEngine</a> for <a class=\"struct\" href=\"webext_storage/sync/bridge/struct.BridgedEngine.html\" title=\"struct webext_storage::sync::bridge::BridgedEngine\">BridgedEngine</a>&lt;'a&gt;","synthetic":false,"types":["webext_storage::sync::bridge::BridgedEngine"]}];
 if (window.register_implementors) {window.register_implementors(implementors);} else {window.pending_implementors = implementors;}})()

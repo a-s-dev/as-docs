@@ -32,5 +32,5 @@ sourcesIndex["tabs"] = {"name":"","dirs":[{"name":"sync","files":["engine.rs","m
 sourcesIndex["tabs_ffi"] = {"name":"","files":["lib.rs"]};
 sourcesIndex["viaduct"] = {"name":"","dirs":[{"name":"backend","files":["ffi.rs"]},{"name":"headers","files":["name.rs"]}],"files":["backend.rs","error.rs","headers.rs","lib.rs","mozilla.appservices.httpconfig.protobuf.rs","settings.rs"]};
 sourcesIndex["viaduct_reqwest"] = {"name":"","files":["lib.rs"]};
-sourcesIndex["webext_storage"] = {"name":"","files":["api.rs","db.rs","error.rs","lib.rs","schema.rs","store.rs"]};
+sourcesIndex["webext_storage"] = {"name":"","dirs":[{"name":"sync","files":["bridge.rs","incoming.rs","mod.rs","outgoing.rs"]}],"files":["api.rs","db.rs","error.rs","lib.rs","schema.rs","store.rs"]};
 createSourceSidebar();

@@ -1,0 +1,1 @@
+initSidebarItems({"struct":[["BridgedEngine","A bridged engine implements all the methods needed to make the `storage.sync` store work with Desktop's Sync implementation. Conceptually, it's similar to `sync15_traits::Store`, which we should eventually rename and unify with this trait (#2841)."]]});

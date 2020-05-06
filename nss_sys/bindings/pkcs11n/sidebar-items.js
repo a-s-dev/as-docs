@@ -1,1 +1,1 @@
-initSidebarItems({"constant":[["CKM_NSS_HKDF_SHA256",""]],"struct":[["CK_GCM_PARAMS",""],["CK_NSS_HKDFParams",""]]});
+initSidebarItems({"constant":[["CKM_NSS_HKDF_SHA256",""]],"struct":[["CK_GCM_PARAMS_V3",""],["CK_NSS_HKDFParams",""]],"type":[["CK_GCM_PARAMS",""]]});
