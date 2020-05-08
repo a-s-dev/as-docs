@@ -214,6 +214,8 @@
 <span id="214">214</span>
 <span id="215">215</span>
 <span id="216">216</span>
+<span id="217">217</span>
+<span id="218">218</span>
 </pre><div class="example-wrap"><pre class="rust ">
 <span class="comment">/* This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
@@ -233,6 +235,8 @@
 <span class="kw">use</span> <span class="ident">incoming</span>::<span class="ident">IncomingAction</span>;
 
 <span class="kw">type</span> <span class="ident">JsonMap</span> <span class="op">=</span> <span class="ident">serde_json</span>::<span class="ident">Map</span><span class="op">&lt;</span><span class="ident">String</span>, <span class="ident">serde_json</span>::<span class="ident">Value</span><span class="op">&gt;</span>;
+
+<span class="kw">pub</span> <span class="kw">const</span> <span class="ident">STORAGE_VERSION</span>: <span class="ident">usize</span> <span class="op">=</span> <span class="number">1</span>;
 
 <span class="doccomment">/// For use with `#[serde(skip_serializing_if = )]`</span>
 <span class="attribute">#[<span class="ident">inline</span>]</span>

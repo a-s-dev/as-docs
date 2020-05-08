@@ -18,15 +18,6 @@
 <span id="18">18</span>
 <span id="19">19</span>
 <span id="20">20</span>
-<span id="21">21</span>
-<span id="22">22</span>
-<span id="23">23</span>
-<span id="24">24</span>
-<span id="25">25</span>
-<span id="26">26</span>
-<span id="27">27</span>
-<span id="28">28</span>
-<span id="29">29</span>
 </pre><div class="example-wrap"><pre class="rust ">
 <span class="comment">/* This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
@@ -42,20 +33,11 @@
 <span class="kw">pub</span> <span class="kw">mod</span> <span class="ident">store</span>;
 <span class="kw">mod</span> <span class="ident">sync</span>;
 
-<span class="comment">// This is what we roughly expect the &quot;bridge&quot; used by desktop to do.</span>
-<span class="comment">// It&#39;s primarily here to avoid dead-code warnings (but I don&#39;t want to disable</span>
-<span class="comment">// those warning, as stuff that remains after this is suspect!)</span>
-<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">delme_demo_usage</span>() <span class="op">-</span><span class="op">&gt;</span> <span class="ident">error</span>::<span class="prelude-ty">Result</span><span class="op">&lt;</span>()<span class="op">&gt;</span> {
-    <span class="kw">use</span> <span class="ident">serde_json</span>::<span class="ident">json</span>;
+<span class="comment">// We publish some constants from non-public modules.</span>
+<span class="kw">pub</span> <span class="kw">use</span> <span class="ident">sync</span>::<span class="ident">STORAGE_VERSION</span>;
 
-    <span class="kw">let</span> <span class="ident">store</span> <span class="op">=</span> <span class="ident">store</span>::<span class="ident">Store</span>::<span class="ident">new</span>(<span class="string">&quot;webext-storage.db&quot;</span>)<span class="question-mark">?</span>;
-    <span class="ident">store</span>.<span class="ident">set</span>(<span class="string">&quot;ext-id&quot;</span>, <span class="macro">json</span><span class="macro">!</span>({}))<span class="question-mark">?</span>;
-    <span class="ident">store</span>.<span class="ident">get</span>(<span class="string">&quot;ext-id&quot;</span>, <span class="macro">json</span><span class="macro">!</span>({}))<span class="question-mark">?</span>;
-    <span class="ident">store</span>.<span class="ident">remove</span>(<span class="string">&quot;ext-id&quot;</span>, <span class="macro">json</span><span class="macro">!</span>({}))<span class="question-mark">?</span>;
-    <span class="ident">store</span>.<span class="ident">clear</span>(<span class="string">&quot;ext-id&quot;</span>)<span class="question-mark">?</span>;
-    <span class="comment">// and it might even...</span>
-    <span class="ident">store</span>.<span class="ident">wipe_all</span>()<span class="question-mark">?</span>;
-    <span class="prelude-val">Ok</span>(())
-}
+<span class="kw">pub</span> <span class="kw">use</span> <span class="ident">api</span>::<span class="ident">SYNC_MAX_ITEMS</span>;
+<span class="kw">pub</span> <span class="kw">use</span> <span class="ident">api</span>::<span class="ident">SYNC_QUOTA_BYTES</span>;
+<span class="kw">pub</span> <span class="kw">use</span> <span class="ident">api</span>::<span class="ident">SYNC_QUOTA_BYTES_PER_ITEM</span>;
 </pre></div>
 </section><section id="search" class="content hidden"></section><section class="footer"></section><script>window.rootPath = "../../";window.currentCrate = "webext_storage";</script><script src="../../aliases.js"></script><script src="../../main.js"></script><script src="../../source-script.js"></script><script src="../../source-files.js"></script><script defer src="../../search-index.js"></script></body></html>

@@ -45,8 +45,6 @@
 <span id="45">45</span>
 <span id="46">46</span>
 <span id="47">47</span>
-<span id="48">48</span>
-<span id="49">49</span>
 </pre><div class="example-wrap"><pre class="rust ">
 <span class="attribute">#[<span class="ident">derive</span>(<span class="ident">Clone</span>, <span class="ident">PartialEq</span>, ::<span class="ident">prost</span>::<span class="ident">Message</span>)]</span>
 <span class="kw">pub</span> <span class="kw">struct</span> <span class="ident">Request</span> {
@@ -61,12 +59,10 @@
     <span class="attribute">#[<span class="ident">prost</span>(<span class="ident">bool</span>, <span class="ident">required</span>, <span class="ident">tag</span><span class="op">=</span><span class="string">&quot;5&quot;</span>)]</span>
     <span class="kw">pub</span> <span class="ident">follow_redirects</span>: <span class="ident">bool</span>,
     <span class="attribute">#[<span class="ident">prost</span>(<span class="ident">bool</span>, <span class="ident">required</span>, <span class="ident">tag</span><span class="op">=</span><span class="string">&quot;6&quot;</span>)]</span>
-    <span class="kw">pub</span> <span class="ident">include_cookies</span>: <span class="ident">bool</span>,
-    <span class="attribute">#[<span class="ident">prost</span>(<span class="ident">bool</span>, <span class="ident">required</span>, <span class="ident">tag</span><span class="op">=</span><span class="string">&quot;7&quot;</span>)]</span>
     <span class="kw">pub</span> <span class="ident">use_caches</span>: <span class="ident">bool</span>,
-    <span class="attribute">#[<span class="ident">prost</span>(<span class="ident">int32</span>, <span class="ident">required</span>, <span class="ident">tag</span><span class="op">=</span><span class="string">&quot;8&quot;</span>)]</span>
+    <span class="attribute">#[<span class="ident">prost</span>(<span class="ident">int32</span>, <span class="ident">required</span>, <span class="ident">tag</span><span class="op">=</span><span class="string">&quot;7&quot;</span>)]</span>
     <span class="kw">pub</span> <span class="ident">connect_timeout_secs</span>: <span class="ident">i32</span>,
-    <span class="attribute">#[<span class="ident">prost</span>(<span class="ident">int32</span>, <span class="ident">required</span>, <span class="ident">tag</span><span class="op">=</span><span class="string">&quot;9&quot;</span>)]</span>
+    <span class="attribute">#[<span class="ident">prost</span>(<span class="ident">int32</span>, <span class="ident">required</span>, <span class="ident">tag</span><span class="op">=</span><span class="string">&quot;8&quot;</span>)]</span>
     <span class="kw">pub</span> <span class="ident">read_timeout_secs</span>: <span class="ident">i32</span>,
 }
 <span class="kw">pub</span> <span class="kw">mod</span> <span class="ident">request</span> {

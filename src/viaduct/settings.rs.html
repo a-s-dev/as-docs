@@ -36,8 +36,6 @@
 <span id="36">36</span>
 <span id="37">37</span>
 <span id="38">38</span>
-<span id="39">39</span>
-<span id="40">40</span>
 </pre><div class="example-wrap"><pre class="rust ">
 <span class="comment">/* This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
@@ -59,7 +57,6 @@
     <span class="kw">pub</span> <span class="ident">read_timeout</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">Duration</span><span class="op">&gt;</span>,
     <span class="kw">pub</span> <span class="ident">connect_timeout</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">Duration</span><span class="op">&gt;</span>,
     <span class="kw">pub</span> <span class="ident">follow_redirects</span>: <span class="ident">bool</span>,
-    <span class="kw">pub</span> <span class="ident">include_cookies</span>: <span class="ident">bool</span>,
     <span class="kw">pub</span> <span class="ident">use_caches</span>: <span class="ident">bool</span>,
     <span class="ident">_priv</span>: (),
 }
@@ -75,7 +72,6 @@
     <span class="ident">read_timeout</span>: <span class="prelude-val">Some</span>(<span class="ident">TIMEOUT_DURATION</span>),
     <span class="ident">connect_timeout</span>: <span class="prelude-val">Some</span>(<span class="ident">TIMEOUT_DURATION</span>),
     <span class="ident">follow_redirects</span>: <span class="bool-val">true</span>,
-    <span class="ident">include_cookies</span>: <span class="bool-val">false</span>,
     <span class="ident">use_caches</span>: <span class="bool-val">false</span>,
     <span class="ident">_priv</span>: (),
 };
