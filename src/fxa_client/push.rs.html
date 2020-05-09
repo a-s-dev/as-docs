@@ -244,7 +244,7 @@
                 <span class="prelude-val">Ok</span>(<span class="macro">vec</span><span class="macro">!</span>[<span class="ident">AccountEvent</span>::<span class="ident">ProfileUpdated</span>])
             }
             <span class="ident">PushPayload</span>::<span class="ident">DeviceConnected</span>(<span class="ident">DeviceConnectedPushPayload</span> { <span class="ident">device_name</span> }) <span class="op">=</span><span class="op">&gt;</span> {
-                <span class="self">self</span>.<span class="ident">attached_clients_cache</span> <span class="op">=</span> <span class="prelude-val">None</span>;
+                <span class="self">self</span>.<span class="ident">clear_devices_and_attached_clients_cache</span>();
                 <span class="prelude-val">Ok</span>(<span class="macro">vec</span><span class="macro">!</span>[<span class="ident">AccountEvent</span>::<span class="ident">DeviceConnected</span> { <span class="ident">device_name</span> }])
             }
             <span class="ident">PushPayload</span>::<span class="ident">DeviceDisconnected</span>(<span class="ident">DeviceDisconnectedPushPayload</span> { <span class="ident">device_id</span> }) <span class="op">=</span><span class="op">&gt;</span> {

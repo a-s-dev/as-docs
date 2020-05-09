@@ -584,6 +584,13 @@
 <span id="584">584</span>
 <span id="585">585</span>
 <span id="586">586</span>
+<span id="587">587</span>
+<span id="588">588</span>
+<span id="589">589</span>
+<span id="590">590</span>
+<span id="591">591</span>
+<span id="592">592</span>
+<span id="593">593</span>
 </pre><div class="example-wrap"><pre class="rust ">
 <span class="comment">/* This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
@@ -678,11 +685,11 @@
 <span class="attribute">#[<span class="ident">no_mangle</span>]</span>
 <span class="kw">pub</span> <span class="kw">extern</span> <span class="string">&quot;C&quot;</span> <span class="kw">fn</span> <span class="ident">fxa_profile</span>(
     <span class="ident">handle</span>: <span class="ident">u64</span>,
-    <span class="ident">ignore_cache</span>: <span class="ident">bool</span>,
+    <span class="ident">ignore_cache</span>: <span class="ident">u8</span>,
     <span class="ident">error</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">ExternError</span>,
 ) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">ByteBuffer</span> {
     <span class="ident">log</span>::<span class="macro">debug</span><span class="macro">!</span>(<span class="string">&quot;fxa_profile&quot;</span>);
-    <span class="ident">ACCOUNTS</span>.<span class="ident">call_with_result_mut</span>(<span class="ident">error</span>, <span class="ident">handle</span>, <span class="op">|</span><span class="ident">fxa</span><span class="op">|</span> <span class="ident">fxa</span>.<span class="ident">get_profile</span>(<span class="ident">ignore_cache</span>))
+    <span class="ident">ACCOUNTS</span>.<span class="ident">call_with_result_mut</span>(<span class="ident">error</span>, <span class="ident">handle</span>, <span class="op">|</span><span class="ident">fxa</span><span class="op">|</span> <span class="ident">fxa</span>.<span class="ident">get_profile</span>(<span class="ident">ignore_cache</span> <span class="op">!</span><span class="op">=</span> <span class="number">0</span>))
 }
 
 <span class="doccomment">/// Get the pairing URL to navigate to on the Auth side (typically a computer).</span>
@@ -1001,15 +1008,22 @@
 
 <span class="doccomment">/// Fetch the devices (including the current one) in the current account.</span>
 <span class="doccomment">///</span>
+<span class="doccomment">/// Devices might get cached in-memory and the caller might get served a cached version.</span>
+<span class="doccomment">/// To bypass this, the `ignore_cache` parameter can be set to `true`.</span>
+<span class="doccomment">///</span>
 <span class="doccomment">/// # Safety</span>
 <span class="doccomment">///</span>
 <span class="doccomment">/// A destructor [fxa_bytebuffer_free] is provided for releasing the memory for this</span>
 <span class="doccomment">/// pointer type.</span>
 <span class="attribute">#[<span class="ident">no_mangle</span>]</span>
-<span class="kw">pub</span> <span class="kw">extern</span> <span class="string">&quot;C&quot;</span> <span class="kw">fn</span> <span class="ident">fxa_get_devices</span>(<span class="ident">handle</span>: <span class="ident">u64</span>, <span class="ident">error</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">ExternError</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">ByteBuffer</span> {
+<span class="kw">pub</span> <span class="kw">extern</span> <span class="string">&quot;C&quot;</span> <span class="kw">fn</span> <span class="ident">fxa_get_devices</span>(
+    <span class="ident">handle</span>: <span class="ident">u64</span>,
+    <span class="ident">ignore_cache</span>: <span class="ident">u8</span>,
+    <span class="ident">error</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">ExternError</span>,
+) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">ByteBuffer</span> {
     <span class="ident">log</span>::<span class="macro">debug</span><span class="macro">!</span>(<span class="string">&quot;fxa_get_devices&quot;</span>);
     <span class="ident">ACCOUNTS</span>.<span class="ident">call_with_result_mut</span>(<span class="ident">error</span>, <span class="ident">handle</span>, <span class="op">|</span><span class="ident">fxa</span><span class="op">|</span> {
-        <span class="ident">fxa</span>.<span class="ident">get_devices</span>().<span class="ident">map</span>(<span class="op">|</span><span class="ident">d</span><span class="op">|</span> {
+        <span class="ident">fxa</span>.<span class="ident">get_devices</span>(<span class="ident">ignore_cache</span> <span class="op">!</span><span class="op">=</span> <span class="number">0</span>).<span class="ident">map</span>(<span class="op">|</span><span class="ident">d</span><span class="op">|</span> {
             <span class="kw">let</span> <span class="ident">devices</span> <span class="op">=</span> <span class="ident">d</span>.<span class="ident">into_iter</span>().<span class="ident">map</span>(<span class="op">|</span><span class="ident">device</span><span class="op">|</span> <span class="ident">device</span>.<span class="ident">into</span>()).<span class="ident">collect</span>();
             <span class="ident">fxa_client</span>::<span class="ident">msg_types</span>::<span class="ident">Devices</span> { <span class="ident">devices</span> }
         })
