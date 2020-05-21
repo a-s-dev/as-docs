@@ -345,7 +345,7 @@
 <span class="kw">use</span> <span class="ident">rusqlite</span>::{<span class="ident">Connection</span>, <span class="ident">OpenFlags</span>, <span class="ident">Transaction</span>, <span class="ident">NO_PARAMS</span>};
 <span class="kw">use</span> <span class="ident">serde_json</span>::{<span class="ident">Map</span>, <span class="ident">Value</span>};
 <span class="kw">use</span> <span class="ident">sql_support</span>::<span class="ident">ConnExt</span>;
-<span class="kw">use</span> <span class="ident">std</span>::<span class="ident">path</span>::<span class="ident">PathBuf</span>;
+<span class="kw">use</span> <span class="ident">std</span>::<span class="ident">path</span>::<span class="ident">Path</span>;
 
 <span class="comment">// Simple migration from the &quot;old&quot; kinto-with-sqlite-backing implementation</span>
 <span class="comment">// to ours.</span>
@@ -440,7 +440,7 @@
     <span class="ident">data</span>: <span class="ident">serde_json</span>::<span class="ident">Value</span>,
 }
 
-<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">migrate</span>(<span class="ident">tx</span>: <span class="kw-2">&amp;</span><span class="ident">Transaction</span><span class="op">&lt;</span><span class="lifetime">&#39;_</span><span class="op">&gt;</span>, <span class="ident">filename</span>: <span class="kw-2">&amp;</span><span class="ident">PathBuf</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">usize</span><span class="op">&gt;</span> {
+<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">migrate</span>(<span class="ident">tx</span>: <span class="kw-2">&amp;</span><span class="ident">Transaction</span><span class="op">&lt;</span><span class="lifetime">&#39;_</span><span class="op">&gt;</span>, <span class="ident">filename</span>: <span class="kw-2">&amp;</span><span class="ident">Path</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">usize</span><span class="op">&gt;</span> {
     <span class="comment">// We do the grouping manually, collecting string values as we go.</span>
     <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">last_ext_id</span> <span class="op">=</span> <span class="string">&quot;&quot;</span>.<span class="ident">to_string</span>();
     <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">curr_values</span>: <span class="ident">Vec</span><span class="op">&lt;</span>(<span class="ident">String</span>, <span class="ident">serde_json</span>::<span class="ident">Value</span>)<span class="op">&gt;</span> <span class="op">=</span> <span class="ident">Vec</span>::<span class="ident">new</span>();
@@ -491,7 +491,7 @@
     <span class="prelude-val">Ok</span>(<span class="ident">num_extensions</span>)
 }
 
-<span class="kw">fn</span> <span class="ident">read_rows</span>(<span class="ident">filename</span>: <span class="kw-2">&amp;</span><span class="ident">PathBuf</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">Vec</span><span class="op">&lt;</span><span class="ident">LegacyRow</span><span class="op">&gt;</span><span class="op">&gt;</span> {
+<span class="kw">fn</span> <span class="ident">read_rows</span>(<span class="ident">filename</span>: <span class="kw-2">&amp;</span><span class="ident">Path</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">Vec</span><span class="op">&lt;</span><span class="ident">LegacyRow</span><span class="op">&gt;</span><span class="op">&gt;</span> {
     <span class="kw">let</span> <span class="ident">flags</span> <span class="op">=</span> <span class="ident">OpenFlags</span>::<span class="ident">SQLITE_OPEN_NO_MUTEX</span> <span class="op">|</span> <span class="ident">OpenFlags</span>::<span class="ident">SQLITE_OPEN_READ_ONLY</span>;
     <span class="kw">let</span> <span class="ident">src_conn</span> <span class="op">=</span> <span class="ident">Connection</span>::<span class="ident">open_with_flags</span>(<span class="kw-2">&amp;</span><span class="ident">filename</span>, <span class="ident">flags</span>)<span class="question-mark">?</span>;
     <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">stmt</span> <span class="op">=</span> <span class="ident">src_conn</span>.<span class="ident">prepare</span>(

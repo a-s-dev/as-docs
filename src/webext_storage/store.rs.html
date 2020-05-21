@@ -139,6 +139,7 @@
 <span id="139">139</span>
 <span id="140">140</span>
 <span id="141">141</span>
+<span id="142">142</span>
 </pre><div class="example-wrap"><pre class="rust ">
 <span class="comment">/* This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
@@ -149,7 +150,7 @@
 <span class="kw">use</span> <span class="kw">crate</span>::<span class="ident">error</span>::<span class="kw-2">*</span>;
 <span class="kw">use</span> <span class="kw">crate</span>::<span class="ident">migration</span>::<span class="ident">migrate</span>;
 <span class="kw">use</span> <span class="kw">crate</span>::<span class="ident">sync</span>;
-<span class="kw">use</span> <span class="ident">std</span>::<span class="ident">path</span>::{<span class="ident">Path</span>, <span class="ident">PathBuf</span>};
+<span class="kw">use</span> <span class="ident">std</span>::<span class="ident">path</span>::<span class="ident">Path</span>;
 <span class="kw">use</span> <span class="ident">std</span>::<span class="ident">result</span>;
 
 <span class="kw">use</span> <span class="ident">serde_json</span>::<span class="ident">Value</span> <span class="kw">as</span> <span class="ident">JsonValue</span>;
@@ -263,9 +264,10 @@
     <span class="doccomment">/// Migrates data from a database in the format of the &quot;old&quot; kinto</span>
     <span class="doccomment">/// implementation. Returns the count of webextensions for whom data was</span>
     <span class="doccomment">/// migrated.</span>
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">migrate</span>(<span class="self">self</span>, <span class="ident">filename</span>: <span class="kw-2">&amp;</span><span class="ident">str</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">usize</span><span class="op">&gt;</span> {
+    <span class="doccomment">/// Note that `filename` isn&#39;t normalized or canonicalized.</span>
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">migrate</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">filename</span>: <span class="kw">impl</span> <span class="ident">AsRef</span><span class="op">&lt;</span><span class="ident">Path</span><span class="op">&gt;</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">usize</span><span class="op">&gt;</span> {
         <span class="kw">let</span> <span class="ident">tx</span> <span class="op">=</span> <span class="self">self</span>.<span class="ident">db</span>.<span class="ident">unchecked_transaction</span>()<span class="question-mark">?</span>;
-        <span class="kw">let</span> <span class="ident">result</span> <span class="op">=</span> <span class="ident">migrate</span>(<span class="kw-2">&amp;</span><span class="ident">tx</span>, <span class="kw-2">&amp;</span><span class="ident">PathBuf</span>::<span class="ident">from</span>(<span class="ident">filename</span>))<span class="question-mark">?</span>;
+        <span class="kw">let</span> <span class="ident">result</span> <span class="op">=</span> <span class="ident">migrate</span>(<span class="kw-2">&amp;</span><span class="ident">tx</span>, <span class="ident">filename</span>.<span class="ident">as_ref</span>())<span class="question-mark">?</span>;
         <span class="ident">tx</span>.<span class="ident">commit</span>()<span class="question-mark">?</span>;
         <span class="prelude-val">Ok</span>(<span class="ident">result</span>)
     }
