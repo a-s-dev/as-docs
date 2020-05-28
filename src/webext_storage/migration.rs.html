@@ -288,54 +288,6 @@
 <span id="288">288</span>
 <span id="289">289</span>
 <span id="290">290</span>
-<span id="291">291</span>
-<span id="292">292</span>
-<span id="293">293</span>
-<span id="294">294</span>
-<span id="295">295</span>
-<span id="296">296</span>
-<span id="297">297</span>
-<span id="298">298</span>
-<span id="299">299</span>
-<span id="300">300</span>
-<span id="301">301</span>
-<span id="302">302</span>
-<span id="303">303</span>
-<span id="304">304</span>
-<span id="305">305</span>
-<span id="306">306</span>
-<span id="307">307</span>
-<span id="308">308</span>
-<span id="309">309</span>
-<span id="310">310</span>
-<span id="311">311</span>
-<span id="312">312</span>
-<span id="313">313</span>
-<span id="314">314</span>
-<span id="315">315</span>
-<span id="316">316</span>
-<span id="317">317</span>
-<span id="318">318</span>
-<span id="319">319</span>
-<span id="320">320</span>
-<span id="321">321</span>
-<span id="322">322</span>
-<span id="323">323</span>
-<span id="324">324</span>
-<span id="325">325</span>
-<span id="326">326</span>
-<span id="327">327</span>
-<span id="328">328</span>
-<span id="329">329</span>
-<span id="330">330</span>
-<span id="331">331</span>
-<span id="332">332</span>
-<span id="333">333</span>
-<span id="334">334</span>
-<span id="335">335</span>
-<span id="336">336</span>
-<span id="337">337</span>
-<span id="338">338</span>
 </pre><div class="example-wrap"><pre class="rust ">
 <span class="comment">/* This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
@@ -372,11 +324,10 @@
 <span class="comment">//   we don&#39;t want to migrate. Its record_id is &#39;keys&#39; and its json has no</span>
 <span class="comment">//   `data`</span>
 
-<span class="comment">// We don&#39;t enforce a real quota, but don&#39;t want to exceed the</span>
-<span class="comment">// sync server&#39;s BSO size and also just be generally sane - so stop at 1.5MB</span>
-<span class="comment">// and also 2k of keys</span>
-<span class="kw">const</span> <span class="ident">MAX_LEN</span>: <span class="ident">usize</span> <span class="op">=</span> <span class="number">1_512_000</span>;
-<span class="kw">const</span> <span class="ident">MAX_KEYS</span>: <span class="ident">usize</span> <span class="op">=</span> <span class="number">2048</span>;
+<span class="comment">// Note we don&#39;t enforce a quota - we migrate everything - even if this means</span>
+<span class="comment">// it&#39;s too big for the server to store. This is a policy decision - it&#39;s better</span>
+<span class="comment">// to not lose data than to try and work out what data can be disposed of, as</span>
+<span class="comment">// the addon has the ability to determine this.</span>
 
 <span class="comment">// The struct we read from the DB.</span>
 <span class="kw">struct</span> <span class="ident">LegacyRow</span> {
@@ -444,7 +395,6 @@
     <span class="comment">// We do the grouping manually, collecting string values as we go.</span>
     <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">last_ext_id</span> <span class="op">=</span> <span class="string">&quot;&quot;</span>.<span class="ident">to_string</span>();
     <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">curr_values</span>: <span class="ident">Vec</span><span class="op">&lt;</span>(<span class="ident">String</span>, <span class="ident">serde_json</span>::<span class="ident">Value</span>)<span class="op">&gt;</span> <span class="op">=</span> <span class="ident">Vec</span>::<span class="ident">new</span>();
-    <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">curr_value_len</span> <span class="op">=</span> <span class="number">0</span>;
     <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">num_extensions</span> <span class="op">=</span> <span class="number">0</span>;
     <span class="kw">for</span> <span class="ident">row</span> <span class="kw">in</span> <span class="ident">read_rows</span>(<span class="ident">filename</span>)<span class="question-mark">?</span> {
         <span class="ident">log</span>::<span class="macro">trace</span><span class="macro">!</span>(<span class="string">&quot;processing &#39;{}&#39; - &#39;{}&#39;&quot;</span>, <span class="ident">row</span>.<span class="ident">col_name</span>, <span class="ident">row</span>.<span class="ident">record</span>);
@@ -462,20 +412,13 @@
             }
             <span class="ident">last_ext_id</span> <span class="op">=</span> <span class="ident">parsed</span>.<span class="ident">ext_id</span>.<span class="ident">to_string</span>();
             <span class="ident">curr_values</span> <span class="op">=</span> <span class="ident">Vec</span>::<span class="ident">new</span>();
-            <span class="ident">curr_value_len</span> <span class="op">=</span> <span class="number">0</span>;
         }
         <span class="comment">// no &#39;else&#39; here - must also enter this block on ext_id change.</span>
         <span class="kw">if</span> <span class="ident">parsed</span>.<span class="ident">ext_id</span> <span class="op">=</span><span class="op">=</span> <span class="ident">last_ext_id</span> {
-            <span class="comment">// Do our &quot;quota but not a quota&quot; thing.</span>
-            <span class="kw">let</span> <span class="ident">new_len</span> <span class="op">=</span> <span class="ident">curr_value_len</span> <span class="op">+</span> <span class="ident">parsed</span>.<span class="ident">data</span>.<span class="ident">to_string</span>().<span class="ident">len</span>() <span class="op">+</span> <span class="ident">parsed</span>.<span class="ident">key</span>.<span class="ident">len</span>();
-            <span class="kw">if</span> <span class="ident">new_len</span> <span class="op">&lt;</span> <span class="ident">MAX_LEN</span> <span class="kw-2">&amp;</span><span class="op">&amp;</span> <span class="ident">curr_values</span>.<span class="ident">len</span>() <span class="op">&lt;</span> <span class="ident">MAX_KEYS</span> {
-                <span class="ident">curr_values</span>.<span class="ident">push</span>((<span class="ident">parsed</span>.<span class="ident">key</span>.<span class="ident">to_string</span>(), <span class="ident">parsed</span>.<span class="ident">data</span>));
-                <span class="ident">curr_value_len</span> <span class="op">=</span> <span class="ident">new_len</span>;
-            }
+            <span class="ident">curr_values</span>.<span class="ident">push</span>((<span class="ident">parsed</span>.<span class="ident">key</span>.<span class="ident">to_string</span>(), <span class="ident">parsed</span>.<span class="ident">data</span>));
             <span class="ident">log</span>::<span class="macro">trace</span><span class="macro">!</span>(
-                <span class="string">&quot;extension {} now has {} bytes, {} keys&quot;</span>,
+                <span class="string">&quot;extension {} now has {} keys&quot;</span>,
                 <span class="ident">parsed</span>.<span class="ident">ext_id</span>,
-                <span class="ident">curr_value_len</span>,
                 <span class="ident">curr_values</span>.<span class="ident">len</span>()
             );
         }
@@ -634,45 +577,6 @@
             )
             .<span class="ident">expect</span>(<span class="string">&quot;should populate&quot;</span>);
         });
-    }
-
-    <span class="attribute">#[<span class="ident">test</span>]</span>
-    <span class="kw">fn</span> <span class="ident">test_too_long</span>() {
-        <span class="kw">let</span> <span class="ident">conn</span> <span class="op">=</span> <span class="ident">do_migrate</span>(<span class="number">1</span>, <span class="op">|</span><span class="ident">c</span><span class="op">|</span> {
-            <span class="kw">for</span> <span class="ident">i</span> <span class="kw">in</span> <span class="number">0</span>..<span class="number">1000</span> {
-                <span class="ident">c</span>.<span class="ident">execute_batch</span>(<span class="kw-2">&amp;</span><span class="macro">format</span><span class="macro">!</span>(
-                    <span class="string">r#&quot;INSERT INTO collection_data(collection_name, record)
-                           VALUES (&#39;default/too_long&#39;, &#39;{{&quot;key&quot;:&quot;{}&quot;,&quot;data&quot;:&quot;{}&quot;}}&#39;)&quot;#</span>,
-                    <span class="ident">i</span>,
-                    <span class="string">&quot;x&quot;</span>.<span class="ident">repeat</span>(<span class="number">2000</span>)
-                ))
-                .<span class="ident">expect</span>(<span class="string">&quot;should populate&quot;</span>);
-            }
-        });
-        <span class="kw">let</span> <span class="ident">data</span> <span class="op">=</span> <span class="ident">api</span>::<span class="ident">get</span>(<span class="kw-2">&amp;</span><span class="ident">conn</span>, <span class="string">&quot;too_long&quot;</span>, <span class="macro">json</span><span class="macro">!</span>(<span class="ident">null</span>)).<span class="ident">expect</span>(<span class="string">&quot;get should work&quot;</span>);
-        <span class="comment">// The way we calculate bytes is designed to be &quot;fast and close enough&quot;</span>
-        <span class="comment">// rather than the exact number of bytes in the final json repr - so we</span>
-        <span class="comment">// might end up with a few bytes over our limit.</span>
-        <span class="comment">// So just check our keys are far less then we expect.</span>
-        <span class="kw">let</span> <span class="ident">nkeys</span> <span class="op">=</span> <span class="ident">data</span>.<span class="ident">as_object</span>().<span class="ident">unwrap</span>().<span class="ident">len</span>();
-        <span class="macro">assert</span><span class="macro">!</span>(<span class="ident">nkeys</span> <span class="op">&gt;</span> <span class="number">0</span>);
-        <span class="macro">assert</span><span class="macro">!</span>(<span class="ident">nkeys</span> <span class="op">&lt;</span> <span class="ident">MAX_KEYS</span>);
-    }
-
-    <span class="attribute">#[<span class="ident">test</span>]</span>
-    <span class="kw">fn</span> <span class="ident">test_too_many_keys</span>() {
-        <span class="kw">let</span> <span class="ident">conn</span> <span class="op">=</span> <span class="ident">do_migrate</span>(<span class="number">1</span>, <span class="op">|</span><span class="ident">c</span><span class="op">|</span> {
-            <span class="kw">for</span> <span class="ident">i</span> <span class="kw">in</span> <span class="number">0</span>..<span class="number">2050</span> {
-                <span class="ident">c</span>.<span class="ident">execute_batch</span>(<span class="kw-2">&amp;</span><span class="macro">format</span><span class="macro">!</span>(
-                    <span class="string">r#&quot;INSERT INTO collection_data(collection_name, record)
-                           VALUES (&#39;default/too_many&#39;, &#39;{{&quot;key&quot;:&quot;{}&quot;,&quot;data&quot;:&quot;yo&quot;}}&#39;)&quot;#</span>,
-                    <span class="ident">i</span>
-                ))
-                .<span class="ident">expect</span>(<span class="string">&quot;should populate&quot;</span>);
-            }
-        });
-        <span class="kw">let</span> <span class="ident">data</span> <span class="op">=</span> <span class="ident">api</span>::<span class="ident">get</span>(<span class="kw-2">&amp;</span><span class="ident">conn</span>, <span class="string">&quot;too_many&quot;</span>, <span class="macro">json</span><span class="macro">!</span>(<span class="ident">null</span>)).<span class="ident">expect</span>(<span class="string">&quot;get should work&quot;</span>);
-        <span class="macro">assert_eq</span><span class="macro">!</span>(<span class="ident">data</span>.<span class="ident">as_object</span>().<span class="ident">unwrap</span>().<span class="ident">len</span>(), <span class="ident">MAX_KEYS</span>);
     }
 }
 </pre></div>
