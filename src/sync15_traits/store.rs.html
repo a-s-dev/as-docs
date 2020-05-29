@@ -104,7 +104,7 @@
     <span class="ident">client</span>::<span class="ident">ClientData</span>, <span class="ident">telemetry</span>, <span class="ident">CollectionRequest</span>, <span class="ident">Guid</span>, <span class="ident">IncomingChangeset</span>, <span class="ident">OutgoingChangeset</span>,
     <span class="ident">ServerTimestamp</span>,
 };
-<span class="kw">use</span> <span class="ident">failure</span>::<span class="ident">Error</span>;
+<span class="kw">use</span> <span class="ident">anyhow</span>::<span class="prelude-ty">Result</span>;
 
 <span class="attribute">#[<span class="ident">derive</span>(<span class="ident">Debug</span>, <span class="ident">Clone</span>, <span class="ident">PartialEq</span>)]</span>
 <span class="kw">pub</span> <span class="kw">struct</span> <span class="ident">CollSyncIds</span> {
@@ -142,7 +142,7 @@
     <span class="doccomment">/// TODO(issue #2590): This is pretty cludgey and will be hard to extend for</span>
     <span class="doccomment">/// any case other than the tabs case. We should find another way to support</span>
     <span class="doccomment">/// tabs...</span>
-    <span class="kw">fn</span> <span class="ident">prepare_for_sync</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">_get_client_data</span>: <span class="kw-2">&amp;</span><span class="kw">dyn</span> <span class="ident">Fn</span>() <span class="op">-</span><span class="op">&gt;</span> <span class="ident">ClientData</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span>(), <span class="ident">Error</span><span class="op">&gt;</span> {
+    <span class="kw">fn</span> <span class="ident">prepare_for_sync</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">_get_client_data</span>: <span class="kw-2">&amp;</span><span class="kw">dyn</span> <span class="ident">Fn</span>() <span class="op">-</span><span class="op">&gt;</span> <span class="ident">ClientData</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span>()<span class="op">&gt;</span> {
         <span class="prelude-val">Ok</span>(())
     }
 
@@ -156,13 +156,13 @@
         <span class="kw-2">&amp;</span><span class="self">self</span>,
         <span class="ident">inbound</span>: <span class="ident">Vec</span><span class="op">&lt;</span><span class="ident">IncomingChangeset</span><span class="op">&gt;</span>,
         <span class="ident">telem</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">telemetry</span>::<span class="ident">Engine</span>,
-    ) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">OutgoingChangeset</span>, <span class="ident">Error</span><span class="op">&gt;</span>;
+    ) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">OutgoingChangeset</span><span class="op">&gt;</span>;
 
     <span class="kw">fn</span> <span class="ident">sync_finished</span>(
         <span class="kw-2">&amp;</span><span class="self">self</span>,
         <span class="ident">new_timestamp</span>: <span class="ident">ServerTimestamp</span>,
         <span class="ident">records_synced</span>: <span class="ident">Vec</span><span class="op">&lt;</span><span class="ident">Guid</span><span class="op">&gt;</span>,
-    ) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span>(), <span class="ident">Error</span><span class="op">&gt;</span>;
+    ) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span>()<span class="op">&gt;</span>;
 
     <span class="doccomment">/// The store is responsible for building the collection request. Engines</span>
     <span class="doccomment">/// typically will store a lastModified timestamp and use that to build a</span>
@@ -181,17 +181,17 @@
     <span class="kw">fn</span> <span class="ident">get_collection_requests</span>(
         <span class="kw-2">&amp;</span><span class="self">self</span>,
         <span class="ident">server_timestamp</span>: <span class="ident">ServerTimestamp</span>,
-    ) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">Vec</span><span class="op">&lt;</span><span class="ident">CollectionRequest</span><span class="op">&gt;</span>, <span class="ident">Error</span><span class="op">&gt;</span>;
+    ) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">Vec</span><span class="op">&lt;</span><span class="ident">CollectionRequest</span><span class="op">&gt;</span><span class="op">&gt;</span>;
 
     <span class="doccomment">/// Get persisted sync IDs. If they don&#39;t match the global state we&#39;ll be</span>
     <span class="doccomment">/// `reset()` with the new IDs.</span>
-    <span class="kw">fn</span> <span class="ident">get_sync_assoc</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">StoreSyncAssociation</span>, <span class="ident">Error</span><span class="op">&gt;</span>;
+    <span class="kw">fn</span> <span class="ident">get_sync_assoc</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">StoreSyncAssociation</span><span class="op">&gt;</span>;
 
     <span class="doccomment">/// Reset the store without wiping local data, ready for a &quot;first sync&quot;.</span>
     <span class="doccomment">/// `assoc` defines how this store is to be associated with sync.</span>
-    <span class="kw">fn</span> <span class="ident">reset</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">assoc</span>: <span class="kw-2">&amp;</span><span class="ident">StoreSyncAssociation</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span>(), <span class="ident">Error</span><span class="op">&gt;</span>;
+    <span class="kw">fn</span> <span class="ident">reset</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">assoc</span>: <span class="kw-2">&amp;</span><span class="ident">StoreSyncAssociation</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span>()<span class="op">&gt;</span>;
 
-    <span class="kw">fn</span> <span class="ident">wipe</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span>(), <span class="ident">Error</span><span class="op">&gt;</span>;
+    <span class="kw">fn</span> <span class="ident">wipe</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span>()<span class="op">&gt;</span>;
 }
 </pre></div>
 </section><section id="search" class="content hidden"></section><section class="footer"></section><script>window.rootPath = "../../";window.currentCrate = "sync15_traits";</script><script src="../../aliases.js"></script><script src="../../main.js"></script><script src="../../source-script.js"></script><script src="../../source-files.js"></script><script defer src="../../search-index.js"></script></body></html>

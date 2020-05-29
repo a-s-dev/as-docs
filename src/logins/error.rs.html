@@ -106,20 +106,10 @@
 <span id="106">106</span>
 <span id="107">107</span>
 <span id="108">108</span>
-<span id="109">109</span>
-<span id="110">110</span>
-<span id="111">111</span>
-<span id="112">112</span>
-<span id="113">113</span>
-<span id="114">114</span>
-<span id="115">115</span>
-<span id="116">116</span>
 </pre><div class="example-wrap"><pre class="rust ">
 <span class="comment">/* This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at http://mozilla.org/MPL/2.0/. */</span>
-
-<span class="kw">use</span> <span class="ident">failure</span>::<span class="ident">Fail</span>;
 
 <span class="comment">// TODO: this is (IMO) useful and was dropped from `failure`, consider moving it</span>
 <span class="comment">// into `error_support`.</span>
@@ -129,50 +119,44 @@
     };
 }
 
-<span class="attribute">#[<span class="ident">derive</span>(<span class="ident">Debug</span>, <span class="ident">Fail</span>)]</span>
+<span class="attribute">#[<span class="ident">derive</span>(<span class="ident">Debug</span>, <span class="ident">thiserror</span>::<span class="ident">Error</span>)]</span>
 <span class="kw">pub</span> <span class="kw">enum</span> <span class="ident">ErrorKind</span> {
-    <span class="attribute">#[<span class="ident">fail</span>(<span class="ident">display</span> <span class="op">=</span> <span class="string">&quot;Invalid login: {}&quot;</span>, <span class="ident">_0</span>)]</span>
+    <span class="attribute">#[<span class="ident">error</span>(<span class="string">&quot;Invalid login: {0}&quot;</span>)]</span>
     <span class="ident">InvalidLogin</span>(<span class="ident">InvalidLogin</span>),
 
-    <span class="attribute">#[<span class="ident">fail</span>(
-        <span class="ident">display</span> <span class="op">=</span> <span class="string">&quot;The `sync_status` column in DB has an illegal value: {}&quot;</span>,
-        <span class="ident">_0</span>
-    )]</span>
+    <span class="attribute">#[<span class="ident">error</span>(<span class="string">&quot;The `sync_status` column in DB has an illegal value: {0}&quot;</span>)]</span>
     <span class="ident">BadSyncStatus</span>(<span class="ident">u8</span>),
 
-    <span class="attribute">#[<span class="ident">fail</span>(<span class="ident">display</span> <span class="op">=</span> <span class="string">&quot;A duplicate GUID is present: {:?}&quot;</span>, <span class="ident">_0</span>)]</span>
+    <span class="attribute">#[<span class="ident">error</span>(<span class="string">&quot;A duplicate GUID is present: {0:?}&quot;</span>)]</span>
     <span class="ident">DuplicateGuid</span>(<span class="ident">String</span>),
 
-    <span class="attribute">#[<span class="ident">fail</span>(
-        <span class="ident">display</span> <span class="op">=</span> <span class="string">&quot;No record with guid exists (when one was required): {:?}&quot;</span>,
-        <span class="ident">_0</span>
-    )]</span>
+    <span class="attribute">#[<span class="ident">error</span>(<span class="string">&quot;No record with guid exists (when one was required): {0:?}&quot;</span>)]</span>
     <span class="ident">NoSuchRecord</span>(<span class="ident">String</span>),
 
     <span class="comment">// Fennec import only works on empty logins tables.</span>
-    <span class="attribute">#[<span class="ident">fail</span>(<span class="ident">display</span> <span class="op">=</span> <span class="string">&quot;The logins tables are not empty&quot;</span>)]</span>
+    <span class="attribute">#[<span class="ident">error</span>(<span class="string">&quot;The logins tables are not empty&quot;</span>)]</span>
     <span class="ident">NonEmptyTable</span>,
 
-    <span class="attribute">#[<span class="ident">fail</span>(<span class="ident">display</span> <span class="op">=</span> <span class="string">&quot;The provided salt is invalid&quot;</span>)]</span>
+    <span class="attribute">#[<span class="ident">error</span>(<span class="string">&quot;The provided salt is invalid&quot;</span>)]</span>
     <span class="ident">InvalidSalt</span>,
 
-    <span class="attribute">#[<span class="ident">fail</span>(<span class="ident">display</span> <span class="op">=</span> <span class="string">&quot;Error synchronizing: {}&quot;</span>, <span class="ident">_0</span>)]</span>
-    <span class="ident">SyncAdapterError</span>(<span class="attribute">#[<span class="ident">fail</span>(<span class="ident">cause</span>)]</span> <span class="ident">sync15</span>::<span class="ident">Error</span>),
+    <span class="attribute">#[<span class="ident">error</span>(<span class="string">&quot;Error synchronizing: {0}&quot;</span>)]</span>
+    <span class="ident">SyncAdapterError</span>(<span class="attribute">#[<span class="ident">from</span>]</span> <span class="ident">sync15</span>::<span class="ident">Error</span>),
 
-    <span class="attribute">#[<span class="ident">fail</span>(<span class="ident">display</span> <span class="op">=</span> <span class="string">&quot;Error parsing JSON data: {}&quot;</span>, <span class="ident">_0</span>)]</span>
-    <span class="ident">JsonError</span>(<span class="attribute">#[<span class="ident">fail</span>(<span class="ident">cause</span>)]</span> <span class="ident">serde_json</span>::<span class="ident">Error</span>),
+    <span class="attribute">#[<span class="ident">error</span>(<span class="string">&quot;Error parsing JSON data: {0}&quot;</span>)]</span>
+    <span class="ident">JsonError</span>(<span class="attribute">#[<span class="ident">from</span>]</span> <span class="ident">serde_json</span>::<span class="ident">Error</span>),
 
-    <span class="attribute">#[<span class="ident">fail</span>(<span class="ident">display</span> <span class="op">=</span> <span class="string">&quot;Error executing SQL: {}&quot;</span>, <span class="ident">_0</span>)]</span>
-    <span class="ident">SqlError</span>(<span class="attribute">#[<span class="ident">fail</span>(<span class="ident">cause</span>)]</span> <span class="ident">rusqlite</span>::<span class="ident">Error</span>),
+    <span class="attribute">#[<span class="ident">error</span>(<span class="string">&quot;Error executing SQL: {0}&quot;</span>)]</span>
+    <span class="ident">SqlError</span>(<span class="attribute">#[<span class="ident">from</span>]</span> <span class="ident">rusqlite</span>::<span class="ident">Error</span>),
 
-    <span class="attribute">#[<span class="ident">fail</span>(<span class="ident">display</span> <span class="op">=</span> <span class="string">&quot;Error parsing URL: {}&quot;</span>, <span class="ident">_0</span>)]</span>
-    <span class="ident">UrlParseError</span>(<span class="attribute">#[<span class="ident">fail</span>(<span class="ident">cause</span>)]</span> <span class="ident">url</span>::<span class="ident">ParseError</span>),
+    <span class="attribute">#[<span class="ident">error</span>(<span class="string">&quot;Error parsing URL: {0}&quot;</span>)]</span>
+    <span class="ident">UrlParseError</span>(<span class="attribute">#[<span class="ident">from</span>]</span> <span class="ident">url</span>::<span class="ident">ParseError</span>),
 
-    <span class="attribute">#[<span class="ident">fail</span>(<span class="ident">display</span> <span class="op">=</span> <span class="string">&quot;{}&quot;</span>, <span class="ident">_0</span>)]</span>
-    <span class="ident">Interrupted</span>(<span class="attribute">#[<span class="ident">fail</span>(<span class="ident">cause</span>)]</span> <span class="ident">interrupt_support</span>::<span class="ident">Interrupted</span>),
+    <span class="attribute">#[<span class="ident">error</span>(<span class="string">&quot;{0}&quot;</span>)]</span>
+    <span class="ident">Interrupted</span>(<span class="attribute">#[<span class="ident">from</span>]</span> <span class="ident">interrupt_support</span>::<span class="ident">Interrupted</span>),
 
-    <span class="attribute">#[<span class="ident">fail</span>(<span class="ident">display</span> <span class="op">=</span> <span class="string">&quot;Protobuf decode error: {}&quot;</span>, <span class="ident">_0</span>)]</span>
-    <span class="ident">ProtobufDecodeError</span>(<span class="attribute">#[<span class="ident">fail</span>(<span class="ident">cause</span>)]</span> <span class="ident">prost</span>::<span class="ident">DecodeError</span>),
+    <span class="attribute">#[<span class="ident">error</span>(<span class="string">&quot;Protobuf decode error: {0}&quot;</span>)]</span>
+    <span class="ident">ProtobufDecodeError</span>(<span class="attribute">#[<span class="ident">from</span>]</span> <span class="ident">prost</span>::<span class="ident">DecodeError</span>),
 }
 
 <span class="ident">error_support</span>::<span class="macro">define_error</span><span class="macro">!</span> {
@@ -187,20 +171,20 @@
     }
 }
 
-<span class="attribute">#[<span class="ident">derive</span>(<span class="ident">Debug</span>, <span class="ident">Fail</span>)]</span>
+<span class="attribute">#[<span class="ident">derive</span>(<span class="ident">Debug</span>, <span class="ident">thiserror</span>::<span class="ident">Error</span>)]</span>
 <span class="kw">pub</span> <span class="kw">enum</span> <span class="ident">InvalidLogin</span> {
     <span class="comment">// EmptyOrigin error occurs when the login&#39;s hostname field is empty.</span>
-    <span class="attribute">#[<span class="ident">fail</span>(<span class="ident">display</span> <span class="op">=</span> <span class="string">&quot;Origin is empty&quot;</span>)]</span>
+    <span class="attribute">#[<span class="ident">error</span>(<span class="string">&quot;Origin is empty&quot;</span>)]</span>
     <span class="ident">EmptyOrigin</span>,
-    <span class="attribute">#[<span class="ident">fail</span>(<span class="ident">display</span> <span class="op">=</span> <span class="string">&quot;Password is empty&quot;</span>)]</span>
+    <span class="attribute">#[<span class="ident">error</span>(<span class="string">&quot;Password is empty&quot;</span>)]</span>
     <span class="ident">EmptyPassword</span>,
-    <span class="attribute">#[<span class="ident">fail</span>(<span class="ident">display</span> <span class="op">=</span> <span class="string">&quot;Login already exists&quot;</span>)]</span>
+    <span class="attribute">#[<span class="ident">error</span>(<span class="string">&quot;Login already exists&quot;</span>)]</span>
     <span class="ident">DuplicateLogin</span>,
-    <span class="attribute">#[<span class="ident">fail</span>(<span class="ident">display</span> <span class="op">=</span> <span class="string">&quot;Both `formSubmitUrl` and `httpRealm` are present&quot;</span>)]</span>
+    <span class="attribute">#[<span class="ident">error</span>(<span class="string">&quot;Both `formSubmitUrl` and `httpRealm` are present&quot;</span>)]</span>
     <span class="ident">BothTargets</span>,
-    <span class="attribute">#[<span class="ident">fail</span>(<span class="ident">display</span> <span class="op">=</span> <span class="string">&quot;Neither `formSubmitUrl` or `httpRealm` are present&quot;</span>)]</span>
+    <span class="attribute">#[<span class="ident">error</span>(<span class="string">&quot;Neither `formSubmitUrl` or `httpRealm` are present&quot;</span>)]</span>
     <span class="ident">NoTarget</span>,
-    <span class="attribute">#[<span class="ident">fail</span>(<span class="ident">display</span> <span class="op">=</span> <span class="string">&quot;Login has illegal field: {}&quot;</span>, <span class="ident">_0</span>)]</span>
+    <span class="attribute">#[<span class="ident">error</span>(<span class="string">&quot;Login has illegal field: {field_info}&quot;</span>)]</span>
     <span class="ident">IllegalFieldValue</span> { <span class="ident">field_info</span>: <span class="ident">String</span> },
 }
 

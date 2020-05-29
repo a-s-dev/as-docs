@@ -347,6 +347,7 @@
 <span id="347">347</span>
 <span id="348">348</span>
 <span id="349">349</span>
+<span id="350">350</span>
 </pre><div class="example-wrap"><pre class="rust ">
 <span class="comment">/* This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
@@ -520,6 +521,7 @@
     <span class="kw">use</span> <span class="kw">crate</span>::<span class="ident">record_types</span>::{<span class="ident">MetaGlobalEngine</span>, <span class="ident">MetaGlobalRecord</span>};
     <span class="kw">use</span> <span class="kw">crate</span>::<span class="ident">request</span>::{<span class="ident">CollectionRequest</span>, <span class="ident">InfoCollections</span>, <span class="ident">InfoConfiguration</span>};
     <span class="kw">use</span> <span class="kw">crate</span>::<span class="ident">telemetry</span>;
+    <span class="kw">use</span> <span class="ident">anyhow</span>::<span class="prelude-ty">Result</span>;
     <span class="kw">use</span> <span class="ident">std</span>::<span class="ident">cell</span>::{<span class="ident">Cell</span>, <span class="ident">RefCell</span>};
     <span class="kw">use</span> <span class="ident">std</span>::<span class="ident">collections</span>::<span class="ident">HashMap</span>;
     <span class="kw">use</span> <span class="ident">sync_guid</span>::<span class="ident">Guid</span>;
@@ -580,7 +582,7 @@
             <span class="kw-2">&amp;</span><span class="self">self</span>,
             <span class="ident">_inbound</span>: <span class="ident">Vec</span><span class="op">&lt;</span><span class="ident">IncomingChangeset</span><span class="op">&gt;</span>,
             <span class="ident">_telem</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">telemetry</span>::<span class="ident">Engine</span>,
-        ) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">OutgoingChangeset</span>, <span class="ident">failure</span>::<span class="ident">Error</span><span class="op">&gt;</span> {
+        ) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">OutgoingChangeset</span><span class="op">&gt;</span> {
             <span class="macro">unreachable</span><span class="macro">!</span>(<span class="string">&quot;these tests shouldn&#39;t call these&quot;</span>);
         }
 
@@ -588,28 +590,28 @@
             <span class="kw-2">&amp;</span><span class="self">self</span>,
             <span class="ident">_new_timestamp</span>: <span class="ident">ServerTimestamp</span>,
             <span class="ident">_records_synced</span>: <span class="ident">Vec</span><span class="op">&lt;</span><span class="ident">Guid</span><span class="op">&gt;</span>,
-        ) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span>(), <span class="ident">failure</span>::<span class="ident">Error</span><span class="op">&gt;</span> {
+        ) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span>()<span class="op">&gt;</span> {
             <span class="macro">unreachable</span><span class="macro">!</span>(<span class="string">&quot;these tests shouldn&#39;t call these&quot;</span>);
         }
 
         <span class="kw">fn</span> <span class="ident">get_collection_requests</span>(
             <span class="kw-2">&amp;</span><span class="self">self</span>,
             <span class="ident">_server_timestamp</span>: <span class="ident">ServerTimestamp</span>,
-        ) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">Vec</span><span class="op">&lt;</span><span class="ident">CollectionRequest</span><span class="op">&gt;</span>, <span class="ident">failure</span>::<span class="ident">Error</span><span class="op">&gt;</span> {
+        ) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">Vec</span><span class="op">&lt;</span><span class="ident">CollectionRequest</span><span class="op">&gt;</span><span class="op">&gt;</span> {
             <span class="macro">unreachable</span><span class="macro">!</span>(<span class="string">&quot;these tests shouldn&#39;t call these&quot;</span>);
         }
 
-        <span class="kw">fn</span> <span class="ident">get_sync_assoc</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">StoreSyncAssociation</span>, <span class="ident">failure</span>::<span class="ident">Error</span><span class="op">&gt;</span> {
+        <span class="kw">fn</span> <span class="ident">get_sync_assoc</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">StoreSyncAssociation</span><span class="op">&gt;</span> {
             <span class="prelude-val">Ok</span>(<span class="self">self</span>.<span class="ident">assoc</span>.<span class="ident">replace</span>(<span class="ident">StoreSyncAssociation</span>::<span class="ident">Disconnected</span>))
         }
 
-        <span class="kw">fn</span> <span class="ident">reset</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">new_assoc</span>: <span class="kw-2">&amp;</span><span class="ident">StoreSyncAssociation</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span>(), <span class="ident">failure</span>::<span class="ident">Error</span><span class="op">&gt;</span> {
+        <span class="kw">fn</span> <span class="ident">reset</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">new_assoc</span>: <span class="kw-2">&amp;</span><span class="ident">StoreSyncAssociation</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span>()<span class="op">&gt;</span> {
             <span class="self">self</span>.<span class="ident">assoc</span>.<span class="ident">replace</span>(<span class="ident">new_assoc</span>.<span class="ident">clone</span>());
             <span class="kw-2">*</span><span class="self">self</span>.<span class="ident">num_resets</span>.<span class="ident">borrow_mut</span>() <span class="op">+</span><span class="op">=</span> <span class="number">1</span>;
             <span class="prelude-val">Ok</span>(())
         }
 
-        <span class="kw">fn</span> <span class="ident">wipe</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span>(), <span class="ident">failure</span>::<span class="ident">Error</span><span class="op">&gt;</span> {
+        <span class="kw">fn</span> <span class="ident">wipe</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span>()<span class="op">&gt;</span> {
             <span class="macro">unreachable</span><span class="macro">!</span>(<span class="string">&quot;these tests shouldn&#39;t call these&quot;</span>);
         }
     }

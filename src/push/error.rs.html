@@ -78,14 +78,10 @@
 <span id="78">78</span>
 <span id="79">79</span>
 <span id="80">80</span>
-<span id="81">81</span>
-<span id="82">82</span>
 </pre><div class="example-wrap"><pre class="rust ">
 <span class="comment">/* This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at http://mozilla.org/MPL/2.0/. */</span>
-
-<span class="kw">use</span> <span class="ident">failure</span>::<span class="ident">Fail</span>;
 
 <span class="kw">impl</span> <span class="ident">From</span><span class="op">&lt;</span><span class="ident">Error</span><span class="op">&gt;</span> <span class="kw">for</span> <span class="ident">ffi_support</span>::<span class="ident">ExternError</span> {
     <span class="kw">fn</span> <span class="ident">from</span>(<span class="ident">e</span>: <span class="ident">Error</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">ffi_support</span>::<span class="ident">ExternError</span> {
@@ -100,47 +96,47 @@
     }
 }
 
-<span class="attribute">#[<span class="ident">derive</span>(<span class="ident">Debug</span>, <span class="ident">Fail</span>)]</span>
+<span class="attribute">#[<span class="ident">derive</span>(<span class="ident">Debug</span>, <span class="ident">thiserror</span>::<span class="ident">Error</span>)]</span>
 <span class="kw">pub</span> <span class="kw">enum</span> <span class="ident">ErrorKind</span> {
     <span class="doccomment">/// An unspecified general error has occured</span>
-    <span class="attribute">#[<span class="ident">fail</span>(<span class="ident">display</span> <span class="op">=</span> <span class="string">&quot;General Error: {:?}&quot;</span>, <span class="ident">_0</span>)]</span>
+    <span class="attribute">#[<span class="ident">error</span>(<span class="string">&quot;General Error: {0:?}&quot;</span>)]</span>
     <span class="ident">GeneralError</span>(<span class="ident">String</span>),
 
-    <span class="attribute">#[<span class="ident">fail</span>(<span class="ident">display</span> <span class="op">=</span> <span class="string">&quot;Crypto error: {}&quot;</span>, <span class="ident">_0</span>)]</span>
+    <span class="attribute">#[<span class="ident">error</span>(<span class="string">&quot;Crypto error: {0}&quot;</span>)]</span>
     <span class="ident">CryptoError</span>(<span class="ident">String</span>),
 
     <span class="doccomment">/// A Client communication error</span>
-    <span class="attribute">#[<span class="ident">fail</span>(<span class="ident">display</span> <span class="op">=</span> <span class="string">&quot;Communication Error: {:?}&quot;</span>, <span class="ident">_0</span>)]</span>
+    <span class="attribute">#[<span class="ident">error</span>(<span class="string">&quot;Communication Error: {0:?}&quot;</span>)]</span>
     <span class="ident">CommunicationError</span>(<span class="ident">String</span>),
 
     <span class="doccomment">/// An error returned from the registration Server</span>
-    <span class="attribute">#[<span class="ident">fail</span>(<span class="ident">display</span> <span class="op">=</span> <span class="string">&quot;Communication Server Error: {:?}&quot;</span>, <span class="ident">_0</span>)]</span>
+    <span class="attribute">#[<span class="ident">error</span>(<span class="string">&quot;Communication Server Error: {0:?}&quot;</span>)]</span>
     <span class="ident">CommunicationServerError</span>(<span class="ident">String</span>),
 
     <span class="doccomment">/// Channel is already registered, generate new channelID</span>
-    <span class="attribute">#[<span class="ident">fail</span>(<span class="ident">display</span> <span class="op">=</span> <span class="string">&quot;Channel already registered.&quot;</span>)]</span>
+    <span class="attribute">#[<span class="ident">error</span>(<span class="string">&quot;Channel already registered.&quot;</span>)]</span>
     <span class="ident">AlreadyRegisteredError</span>,
 
     <span class="doccomment">/// An error with Storage</span>
-    <span class="attribute">#[<span class="ident">fail</span>(<span class="ident">display</span> <span class="op">=</span> <span class="string">&quot;Storage Error: {:?}&quot;</span>, <span class="ident">_0</span>)]</span>
+    <span class="attribute">#[<span class="ident">error</span>(<span class="string">&quot;Storage Error: {0:?}&quot;</span>)]</span>
     <span class="ident">StorageError</span>(<span class="ident">String</span>),
 
-    <span class="attribute">#[<span class="ident">fail</span>(<span class="ident">display</span> <span class="op">=</span> <span class="string">&quot;No record for uaid:chid {:?}:{:?}&quot;</span>, <span class="ident">_0</span>, <span class="ident">_1</span>)]</span>
+    <span class="attribute">#[<span class="ident">error</span>(<span class="string">&quot;No record for uaid:chid {0:?}:{1:?}&quot;</span>)]</span>
     <span class="ident">RecordNotFoundError</span>(<span class="ident">String</span>, <span class="ident">String</span>),
 
     <span class="doccomment">/// A failure to encode data to/from storage.</span>
-    <span class="attribute">#[<span class="ident">fail</span>(<span class="ident">display</span> <span class="op">=</span> <span class="string">&quot;Error executing SQL: {}&quot;</span>, <span class="ident">_0</span>)]</span>
-    <span class="ident">StorageSqlError</span>(<span class="attribute">#[<span class="ident">fail</span>(<span class="ident">cause</span>)]</span> <span class="ident">rusqlite</span>::<span class="ident">Error</span>),
+    <span class="attribute">#[<span class="ident">error</span>(<span class="string">&quot;Error executing SQL: {0}&quot;</span>)]</span>
+    <span class="ident">StorageSqlError</span>(<span class="attribute">#[<span class="ident">from</span>]</span> <span class="ident">rusqlite</span>::<span class="ident">Error</span>),
 
-    <span class="attribute">#[<span class="ident">fail</span>(<span class="ident">display</span> <span class="op">=</span> <span class="string">&quot;Missing Registration Token&quot;</span>)]</span>
+    <span class="attribute">#[<span class="ident">error</span>(<span class="string">&quot;Missing Registration Token&quot;</span>)]</span>
     <span class="ident">MissingRegistrationTokenError</span>,
 
-    <span class="attribute">#[<span class="ident">fail</span>(<span class="ident">display</span> <span class="op">=</span> <span class="string">&quot;Transcoding Error: {}&quot;</span>, <span class="ident">_0</span>)]</span>
+    <span class="attribute">#[<span class="ident">error</span>(<span class="string">&quot;Transcoding Error: {0}&quot;</span>)]</span>
     <span class="ident">TranscodingError</span>(<span class="ident">String</span>),
 
     <span class="doccomment">/// A failure to parse a URL.</span>
-    <span class="attribute">#[<span class="ident">fail</span>(<span class="ident">display</span> <span class="op">=</span> <span class="string">&quot;URL parse error: {:?}&quot;</span>, <span class="ident">_0</span>)]</span>
-    <span class="ident">UrlParseError</span>(<span class="attribute">#[<span class="ident">fail</span>(<span class="ident">cause</span>)]</span> <span class="ident">url</span>::<span class="ident">ParseError</span>),
+    <span class="attribute">#[<span class="ident">error</span>(<span class="string">&quot;URL parse error: {0:?}&quot;</span>)]</span>
+    <span class="ident">UrlParseError</span>(<span class="attribute">#[<span class="ident">from</span>]</span> <span class="ident">url</span>::<span class="ident">ParseError</span>),
 }
 
 <span class="comment">// Note, be sure to duplicate errors in the Kotlin side</span>

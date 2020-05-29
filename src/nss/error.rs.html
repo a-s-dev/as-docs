@@ -22,27 +22,23 @@
 <span id="22">22</span>
 <span id="23">23</span>
 <span id="24">24</span>
-<span id="25">25</span>
-<span id="26">26</span>
 </pre><div class="example-wrap"><pre class="rust ">
 <span class="comment">/* This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at http://mozilla.org/MPL/2.0/. */</span>
 
-<span class="kw">use</span> <span class="ident">failure</span>::<span class="ident">Fail</span>;
-
-<span class="attribute">#[<span class="ident">derive</span>(<span class="ident">Debug</span>, <span class="ident">Fail</span>)]</span>
+<span class="attribute">#[<span class="ident">derive</span>(<span class="ident">Debug</span>, <span class="ident">thiserror</span>::<span class="ident">Error</span>)]</span>
 <span class="kw">pub</span> <span class="kw">enum</span> <span class="ident">ErrorKind</span> {
-    <span class="attribute">#[<span class="ident">fail</span>(<span class="ident">display</span> <span class="op">=</span> <span class="string">&quot;NSS could not be initialized&quot;</span>)]</span>
+    <span class="attribute">#[<span class="ident">error</span>(<span class="string">&quot;NSS could not be initialized&quot;</span>)]</span>
     <span class="ident">NSSInitFailure</span>,
-    <span class="attribute">#[<span class="ident">fail</span>(<span class="ident">display</span> <span class="op">=</span> <span class="string">&quot;NSS error: {} {}&quot;</span>, <span class="ident">_0</span>, <span class="ident">_1</span>)]</span>
+    <span class="attribute">#[<span class="ident">error</span>(<span class="string">&quot;NSS error: {0} {1}&quot;</span>)]</span>
     <span class="ident">NSSError</span>(<span class="ident">i32</span>, <span class="ident">String</span>),
-    <span class="attribute">#[<span class="ident">fail</span>(<span class="ident">display</span> <span class="op">=</span> <span class="string">&quot;Internal crypto error&quot;</span>)]</span>
+    <span class="attribute">#[<span class="ident">error</span>(<span class="string">&quot;Internal crypto error&quot;</span>)]</span>
     <span class="ident">InternalError</span>,
-    <span class="attribute">#[<span class="ident">fail</span>(<span class="ident">display</span> <span class="op">=</span> <span class="string">&quot;Conversion error: {}&quot;</span>, <span class="ident">_0</span>)]</span>
-    <span class="ident">ConversionError</span>(<span class="attribute">#[<span class="ident">fail</span>(<span class="ident">cause</span>)]</span> <span class="ident">std</span>::<span class="ident">num</span>::<span class="ident">TryFromIntError</span>),
-    <span class="attribute">#[<span class="ident">fail</span>(<span class="ident">display</span> <span class="op">=</span> <span class="string">&quot;Base64 decode error: {}&quot;</span>, <span class="ident">_0</span>)]</span>
-    <span class="ident">Base64Decode</span>(<span class="attribute">#[<span class="ident">fail</span>(<span class="ident">cause</span>)]</span> <span class="ident">base64</span>::<span class="ident">DecodeError</span>),
+    <span class="attribute">#[<span class="ident">error</span>(<span class="string">&quot;Conversion error: {0}&quot;</span>)]</span>
+    <span class="ident">ConversionError</span>(<span class="attribute">#[<span class="ident">from</span>]</span> <span class="ident">std</span>::<span class="ident">num</span>::<span class="ident">TryFromIntError</span>),
+    <span class="attribute">#[<span class="ident">error</span>(<span class="string">&quot;Base64 decode error: {0}&quot;</span>)]</span>
+    <span class="ident">Base64Decode</span>(<span class="attribute">#[<span class="ident">from</span>]</span> <span class="ident">base64</span>::<span class="ident">DecodeError</span>),
 }
 
 <span class="ident">error_support</span>::<span class="macro">define_error</span><span class="macro">!</span> {

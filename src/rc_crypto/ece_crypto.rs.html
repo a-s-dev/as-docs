@@ -446,7 +446,7 @@
 
 <span class="kw">impl</span> <span class="ident">From</span><span class="op">&lt;</span><span class="kw">crate</span>::<span class="ident">Error</span><span class="op">&gt;</span> <span class="kw">for</span> <span class="ident">ece</span>::<span class="ident">Error</span> {
     <span class="kw">fn</span> <span class="ident">from</span>(<span class="kw">_</span>: <span class="kw">crate</span>::<span class="ident">Error</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="self">Self</span> {
-        <span class="ident">ece</span>::<span class="ident">ErrorKind</span>::<span class="ident">CryptoError</span>.<span class="ident">into</span>()
+        <span class="ident">ece</span>::<span class="ident">Error</span>::<span class="ident">CryptoError</span>
     }
 }
 
@@ -815,8 +815,8 @@
             <span class="string">&quot;45b74d2b69be9b074de3b35aa87e7c15611d&quot;</span>,
         )
         .<span class="ident">unwrap_err</span>();
-        <span class="kw">match</span> <span class="ident">err</span>.<span class="ident">kind</span>() {
-            <span class="ident">ErrorKind</span>::<span class="ident">HeaderTooShort</span> <span class="op">=</span><span class="op">&gt;</span> {}
+        <span class="kw">match</span> <span class="ident">err</span> {
+            <span class="ident">Error</span>::<span class="ident">HeaderTooShort</span> <span class="op">=</span><span class="op">&gt;</span> {}
             <span class="kw">_</span> <span class="op">=</span><span class="op">&gt;</span> <span class="macro">panic</span><span class="macro">!</span>(<span class="string">&quot;Unexpected error type!&quot;</span>),
         };
     }
@@ -831,8 +831,8 @@
             <span class="string">&quot;de5b696b87f1a15cb6adebdd79d6f99e000000120100b6bc1826c37c9f73dd6b4859c2b505181952&quot;</span>,
         )
         .<span class="ident">unwrap_err</span>();
-        <span class="kw">match</span> <span class="ident">err</span>.<span class="ident">kind</span>() {
-            <span class="ident">ErrorKind</span>::<span class="ident">InvalidKeyLength</span> <span class="op">=</span><span class="op">&gt;</span> {}
+        <span class="kw">match</span> <span class="ident">err</span> {
+            <span class="ident">Error</span>::<span class="ident">InvalidKeyLength</span> <span class="op">=</span><span class="op">&gt;</span> {}
             <span class="kw">_</span> <span class="op">=</span><span class="op">&gt;</span> <span class="macro">panic</span><span class="macro">!</span>(<span class="string">&quot;Unexpected error type!&quot;</span>),
         };
     }
@@ -846,8 +846,8 @@
             <span class="string">&quot;355a38cd6d9bef15990e2d3308dbd600&quot;</span>,
             <span class="string">&quot;8115f4988b8c392a7bacb43c8f1ac5650000001241041994483c541e9bc39a6af03ff713aa7745c284e138a42a2435b797b20c4b698cf5118b4f8555317c190eabebfab749c164d3f6bdebe0d441719131a357d8890a13c4dbd4b16ff3dd5a83f7c91ad6e040ac42730a7f0b3cd3245e9f8d6ff31c751d410cfd&quot;</span>
         ).<span class="ident">unwrap_err</span>();
-        <span class="kw">match</span> <span class="ident">err</span>.<span class="ident">kind</span>() {
-            <span class="ident">ece</span>::<span class="ident">ErrorKind</span>::<span class="ident">CryptoError</span> <span class="op">=</span><span class="op">&gt;</span> {}
+        <span class="kw">match</span> <span class="ident">err</span> {
+            <span class="ident">Error</span>::<span class="ident">CryptoError</span> <span class="op">=</span><span class="op">&gt;</span> {}
             <span class="kw">_</span> <span class="op">=</span><span class="op">&gt;</span> <span class="macro">panic</span><span class="macro">!</span>(<span class="string">&quot;Unexpected error type!&quot;</span>),
         };
     }
@@ -861,8 +861,8 @@
             <span class="string">&quot;40c241fde4269ee1e6d725592d982718&quot;</span>,
             <span class="string">&quot;dbe215507d1ad3d2eaeabeae6e874d8f0000001241047bc4343f34a8348cdc4e462ffc7c40aa6a8c61a739c4c41d45125505f70e9fc5f9efa86852dd488dcf8e8ea2cafb75e07abd5ee7c9d5c038bafef079571b0bda294411ce98c76dd031c0e580577a4980a375e45ed30429be0e2ee9da7e6df8696d01b8ec&quot;</span>
         ).<span class="ident">unwrap_err</span>();
-        <span class="kw">match</span> <span class="ident">err</span>.<span class="ident">kind</span>() {
-            <span class="ident">ErrorKind</span>::<span class="ident">DecryptPadding</span> <span class="op">=</span><span class="op">&gt;</span> {}
+        <span class="kw">match</span> <span class="ident">err</span> {
+            <span class="ident">Error</span>::<span class="ident">DecryptPadding</span> <span class="op">=</span><span class="op">&gt;</span> {}
             <span class="kw">_</span> <span class="op">=</span><span class="op">&gt;</span> <span class="macro">panic</span><span class="macro">!</span>(<span class="string">&quot;Unexpected error type!&quot;</span>),
         };
     }

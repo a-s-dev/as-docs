@@ -3933,7 +3933,6 @@
 <span id="3933">3933</span>
 <span id="3934">3934</span>
 <span id="3935">3935</span>
-<span id="3936">3936</span>
 </pre><div class="example-wrap"><pre class="rust ">
 <span class="comment">/* This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
@@ -3967,7 +3966,6 @@
 <span class="kw">use</span> <span class="ident">std</span>::<span class="ident">collections</span>::<span class="ident">HashMap</span>;
 <span class="kw">use</span> <span class="ident">std</span>::<span class="ident">convert</span>::<span class="ident">TryFrom</span>;
 <span class="kw">use</span> <span class="ident">std</span>::<span class="ident">fmt</span>;
-<span class="kw">use</span> <span class="ident">std</span>::<span class="ident">result</span>;
 <span class="kw">use</span> <span class="ident">sync15</span>::{
     <span class="ident">telemetry</span>, <span class="ident">CollSyncIds</span>, <span class="ident">CollectionRequest</span>, <span class="ident">IncomingChangeset</span>, <span class="ident">OutgoingChangeset</span>, <span class="ident">Payload</span>,
     <span class="ident">ServerTimestamp</span>, <span class="ident">Store</span>, <span class="ident">StoreSyncAssociation</span>,
@@ -4869,7 +4867,7 @@
         <span class="kw-2">&amp;</span><span class="self">self</span>,
         <span class="ident">inbound</span>: <span class="ident">Vec</span><span class="op">&lt;</span><span class="ident">IncomingChangeset</span><span class="op">&gt;</span>,
         <span class="ident">telem</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">telemetry</span>::<span class="ident">Engine</span>,
-    ) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">result</span>::<span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">OutgoingChangeset</span>, <span class="ident">failure</span>::<span class="ident">Error</span><span class="op">&gt;</span> {
+    ) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">anyhow</span>::<span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">OutgoingChangeset</span><span class="op">&gt;</span> {
         <span class="macro">assert_eq</span><span class="macro">!</span>(<span class="ident">inbound</span>.<span class="ident">len</span>(), <span class="number">1</span>, <span class="string">&quot;bookmarks only requests one item&quot;</span>);
         <span class="kw">let</span> <span class="ident">inbound</span> <span class="op">=</span> <span class="ident">inbound</span>.<span class="ident">into_iter</span>().<span class="ident">next</span>().<span class="ident">unwrap</span>();
         <span class="comment">// Stage all incoming items.</span>
@@ -4895,7 +4893,7 @@
         <span class="kw-2">&amp;</span><span class="self">self</span>,
         <span class="ident">new_timestamp</span>: <span class="ident">ServerTimestamp</span>,
         <span class="ident">records_synced</span>: <span class="ident">Vec</span><span class="op">&lt;</span><span class="ident">SyncGuid</span><span class="op">&gt;</span>,
-    ) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">result</span>::<span class="prelude-ty">Result</span><span class="op">&lt;</span>(), <span class="ident">failure</span>::<span class="ident">Error</span><span class="op">&gt;</span> {
+    ) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">anyhow</span>::<span class="prelude-ty">Result</span><span class="op">&lt;</span>()<span class="op">&gt;</span> {
         <span class="self">self</span>.<span class="ident">push_synced_items</span>(<span class="ident">new_timestamp</span>, <span class="ident">records_synced</span>)<span class="question-mark">?</span>;
         <span class="self">self</span>.<span class="ident">update_frecencies</span>()<span class="question-mark">?</span>;
         <span class="self">self</span>.<span class="ident">db</span>.<span class="ident">pragma_update</span>(<span class="prelude-val">None</span>, <span class="string">&quot;wal_checkpoint&quot;</span>, <span class="kw-2">&amp;</span><span class="string">&quot;PASSIVE&quot;</span>)<span class="question-mark">?</span>;
@@ -4905,7 +4903,7 @@
     <span class="kw">fn</span> <span class="ident">get_collection_requests</span>(
         <span class="kw-2">&amp;</span><span class="self">self</span>,
         <span class="ident">server_timestamp</span>: <span class="ident">ServerTimestamp</span>,
-    ) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">result</span>::<span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">Vec</span><span class="op">&lt;</span><span class="ident">CollectionRequest</span><span class="op">&gt;</span>, <span class="ident">failure</span>::<span class="ident">Error</span><span class="op">&gt;</span> {
+    ) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">anyhow</span>::<span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">Vec</span><span class="op">&lt;</span><span class="ident">CollectionRequest</span><span class="op">&gt;</span><span class="op">&gt;</span> {
         <span class="kw">let</span> <span class="ident">since</span> <span class="op">=</span>
             <span class="ident">ServerTimestamp</span>(<span class="ident">get_meta</span>::<span class="op">&lt;</span><span class="ident">i64</span><span class="op">&gt;</span>(<span class="self">self</span>.<span class="ident">db</span>, <span class="ident">LAST_SYNC_META_KEY</span>)<span class="question-mark">?</span>.<span class="ident">unwrap_or_default</span>());
         <span class="prelude-val">Ok</span>(<span class="kw">if</span> <span class="ident">since</span> <span class="op">=</span><span class="op">=</span> <span class="ident">server_timestamp</span> {
@@ -4917,7 +4915,7 @@
         })
     }
 
-    <span class="kw">fn</span> <span class="ident">get_sync_assoc</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">result</span>::<span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">StoreSyncAssociation</span>, <span class="ident">failure</span>::<span class="ident">Error</span><span class="op">&gt;</span> {
+    <span class="kw">fn</span> <span class="ident">get_sync_assoc</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">anyhow</span>::<span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">StoreSyncAssociation</span><span class="op">&gt;</span> {
         <span class="kw">let</span> <span class="ident">global</span> <span class="op">=</span> <span class="ident">get_meta</span>(<span class="self">self</span>.<span class="ident">db</span>, <span class="ident">GLOBAL_SYNCID_META_KEY</span>)<span class="question-mark">?</span>;
         <span class="kw">let</span> <span class="ident">coll</span> <span class="op">=</span> <span class="ident">get_meta</span>(<span class="self">self</span>.<span class="ident">db</span>, <span class="ident">COLLECTION_SYNCID_META_KEY</span>)<span class="question-mark">?</span>;
         <span class="prelude-val">Ok</span>(<span class="kw">if</span> <span class="kw">let</span> (<span class="prelude-val">Some</span>(<span class="ident">global</span>), <span class="prelude-val">Some</span>(<span class="ident">coll</span>)) <span class="op">=</span> (<span class="ident">global</span>, <span class="ident">coll</span>) {
@@ -4927,7 +4925,7 @@
         })
     }
 
-    <span class="kw">fn</span> <span class="ident">reset</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">assoc</span>: <span class="kw-2">&amp;</span><span class="ident">StoreSyncAssociation</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">result</span>::<span class="prelude-ty">Result</span><span class="op">&lt;</span>(), <span class="ident">failure</span>::<span class="ident">Error</span><span class="op">&gt;</span> {
+    <span class="kw">fn</span> <span class="ident">reset</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">assoc</span>: <span class="kw-2">&amp;</span><span class="ident">StoreSyncAssociation</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">anyhow</span>::<span class="prelude-ty">Result</span><span class="op">&lt;</span>()<span class="op">&gt;</span> {
         <span class="ident">BookmarksStore</span>::<span class="ident">reset</span>(<span class="self">self</span>, <span class="ident">assoc</span>)<span class="question-mark">?</span>;
         <span class="prelude-val">Ok</span>(())
     }
@@ -4938,7 +4936,7 @@
     <span class="doccomment">///</span>
     <span class="doccomment">/// Conceptually, the next sync will merge an empty local tree, and a full</span>
     <span class="doccomment">/// remote tree.</span>
-    <span class="kw">fn</span> <span class="ident">wipe</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">result</span>::<span class="prelude-ty">Result</span><span class="op">&lt;</span>(), <span class="ident">failure</span>::<span class="ident">Error</span><span class="op">&gt;</span> {
+    <span class="kw">fn</span> <span class="ident">wipe</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">anyhow</span>::<span class="prelude-ty">Result</span><span class="op">&lt;</span>()<span class="op">&gt;</span> {
         <span class="kw">let</span> <span class="ident">tx</span> <span class="op">=</span> <span class="self">self</span>.<span class="ident">db</span>.<span class="ident">begin_transaction</span>()<span class="question-mark">?</span>;
         <span class="kw">let</span> <span class="ident">sql</span> <span class="op">=</span> <span class="macro">format</span><span class="macro">!</span>(
             <span class="string">&quot;INSERT INTO moz_bookmarks_deleted(guid, dateRemoved)
@@ -7459,7 +7457,7 @@
     }
 
     <span class="attribute">#[<span class="ident">test</span>]</span>
-    <span class="kw">fn</span> <span class="ident">test_reset</span>() <span class="op">-</span><span class="op">&gt;</span> <span class="ident">result</span>::<span class="prelude-ty">Result</span><span class="op">&lt;</span>(), <span class="ident">failure</span>::<span class="ident">Error</span><span class="op">&gt;</span> {
+    <span class="kw">fn</span> <span class="ident">test_reset</span>() <span class="op">-</span><span class="op">&gt;</span> <span class="ident">anyhow</span>::<span class="prelude-ty">Result</span><span class="op">&lt;</span>()<span class="op">&gt;</span> {
         <span class="kw">let</span> <span class="ident">api</span> <span class="op">=</span> <span class="ident">new_mem_api</span>();
         <span class="kw">let</span> <span class="ident">writer</span> <span class="op">=</span> <span class="ident">api</span>.<span class="ident">open_connection</span>(<span class="ident">ConnectionType</span>::<span class="ident">ReadWrite</span>)<span class="question-mark">?</span>;
 
@@ -7516,7 +7514,7 @@
     }
 
     <span class="attribute">#[<span class="ident">test</span>]</span>
-    <span class="kw">fn</span> <span class="ident">test_dedupe_local_newer</span>() <span class="op">-</span><span class="op">&gt;</span> <span class="ident">result</span>::<span class="prelude-ty">Result</span><span class="op">&lt;</span>(), <span class="ident">failure</span>::<span class="ident">Error</span><span class="op">&gt;</span> {
+    <span class="kw">fn</span> <span class="ident">test_dedupe_local_newer</span>() <span class="op">-</span><span class="op">&gt;</span> <span class="ident">anyhow</span>::<span class="prelude-ty">Result</span><span class="op">&lt;</span>()<span class="op">&gt;</span> {
         <span class="kw">let</span> <span class="kw">_</span> <span class="op">=</span> <span class="ident">env_logger</span>::<span class="ident">try_init</span>();
 
         <span class="kw">let</span> <span class="ident">api</span> <span class="op">=</span> <span class="ident">new_mem_api</span>();
@@ -7635,7 +7633,7 @@
     }
 
     <span class="attribute">#[<span class="ident">test</span>]</span>
-    <span class="kw">fn</span> <span class="ident">test_deduping_remote_newer</span>() <span class="op">-</span><span class="op">&gt;</span> <span class="ident">result</span>::<span class="prelude-ty">Result</span><span class="op">&lt;</span>(), <span class="ident">failure</span>::<span class="ident">Error</span><span class="op">&gt;</span> {
+    <span class="kw">fn</span> <span class="ident">test_deduping_remote_newer</span>() <span class="op">-</span><span class="op">&gt;</span> <span class="ident">anyhow</span>::<span class="prelude-ty">Result</span><span class="op">&lt;</span>()<span class="op">&gt;</span> {
         <span class="kw">let</span> <span class="kw">_</span> <span class="op">=</span> <span class="ident">env_logger</span>::<span class="ident">try_init</span>();
 
         <span class="kw">let</span> <span class="ident">api</span> <span class="op">=</span> <span class="ident">new_mem_api</span>();

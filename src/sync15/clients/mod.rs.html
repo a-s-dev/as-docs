@@ -91,6 +91,7 @@
 <span id="91">91</span>
 <span id="92">92</span>
 <span id="93">93</span>
+<span id="94">94</span>
 </pre><div class="example-wrap"><pre class="rust ">
 <span class="comment">/* This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
@@ -102,6 +103,7 @@
 <span class="kw">mod</span> <span class="ident">record</span>;
 <span class="kw">mod</span> <span class="ident">ser</span>;
 
+<span class="kw">use</span> <span class="ident">anyhow</span>::<span class="prelude-ty">Result</span>;
 <span class="kw">pub</span> <span class="kw">use</span> <span class="ident">engine</span>::<span class="ident">Engine</span>;
 <span class="kw">pub</span> <span class="kw">use</span> <span class="ident">sync15_traits</span>::<span class="ident">client</span>::{<span class="ident">ClientData</span>, <span class="ident">DeviceType</span>, <span class="ident">RemoteClient</span>};
 
@@ -125,7 +127,7 @@
 
     <span class="doccomment">/// Fetches commands to send to other clients. An error return value means</span>
     <span class="doccomment">/// commands couldn&#39;t be fetched, and halts the sync.</span>
-    <span class="kw">fn</span> <span class="ident">fetch_outgoing_commands</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">HashSet</span><span class="op">&lt;</span><span class="ident">Command</span><span class="op">&gt;</span>, <span class="ident">failure</span>::<span class="ident">Error</span><span class="op">&gt;</span>;
+    <span class="kw">fn</span> <span class="ident">fetch_outgoing_commands</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">HashSet</span><span class="op">&lt;</span><span class="ident">Command</span><span class="op">&gt;</span><span class="op">&gt;</span>;
 
     <span class="doccomment">/// Applies a command sent to this client from another client. This method</span>
     <span class="doccomment">/// should return a `CommandStatus` indicating whether the command was</span>
@@ -135,7 +137,7 @@
     <span class="doccomment">/// applying the command, and halts the sync to prevent unexpected behavior</span>
     <span class="doccomment">/// (for example, merging local and remote bookmarks, when we were told to</span>
     <span class="doccomment">/// wipe our local bookmarks).</span>
-    <span class="kw">fn</span> <span class="ident">apply_incoming_command</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">command</span>: <span class="ident">Command</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">CommandStatus</span>, <span class="ident">failure</span>::<span class="ident">Error</span><span class="op">&gt;</span>;
+    <span class="kw">fn</span> <span class="ident">apply_incoming_command</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">command</span>: <span class="ident">Command</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">CommandStatus</span><span class="op">&gt;</span>;
 }
 
 <span class="doccomment">/// Indicates if a command was applied successfully, ignored, or not supported.</span>

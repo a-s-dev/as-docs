@@ -43,40 +43,38 @@
 <span id="43">43</span>
 <span id="44">44</span>
 <span id="45">45</span>
-<span id="46">46</span>
 </pre><div class="example-wrap"><pre class="rust ">
 <span class="comment">/* This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at http://mozilla.org/MPL/2.0/. */</span>
-<span class="kw">use</span> <span class="ident">failure</span>::<span class="ident">Fail</span>;
-<span class="kw">use</span> <span class="ident">interrupt_support</span>::<span class="ident">Interrupted</span>;
 
-<span class="attribute">#[<span class="ident">derive</span>(<span class="ident">Debug</span>, <span class="ident">Fail</span>)]</span>
+<span class="kw">use</span> <span class="ident">interrupt_support</span>::<span class="ident">Interrupted</span>;
+<span class="attribute">#[<span class="ident">derive</span>(<span class="ident">Debug</span>, <span class="ident">thiserror</span>::<span class="ident">Error</span>)]</span>
 <span class="kw">pub</span> <span class="kw">enum</span> <span class="ident">ErrorKind</span> {
-    <span class="attribute">#[<span class="ident">fail</span>(<span class="ident">display</span> <span class="op">=</span> <span class="string">&quot;Unknown engine: {}&quot;</span>, <span class="ident">_0</span>)]</span>
+    <span class="attribute">#[<span class="ident">error</span>(<span class="string">&quot;Unknown engine: {0}&quot;</span>)]</span>
     <span class="ident">UnknownEngine</span>(<span class="ident">String</span>),
-    <span class="attribute">#[<span class="ident">fail</span>(<span class="ident">display</span> <span class="op">=</span> <span class="string">&quot;Manager was compiled without support for {:?}&quot;</span>, <span class="ident">_0</span>)]</span>
+    <span class="attribute">#[<span class="ident">error</span>(<span class="string">&quot;Manager was compiled without support for {0:?}&quot;</span>)]</span>
     <span class="ident">UnsupportedFeature</span>(<span class="ident">String</span>),
-    <span class="attribute">#[<span class="ident">fail</span>(<span class="ident">display</span> <span class="op">=</span> <span class="string">&quot;Database connection for &#39;{}&#39; is not open&quot;</span>, <span class="ident">_0</span>)]</span>
+    <span class="attribute">#[<span class="ident">error</span>(<span class="string">&quot;Database connection for &#39;{0}&#39; is not open&quot;</span>)]</span>
     <span class="ident">ConnectionClosed</span>(<span class="ident">String</span>),
-    <span class="attribute">#[<span class="ident">fail</span>(<span class="ident">display</span> <span class="op">=</span> <span class="string">&quot;Handle is invalid: {}&quot;</span>, <span class="ident">_0</span>)]</span>
-    <span class="ident">InvalidHandle</span>(<span class="attribute">#[<span class="ident">fail</span>(<span class="ident">cause</span>)]</span> <span class="ident">ffi_support</span>::<span class="ident">HandleError</span>),
-    <span class="attribute">#[<span class="ident">fail</span>(<span class="ident">display</span> <span class="op">=</span> <span class="string">&quot;Protobuf decode error: {}&quot;</span>, <span class="ident">_0</span>)]</span>
-    <span class="ident">ProtobufDecodeError</span>(<span class="attribute">#[<span class="ident">fail</span>(<span class="ident">cause</span>)]</span> <span class="ident">prost</span>::<span class="ident">DecodeError</span>),
+    <span class="attribute">#[<span class="ident">error</span>(<span class="string">&quot;Handle is invalid: {0}&quot;</span>)]</span>
+    <span class="ident">InvalidHandle</span>(<span class="attribute">#[<span class="ident">from</span>]</span> <span class="ident">ffi_support</span>::<span class="ident">HandleError</span>),
+    <span class="attribute">#[<span class="ident">error</span>(<span class="string">&quot;Protobuf decode error: {0}&quot;</span>)]</span>
+    <span class="ident">ProtobufDecodeError</span>(<span class="attribute">#[<span class="ident">from</span>]</span> <span class="ident">prost</span>::<span class="ident">DecodeError</span>),
     <span class="comment">// Used for things like &#39;failed to decode the provided sync key because it&#39;s</span>
     <span class="comment">// completely the wrong format&#39;, etc.</span>
-    <span class="attribute">#[<span class="ident">fail</span>(<span class="ident">display</span> <span class="op">=</span> <span class="string">&quot;Sync error: {}&quot;</span>, <span class="ident">_0</span>)]</span>
-    <span class="ident">Sync15Error</span>(<span class="attribute">#[<span class="ident">fail</span>(<span class="ident">cause</span>)]</span> <span class="ident">sync15</span>::<span class="ident">Error</span>),
-    <span class="attribute">#[<span class="ident">fail</span>(<span class="ident">display</span> <span class="op">=</span> <span class="string">&quot;URL parse error: {}&quot;</span>, <span class="ident">_0</span>)]</span>
-    <span class="ident">UrlParseError</span>(<span class="attribute">#[<span class="ident">fail</span>(<span class="ident">cause</span>)]</span> <span class="ident">url</span>::<span class="ident">ParseError</span>),
-    <span class="attribute">#[<span class="ident">fail</span>(<span class="ident">display</span> <span class="op">=</span> <span class="string">&quot;Operation interrupted&quot;</span>)]</span>
-    <span class="ident">InterruptedError</span>(<span class="attribute">#[<span class="ident">fail</span>(<span class="ident">cause</span>)]</span> <span class="ident">Interrupted</span>),
-    <span class="attribute">#[<span class="ident">fail</span>(<span class="ident">display</span> <span class="op">=</span> <span class="string">&quot;Error parsing JSON data: {}&quot;</span>, <span class="ident">_0</span>)]</span>
-    <span class="ident">JsonError</span>(<span class="attribute">#[<span class="ident">fail</span>(<span class="ident">cause</span>)]</span> <span class="ident">serde_json</span>::<span class="ident">Error</span>),
-    <span class="attribute">#[<span class="ident">fail</span>(<span class="ident">display</span> <span class="op">=</span> <span class="string">&quot;Logins error: {}&quot;</span>, <span class="ident">_0</span>)]</span>
-    <span class="ident">LoginsError</span>(<span class="attribute">#[<span class="ident">fail</span>(<span class="ident">cause</span>)]</span> <span class="ident">logins</span>::<span class="ident">Error</span>),
-    <span class="attribute">#[<span class="ident">fail</span>(<span class="ident">display</span> <span class="op">=</span> <span class="string">&quot;Places error: {}&quot;</span>, <span class="ident">_0</span>)]</span>
-    <span class="ident">PlacesError</span>(<span class="attribute">#[<span class="ident">fail</span>(<span class="ident">cause</span>)]</span> <span class="ident">places</span>::<span class="ident">Error</span>),
+    <span class="attribute">#[<span class="ident">error</span>(<span class="string">&quot;Sync error: {0}&quot;</span>)]</span>
+    <span class="ident">Sync15Error</span>(<span class="attribute">#[<span class="ident">from</span>]</span> <span class="ident">sync15</span>::<span class="ident">Error</span>),
+    <span class="attribute">#[<span class="ident">error</span>(<span class="string">&quot;URL parse error: {0}&quot;</span>)]</span>
+    <span class="ident">UrlParseError</span>(<span class="attribute">#[<span class="ident">from</span>]</span> <span class="ident">url</span>::<span class="ident">ParseError</span>),
+    <span class="attribute">#[<span class="ident">error</span>(<span class="string">&quot;Operation interrupted&quot;</span>)]</span>
+    <span class="ident">InterruptedError</span>(<span class="attribute">#[<span class="ident">from</span>]</span> <span class="ident">Interrupted</span>),
+    <span class="attribute">#[<span class="ident">error</span>(<span class="string">&quot;Error parsing JSON data: {0}&quot;</span>)]</span>
+    <span class="ident">JsonError</span>(<span class="attribute">#[<span class="ident">from</span>]</span> <span class="ident">serde_json</span>::<span class="ident">Error</span>),
+    <span class="attribute">#[<span class="ident">error</span>(<span class="string">&quot;Logins error: {0}&quot;</span>)]</span>
+    <span class="ident">LoginsError</span>(<span class="attribute">#[<span class="ident">from</span>]</span> <span class="ident">logins</span>::<span class="ident">Error</span>),
+    <span class="attribute">#[<span class="ident">error</span>(<span class="string">&quot;Places error: {0}&quot;</span>)]</span>
+    <span class="ident">PlacesError</span>(<span class="attribute">#[<span class="ident">from</span>]</span> <span class="ident">places</span>::<span class="ident">Error</span>),
 }
 
 <span class="ident">error_support</span>::<span class="macro">define_error</span><span class="macro">!</span> {

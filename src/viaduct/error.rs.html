@@ -46,38 +46,34 @@
 <span id="46">46</span>
 <span id="47">47</span>
 <span id="48">48</span>
-<span id="49">49</span>
-<span id="50">50</span>
 </pre><div class="example-wrap"><pre class="rust ">
 <span class="comment">/* This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at http://mozilla.org/MPL/2.0/. */</span>
 
-<span class="kw">use</span> <span class="ident">failure</span>::<span class="ident">Fail</span>;
-
-<span class="attribute">#[<span class="ident">derive</span>(<span class="ident">Debug</span>, <span class="ident">Fail</span>)]</span>
+<span class="attribute">#[<span class="ident">derive</span>(<span class="ident">Debug</span>, <span class="ident">thiserror</span>::<span class="ident">Error</span>)]</span>
 <span class="kw">pub</span> <span class="kw">enum</span> <span class="ident">Error</span> {
-    <span class="attribute">#[<span class="ident">fail</span>(<span class="ident">display</span> <span class="op">=</span> <span class="string">&quot;Illegal characters in request header &#39;{}&#39;&quot;</span>, <span class="ident">_0</span>)]</span>
+    <span class="attribute">#[<span class="ident">error</span>(<span class="string">&quot;Illegal characters in request header &#39;{0}&#39;&quot;</span>)]</span>
     <span class="ident">RequestHeaderError</span>(<span class="kw">crate</span>::<span class="ident">HeaderName</span>),
 
-    <span class="attribute">#[<span class="ident">fail</span>(<span class="ident">display</span> <span class="op">=</span> <span class="string">&quot;Backend error: {}&quot;</span>, <span class="ident">_0</span>)]</span>
+    <span class="attribute">#[<span class="ident">error</span>(<span class="string">&quot;Backend error: {0}&quot;</span>)]</span>
     <span class="ident">BackendError</span>(<span class="ident">String</span>),
 
-    <span class="attribute">#[<span class="ident">fail</span>(<span class="ident">display</span> <span class="op">=</span> <span class="string">&quot;Network error: {}&quot;</span>, <span class="ident">_0</span>)]</span>
+    <span class="attribute">#[<span class="ident">error</span>(<span class="string">&quot;Network error: {0}&quot;</span>)]</span>
     <span class="ident">NetworkError</span>(<span class="ident">String</span>),
 
-    <span class="attribute">#[<span class="ident">fail</span>(<span class="ident">display</span> <span class="op">=</span> <span class="string">&quot;The rust-components network backend must be initialized before use!&quot;</span>)]</span>
+    <span class="attribute">#[<span class="ident">error</span>(<span class="string">&quot;The rust-components network backend must be initialized before use!&quot;</span>)]</span>
     <span class="ident">BackendNotInitialized</span>,
 
-    <span class="attribute">#[<span class="ident">fail</span>(<span class="ident">display</span> <span class="op">=</span> <span class="string">&quot;Backend already initialized.&quot;</span>)]</span>
+    <span class="attribute">#[<span class="ident">error</span>(<span class="string">&quot;Backend already initialized.&quot;</span>)]</span>
     <span class="ident">SetBackendError</span>,
 
     <span class="doccomment">/// Note: we return this if the server returns a bad URL with</span>
     <span class="doccomment">/// its response. This *probably* should never happen, but who knows.</span>
-    <span class="attribute">#[<span class="ident">fail</span>(<span class="ident">display</span> <span class="op">=</span> <span class="string">&quot;URL Parse Error: {}&quot;</span>, <span class="ident">_0</span>)]</span>
-    <span class="ident">UrlError</span>(<span class="attribute">#[<span class="ident">fail</span>(<span class="ident">cause</span>)]</span> <span class="ident">url</span>::<span class="ident">ParseError</span>),
+    <span class="attribute">#[<span class="ident">error</span>(<span class="string">&quot;URL Parse Error: {0}&quot;</span>)]</span>
+    <span class="ident">UrlError</span>(<span class="attribute">#[<span class="ident">source</span>]</span> <span class="ident">url</span>::<span class="ident">ParseError</span>),
 
-    <span class="attribute">#[<span class="ident">fail</span>(<span class="ident">display</span> <span class="op">=</span> <span class="string">&quot;Validation error: URL does not use TLS protocol.&quot;</span>)]</span>
+    <span class="attribute">#[<span class="ident">error</span>(<span class="string">&quot;Validation error: URL does not use TLS protocol.&quot;</span>)]</span>
     <span class="ident">NonTlsUrl</span>,
 }
 
@@ -92,8 +88,8 @@
 <span class="doccomment">///</span>
 <span class="doccomment">/// Note that it&#39;s not a variant on `Error` to distinguish between errors</span>
 <span class="doccomment">/// caused by the network, and errors returned from the server.</span>
-<span class="attribute">#[<span class="ident">derive</span>(<span class="ident">failure</span>::<span class="ident">Fail</span>, <span class="ident">Debug</span>, <span class="ident">Clone</span>, <span class="ident">PartialEq</span>)]</span>
-<span class="attribute">#[<span class="ident">fail</span>(<span class="ident">display</span> <span class="op">=</span> <span class="string">&quot;Error: {} {} returned {}&quot;</span>, <span class="ident">method</span>, <span class="ident">url</span>, <span class="ident">status</span>)]</span>
+<span class="attribute">#[<span class="ident">derive</span>(<span class="ident">thiserror</span>::<span class="ident">Error</span>, <span class="ident">Debug</span>, <span class="ident">Clone</span>, <span class="ident">PartialEq</span>)]</span>
+<span class="attribute">#[<span class="ident">error</span>(<span class="string">&quot;Error: {method} {url} returned {status}&quot;</span>)]</span>
 <span class="kw">pub</span> <span class="kw">struct</span> <span class="ident">UnexpectedStatus</span> {
     <span class="kw">pub</span> <span class="ident">status</span>: <span class="ident">u16</span>,
     <span class="kw">pub</span> <span class="ident">method</span>: <span class="kw">crate</span>::<span class="ident">Method</span>,

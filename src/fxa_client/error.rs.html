@@ -170,128 +170,112 @@
 <span id="170">170</span>
 <span id="171">171</span>
 <span id="172">172</span>
-<span id="173">173</span>
-<span id="174">174</span>
-<span id="175">175</span>
-<span id="176">176</span>
-<span id="177">177</span>
-<span id="178">178</span>
-<span id="179">179</span>
-<span id="180">180</span>
 </pre><div class="example-wrap"><pre class="rust ">
 <span class="comment">/* This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at http://mozilla.org/MPL/2.0/. */</span>
 
-<span class="kw">use</span> <span class="ident">failure</span>::<span class="ident">Fail</span>;
 <span class="kw">use</span> <span class="ident">rc_crypto</span>::<span class="ident">hawk</span>;
 <span class="kw">use</span> <span class="ident">std</span>::<span class="ident">string</span>;
-
-<span class="attribute">#[<span class="ident">derive</span>(<span class="ident">Debug</span>, <span class="ident">Fail</span>)]</span>
+<span class="attribute">#[<span class="ident">derive</span>(<span class="ident">Debug</span>, <span class="ident">thiserror</span>::<span class="ident">Error</span>)]</span>
 <span class="kw">pub</span> <span class="kw">enum</span> <span class="ident">ErrorKind</span> {
-    <span class="attribute">#[<span class="ident">fail</span>(<span class="ident">display</span> <span class="op">=</span> <span class="string">&quot;Unknown OAuth State&quot;</span>)]</span>
+    <span class="attribute">#[<span class="ident">error</span>(<span class="string">&quot;Unknown OAuth State&quot;</span>)]</span>
     <span class="ident">UnknownOAuthState</span>,
 
-    <span class="attribute">#[<span class="ident">fail</span>(<span class="ident">display</span> <span class="op">=</span> <span class="string">&quot;The client requested keys alongside the token but they were not included&quot;</span>)]</span>
+    <span class="attribute">#[<span class="ident">error</span>(<span class="string">&quot;The client requested keys alongside the token but they were not included&quot;</span>)]</span>
     <span class="ident">TokenWithoutKeys</span>,
 
-    <span class="attribute">#[<span class="ident">fail</span>(<span class="ident">display</span> <span class="op">=</span> <span class="string">&quot;Login state needs to be Married for the current operation&quot;</span>)]</span>
+    <span class="attribute">#[<span class="ident">error</span>(<span class="string">&quot;Login state needs to be Married for the current operation&quot;</span>)]</span>
     <span class="ident">NotMarried</span>,
 
-    <span class="attribute">#[<span class="ident">fail</span>(<span class="ident">display</span> <span class="op">=</span> <span class="string">&quot;Multiple OAuth scopes requested&quot;</span>)]</span>
+    <span class="attribute">#[<span class="ident">error</span>(<span class="string">&quot;Multiple OAuth scopes requested&quot;</span>)]</span>
     <span class="ident">MultipleScopesRequested</span>,
 
-    <span class="attribute">#[<span class="ident">fail</span>(<span class="ident">display</span> <span class="op">=</span> <span class="string">&quot;No cached token for scope {}&quot;</span>, <span class="ident">_0</span>)]</span>
+    <span class="attribute">#[<span class="ident">error</span>(<span class="string">&quot;No cached token for scope {0}&quot;</span>)]</span>
     <span class="ident">NoCachedToken</span>(<span class="ident">String</span>),
 
-    <span class="attribute">#[<span class="ident">fail</span>(<span class="ident">display</span> <span class="op">=</span> <span class="string">&quot;No cached scoped keys for scope {}&quot;</span>, <span class="ident">_0</span>)]</span>
+    <span class="attribute">#[<span class="ident">error</span>(<span class="string">&quot;No cached scoped keys for scope {0}&quot;</span>)]</span>
     <span class="ident">NoScopedKey</span>(<span class="ident">String</span>),
 
-    <span class="attribute">#[<span class="ident">fail</span>(<span class="ident">display</span> <span class="op">=</span> <span class="string">&quot;No stored refresh token&quot;</span>)]</span>
+    <span class="attribute">#[<span class="ident">error</span>(<span class="string">&quot;No stored refresh token&quot;</span>)]</span>
     <span class="ident">NoRefreshToken</span>,
 
-    <span class="attribute">#[<span class="ident">fail</span>(<span class="ident">display</span> <span class="op">=</span> <span class="string">&quot;No stored session token&quot;</span>)]</span>
+    <span class="attribute">#[<span class="ident">error</span>(<span class="string">&quot;No stored session token&quot;</span>)]</span>
     <span class="ident">NoSessionToken</span>,
 
-    <span class="attribute">#[<span class="ident">fail</span>(<span class="ident">display</span> <span class="op">=</span> <span class="string">&quot;No stored migration data&quot;</span>)]</span>
+    <span class="attribute">#[<span class="ident">error</span>(<span class="string">&quot;No stored migration data&quot;</span>)]</span>
     <span class="ident">NoMigrationData</span>,
 
-    <span class="attribute">#[<span class="ident">fail</span>(<span class="ident">display</span> <span class="op">=</span> <span class="string">&quot;No stored current device id&quot;</span>)]</span>
+    <span class="attribute">#[<span class="ident">error</span>(<span class="string">&quot;No stored current device id&quot;</span>)]</span>
     <span class="ident">NoCurrentDeviceId</span>,
 
-    <span class="attribute">#[<span class="ident">fail</span>(<span class="ident">display</span> <span class="op">=</span> <span class="string">&quot;Could not find a refresh token in the server response&quot;</span>)]</span>
+    <span class="attribute">#[<span class="ident">error</span>(<span class="string">&quot;Could not find a refresh token in the server response&quot;</span>)]</span>
     <span class="ident">RefreshTokenNotPresent</span>,
 
-    <span class="attribute">#[<span class="ident">fail</span>(<span class="ident">display</span> <span class="op">=</span> <span class="string">&quot;Action requires a prior device registration&quot;</span>)]</span>
+    <span class="attribute">#[<span class="ident">error</span>(<span class="string">&quot;Action requires a prior device registration&quot;</span>)]</span>
     <span class="ident">DeviceUnregistered</span>,
 
-    <span class="attribute">#[<span class="ident">fail</span>(<span class="ident">display</span> <span class="op">=</span> <span class="string">&quot;Device target is unknown (Device ID: {})&quot;</span>, <span class="ident">_0</span>)]</span>
+    <span class="attribute">#[<span class="ident">error</span>(<span class="string">&quot;Device target is unknown (Device ID: {0})&quot;</span>)]</span>
     <span class="ident">UnknownTargetDevice</span>(<span class="ident">String</span>),
 
-    <span class="attribute">#[<span class="ident">fail</span>(<span class="ident">display</span> <span class="op">=</span> <span class="string">&quot;Unrecoverable server error {}&quot;</span>, <span class="ident">_0</span>)]</span>
+    <span class="attribute">#[<span class="ident">error</span>(<span class="string">&quot;Unrecoverable server error {0}&quot;</span>)]</span>
     <span class="ident">UnrecoverableServerError</span>(<span class="kw-2">&amp;</span><span class="lifetime">&#39;static</span> <span class="ident">str</span>),
 
-    <span class="attribute">#[<span class="ident">fail</span>(<span class="ident">display</span> <span class="op">=</span> <span class="string">&quot;Invalid OAuth scope value {}&quot;</span>, <span class="ident">_0</span>)]</span>
+    <span class="attribute">#[<span class="ident">error</span>(<span class="string">&quot;Invalid OAuth scope value {0}&quot;</span>)]</span>
     <span class="ident">InvalidOAuthScopeValue</span>(<span class="ident">String</span>),
 
-    <span class="attribute">#[<span class="ident">fail</span>(<span class="ident">display</span> <span class="op">=</span> <span class="string">&quot;Illegal state: {}&quot;</span>, <span class="ident">_0</span>)]</span>
+    <span class="attribute">#[<span class="ident">error</span>(<span class="string">&quot;Illegal state: {0}&quot;</span>)]</span>
     <span class="ident">IllegalState</span>(<span class="kw-2">&amp;</span><span class="lifetime">&#39;static</span> <span class="ident">str</span>),
 
-    <span class="attribute">#[<span class="ident">fail</span>(<span class="ident">display</span> <span class="op">=</span> <span class="string">&quot;Unknown command: {}&quot;</span>, <span class="ident">_0</span>)]</span>
+    <span class="attribute">#[<span class="ident">error</span>(<span class="string">&quot;Unknown command: {0}&quot;</span>)]</span>
     <span class="ident">UnknownCommand</span>(<span class="ident">String</span>),
 
-    <span class="attribute">#[<span class="ident">fail</span>(<span class="ident">display</span> <span class="op">=</span> <span class="string">&quot;Send Tab diagnosis error: {}&quot;</span>, <span class="ident">_0</span>)]</span>
+    <span class="attribute">#[<span class="ident">error</span>(<span class="string">&quot;Send Tab diagnosis error: {0}&quot;</span>)]</span>
     <span class="ident">SendTabDiagnosisError</span>(<span class="kw-2">&amp;</span><span class="lifetime">&#39;static</span> <span class="ident">str</span>),
 
-    <span class="attribute">#[<span class="ident">fail</span>(<span class="ident">display</span> <span class="op">=</span> <span class="string">&quot;Empty names&quot;</span>)]</span>
+    <span class="attribute">#[<span class="ident">error</span>(<span class="string">&quot;Empty names&quot;</span>)]</span>
     <span class="ident">EmptyOAuthScopeNames</span>,
 
-    <span class="attribute">#[<span class="ident">fail</span>(<span class="ident">display</span> <span class="op">=</span> <span class="string">&quot;Key {} had wrong length, got {}, expected {}&quot;</span>, <span class="ident">_0</span>, <span class="ident">_1</span>, <span class="ident">_2</span>)]</span>
+    <span class="attribute">#[<span class="ident">error</span>(<span class="string">&quot;Key {0} had wrong length, got {1}, expected {2}&quot;</span>)]</span>
     <span class="ident">BadKeyLength</span>(<span class="kw-2">&amp;</span><span class="lifetime">&#39;static</span> <span class="ident">str</span>, <span class="ident">usize</span>, <span class="ident">usize</span>),
 
-    <span class="attribute">#[<span class="ident">fail</span>(
-        <span class="ident">display</span> <span class="op">=</span> <span class="string">&quot;Cannot xor arrays with different lengths: {} and {}&quot;</span>,
-        <span class="ident">_0</span>, <span class="ident">_1</span>
-    )]</span>
+    <span class="attribute">#[<span class="ident">error</span>(<span class="string">&quot;Cannot xor arrays with different lengths: {0} and {1}&quot;</span>)]</span>
     <span class="ident">XorLengthMismatch</span>(<span class="ident">usize</span>, <span class="ident">usize</span>),
 
-    <span class="attribute">#[<span class="ident">fail</span>(<span class="ident">display</span> <span class="op">=</span> <span class="string">&quot;Audience URL without a host&quot;</span>)]</span>
+    <span class="attribute">#[<span class="ident">error</span>(<span class="string">&quot;Audience URL without a host&quot;</span>)]</span>
     <span class="ident">AudienceURLWithoutHost</span>,
 
-    <span class="attribute">#[<span class="ident">fail</span>(<span class="ident">display</span> <span class="op">=</span> <span class="string">&quot;Origin mismatch&quot;</span>)]</span>
+    <span class="attribute">#[<span class="ident">error</span>(<span class="string">&quot;Origin mismatch&quot;</span>)]</span>
     <span class="ident">OriginMismatch</span>,
 
-    <span class="attribute">#[<span class="ident">fail</span>(<span class="ident">display</span> <span class="op">=</span> <span class="string">&quot;JWT signature validation failed&quot;</span>)]</span>
+    <span class="attribute">#[<span class="ident">error</span>(<span class="string">&quot;JWT signature validation failed&quot;</span>)]</span>
     <span class="ident">JWTSignatureValidationFailed</span>,
 
-    <span class="attribute">#[<span class="ident">fail</span>(<span class="ident">display</span> <span class="op">=</span> <span class="string">&quot;ECDH key generation failed&quot;</span>)]</span>
+    <span class="attribute">#[<span class="ident">error</span>(<span class="string">&quot;ECDH key generation failed&quot;</span>)]</span>
     <span class="ident">KeyGenerationFailed</span>,
 
-    <span class="attribute">#[<span class="ident">fail</span>(<span class="ident">display</span> <span class="op">=</span> <span class="string">&quot;Public key computation failed&quot;</span>)]</span>
+    <span class="attribute">#[<span class="ident">error</span>(<span class="string">&quot;Public key computation failed&quot;</span>)]</span>
     <span class="ident">PublicKeyComputationFailed</span>,
 
-    <span class="attribute">#[<span class="ident">fail</span>(<span class="ident">display</span> <span class="op">=</span> <span class="string">&quot;Remote key and local key mismatch&quot;</span>)]</span>
+    <span class="attribute">#[<span class="ident">error</span>(<span class="string">&quot;Remote key and local key mismatch&quot;</span>)]</span>
     <span class="ident">MismatchedKeys</span>,
 
-    <span class="attribute">#[<span class="ident">fail</span>(<span class="ident">display</span> <span class="op">=</span> <span class="string">&quot;Key import failed&quot;</span>)]</span>
+    <span class="attribute">#[<span class="ident">error</span>(<span class="string">&quot;Key import failed&quot;</span>)]</span>
     <span class="ident">KeyImportFailed</span>,
 
-    <span class="attribute">#[<span class="ident">fail</span>(<span class="ident">display</span> <span class="op">=</span> <span class="string">&quot;AEAD open failure&quot;</span>)]</span>
+    <span class="attribute">#[<span class="ident">error</span>(<span class="string">&quot;AEAD open failure&quot;</span>)]</span>
     <span class="ident">AEADOpenFailure</span>,
 
-    <span class="attribute">#[<span class="ident">fail</span>(<span class="ident">display</span> <span class="op">=</span> <span class="string">&quot;Random number generation failure&quot;</span>)]</span>
+    <span class="attribute">#[<span class="ident">error</span>(<span class="string">&quot;Random number generation failure&quot;</span>)]</span>
     <span class="ident">RngFailure</span>,
 
-    <span class="attribute">#[<span class="ident">fail</span>(<span class="ident">display</span> <span class="op">=</span> <span class="string">&quot;HMAC mismatch&quot;</span>)]</span>
+    <span class="attribute">#[<span class="ident">error</span>(<span class="string">&quot;HMAC mismatch&quot;</span>)]</span>
     <span class="ident">HmacMismatch</span>,
 
-    <span class="attribute">#[<span class="ident">fail</span>(<span class="ident">display</span> <span class="op">=</span> <span class="string">&quot;Unsupported command: {}&quot;</span>, <span class="ident">_0</span>)]</span>
+    <span class="attribute">#[<span class="ident">error</span>(<span class="string">&quot;Unsupported command: {0}&quot;</span>)]</span>
     <span class="ident">UnsupportedCommand</span>(<span class="kw-2">&amp;</span><span class="lifetime">&#39;static</span> <span class="ident">str</span>),
 
-    <span class="attribute">#[<span class="ident">fail</span>(
-        <span class="ident">display</span> <span class="op">=</span> <span class="string">&quot;Remote server error: &#39;{}&#39; &#39;{}&#39; &#39;{}&#39; &#39;{}&#39; &#39;{}&#39;&quot;</span>,
-        <span class="ident">code</span>, <span class="ident">errno</span>, <span class="ident">error</span>, <span class="ident">message</span>, <span class="ident">info</span>
-    )]</span>
+    <span class="attribute">#[<span class="ident">error</span>(<span class="string">&quot;Remote server error: &#39;{code}&#39; &#39;{errno}&#39; &#39;{error}&#39; &#39;{message}&#39; &#39;{info}&#39;&quot;</span>)]</span>
     <span class="ident">RemoteError</span> {
         <span class="ident">code</span>: <span class="ident">u64</span>,
         <span class="ident">errno</span>: <span class="ident">u64</span>,
@@ -301,41 +285,41 @@
     },
 
     <span class="comment">// Basically reimplement error_chain&#39;s foreign_links. (Ugh, this sucks).</span>
-    <span class="attribute">#[<span class="ident">fail</span>(<span class="ident">display</span> <span class="op">=</span> <span class="string">&quot;Crypto/NSS error: {}&quot;</span>, <span class="ident">_0</span>)]</span>
-    <span class="ident">CryptoError</span>(<span class="attribute">#[<span class="ident">fail</span>(<span class="ident">cause</span>)]</span> <span class="ident">rc_crypto</span>::<span class="ident">Error</span>),
+    <span class="attribute">#[<span class="ident">error</span>(<span class="string">&quot;Crypto/NSS error: {0}&quot;</span>)]</span>
+    <span class="ident">CryptoError</span>(<span class="attribute">#[<span class="ident">from</span>]</span> <span class="ident">rc_crypto</span>::<span class="ident">Error</span>),
 
-    <span class="attribute">#[<span class="ident">fail</span>(<span class="ident">display</span> <span class="op">=</span> <span class="string">&quot;http-ece encryption error: {}&quot;</span>, <span class="ident">_0</span>)]</span>
-    <span class="ident">EceError</span>(<span class="attribute">#[<span class="ident">fail</span>(<span class="ident">cause</span>)]</span> <span class="ident">rc_crypto</span>::<span class="ident">ece</span>::<span class="ident">Error</span>),
+    <span class="attribute">#[<span class="ident">error</span>(<span class="string">&quot;http-ece encryption error: {0}&quot;</span>)]</span>
+    <span class="ident">EceError</span>(<span class="attribute">#[<span class="ident">from</span>]</span> <span class="ident">rc_crypto</span>::<span class="ident">ece</span>::<span class="ident">Error</span>),
 
-    <span class="attribute">#[<span class="ident">fail</span>(<span class="ident">display</span> <span class="op">=</span> <span class="string">&quot;Hex decode error: {}&quot;</span>, <span class="ident">_0</span>)]</span>
-    <span class="ident">HexDecodeError</span>(<span class="attribute">#[<span class="ident">fail</span>(<span class="ident">cause</span>)]</span> <span class="ident">hex</span>::<span class="ident">FromHexError</span>),
+    <span class="attribute">#[<span class="ident">error</span>(<span class="string">&quot;Hex decode error: {0}&quot;</span>)]</span>
+    <span class="ident">HexDecodeError</span>(<span class="attribute">#[<span class="ident">from</span>]</span> <span class="ident">hex</span>::<span class="ident">FromHexError</span>),
 
-    <span class="attribute">#[<span class="ident">fail</span>(<span class="ident">display</span> <span class="op">=</span> <span class="string">&quot;Base64 decode error: {}&quot;</span>, <span class="ident">_0</span>)]</span>
-    <span class="ident">Base64Decode</span>(<span class="attribute">#[<span class="ident">fail</span>(<span class="ident">cause</span>)]</span> <span class="ident">base64</span>::<span class="ident">DecodeError</span>),
+    <span class="attribute">#[<span class="ident">error</span>(<span class="string">&quot;Base64 decode error: {0}&quot;</span>)]</span>
+    <span class="ident">Base64Decode</span>(<span class="attribute">#[<span class="ident">from</span>]</span> <span class="ident">base64</span>::<span class="ident">DecodeError</span>),
 
-    <span class="attribute">#[<span class="ident">fail</span>(<span class="ident">display</span> <span class="op">=</span> <span class="string">&quot;JSON error: {}&quot;</span>, <span class="ident">_0</span>)]</span>
-    <span class="ident">JsonError</span>(<span class="attribute">#[<span class="ident">fail</span>(<span class="ident">cause</span>)]</span> <span class="ident">serde_json</span>::<span class="ident">Error</span>),
+    <span class="attribute">#[<span class="ident">error</span>(<span class="string">&quot;JSON error: {0}&quot;</span>)]</span>
+    <span class="ident">JsonError</span>(<span class="attribute">#[<span class="ident">from</span>]</span> <span class="ident">serde_json</span>::<span class="ident">Error</span>),
 
-    <span class="attribute">#[<span class="ident">fail</span>(<span class="ident">display</span> <span class="op">=</span> <span class="string">&quot;UTF8 decode error: {}&quot;</span>, <span class="ident">_0</span>)]</span>
-    <span class="ident">UTF8DecodeError</span>(<span class="attribute">#[<span class="ident">fail</span>(<span class="ident">cause</span>)]</span> <span class="ident">string</span>::<span class="ident">FromUtf8Error</span>),
+    <span class="attribute">#[<span class="ident">error</span>(<span class="string">&quot;UTF8 decode error: {0}&quot;</span>)]</span>
+    <span class="ident">UTF8DecodeError</span>(<span class="attribute">#[<span class="ident">from</span>]</span> <span class="ident">string</span>::<span class="ident">FromUtf8Error</span>),
 
-    <span class="attribute">#[<span class="ident">fail</span>(<span class="ident">display</span> <span class="op">=</span> <span class="string">&quot;Network error: {}&quot;</span>, <span class="ident">_0</span>)]</span>
-    <span class="ident">RequestError</span>(<span class="attribute">#[<span class="ident">fail</span>(<span class="ident">cause</span>)]</span> <span class="ident">viaduct</span>::<span class="ident">Error</span>),
+    <span class="attribute">#[<span class="ident">error</span>(<span class="string">&quot;Network error: {0}&quot;</span>)]</span>
+    <span class="ident">RequestError</span>(<span class="attribute">#[<span class="ident">from</span>]</span> <span class="ident">viaduct</span>::<span class="ident">Error</span>),
 
-    <span class="attribute">#[<span class="ident">fail</span>(<span class="ident">display</span> <span class="op">=</span> <span class="string">&quot;Malformed URL error: {}&quot;</span>, <span class="ident">_0</span>)]</span>
-    <span class="ident">MalformedUrl</span>(<span class="attribute">#[<span class="ident">fail</span>(<span class="ident">cause</span>)]</span> <span class="ident">url</span>::<span class="ident">ParseError</span>),
+    <span class="attribute">#[<span class="ident">error</span>(<span class="string">&quot;Malformed URL error: {0}&quot;</span>)]</span>
+    <span class="ident">MalformedUrl</span>(<span class="attribute">#[<span class="ident">from</span>]</span> <span class="ident">url</span>::<span class="ident">ParseError</span>),
 
-    <span class="attribute">#[<span class="ident">fail</span>(<span class="ident">display</span> <span class="op">=</span> <span class="string">&quot;Unexpected HTTP status: {}&quot;</span>, <span class="ident">_0</span>)]</span>
-    <span class="ident">UnexpectedStatus</span>(<span class="attribute">#[<span class="ident">fail</span>(<span class="ident">cause</span>)]</span> <span class="ident">viaduct</span>::<span class="ident">UnexpectedStatus</span>),
+    <span class="attribute">#[<span class="ident">error</span>(<span class="string">&quot;Unexpected HTTP status: {0}&quot;</span>)]</span>
+    <span class="ident">UnexpectedStatus</span>(<span class="attribute">#[<span class="ident">from</span>]</span> <span class="ident">viaduct</span>::<span class="ident">UnexpectedStatus</span>),
 
-    <span class="attribute">#[<span class="ident">fail</span>(<span class="ident">display</span> <span class="op">=</span> <span class="string">&quot;Sync15 error: {}&quot;</span>, <span class="ident">_0</span>)]</span>
-    <span class="ident">SyncError</span>(<span class="attribute">#[<span class="ident">fail</span>(<span class="ident">cause</span>)]</span> <span class="ident">sync15</span>::<span class="ident">Error</span>),
+    <span class="attribute">#[<span class="ident">error</span>(<span class="string">&quot;Sync15 error: {0}&quot;</span>)]</span>
+    <span class="ident">SyncError</span>(<span class="attribute">#[<span class="ident">from</span>]</span> <span class="ident">sync15</span>::<span class="ident">Error</span>),
 
-    <span class="attribute">#[<span class="ident">fail</span>(<span class="ident">display</span> <span class="op">=</span> <span class="string">&quot;HAWK error: {}&quot;</span>, <span class="ident">_0</span>)]</span>
-    <span class="ident">HawkError</span>(<span class="attribute">#[<span class="ident">fail</span>(<span class="ident">cause</span>)]</span> <span class="ident">hawk</span>::<span class="ident">Error</span>),
+    <span class="attribute">#[<span class="ident">error</span>(<span class="string">&quot;HAWK error: {0}&quot;</span>)]</span>
+    <span class="ident">HawkError</span>(<span class="attribute">#[<span class="ident">from</span>]</span> <span class="ident">hawk</span>::<span class="ident">Error</span>),
 
-    <span class="attribute">#[<span class="ident">fail</span>(<span class="ident">display</span> <span class="op">=</span> <span class="string">&quot;Protobuf decode error: {}&quot;</span>, <span class="ident">_0</span>)]</span>
-    <span class="ident">ProtobufDecodeError</span>(<span class="attribute">#[<span class="ident">fail</span>(<span class="ident">cause</span>)]</span> <span class="ident">prost</span>::<span class="ident">DecodeError</span>),
+    <span class="attribute">#[<span class="ident">error</span>(<span class="string">&quot;Protobuf decode error: {0}&quot;</span>)]</span>
+    <span class="ident">ProtobufDecodeError</span>(<span class="attribute">#[<span class="ident">from</span>]</span> <span class="ident">prost</span>::<span class="ident">DecodeError</span>),
 }
 
 <span class="ident">error_support</span>::<span class="macro">define_error</span><span class="macro">!</span> {

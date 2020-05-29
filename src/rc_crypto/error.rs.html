@@ -18,23 +18,19 @@
 <span id="18">18</span>
 <span id="19">19</span>
 <span id="20">20</span>
-<span id="21">21</span>
-<span id="22">22</span>
 </pre><div class="example-wrap"><pre class="rust ">
 <span class="comment">/* This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at http://mozilla.org/MPL/2.0/. */</span>
 
-<span class="kw">use</span> <span class="ident">failure</span>::<span class="ident">Fail</span>;
-
-<span class="attribute">#[<span class="ident">derive</span>(<span class="ident">Debug</span>, <span class="ident">Fail</span>)]</span>
+<span class="attribute">#[<span class="ident">derive</span>(<span class="ident">Debug</span>, <span class="ident">thiserror</span>::<span class="ident">Error</span>)]</span>
 <span class="kw">pub</span> <span class="kw">enum</span> <span class="ident">ErrorKind</span> {
-    <span class="attribute">#[<span class="ident">fail</span>(<span class="ident">display</span> <span class="op">=</span> <span class="string">&quot;NSS error: {}&quot;</span>, <span class="ident">_0</span>)]</span>
-    <span class="ident">NSSError</span>(<span class="attribute">#[<span class="ident">fail</span>(<span class="ident">cause</span>)]</span> <span class="ident">nss</span>::<span class="ident">Error</span>),
-    <span class="attribute">#[<span class="ident">fail</span>(<span class="ident">display</span> <span class="op">=</span> <span class="string">&quot;Internal crypto error&quot;</span>)]</span>
+    <span class="attribute">#[<span class="ident">error</span>(<span class="string">&quot;NSS error: {0}&quot;</span>)]</span>
+    <span class="ident">NSSError</span>(<span class="attribute">#[<span class="ident">from</span>]</span> <span class="ident">nss</span>::<span class="ident">Error</span>),
+    <span class="attribute">#[<span class="ident">error</span>(<span class="string">&quot;Internal crypto error&quot;</span>)]</span>
     <span class="ident">InternalError</span>,
-    <span class="attribute">#[<span class="ident">fail</span>(<span class="ident">display</span> <span class="op">=</span> <span class="string">&quot;Conversion error: {}&quot;</span>, <span class="ident">_0</span>)]</span>
-    <span class="ident">ConversionError</span>(<span class="attribute">#[<span class="ident">fail</span>(<span class="ident">cause</span>)]</span> <span class="ident">std</span>::<span class="ident">num</span>::<span class="ident">TryFromIntError</span>),
+    <span class="attribute">#[<span class="ident">error</span>(<span class="string">&quot;Conversion error: {0}&quot;</span>)]</span>
+    <span class="ident">ConversionError</span>(<span class="attribute">#[<span class="ident">from</span>]</span> <span class="ident">std</span>::<span class="ident">num</span>::<span class="ident">TryFromIntError</span>),
 }
 
 <span class="ident">error_support</span>::<span class="macro">define_error</span><span class="macro">!</span> {

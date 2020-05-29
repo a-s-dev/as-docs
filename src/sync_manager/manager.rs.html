@@ -495,10 +495,6 @@
 <span id="495">495</span>
 <span id="496">496</span>
 <span id="497">497</span>
-<span id="498">498</span>
-<span id="499">499</span>
-<span id="500">500</span>
-<span id="501">501</span>
 </pre><div class="example-wrap"><pre class="rust ">
 <span class="comment">/* This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
@@ -510,7 +506,6 @@
 <span class="kw">use</span> <span class="ident">logins</span>::<span class="ident">PasswordEngine</span>;
 <span class="kw">use</span> <span class="ident">places</span>::{<span class="ident">bookmark_sync</span>::<span class="ident">store</span>::<span class="ident">BookmarksStore</span>, <span class="ident">history_sync</span>::<span class="ident">store</span>::<span class="ident">HistoryStore</span>, <span class="ident">PlacesApi</span>};
 <span class="kw">use</span> <span class="ident">std</span>::<span class="ident">collections</span>::{<span class="ident">HashMap</span>, <span class="ident">HashSet</span>};
-<span class="kw">use</span> <span class="ident">std</span>::<span class="ident">result</span>;
 <span class="kw">use</span> <span class="ident">std</span>::<span class="ident">sync</span>::{<span class="ident">atomic</span>::<span class="ident">AtomicUsize</span>, <span class="ident">Arc</span>, <span class="ident">Mutex</span>, <span class="ident">Weak</span>};
 <span class="kw">use</span> <span class="ident">std</span>::<span class="ident">time</span>::<span class="ident">SystemTime</span>;
 <span class="kw">use</span> <span class="ident">sync15</span>::{
@@ -978,10 +973,7 @@
         <span class="kw-2">&amp;</span><span class="self">self</span>.<span class="number">0</span>
     }
 
-    <span class="kw">fn</span> <span class="ident">apply_incoming_command</span>(
-        <span class="kw-2">&amp;</span><span class="self">self</span>,
-        <span class="ident">command</span>: <span class="ident">Command</span>,
-    ) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">result</span>::<span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">CommandStatus</span>, <span class="ident">failure</span>::<span class="ident">Error</span><span class="op">&gt;</span> {
+    <span class="kw">fn</span> <span class="ident">apply_incoming_command</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">command</span>: <span class="ident">Command</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">anyhow</span>::<span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">CommandStatus</span><span class="op">&gt;</span> {
         <span class="kw">let</span> <span class="ident">result</span> <span class="op">=</span> <span class="kw">match</span> <span class="ident">command</span> {
             <span class="ident">Command</span>::<span class="ident">Wipe</span>(<span class="ident">engine</span>) <span class="op">=</span><span class="op">&gt;</span> <span class="ident">wipe</span>(<span class="kw-2">&amp;</span><span class="ident">engine</span>),
             <span class="ident">Command</span>::<span class="ident">WipeAll</span> <span class="op">=</span><span class="op">&gt;</span> <span class="ident">wipe_all</span>(),
@@ -997,7 +989,7 @@
         }
     }
 
-    <span class="kw">fn</span> <span class="ident">fetch_outgoing_commands</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">result</span>::<span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">HashSet</span><span class="op">&lt;</span><span class="ident">Command</span><span class="op">&gt;</span>, <span class="ident">failure</span>::<span class="ident">Error</span><span class="op">&gt;</span> {
+    <span class="kw">fn</span> <span class="ident">fetch_outgoing_commands</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">anyhow</span>::<span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">HashSet</span><span class="op">&lt;</span><span class="ident">Command</span><span class="op">&gt;</span><span class="op">&gt;</span> {
         <span class="prelude-val">Ok</span>(<span class="ident">HashSet</span>::<span class="ident">new</span>())
     }
 }

@@ -144,7 +144,7 @@
 <span class="kw">use</span> <span class="ident">sync15</span>::{<span class="ident">KeyBundle</span>, <span class="ident">Sync15StorageClientInit</span>};
 <span class="kw">use</span> <span class="ident">url</span>::<span class="ident">Url</span>;
 
-<span class="kw">type</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">T</span><span class="op">&gt;</span> <span class="op">=</span> <span class="ident">std</span>::<span class="ident">result</span>::<span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">T</span>, <span class="ident">failure</span>::<span class="ident">Error</span><span class="op">&gt;</span>;
+<span class="kw">use</span> <span class="ident">anyhow</span>::<span class="prelude-ty">Result</span>;
 
 <span class="comment">// Defaults - not clear they are the best option, but they are a currently</span>
 <span class="comment">// working option.</span>
@@ -232,7 +232,7 @@
     <span class="kw">let</span> <span class="ident">tokenserver_url</span> <span class="op">=</span> <span class="ident">config</span>.<span class="ident">token_server_endpoint_url</span>()<span class="question-mark">?</span>;
     <span class="kw">let</span> (<span class="ident">acct</span>, <span class="ident">token_info</span>) <span class="op">=</span> <span class="kw">match</span> <span class="ident">get_account_and_token</span>(<span class="ident">config</span>, <span class="ident">cred_file</span>) {
         <span class="prelude-val">Ok</span>(<span class="ident">v</span>) <span class="op">=</span><span class="op">&gt;</span> <span class="ident">v</span>,
-        <span class="prelude-val">Err</span>(<span class="ident">e</span>) <span class="op">=</span><span class="op">&gt;</span> <span class="ident">failure</span>::<span class="macro">bail</span><span class="macro">!</span>(<span class="string">&quot;Failed to use saved credentials. {}&quot;</span>, <span class="ident">e</span>),
+        <span class="prelude-val">Err</span>(<span class="ident">e</span>) <span class="op">=</span><span class="op">&gt;</span> <span class="ident">anyhow</span>::<span class="macro">bail</span><span class="macro">!</span>(<span class="string">&quot;Failed to use saved credentials. {}&quot;</span>, <span class="ident">e</span>),
     };
     <span class="kw">let</span> <span class="ident">key</span> <span class="op">=</span> <span class="ident">token_info</span>.<span class="ident">key</span>.<span class="ident">unwrap</span>();
 
