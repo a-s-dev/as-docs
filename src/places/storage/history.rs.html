@@ -2846,6 +2846,26 @@
 <span id="2846">2846</span>
 <span id="2847">2847</span>
 <span id="2848">2848</span>
+<span id="2849">2849</span>
+<span id="2850">2850</span>
+<span id="2851">2851</span>
+<span id="2852">2852</span>
+<span id="2853">2853</span>
+<span id="2854">2854</span>
+<span id="2855">2855</span>
+<span id="2856">2856</span>
+<span id="2857">2857</span>
+<span id="2858">2858</span>
+<span id="2859">2859</span>
+<span id="2860">2860</span>
+<span id="2861">2861</span>
+<span id="2862">2862</span>
+<span id="2863">2863</span>
+<span id="2864">2864</span>
+<span id="2865">2865</span>
+<span id="2866">2866</span>
+<span id="2867">2867</span>
+<span id="2868">2868</span>
 </pre><div class="example-wrap"><pre class="rust ">
 <span class="comment">/* This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
@@ -2859,7 +2879,10 @@
 <span class="kw">use</span> <span class="kw">crate</span>::<span class="ident">history_sync</span>::<span class="ident">store</span>::{
     <span class="ident">COLLECTION_SYNCID_META_KEY</span>, <span class="ident">GLOBAL_SYNCID_META_KEY</span>, <span class="ident">LAST_SYNC_META_KEY</span>,
 };
-<span class="kw">use</span> <span class="kw">crate</span>::<span class="ident">msg_types</span>::{<span class="ident">HistoryVisitInfo</span>, <span class="ident">HistoryVisitInfos</span>, <span class="ident">HistoryVisitInfosWithBound</span>};
+<span class="kw">use</span> <span class="kw">crate</span>::<span class="ident">msg_types</span>::{
+    <span class="ident">HistoryVisitInfo</span>, <span class="ident">HistoryVisitInfos</span>, <span class="ident">HistoryVisitInfosWithBound</span>, <span class="ident">TopFrecentSiteInfo</span>,
+    <span class="ident">TopFrecentSiteInfos</span>,
+};
 <span class="kw">use</span> <span class="kw">crate</span>::<span class="ident">observation</span>::<span class="ident">VisitObservation</span>;
 <span class="kw">use</span> <span class="kw">crate</span>::<span class="ident">storage</span>::{<span class="ident">delete_meta</span>, <span class="ident">delete_pending_temp_tables</span>, <span class="ident">get_meta</span>, <span class="ident">put_meta</span>};
 <span class="kw">use</span> <span class="kw">crate</span>::<span class="ident">types</span>::{<span class="ident">SyncStatus</span>, <span class="ident">Timestamp</span>, <span class="ident">VisitTransition</span>, <span class="ident">VisitTransitionSet</span>};
@@ -4024,6 +4047,23 @@
         <span class="kw-2">&amp;</span>[(<span class="string">&quot;:start&quot;</span>, <span class="kw-2">&amp;</span><span class="ident">start</span>), (<span class="string">&quot;:end&quot;</span>, <span class="kw-2">&amp;</span><span class="ident">end</span>)],
         <span class="op">|</span><span class="ident">row</span><span class="op">|</span> <span class="op">-</span><span class="op">&gt;</span> <span class="ident">RusqliteResult</span><span class="op">&lt;</span><span class="kw">_</span><span class="op">&gt;</span> { <span class="prelude-val">Ok</span>(<span class="ident">row</span>.<span class="ident">get</span>::<span class="op">&lt;</span><span class="kw">_</span>, <span class="ident">String</span><span class="op">&gt;</span>(<span class="number">0</span>)<span class="question-mark">?</span>) },
     )<span class="question-mark">?</span>)
+}
+
+<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">get_top_frecent_site_infos</span>(<span class="ident">db</span>: <span class="kw-2">&amp;</span><span class="ident">PlacesDb</span>, <span class="ident">num_items</span>: <span class="ident">i32</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">TopFrecentSiteInfos</span><span class="op">&gt;</span> {
+    <span class="kw">let</span> <span class="ident">infos</span> <span class="op">=</span> <span class="ident">db</span>.<span class="ident">query_rows_and_then_named_cached</span>(
+        <span class="string">&quot;SELECT frecency, title, url
+         FROM moz_places
+         WHERE (SUBSTR(url, 1, 6) == &#39;https:&#39; OR SUBSTR(url, 1, 5) == &#39;http:&#39;)
+           AND (last_visit_date_local + last_visit_date_remote) != 0 AND
+           NOT hidden
+         ORDER BY frecency DESC
+         LIMIT :limit&quot;</span>,
+        <span class="ident">rusqlite</span>::<span class="macro">named_params</span><span class="macro">!</span> {
+            <span class="string">&quot;:limit&quot;</span>: <span class="ident">num_items</span>,
+        },
+        <span class="ident">TopFrecentSiteInfo</span>::<span class="ident">from_row</span>,
+    )<span class="question-mark">?</span>;
+    <span class="prelude-val">Ok</span>(<span class="ident">TopFrecentSiteInfos</span> { <span class="ident">infos</span> })
 }
 
 <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">get_visit_infos</span>(

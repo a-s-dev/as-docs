@@ -206,6 +206,33 @@
 <span id="206">206</span>
 <span id="207">207</span>
 <span id="208">208</span>
+<span id="209">209</span>
+<span id="210">210</span>
+<span id="211">211</span>
+<span id="212">212</span>
+<span id="213">213</span>
+<span id="214">214</span>
+<span id="215">215</span>
+<span id="216">216</span>
+<span id="217">217</span>
+<span id="218">218</span>
+<span id="219">219</span>
+<span id="220">220</span>
+<span id="221">221</span>
+<span id="222">222</span>
+<span id="223">223</span>
+<span id="224">224</span>
+<span id="225">225</span>
+<span id="226">226</span>
+<span id="227">227</span>
+<span id="228">228</span>
+<span id="229">229</span>
+<span id="230">230</span>
+<span id="231">231</span>
+<span id="232">232</span>
+<span id="233">233</span>
+<span id="234">234</span>
+<span id="235">235</span>
 </pre><div class="example-wrap"><pre class="rust ">
 <span class="comment">/* This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
@@ -225,7 +252,17 @@
     <span class="doccomment">///</span>
     <span class="doccomment">/// **💾 This method alters the persisted account state.**</span>
     <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">handle_push_message</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>, <span class="ident">payload</span>: <span class="kw-2">&amp;</span><span class="ident">str</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">Vec</span><span class="op">&lt;</span><span class="ident">AccountEvent</span><span class="op">&gt;</span><span class="op">&gt;</span> {
-        <span class="kw">let</span> <span class="ident">payload</span> <span class="op">=</span> <span class="ident">serde_json</span>::<span class="ident">from_str</span>(<span class="ident">payload</span>)<span class="question-mark">?</span>;
+        <span class="kw">let</span> <span class="ident">payload</span> <span class="op">=</span> <span class="ident">serde_json</span>::<span class="ident">from_str</span>(<span class="ident">payload</span>).<span class="ident">or_else</span>(<span class="op">|</span><span class="ident">err</span><span class="op">|</span> {
+            <span class="comment">// Due to a limitation of serde (https://github.com/serde-rs/serde/issues/1714)</span>
+            <span class="comment">// we can&#39;t parse some payloads with an unknown &quot;command&quot; value. Try doing a</span>
+            <span class="comment">// less-strongly-validating parse so we can silently ignore such messages, while</span>
+            <span class="comment">// while reporting errors if the payload is completely unintelligible.</span>
+            <span class="kw">let</span> <span class="ident">v</span>: <span class="ident">serde_json</span>::<span class="ident">Value</span> <span class="op">=</span> <span class="ident">serde_json</span>::<span class="ident">from_str</span>(<span class="ident">payload</span>)<span class="question-mark">?</span>;
+            <span class="kw">match</span> <span class="ident">v</span>.<span class="ident">get</span>(<span class="string">&quot;command&quot;</span>) {
+                <span class="prelude-val">Some</span>(<span class="kw">_</span>) <span class="op">=</span><span class="op">&gt;</span> <span class="prelude-val">Ok</span>(<span class="ident">PushPayload</span>::<span class="ident">Unknown</span>),
+                <span class="prelude-val">None</span> <span class="op">=</span><span class="op">&gt;</span> <span class="prelude-val">Err</span>(<span class="ident">err</span>),
+            }
+        })<span class="question-mark">?</span>;
         <span class="kw">match</span> <span class="ident">payload</span> {
             <span class="ident">PushPayload</span>::<span class="ident">CommandReceived</span>(<span class="ident">CommandReceivedPushPayload</span> { <span class="ident">index</span>, .. }) <span class="op">=</span><span class="op">&gt;</span> {
                 <span class="kw">if</span> <span class="macro">cfg</span><span class="macro">!</span>(<span class="ident">target_os</span> <span class="op">=</span> <span class="string">&quot;ios&quot;</span>) {
@@ -407,12 +444,29 @@
     }
 
     <span class="attribute">#[<span class="ident">test</span>]</span>
-    <span class="kw">fn</span> <span class="ident">test_handle_push_message_unknown_command</span>() {
+    <span class="kw">fn</span> <span class="ident">test_handle_push_message_ignores_unknown_command</span>() {
         <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">fxa</span> <span class="op">=</span>
             <span class="ident">FirefoxAccount</span>::<span class="ident">with_config</span>(<span class="kw">crate</span>::<span class="ident">Config</span>::<span class="ident">stable_dev</span>(<span class="string">&quot;12345678&quot;</span>, <span class="string">&quot;https://foo.bar&quot;</span>));
         <span class="kw">let</span> <span class="ident">json</span> <span class="op">=</span> <span class="string">&quot;{\&quot;version\&quot;:1,\&quot;command\&quot;:\&quot;huh\&quot;}&quot;</span>;
         <span class="kw">let</span> <span class="ident">events</span> <span class="op">=</span> <span class="ident">fxa</span>.<span class="ident">handle_push_message</span>(<span class="ident">json</span>).<span class="ident">unwrap</span>();
         <span class="macro">assert</span><span class="macro">!</span>(<span class="ident">events</span>.<span class="ident">is_empty</span>());
+    }
+
+    <span class="attribute">#[<span class="ident">test</span>]</span>
+    <span class="kw">fn</span> <span class="ident">test_handle_push_message_ignores_unknown_command_with_data</span>() {
+        <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">fxa</span> <span class="op">=</span>
+            <span class="ident">FirefoxAccount</span>::<span class="ident">with_config</span>(<span class="kw">crate</span>::<span class="ident">Config</span>::<span class="ident">stable_dev</span>(<span class="string">&quot;12345678&quot;</span>, <span class="string">&quot;https://foo.bar&quot;</span>));
+        <span class="kw">let</span> <span class="ident">json</span> <span class="op">=</span> <span class="string">&quot;{\&quot;version\&quot;:1,\&quot;command\&quot;:\&quot;huh\&quot;,\&quot;data\&quot;:{\&quot;value\&quot;:42}}&quot;</span>;
+        <span class="kw">let</span> <span class="ident">events</span> <span class="op">=</span> <span class="ident">fxa</span>.<span class="ident">handle_push_message</span>(<span class="ident">json</span>).<span class="ident">unwrap</span>();
+        <span class="macro">assert</span><span class="macro">!</span>(<span class="ident">events</span>.<span class="ident">is_empty</span>());
+    }
+
+    <span class="attribute">#[<span class="ident">test</span>]</span>
+    <span class="kw">fn</span> <span class="ident">test_handle_push_message_errors_on_garbage_data</span>() {
+        <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">fxa</span> <span class="op">=</span>
+            <span class="ident">FirefoxAccount</span>::<span class="ident">with_config</span>(<span class="kw">crate</span>::<span class="ident">Config</span>::<span class="ident">stable_dev</span>(<span class="string">&quot;12345678&quot;</span>, <span class="string">&quot;https://foo.bar&quot;</span>));
+        <span class="kw">let</span> <span class="ident">json</span> <span class="op">=</span> <span class="string">&quot;{\&quot;wtf\&quot;:\&quot;bbq\&quot;}&quot;</span>;
+        <span class="ident">fxa</span>.<span class="ident">handle_push_message</span>(<span class="ident">json</span>).<span class="ident">unwrap_err</span>();
     }
 }
 </pre></div>
