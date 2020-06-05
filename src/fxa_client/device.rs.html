@@ -1494,7 +1494,7 @@
 
         <span class="comment">// Check that a second call to get_devices doesn&#39;t hit the server</span>
         <span class="macro">assert</span><span class="macro">!</span>(<span class="ident">fxa</span>.<span class="ident">get_devices</span>(<span class="bool-val">false</span>).<span class="ident">is_ok</span>());
-        <span class="macro">assert</span><span class="macro">!</span>(<span class="ident">fxa</span>.<span class="ident">devices_cache</span>.<span class="ident">clone</span>().<span class="ident">is_some</span>());
+        <span class="macro">assert</span><span class="macro">!</span>(<span class="ident">fxa</span>.<span class="ident">devices_cache</span>.<span class="ident">is_some</span>());
 
         <span class="kw">let</span> <span class="ident">cache2</span> <span class="op">=</span> <span class="ident">fxa</span>.<span class="ident">devices_cache</span>.<span class="ident">unwrap</span>();
         <span class="kw">let</span> <span class="ident">cached_devices2</span> <span class="op">=</span> <span class="ident">cache2</span>.<span class="ident">response</span>;

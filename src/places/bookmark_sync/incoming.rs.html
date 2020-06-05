@@ -1215,7 +1215,7 @@
                         <span class="comment">// need to add excludeItems, and I guess we should do</span>
                         <span class="comment">// it properly without resorting to string manipulation...</span>
                         <span class="kw">let</span> <span class="ident">tail</span> <span class="op">=</span> <span class="ident">url</span>::<span class="ident">form_urlencoded</span>::<span class="ident">Serializer</span>::<span class="ident">new</span>(<span class="ident">String</span>::<span class="ident">new</span>())
-                            .<span class="ident">extend_pairs</span>(<span class="ident">parse</span>.<span class="ident">clone</span>())
+                            .<span class="ident">extend_pairs</span>(<span class="ident">parse</span>)
                             .<span class="ident">append_pair</span>(<span class="string">&quot;excludeItems&quot;</span>, <span class="string">&quot;1&quot;</span>)
                             .<span class="ident">finish</span>();
                         <span class="ident">set_reupload</span>(<span class="ident">validity</span>);

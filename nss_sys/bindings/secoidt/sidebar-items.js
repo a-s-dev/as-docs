@@ -1,1 +1,1 @@
-initSidebarItems({"enum":[["SECOidTag",""],["SECSupportExtenTag",""]],"struct":[["SECOidDataStr",""]],"type":[["SECOidData",""]]});
+initSidebarItems({"enum":[["SECOidTag",""],["SECSupportExtenTag",""]],"struct":[["SECAlgorithmIDStr",""],["SECOidDataStr",""]],"type":[["SECAlgorithmID",""],["SECOidData",""]]});

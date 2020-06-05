@@ -238,7 +238,7 @@
 
     <span class="kw">let</span> <span class="ident">client_init</span> <span class="op">=</span> <span class="ident">Sync15StorageClientInit</span> {
         <span class="ident">key_id</span>: <span class="ident">key</span>.<span class="ident">kid</span>.<span class="ident">clone</span>(),
-        <span class="ident">access_token</span>: <span class="ident">token_info</span>.<span class="ident">token</span>.<span class="ident">clone</span>(),
+        <span class="ident">access_token</span>: <span class="ident">token_info</span>.<span class="ident">token</span>,
         <span class="ident">tokenserver_url</span>: <span class="ident">tokenserver_url</span>.<span class="ident">clone</span>(),
     };
     <span class="kw">let</span> <span class="ident">root_sync_key</span> <span class="op">=</span> <span class="ident">KeyBundle</span>::<span class="ident">from_ksync_bytes</span>(<span class="kw-2">&amp;</span><span class="ident">key</span>.<span class="ident">key_bytes</span>()<span class="question-mark">?</span>)<span class="question-mark">?</span>;

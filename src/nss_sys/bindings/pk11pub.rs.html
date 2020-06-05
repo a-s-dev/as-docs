@@ -111,6 +111,22 @@
 <span id="111">111</span>
 <span id="112">112</span>
 <span id="113">113</span>
+<span id="114">114</span>
+<span id="115">115</span>
+<span id="116">116</span>
+<span id="117">117</span>
+<span id="118">118</span>
+<span id="119">119</span>
+<span id="120">120</span>
+<span id="121">121</span>
+<span id="122">122</span>
+<span id="123">123</span>
+<span id="124">124</span>
+<span id="125">125</span>
+<span id="126">126</span>
+<span id="127">127</span>
+<span id="128">128</span>
+<span id="129">129</span>
 </pre><div class="example-wrap"><pre class="rust ">
 <span class="comment">/* This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
@@ -224,6 +240,22 @@
         <span class="ident">attr</span>: <span class="ident">CK_ATTRIBUTE_TYPE</span>,
         <span class="ident">item</span>: <span class="kw-2">*</span><span class="kw-2">mut</span> <span class="ident">SECItem</span>,
     ) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">SECStatus</span>;
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">PK11_CreatePBEV2AlgorithmID</span>(
+        <span class="ident">pbeAlgTag</span>: <span class="ident">u32</span>,    <span class="comment">/* SECOidTag */</span>
+        <span class="ident">cipherAlgTag</span>: <span class="ident">u32</span>, <span class="comment">/* SECOidTag */</span>
+        <span class="ident">prfAlgTag</span>: <span class="ident">u32</span>,    <span class="comment">/* SECOidTag */</span>
+        <span class="ident">keyLength</span>: <span class="ident">c_int</span>,
+        <span class="ident">iteration</span>: <span class="ident">c_int</span>,
+        <span class="ident">salt</span>: <span class="kw-2">*</span><span class="kw-2">mut</span> <span class="ident">SECItem</span>,
+    ) <span class="op">-</span><span class="op">&gt;</span> <span class="kw-2">*</span><span class="kw-2">mut</span> <span class="ident">SECAlgorithmID</span>;
+
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">PK11_PBEKeyGen</span>(
+        <span class="ident">slot</span>: <span class="kw-2">*</span><span class="kw-2">mut</span> <span class="ident">PK11SlotInfo</span>,
+        <span class="ident">algid</span>: <span class="kw-2">*</span><span class="kw-2">mut</span> <span class="ident">SECAlgorithmID</span>,
+        <span class="ident">pwitem</span>: <span class="kw-2">*</span><span class="kw-2">mut</span> <span class="ident">SECItem</span>,
+        <span class="ident">faulty3DES</span>: <span class="ident">PRBool</span>,
+        <span class="ident">wincx</span>: <span class="kw-2">*</span><span class="kw-2">mut</span> <span class="ident">c_void</span>,
+    ) <span class="op">-</span><span class="op">&gt;</span> <span class="kw-2">*</span><span class="kw-2">mut</span> <span class="ident">PK11SymKey</span>;
 }
 </pre></div>
 </section><section id="search" class="content hidden"></section><section class="footer"></section><script>window.rootPath = "../../../";window.currentCrate = "nss_sys";</script><script src="../../../aliases.js"></script><script src="../../../main.js"></script><script src="../../../source-script.js"></script><script src="../../../source-files.js"></script><script defer src="../../../search-index.js"></script></body></html>

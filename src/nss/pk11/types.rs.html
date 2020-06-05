@@ -207,6 +207,17 @@
 <span id="207">207</span>
 <span id="208">208</span>
 <span id="209">209</span>
+<span id="210">210</span>
+<span id="211">211</span>
+<span id="212">212</span>
+<span id="213">213</span>
+<span id="214">214</span>
+<span id="215">215</span>
+<span id="216">216</span>
+<span id="217">217</span>
+<span id="218">218</span>
+<span id="219">219</span>
+<span id="220">220</span>
 </pre><div class="example-wrap"><pre class="rust ">
 <span class="comment">/* This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
@@ -242,6 +253,17 @@
 );
 <span class="macro">scoped_ptr</span><span class="macro">!</span>(<span class="ident">Context</span>, <span class="ident">nss_sys</span>::<span class="ident">PK11Context</span>, <span class="ident">pk11_destroy_context_true</span>);
 <span class="macro">scoped_ptr</span><span class="macro">!</span>(<span class="ident">Slot</span>, <span class="ident">nss_sys</span>::<span class="ident">PK11SlotInfo</span>, <span class="ident">nss_sys</span>::<span class="ident">PK11_FreeSlot</span>);
+
+<span class="macro">scoped_ptr</span><span class="macro">!</span>(
+    <span class="ident">AlgorithmID</span>,
+    <span class="ident">nss_sys</span>::<span class="ident">SECAlgorithmID</span>,
+    <span class="ident">secoid_destroy_algorithm_id_true</span>
+);
+
+<span class="attribute">#[<span class="ident">inline</span>]</span>
+<span class="kw">unsafe</span> <span class="kw">fn</span> <span class="ident">secoid_destroy_algorithm_id_true</span>(<span class="ident">alg_id</span>: <span class="kw-2">*</span><span class="kw-2">mut</span> <span class="ident">nss_sys</span>::<span class="ident">SECAlgorithmID</span>) {
+    <span class="ident">nss_sys</span>::<span class="ident">SECOID_DestroyAlgorithmID</span>(<span class="ident">alg_id</span>, <span class="ident">nss_sys</span>::<span class="ident">PR_TRUE</span>);
+}
 
 <span class="attribute">#[<span class="ident">inline</span>]</span>
 <span class="kw">unsafe</span> <span class="kw">fn</span> <span class="ident">pk11_destroy_context_true</span>(<span class="ident">context</span>: <span class="kw-2">*</span><span class="kw-2">mut</span> <span class="ident">nss_sys</span>::<span class="ident">PK11Context</span>) {
