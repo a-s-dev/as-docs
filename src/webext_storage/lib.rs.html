@@ -21,6 +21,8 @@
 <span id="21">21</span>
 <span id="22">22</span>
 <span id="23">23</span>
+<span id="24">24</span>
+<span id="25">25</span>
 </pre><div class="example-wrap"><pre class="rust ">
 <span class="comment">/* This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
@@ -36,6 +38,8 @@
 <span class="kw">mod</span> <span class="ident">schema</span>;
 <span class="kw">pub</span> <span class="kw">mod</span> <span class="ident">store</span>;
 <span class="kw">mod</span> <span class="ident">sync</span>;
+
+<span class="kw">pub</span> <span class="kw">use</span> <span class="ident">migration</span>::<span class="ident">MigrationInfo</span>;
 
 <span class="comment">// We publish some constants from non-public modules.</span>
 <span class="kw">pub</span> <span class="kw">use</span> <span class="ident">sync</span>::<span class="ident">STORAGE_VERSION</span>;
