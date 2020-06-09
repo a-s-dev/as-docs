@@ -65,12 +65,6 @@
 <span id="65">65</span>
 <span id="66">66</span>
 <span id="67">67</span>
-<span id="68">68</span>
-<span id="69">69</span>
-<span id="70">70</span>
-<span id="71">71</span>
-<span id="72">72</span>
-<span id="73">73</span>
 </pre><div class="example-wrap"><pre class="rust ">
 <span class="comment">/* This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
@@ -123,12 +117,6 @@
 <span class="kw">pub</span> <span class="kw">use</span> <span class="ident">ece</span>;
 
 <span class="kw">pub</span> <span class="kw">use</span> <span class="kw">crate</span>::<span class="ident">error</span>::{<span class="ident">Error</span>, <span class="ident">ErrorKind</span>, <span class="prelude-ty">Result</span>};
-
-<span class="comment">// So we link against the SQLite lib imported by parent crates</span>
-<span class="comment">// such as places and logins.</span>
-<span class="attribute">#[<span class="ident">allow</span>(<span class="ident">unused_extern_crates</span>)]</span>
-<span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">not</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;gecko&quot;</span>))]</span>
-<span class="kw">extern</span> <span class="kw">crate</span> <span class="ident">libsqlite3_sys</span>;
 
 <span class="doccomment">/// Only required to be called if you intend to use this library in conjunction</span>
 <span class="doccomment">/// with the `hawk` or the `ece` crate.</span>

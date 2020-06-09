@@ -208,6 +208,82 @@
 <span id="208">208</span>
 <span id="209">209</span>
 <span id="210">210</span>
+<span id="211">211</span>
+<span id="212">212</span>
+<span id="213">213</span>
+<span id="214">214</span>
+<span id="215">215</span>
+<span id="216">216</span>
+<span id="217">217</span>
+<span id="218">218</span>
+<span id="219">219</span>
+<span id="220">220</span>
+<span id="221">221</span>
+<span id="222">222</span>
+<span id="223">223</span>
+<span id="224">224</span>
+<span id="225">225</span>
+<span id="226">226</span>
+<span id="227">227</span>
+<span id="228">228</span>
+<span id="229">229</span>
+<span id="230">230</span>
+<span id="231">231</span>
+<span id="232">232</span>
+<span id="233">233</span>
+<span id="234">234</span>
+<span id="235">235</span>
+<span id="236">236</span>
+<span id="237">237</span>
+<span id="238">238</span>
+<span id="239">239</span>
+<span id="240">240</span>
+<span id="241">241</span>
+<span id="242">242</span>
+<span id="243">243</span>
+<span id="244">244</span>
+<span id="245">245</span>
+<span id="246">246</span>
+<span id="247">247</span>
+<span id="248">248</span>
+<span id="249">249</span>
+<span id="250">250</span>
+<span id="251">251</span>
+<span id="252">252</span>
+<span id="253">253</span>
+<span id="254">254</span>
+<span id="255">255</span>
+<span id="256">256</span>
+<span id="257">257</span>
+<span id="258">258</span>
+<span id="259">259</span>
+<span id="260">260</span>
+<span id="261">261</span>
+<span id="262">262</span>
+<span id="263">263</span>
+<span id="264">264</span>
+<span id="265">265</span>
+<span id="266">266</span>
+<span id="267">267</span>
+<span id="268">268</span>
+<span id="269">269</span>
+<span id="270">270</span>
+<span id="271">271</span>
+<span id="272">272</span>
+<span id="273">273</span>
+<span id="274">274</span>
+<span id="275">275</span>
+<span id="276">276</span>
+<span id="277">277</span>
+<span id="278">278</span>
+<span id="279">279</span>
+<span id="280">280</span>
+<span id="281">281</span>
+<span id="282">282</span>
+<span id="283">283</span>
+<span id="284">284</span>
+<span id="285">285</span>
+<span id="286">286</span>
 </pre><div class="example-wrap"><pre class="rust ">
 <span class="comment">/* This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
@@ -216,8 +292,8 @@
 <span class="kw">use</span> <span class="kw">crate</span>::{<span class="ident">error</span>::<span class="kw-2">*</span>, <span class="ident">FirefoxAccount</span>};
 <span class="kw">use</span> <span class="ident">rc_crypto</span>::{
     <span class="ident">aead</span>, <span class="ident">agreement</span>,
-    <span class="ident">agreement</span>::{<span class="ident">Ephemeral</span>, <span class="ident">KeyPair</span>},
-    <span class="ident">digest</span>,
+    <span class="ident">agreement</span>::{<span class="ident">Ephemeral</span>, <span class="ident">InputKeyMaterial</span>, <span class="ident">KeyPair</span>},
+    <span class="ident">digest</span>, <span class="ident">rand</span>,
 };
 <span class="kw">use</span> <span class="ident">serde_derive</span>::<span class="kw-2">*</span>;
 <span class="kw">use</span> <span class="ident">serde_json</span>::{<span class="self">self</span>, <span class="ident">json</span>};
@@ -254,6 +330,23 @@
             .<span class="ident">field</span>(<span class="string">&quot;kid&quot;</span>, <span class="kw-2">&amp;</span><span class="self">self</span>.<span class="ident">kid</span>)
             .<span class="ident">finish</span>()
     }
+}
+
+<span class="attribute">#[<span class="ident">derive</span>(<span class="ident">Serialize</span>, <span class="ident">Deserialize</span>)]</span>
+<span class="kw">struct</span> <span class="ident">Jwk</span> {
+    <span class="ident">crv</span>: <span class="ident">String</span>,
+    <span class="ident">kty</span>: <span class="ident">String</span>,
+    <span class="ident">x</span>: <span class="ident">String</span>,
+    <span class="ident">y</span>: <span class="ident">String</span>,
+}
+
+<span class="attribute">#[<span class="ident">derive</span>(<span class="ident">Serialize</span>, <span class="ident">Deserialize</span>)]</span>
+<span class="kw">struct</span> <span class="ident">JweHeader</span> {
+    <span class="ident">alg</span>: <span class="ident">String</span>,
+    <span class="ident">enc</span>: <span class="ident">String</span>,
+    <span class="ident">epk</span>: <span class="ident">Jwk</span>,
+    <span class="ident">apu</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">String</span><span class="op">&gt;</span>,
+    <span class="ident">apv</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">String</span><span class="op">&gt;</span>,
 }
 
 <span class="kw">pub</span> <span class="kw">struct</span> <span class="ident">ScopedKeysFlow</span> {
@@ -299,37 +392,17 @@
         .<span class="ident">to_string</span>())
     }
 
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">decrypt_keys_jwe</span>(<span class="self">self</span>, <span class="ident">jwe</span>: <span class="kw-2">&amp;</span><span class="ident">str</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">String</span><span class="op">&gt;</span> {
-        <span class="kw">let</span> <span class="ident">segments</span>: <span class="ident">Vec</span><span class="op">&lt;</span><span class="kw-2">&amp;</span><span class="ident">str</span><span class="op">&gt;</span> <span class="op">=</span> <span class="ident">jwe</span>.<span class="ident">split</span>(<span class="string">&#39;.&#39;</span>).<span class="ident">collect</span>();
-        <span class="kw">let</span> <span class="ident">header</span> <span class="op">=</span> <span class="ident">base64</span>::<span class="ident">decode_config</span>(<span class="kw-2">&amp;</span><span class="ident">segments</span>[<span class="number">0</span>], <span class="ident">base64</span>::<span class="ident">URL_SAFE_NO_PAD</span>)<span class="question-mark">?</span>;
-        <span class="kw">let</span> <span class="ident">protected_header</span>: <span class="ident">serde_json</span>::<span class="ident">Value</span> <span class="op">=</span> <span class="ident">serde_json</span>::<span class="ident">from_slice</span>(<span class="kw-2">&amp;</span><span class="ident">header</span>)<span class="question-mark">?</span>;
-        <span class="kw">if</span> <span class="ident">protected_header</span>[<span class="string">&quot;epk&quot;</span>][<span class="string">&quot;kty&quot;</span>] <span class="op">!</span><span class="op">=</span> <span class="string">&quot;EC&quot;</span> {
+    <span class="kw">fn</span> <span class="ident">get_peer_public_from_jwk</span>(<span class="ident">jwk</span>: <span class="ident">Jwk</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">Vec</span><span class="op">&lt;</span><span class="ident">u8</span><span class="op">&gt;</span><span class="op">&gt;</span> {
+        <span class="kw">let</span> <span class="ident">x</span> <span class="op">=</span> <span class="ident">base64</span>::<span class="ident">decode_config</span>(<span class="ident">jwk</span>.<span class="ident">x</span>, <span class="ident">base64</span>::<span class="ident">URL_SAFE_NO_PAD</span>)<span class="question-mark">?</span>;
+        <span class="kw">let</span> <span class="ident">y</span> <span class="op">=</span> <span class="ident">base64</span>::<span class="ident">decode_config</span>(<span class="ident">jwk</span>.<span class="ident">y</span>, <span class="ident">base64</span>::<span class="ident">URL_SAFE_NO_PAD</span>)<span class="question-mark">?</span>;
+        <span class="kw">if</span> <span class="ident">jwk</span>.<span class="ident">kty</span> <span class="op">!</span><span class="op">=</span> <span class="string">&quot;EC&quot;</span> {
             <span class="kw">return</span> <span class="prelude-val">Err</span>(<span class="ident">ErrorKind</span>::<span class="ident">UnrecoverableServerError</span>(<span class="string">&quot;Only EC keys are supported.&quot;</span>).<span class="ident">into</span>());
         }
-        <span class="kw">if</span> <span class="ident">protected_header</span>[<span class="string">&quot;epk&quot;</span>][<span class="string">&quot;crv&quot;</span>] <span class="op">!</span><span class="op">=</span> <span class="string">&quot;P-256&quot;</span> {
+        <span class="kw">if</span> <span class="ident">jwk</span>.<span class="ident">crv</span> <span class="op">!</span><span class="op">=</span> <span class="string">&quot;P-256&quot;</span> {
             <span class="kw">return</span> <span class="prelude-val">Err</span>(
                 <span class="ident">ErrorKind</span>::<span class="ident">UnrecoverableServerError</span>(<span class="string">&quot;Only P-256 curves are supported.&quot;</span>).<span class="ident">into</span>(),
             );
         }
-        <span class="kw">let</span> <span class="ident">alg</span> <span class="op">=</span> <span class="ident">protected_header</span>[<span class="string">&quot;enc&quot;</span>]
-            .<span class="ident">as_str</span>()
-            .<span class="ident">ok_or_else</span>(<span class="op">|</span><span class="op">|</span> <span class="ident">ErrorKind</span>::<span class="ident">UnrecoverableServerError</span>(<span class="string">&quot;enc is not a string.&quot;</span>))<span class="question-mark">?</span>;
-        <span class="kw">let</span> <span class="ident">apu</span> <span class="op">=</span> <span class="ident">protected_header</span>[<span class="string">&quot;apu&quot;</span>].<span class="ident">as_str</span>().<span class="ident">unwrap_or</span>(<span class="string">&quot;&quot;</span>);
-        <span class="kw">let</span> <span class="ident">apv</span> <span class="op">=</span> <span class="ident">protected_header</span>[<span class="string">&quot;apv&quot;</span>].<span class="ident">as_str</span>().<span class="ident">unwrap_or</span>(<span class="string">&quot;&quot;</span>);
-
-        <span class="comment">// Part 1: Grab the x/y from the other party and construct the secret.</span>
-        <span class="kw">let</span> <span class="ident">x</span> <span class="op">=</span> <span class="ident">base64</span>::<span class="ident">decode_config</span>(
-            <span class="kw-2">&amp;</span><span class="ident">protected_header</span>[<span class="string">&quot;epk&quot;</span>][<span class="string">&quot;x&quot;</span>]
-                .<span class="ident">as_str</span>()
-                .<span class="ident">ok_or_else</span>(<span class="op">|</span><span class="op">|</span> <span class="ident">ErrorKind</span>::<span class="ident">UnrecoverableServerError</span>(<span class="string">&quot;x is not a string.&quot;</span>))<span class="question-mark">?</span>,
-            <span class="ident">base64</span>::<span class="ident">URL_SAFE_NO_PAD</span>,
-        )<span class="question-mark">?</span>;
-        <span class="kw">let</span> <span class="ident">y</span> <span class="op">=</span> <span class="ident">base64</span>::<span class="ident">decode_config</span>(
-            <span class="kw-2">&amp;</span><span class="ident">protected_header</span>[<span class="string">&quot;epk&quot;</span>][<span class="string">&quot;y&quot;</span>]
-                .<span class="ident">as_str</span>()
-                .<span class="ident">ok_or_else</span>(<span class="op">|</span><span class="op">|</span> <span class="ident">ErrorKind</span>::<span class="ident">UnrecoverableServerError</span>(<span class="string">&quot;y is not a string.&quot;</span>))<span class="question-mark">?</span>,
-            <span class="ident">base64</span>::<span class="ident">URL_SAFE_NO_PAD</span>,
-        )<span class="question-mark">?</span>;
         <span class="kw">if</span> <span class="ident">x</span>.<span class="ident">len</span>() <span class="op">!</span><span class="op">=</span> (<span class="number">256</span> <span class="op">/</span> <span class="number">8</span>) {
             <span class="kw">return</span> <span class="prelude-val">Err</span>(<span class="ident">ErrorKind</span>::<span class="ident">UnrecoverableServerError</span>(<span class="string">&quot;X must be 32 bytes long.&quot;</span>).<span class="ident">into</span>());
         }
@@ -339,24 +412,67 @@
         <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">peer_pub_key</span>: <span class="ident">Vec</span><span class="op">&lt;</span><span class="ident">u8</span><span class="op">&gt;</span> <span class="op">=</span> <span class="macro">vec</span><span class="macro">!</span>[<span class="number">0x04</span>];
         <span class="ident">peer_pub_key</span>.<span class="ident">extend_from_slice</span>(<span class="kw-2">&amp;</span><span class="ident">x</span>);
         <span class="ident">peer_pub_key</span>.<span class="ident">extend_from_slice</span>(<span class="kw-2">&amp;</span><span class="ident">y</span>);
+        <span class="prelude-val">Ok</span>(<span class="ident">peer_pub_key</span>)
+    }
+
+    <span class="comment">// Not being used yet, will be consumed by: https://github.com/mozilla/application-services/pull/3187</span>
+    <span class="comment">// This comment and the #[allow(dead_code)] will be removed by that pull request</span>
+    <span class="attribute">#[<span class="ident">allow</span>(<span class="ident">dead_code</span>)]</span>
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">encrypt_keys_jwe</span>(<span class="self">self</span>, <span class="ident">jwk</span>: <span class="kw-2">&amp;</span><span class="ident">str</span>, <span class="ident">data</span>: <span class="kw-2">&amp;</span>[<span class="ident">u8</span>]) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">String</span><span class="op">&gt;</span> {
+        <span class="kw">let</span> <span class="ident">jwk</span>: <span class="ident">Jwk</span> <span class="op">=</span> <span class="ident">serde_json</span>::<span class="ident">from_str</span>(<span class="kw-2">&amp;</span><span class="ident">jwk</span>)<span class="question-mark">?</span>;
+        <span class="kw">let</span> <span class="ident">peer_public_key</span> <span class="op">=</span> <span class="self">Self</span>::<span class="ident">get_peer_public_from_jwk</span>(<span class="ident">jwk</span>)<span class="question-mark">?</span>;
+        <span class="kw">let</span> <span class="ident">epk_jwk</span>: <span class="ident">Jwk</span> <span class="op">=</span> <span class="ident">serde_json</span>::<span class="ident">from_str</span>(<span class="kw-2">&amp;</span><span class="self">self</span>.<span class="ident">generate_keys_jwk</span>()<span class="question-mark">?</span>)<span class="question-mark">?</span>;
+        <span class="kw">let</span> (<span class="ident">private_key</span>, <span class="kw">_</span>) <span class="op">=</span> <span class="self">self</span>.<span class="ident">key_pair</span>.<span class="ident">split</span>();
+
+        <span class="kw">let</span> <span class="ident">content_key</span> <span class="op">=</span> <span class="ident">private_key</span>.<span class="ident">agree</span>(<span class="kw-2">&amp;</span><span class="ident">agreement</span>::<span class="ident">ECDH_P256</span>, <span class="kw-2">&amp;</span><span class="ident">peer_public_key</span>)<span class="question-mark">?</span>;
+        <span class="kw">let</span> <span class="ident">apu</span> <span class="op">=</span> <span class="string">&quot;&quot;</span>;
+        <span class="kw">let</span> <span class="ident">alg</span> <span class="op">=</span> <span class="string">&quot;A256GCM&quot;</span>;
+        <span class="kw">let</span> <span class="ident">apv</span> <span class="op">=</span> <span class="string">&quot;&quot;</span>;
+        <span class="kw">let</span> <span class="ident">secret</span> <span class="op">=</span> <span class="self">Self</span>::<span class="ident">get_secret_from_ikm</span>(<span class="ident">content_key</span>, <span class="ident">apu</span>, <span class="ident">apv</span>, <span class="ident">alg</span>)<span class="question-mark">?</span>;
+        <span class="kw">let</span> <span class="ident">sealing_key</span> <span class="op">=</span> <span class="ident">aead</span>::<span class="ident">SealingKey</span>::<span class="ident">new</span>(<span class="kw-2">&amp;</span><span class="ident">aead</span>::<span class="ident">AES_256_GCM</span>, <span class="kw-2">&amp;</span><span class="ident">secret</span>.<span class="ident">as_ref</span>())<span class="question-mark">?</span>;
+        <span class="kw">let</span> <span class="ident">header</span> <span class="op">=</span> <span class="ident">JweHeader</span> {
+            <span class="ident">alg</span>: <span class="string">&quot;ECDH-ES&quot;</span>.<span class="ident">to_string</span>(),
+            <span class="ident">enc</span>: <span class="string">&quot;A256GCM&quot;</span>.<span class="ident">to_string</span>(),
+            <span class="ident">epk</span>: <span class="ident">epk_jwk</span>,
+            <span class="ident">apu</span>: <span class="prelude-val">None</span>,
+            <span class="ident">apv</span>: <span class="prelude-val">None</span>,
+        };
+        <span class="kw">let</span> <span class="ident">additional_data</span> <span class="op">=</span> <span class="ident">serde_json</span>::<span class="ident">to_string</span>(<span class="kw-2">&amp;</span><span class="ident">header</span>)<span class="question-mark">?</span>;
+        <span class="kw">let</span> <span class="ident">additional_data</span> <span class="op">=</span>
+            <span class="ident">base64</span>::<span class="ident">encode_config</span>(<span class="ident">additional_data</span>.<span class="ident">as_bytes</span>(), <span class="ident">base64</span>::<span class="ident">URL_SAFE_NO_PAD</span>);
+        <span class="kw">let</span> <span class="ident">additional_data</span> <span class="op">=</span> <span class="ident">additional_data</span>.<span class="ident">as_bytes</span>();
+        <span class="kw">let</span> <span class="ident">aad</span> <span class="op">=</span> <span class="ident">aead</span>::<span class="ident">Aad</span>::<span class="ident">from</span>(<span class="ident">additional_data</span>);
+        <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">iv</span>: <span class="ident">Vec</span><span class="op">&lt;</span><span class="ident">u8</span><span class="op">&gt;</span> <span class="op">=</span> <span class="macro">vec</span><span class="macro">!</span>[<span class="number">0</span>; <span class="number">12</span>];
+        <span class="ident">rand</span>::<span class="ident">fill</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">iv</span>)<span class="question-mark">?</span>;
+        <span class="kw">let</span> <span class="ident">nonce</span> <span class="op">=</span> <span class="ident">aead</span>::<span class="ident">Nonce</span>::<span class="ident">try_assume_unique_for_key</span>(<span class="kw-2">&amp;</span><span class="ident">aead</span>::<span class="ident">AES_256_GCM</span>, <span class="kw-2">&amp;</span><span class="ident">iv</span>)<span class="question-mark">?</span>;
+        <span class="kw">let</span> <span class="ident">encrypted</span> <span class="op">=</span> <span class="ident">aead</span>::<span class="ident">seal</span>(<span class="kw-2">&amp;</span><span class="ident">sealing_key</span>, <span class="ident">nonce</span>, <span class="ident">aad</span>, <span class="ident">data</span>)<span class="question-mark">?</span>;
+
+        <span class="comment">// Assemble JWE</span>
+        <span class="kw">let</span> <span class="ident">header</span> <span class="op">=</span> <span class="ident">serde_json</span>::<span class="ident">to_string</span>(<span class="kw-2">&amp;</span><span class="ident">header</span>)<span class="question-mark">?</span>;
+        <span class="kw">let</span> <span class="ident">header</span> <span class="op">=</span> <span class="ident">base64</span>::<span class="ident">encode_config</span>(<span class="ident">header</span>.<span class="ident">as_bytes</span>(), <span class="ident">base64</span>::<span class="ident">URL_SAFE_NO_PAD</span>);
+        <span class="kw">let</span> <span class="ident">tag_idx</span> <span class="op">=</span> <span class="ident">encrypted</span>.<span class="ident">len</span>() <span class="op">-</span> ((<span class="number">128</span> <span class="op">+</span> <span class="number">7</span>) <span class="op">&gt;</span><span class="op">&gt;</span> <span class="number">3</span>);
+        <span class="kw">let</span> <span class="ident">tag</span> <span class="op">=</span> <span class="kw-2">&amp;</span><span class="ident">encrypted</span>[<span class="ident">tag_idx</span>..];
+        <span class="kw">let</span> <span class="ident">tag</span> <span class="op">=</span> <span class="ident">base64</span>::<span class="ident">encode_config</span>(<span class="ident">tag</span>, <span class="ident">base64</span>::<span class="ident">URL_SAFE_NO_PAD</span>);
+        <span class="kw">let</span> <span class="ident">ciphertext</span> <span class="op">=</span> <span class="kw-2">&amp;</span><span class="ident">encrypted</span>[<span class="number">0</span>..<span class="ident">tag_idx</span>];
+        <span class="kw">let</span> <span class="ident">ciphertext</span> <span class="op">=</span> <span class="ident">base64</span>::<span class="ident">encode_config</span>(<span class="ident">ciphertext</span>, <span class="ident">base64</span>::<span class="ident">URL_SAFE_NO_PAD</span>);
+        <span class="kw">let</span> <span class="ident">iv</span> <span class="op">=</span> <span class="ident">base64</span>::<span class="ident">encode_config</span>(<span class="ident">iv</span>, <span class="ident">base64</span>::<span class="ident">URL_SAFE_NO_PAD</span>);
+        <span class="prelude-val">Ok</span>(<span class="macro">format</span><span class="macro">!</span>(<span class="string">&quot;{}..{}.{}.{}&quot;</span>, <span class="ident">header</span>, <span class="ident">iv</span>, <span class="ident">ciphertext</span>, <span class="ident">tag</span>))
+    }
+
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">decrypt_keys_jwe</span>(<span class="self">self</span>, <span class="ident">jwe</span>: <span class="kw-2">&amp;</span><span class="ident">str</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">String</span><span class="op">&gt;</span> {
+        <span class="kw">let</span> <span class="ident">segments</span>: <span class="ident">Vec</span><span class="op">&lt;</span><span class="kw-2">&amp;</span><span class="ident">str</span><span class="op">&gt;</span> <span class="op">=</span> <span class="ident">jwe</span>.<span class="ident">split</span>(<span class="string">&#39;.&#39;</span>).<span class="ident">collect</span>();
+        <span class="kw">let</span> <span class="ident">header</span> <span class="op">=</span> <span class="ident">base64</span>::<span class="ident">decode_config</span>(<span class="kw-2">&amp;</span><span class="ident">segments</span>[<span class="number">0</span>], <span class="ident">base64</span>::<span class="ident">URL_SAFE_NO_PAD</span>)<span class="question-mark">?</span>;
+        <span class="kw">let</span> <span class="ident">protected_header</span>: <span class="ident">JweHeader</span> <span class="op">=</span> <span class="ident">serde_json</span>::<span class="ident">from_slice</span>(<span class="kw-2">&amp;</span><span class="ident">header</span>)<span class="question-mark">?</span>;
+        <span class="kw">let</span> <span class="ident">alg</span> <span class="op">=</span> <span class="ident">protected_header</span>.<span class="ident">enc</span>;
+        <span class="kw">let</span> <span class="ident">apu</span> <span class="op">=</span> <span class="ident">protected_header</span>.<span class="ident">apu</span>.<span class="ident">unwrap_or_else</span>(<span class="op">|</span><span class="op">|</span> <span class="string">&quot;&quot;</span>.<span class="ident">to_string</span>());
+        <span class="kw">let</span> <span class="ident">apv</span> <span class="op">=</span> <span class="ident">protected_header</span>.<span class="ident">apv</span>.<span class="ident">unwrap_or_else</span>(<span class="op">|</span><span class="op">|</span> <span class="string">&quot;&quot;</span>.<span class="ident">to_string</span>());
+
+        <span class="comment">// Part 1: Grab the x/y from the other party and construct the secret.</span>
+        <span class="kw">let</span> <span class="ident">peer_pub_key</span> <span class="op">=</span> <span class="self">Self</span>::<span class="ident">get_peer_public_from_jwk</span>(<span class="ident">protected_header</span>.<span class="ident">epk</span>)<span class="question-mark">?</span>;
+
         <span class="kw">let</span> (<span class="ident">private_key</span>, <span class="kw">_</span>) <span class="op">=</span> <span class="self">self</span>.<span class="ident">key_pair</span>.<span class="ident">split</span>();
         <span class="kw">let</span> <span class="ident">ikm</span> <span class="op">=</span> <span class="ident">private_key</span>.<span class="ident">agree</span>(<span class="kw-2">&amp;</span><span class="ident">agreement</span>::<span class="ident">ECDH_P256</span>, <span class="kw-2">&amp;</span><span class="ident">peer_pub_key</span>)<span class="question-mark">?</span>;
-        <span class="kw">let</span> <span class="ident">secret</span> <span class="op">=</span> <span class="ident">ikm</span>.<span class="ident">derive</span>(<span class="op">|</span><span class="ident">z</span><span class="op">|</span> {
-            <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">buf</span>: <span class="ident">Vec</span><span class="op">&lt;</span><span class="ident">u8</span><span class="op">&gt;</span> <span class="op">=</span> <span class="macro">vec</span><span class="macro">!</span>[];
-            <span class="comment">// ConcatKDF (1 iteration since keyLen &lt;= hashLen).</span>
-            <span class="comment">// See rfc7518 section 4.6 for reference.</span>
-            <span class="ident">buf</span>.<span class="ident">extend_from_slice</span>(<span class="kw-2">&amp;</span><span class="number">1u32</span>.<span class="ident">to_be_bytes</span>());
-            <span class="ident">buf</span>.<span class="ident">extend_from_slice</span>(<span class="kw-2">&amp;</span><span class="ident">z</span>);
-            <span class="comment">// otherinfo</span>
-            <span class="ident">buf</span>.<span class="ident">extend_from_slice</span>(<span class="kw-2">&amp;</span>(<span class="ident">alg</span>.<span class="ident">len</span>() <span class="kw">as</span> <span class="ident">u32</span>).<span class="ident">to_be_bytes</span>());
-            <span class="ident">buf</span>.<span class="ident">extend_from_slice</span>(<span class="ident">alg</span>.<span class="ident">as_bytes</span>());
-            <span class="ident">buf</span>.<span class="ident">extend_from_slice</span>(<span class="kw-2">&amp;</span>(<span class="ident">apu</span>.<span class="ident">len</span>() <span class="kw">as</span> <span class="ident">u32</span>).<span class="ident">to_be_bytes</span>());
-            <span class="ident">buf</span>.<span class="ident">extend_from_slice</span>(<span class="ident">apu</span>.<span class="ident">as_bytes</span>());
-            <span class="ident">buf</span>.<span class="ident">extend_from_slice</span>(<span class="kw-2">&amp;</span>(<span class="ident">apv</span>.<span class="ident">len</span>() <span class="kw">as</span> <span class="ident">u32</span>).<span class="ident">to_be_bytes</span>());
-            <span class="ident">buf</span>.<span class="ident">extend_from_slice</span>(<span class="ident">apv</span>.<span class="ident">as_bytes</span>());
-            <span class="ident">buf</span>.<span class="ident">extend_from_slice</span>(<span class="kw-2">&amp;</span><span class="number">256u32</span>.<span class="ident">to_be_bytes</span>());
-            <span class="ident">digest</span>::<span class="ident">digest</span>(<span class="kw-2">&amp;</span><span class="ident">digest</span>::<span class="ident">SHA256</span>, <span class="kw-2">&amp;</span><span class="ident">buf</span>)
-        })<span class="question-mark">?</span>;
+        <span class="kw">let</span> <span class="ident">secret</span> <span class="op">=</span> <span class="self">Self</span>::<span class="ident">get_secret_from_ikm</span>(<span class="ident">ikm</span>, <span class="kw-2">&amp;</span><span class="ident">apu</span>, <span class="kw-2">&amp;</span><span class="ident">apv</span>, <span class="kw-2">&amp;</span><span class="ident">alg</span>)<span class="question-mark">?</span>;
 
         <span class="comment">// Part 2: decrypt the payload with the obtained secret</span>
         <span class="kw">if</span> <span class="op">!</span><span class="ident">segments</span>[<span class="number">1</span>].<span class="ident">is_empty</span>() {
@@ -381,6 +497,31 @@
         <span class="kw">let</span> <span class="ident">plaintext</span> <span class="op">=</span> <span class="ident">aead</span>::<span class="ident">open</span>(<span class="kw-2">&amp;</span><span class="ident">opening_key</span>, <span class="ident">nonce</span>, <span class="ident">aad</span>, <span class="kw-2">&amp;</span><span class="ident">ciphertext_and_tag</span>)
             .<span class="ident">map_err</span>(<span class="op">|</span><span class="kw">_</span><span class="op">|</span> <span class="ident">ErrorKind</span>::<span class="ident">AEADOpenFailure</span>)<span class="question-mark">?</span>;
         <span class="ident">String</span>::<span class="ident">from_utf8</span>(<span class="ident">plaintext</span>.<span class="ident">to_vec</span>()).<span class="ident">map_err</span>(<span class="ident">Into</span>::<span class="ident">into</span>)
+    }
+
+    <span class="kw">fn</span> <span class="ident">get_secret_from_ikm</span>(
+        <span class="ident">ikm</span>: <span class="ident">InputKeyMaterial</span>,
+        <span class="ident">apu</span>: <span class="kw-2">&amp;</span><span class="ident">str</span>,
+        <span class="ident">apv</span>: <span class="kw-2">&amp;</span><span class="ident">str</span>,
+        <span class="ident">alg</span>: <span class="kw-2">&amp;</span><span class="ident">str</span>,
+    ) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">digest</span>::<span class="ident">Digest</span><span class="op">&gt;</span> {
+        <span class="kw">let</span> <span class="ident">secret</span> <span class="op">=</span> <span class="ident">ikm</span>.<span class="ident">derive</span>(<span class="op">|</span><span class="ident">z</span><span class="op">|</span> {
+            <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">buf</span>: <span class="ident">Vec</span><span class="op">&lt;</span><span class="ident">u8</span><span class="op">&gt;</span> <span class="op">=</span> <span class="macro">vec</span><span class="macro">!</span>[];
+            <span class="comment">// ConcatKDF (1 iteration since keyLen &lt;= hashLen).</span>
+            <span class="comment">// See rfc7518 section 4.6 for reference.</span>
+            <span class="ident">buf</span>.<span class="ident">extend_from_slice</span>(<span class="kw-2">&amp;</span><span class="number">1u32</span>.<span class="ident">to_be_bytes</span>());
+            <span class="ident">buf</span>.<span class="ident">extend_from_slice</span>(<span class="kw-2">&amp;</span><span class="ident">z</span>);
+            <span class="comment">// otherinfo</span>
+            <span class="ident">buf</span>.<span class="ident">extend_from_slice</span>(<span class="kw-2">&amp;</span>(<span class="ident">alg</span>.<span class="ident">len</span>() <span class="kw">as</span> <span class="ident">u32</span>).<span class="ident">to_be_bytes</span>());
+            <span class="ident">buf</span>.<span class="ident">extend_from_slice</span>(<span class="ident">alg</span>.<span class="ident">as_bytes</span>());
+            <span class="ident">buf</span>.<span class="ident">extend_from_slice</span>(<span class="kw-2">&amp;</span>(<span class="ident">apu</span>.<span class="ident">len</span>() <span class="kw">as</span> <span class="ident">u32</span>).<span class="ident">to_be_bytes</span>());
+            <span class="ident">buf</span>.<span class="ident">extend_from_slice</span>(<span class="ident">apu</span>.<span class="ident">as_bytes</span>());
+            <span class="ident">buf</span>.<span class="ident">extend_from_slice</span>(<span class="kw-2">&amp;</span>(<span class="ident">apv</span>.<span class="ident">len</span>() <span class="kw">as</span> <span class="ident">u32</span>).<span class="ident">to_be_bytes</span>());
+            <span class="ident">buf</span>.<span class="ident">extend_from_slice</span>(<span class="ident">apv</span>.<span class="ident">as_bytes</span>());
+            <span class="ident">buf</span>.<span class="ident">extend_from_slice</span>(<span class="kw-2">&amp;</span><span class="number">256u32</span>.<span class="ident">to_be_bytes</span>());
+            <span class="ident">digest</span>::<span class="ident">digest</span>(<span class="kw-2">&amp;</span><span class="ident">digest</span>::<span class="ident">SHA256</span>, <span class="kw-2">&amp;</span><span class="ident">buf</span>)
+        })<span class="question-mark">?</span>;
+        <span class="prelude-val">Ok</span>(<span class="ident">secret</span>)
     }
 }
 
@@ -417,6 +558,17 @@
         <span class="kw">let</span> <span class="ident">jwe</span> <span class="op">=</span> <span class="string">&quot;eyJhbGciOiJFQ0RILUVTIiwia2lkIjoiNFBKTTl5dGVGeUtsb21ILWd2UUtyWGZ0a0N3ak9HNHRfTmpYVXhLM1VqSSIsImVwayI6eyJrdHkiOiJFQyIsImNydiI6IlAtMjU2IiwieCI6IlB3eG9Na1RjSVZ2TFlKWU4wM2R0Y3o2TEJrR0FHaU1hZWlNQ3lTZXEzb2MiLCJ5IjoiLUYtTllRRDZwNUdSQ2ZoYm1hN3NvNkhxdExhVlNub012S0pFcjFBeWlaSSJ9LCJlbmMiOiJBMjU2R0NNIn0..b9FPhjjpmAmo_rP8.ur9jTry21Y2trvtcanSFmAtiRfF6s6qqyg6ruRal7PCwa7PxDzAuMN6DZW5BiK8UREOH08-FyRcIgdDOm5Zq8KwVAn56PGfcH30aNDGQNkA_mpfjx5Tj2z8kI6ryLWew4PGZb-PsL1g-_eyXhktq7dAhetjNYttKwSREWQFokv7N3nJGpukBqnwL1ost-MjDXlINZLVJKAiMHDcu-q7Epitwid2c2JVGOSCJjbZ4-zbxVmZ4o9xhFb2lbvdiaMygH6bPlrjEK99uT6XKtaIZmyDwftbD6G3x4On-CqA2TNL6ILRaJMtmyX--ctL0IrngUIHg_F0Wz94v.zBD8NACkUcZTPLH0tceGnA&quot;</span>;
         <span class="kw">let</span> <span class="ident">keys</span> <span class="op">=</span> <span class="ident">flow</span>.<span class="ident">decrypt_keys_jwe</span>(<span class="ident">jwe</span>).<span class="ident">unwrap</span>();
         <span class="macro">assert_eq</span><span class="macro">!</span>(<span class="ident">keys</span>, <span class="string">&quot;{\&quot;https://identity.mozilla.com/apps/oldsync\&quot;:{\&quot;kty\&quot;:\&quot;oct\&quot;,\&quot;scope\&quot;:\&quot;https://identity.mozilla.com/apps/oldsync\&quot;,\&quot;k\&quot;:\&quot;8ek1VNk4sjrNP0DhGC4crzQtwmpoR64zHuFMHb4Tw-exR70Z2SSIfMSrJDTLEZid9lD05-hbA3n2Q4Esjlu1tA\&quot;,\&quot;kid\&quot;:\&quot;1526414944666-zgTjf5oXmPmBjxwXWFsDWg\&quot;}}&quot;</span>);
+    }
+
+    <span class="attribute">#[<span class="ident">test</span>]</span>
+    <span class="kw">fn</span> <span class="ident">test_encrypt_decrypt_jwe</span>() {
+        <span class="kw">let</span> <span class="ident">sk</span> <span class="op">=</span> <span class="ident">ScopedKeysFlow</span>::<span class="ident">with_random_key</span>().<span class="ident">unwrap</span>();
+        <span class="kw">let</span> <span class="ident">jwk</span> <span class="op">=</span> <span class="ident">sk</span>.<span class="ident">generate_keys_jwk</span>().<span class="ident">unwrap</span>();
+        <span class="kw">let</span> <span class="ident">other_sk</span> <span class="op">=</span> <span class="ident">ScopedKeysFlow</span>::<span class="ident">with_random_key</span>().<span class="ident">unwrap</span>();
+        <span class="kw">let</span> <span class="ident">data</span> <span class="op">=</span> <span class="string">b&quot;The big brown fox jumped over... What?&quot;</span>;
+        <span class="kw">let</span> <span class="ident">encrypted</span> <span class="op">=</span> <span class="ident">other_sk</span>.<span class="ident">encrypt_keys_jwe</span>(<span class="kw-2">&amp;</span><span class="ident">jwk</span>, <span class="ident">data</span>).<span class="ident">unwrap</span>();
+        <span class="kw">let</span> <span class="ident">decrypted</span> <span class="op">=</span> <span class="ident">sk</span>.<span class="ident">decrypt_keys_jwe</span>(<span class="kw-2">&amp;</span><span class="ident">encrypted</span>).<span class="ident">unwrap</span>();
+        <span class="macro">assert_eq</span><span class="macro">!</span>(<span class="ident">decrypted</span>, <span class="ident">std</span>::<span class="ident">str</span>::<span class="ident">from_utf8</span>(<span class="ident">data</span>).<span class="ident">unwrap</span>());
     }
 }
 </pre></div>
