@@ -2,7 +2,7 @@ var N = null;var sourcesIndex = {};
 sourcesIndex["cli_support"] = {"name":"","files":["fxa_creds.rs","lib.rs","prompt.rs"]};
 sourcesIndex["error_support"] = {"name":"","files":["lib.rs"]};
 sourcesIndex["ffi_support"] = {"name":"","files":["error.rs","ffistr.rs","handle_map.rs","into_ffi.rs","lib.rs","macros.rs","string.rs"]};
-sourcesIndex["fxa_client"] = {"name":"","dirs":[{"name":"commands","files":["mod.rs","send_tab.rs"]},{"name":"oauth","files":["attached_clients.rs"]}],"files":["config.rs","device.rs","error.rs","ffi.rs","http_client.rs","lib.rs","migrator.rs","mozilla.appservices.fxaclient.protobuf.rs","oauth.rs","profile.rs","push.rs","scoped_keys.rs","scopes.rs","send_tab.rs","state_persistence.rs","util.rs"]};
+sourcesIndex["fxa_client"] = {"name":"","dirs":[{"name":"commands","files":["mod.rs","send_tab.rs"]},{"name":"oauth","files":["attached_clients.rs"]}],"files":["auth.rs","config.rs","device.rs","error.rs","ffi.rs","http_client.rs","lib.rs","migrator.rs","mozilla.appservices.fxaclient.protobuf.rs","oauth.rs","profile.rs","push.rs","scoped_keys.rs","scopes.rs","send_tab.rs","state_persistence.rs","util.rs"]};
 sourcesIndex["fxaclient_ffi"] = {"name":"","files":["lib.rs"]};
 sourcesIndex["interrupt_support"] = {"name":"","files":["lib.rs"]};
 sourcesIndex["lockbox"] = {"name":"","files":["lib.rs"]};
@@ -26,7 +26,7 @@ sourcesIndex["sync15_traits"] = {"name":"","files":["bridged_engine.rs","changes
 sourcesIndex["sync_guid"] = {"name":"","files":["lib.rs","rusqlite_support.rs","serde_support.rs"]};
 sourcesIndex["sync_manager"] = {"name":"","files":["error.rs","ffi.rs","lib.rs","manager.rs","mozilla.appservices.syncmanager.protobuf.rs"]};
 sourcesIndex["sync_manager_ffi"] = {"name":"","files":["lib.rs"]};
-sourcesIndex["sync_test"] = {"name":"","files":["auth.rs","logins.rs","main.rs","tabs.rs","testing.rs"]};
+sourcesIndex["sync_test"] = {"name":"","files":["auth.rs","logins.rs","main.rs","restmail.rs","tabs.rs","testing.rs"]};
 sourcesIndex["systest"] = {"name":"","files":["main.rs"]};
 sourcesIndex["tabs"] = {"name":"","dirs":[{"name":"sync","files":["engine.rs","mod.rs","record.rs","store.rs"]}],"files":["error.rs","ffi.rs","lib.rs","mozilla.appservices.remotetabs.protobuf.rs","storage.rs"]};
 sourcesIndex["tabs_ffi"] = {"name":"","files":["lib.rs"]};

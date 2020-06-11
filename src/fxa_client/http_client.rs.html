@@ -801,6 +801,100 @@
 <span id="801">801</span>
 <span id="802">802</span>
 <span id="803">803</span>
+<span id="804">804</span>
+<span id="805">805</span>
+<span id="806">806</span>
+<span id="807">807</span>
+<span id="808">808</span>
+<span id="809">809</span>
+<span id="810">810</span>
+<span id="811">811</span>
+<span id="812">812</span>
+<span id="813">813</span>
+<span id="814">814</span>
+<span id="815">815</span>
+<span id="816">816</span>
+<span id="817">817</span>
+<span id="818">818</span>
+<span id="819">819</span>
+<span id="820">820</span>
+<span id="821">821</span>
+<span id="822">822</span>
+<span id="823">823</span>
+<span id="824">824</span>
+<span id="825">825</span>
+<span id="826">826</span>
+<span id="827">827</span>
+<span id="828">828</span>
+<span id="829">829</span>
+<span id="830">830</span>
+<span id="831">831</span>
+<span id="832">832</span>
+<span id="833">833</span>
+<span id="834">834</span>
+<span id="835">835</span>
+<span id="836">836</span>
+<span id="837">837</span>
+<span id="838">838</span>
+<span id="839">839</span>
+<span id="840">840</span>
+<span id="841">841</span>
+<span id="842">842</span>
+<span id="843">843</span>
+<span id="844">844</span>
+<span id="845">845</span>
+<span id="846">846</span>
+<span id="847">847</span>
+<span id="848">848</span>
+<span id="849">849</span>
+<span id="850">850</span>
+<span id="851">851</span>
+<span id="852">852</span>
+<span id="853">853</span>
+<span id="854">854</span>
+<span id="855">855</span>
+<span id="856">856</span>
+<span id="857">857</span>
+<span id="858">858</span>
+<span id="859">859</span>
+<span id="860">860</span>
+<span id="861">861</span>
+<span id="862">862</span>
+<span id="863">863</span>
+<span id="864">864</span>
+<span id="865">865</span>
+<span id="866">866</span>
+<span id="867">867</span>
+<span id="868">868</span>
+<span id="869">869</span>
+<span id="870">870</span>
+<span id="871">871</span>
+<span id="872">872</span>
+<span id="873">873</span>
+<span id="874">874</span>
+<span id="875">875</span>
+<span id="876">876</span>
+<span id="877">877</span>
+<span id="878">878</span>
+<span id="879">879</span>
+<span id="880">880</span>
+<span id="881">881</span>
+<span id="882">882</span>
+<span id="883">883</span>
+<span id="884">884</span>
+<span id="885">885</span>
+<span id="886">886</span>
+<span id="887">887</span>
+<span id="888">888</span>
+<span id="889">889</span>
+<span id="890">890</span>
+<span id="891">891</span>
+<span id="892">892</span>
+<span id="893">893</span>
+<span id="894">894</span>
+<span id="895">895</span>
+<span id="896">896</span>
+<span id="897">897</span>
 </pre><div class="example-wrap"><pre class="rust ">
 <span class="comment">/* This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
@@ -1202,7 +1296,7 @@
         <span class="prelude-val">Ok</span>(<span class="self">Self</span>::<span class="ident">make_request</span>(<span class="ident">Request</span>::<span class="ident">post</span>(<span class="ident">url</span>).<span class="ident">json</span>(<span class="kw-2">&amp;</span><span class="ident">body</span>))<span class="question-mark">?</span>.<span class="ident">json</span>()<span class="question-mark">?</span>)
     }
 
-    <span class="kw">fn</span> <span class="ident">make_request</span>(<span class="ident">request</span>: <span class="ident">Request</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">Response</span><span class="op">&gt;</span> {
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">make_request</span>(<span class="ident">request</span>: <span class="ident">Request</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">Response</span><span class="op">&gt;</span> {
         <span class="kw">let</span> <span class="ident">resp</span> <span class="op">=</span> <span class="ident">request</span>.<span class="ident">send</span>()<span class="question-mark">?</span>;
         <span class="kw">if</span> <span class="ident">resp</span>.<span class="ident">is_success</span>() <span class="op">|</span><span class="op">|</span> <span class="ident">resp</span>.<span class="ident">status</span> <span class="op">=</span><span class="op">=</span> <span class="ident">status_codes</span>::<span class="ident">NOT_MODIFIED</span> {
             <span class="prelude-val">Ok</span>(<span class="ident">resp</span>)
@@ -1240,6 +1334,100 @@
     <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">out</span> <span class="op">=</span> <span class="macro">vec</span><span class="macro">!</span>[<span class="number">0u8</span>; <span class="ident">HAWK_KEY_LENGTH</span> <span class="op">*</span> <span class="number">2</span>];
     <span class="ident">hkdf</span>::<span class="ident">extract_and_expand</span>(<span class="kw-2">&amp;</span><span class="ident">salt</span>, <span class="kw-2">&amp;</span><span class="ident">session_token_bytes</span>, <span class="kw-2">&amp;</span><span class="ident">context_info</span>, <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">out</span>)<span class="question-mark">?</span>;
     <span class="prelude-val">Ok</span>(<span class="ident">out</span>)
+}
+
+<span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;integration_test&quot;</span>)]</span>
+<span class="attribute">#[<span class="ident">derive</span>(<span class="ident">Serialize</span>, <span class="ident">Deserialize</span>)]</span>
+<span class="kw">pub</span> <span class="kw">struct</span> <span class="ident">AuthorizationParameters</span> {
+    <span class="ident">access_type</span>: <span class="ident">String</span>,
+    <span class="ident">client_id</span>: <span class="ident">String</span>,
+    <span class="ident">code_challenge</span>: <span class="ident">String</span>,
+    <span class="ident">code_challenge_method</span>: <span class="ident">String</span>,
+    <span class="ident">scope</span>: <span class="ident">String</span>,
+    <span class="ident">keys_jwe</span>: <span class="ident">String</span>,
+    <span class="ident">state</span>: <span class="ident">String</span>,
+}
+
+<span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;integration_test&quot;</span>)]</span>
+<span class="kw">impl</span> <span class="ident">AuthorizationParameters</span> {
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">new</span>(
+        <span class="ident">client_id</span>: <span class="ident">String</span>,
+        <span class="ident">code_challenge</span>: <span class="ident">String</span>,
+        <span class="ident">code_challenge_method</span>: <span class="ident">String</span>,
+        <span class="ident">scope</span>: <span class="ident">String</span>,
+        <span class="ident">keys_jwe</span>: <span class="ident">String</span>,
+        <span class="ident">state</span>: <span class="ident">String</span>,
+    ) <span class="op">-</span><span class="op">&gt;</span> <span class="self">Self</span> {
+        <span class="ident">AuthorizationParameters</span> {
+            <span class="ident">access_type</span>: <span class="string">&quot;offline&quot;</span>.<span class="ident">to_string</span>(),
+            <span class="ident">client_id</span>,
+            <span class="ident">code_challenge</span>,
+            <span class="ident">code_challenge_method</span>,
+            <span class="ident">scope</span>,
+            <span class="ident">keys_jwe</span>,
+            <span class="ident">state</span>,
+        }
+    }
+}
+
+<span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;integration_test&quot;</span>)]</span>
+<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">send_authorization_request</span>(
+    <span class="ident">config</span>: <span class="kw-2">&amp;</span><span class="ident">Config</span>,
+    <span class="ident">auth_params</span>: <span class="ident">AuthorizationParameters</span>,
+    <span class="ident">auth_key</span>: <span class="kw-2">&amp;</span>[<span class="ident">u8</span>],
+) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">anyhow</span>::<span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">String</span><span class="op">&gt;</span> {
+    <span class="kw">let</span> <span class="ident">auth_endpoint</span> <span class="op">=</span> <span class="ident">config</span>.<span class="ident">auth_url_path</span>(<span class="string">&quot;v1/oauth/authorization&quot;</span>)<span class="question-mark">?</span>;
+    <span class="kw">let</span> <span class="ident">req</span> <span class="op">=</span> <span class="ident">HawkRequestBuilder</span>::<span class="ident">new</span>(<span class="ident">Method</span>::<span class="ident">Post</span>, <span class="ident">auth_endpoint</span>, <span class="ident">auth_key</span>)
+        .<span class="ident">body</span>(<span class="ident">serde_json</span>::<span class="ident">to_value</span>(<span class="kw-2">&amp;</span><span class="ident">auth_params</span>)<span class="question-mark">?</span>)
+        .<span class="ident">build</span>()<span class="question-mark">?</span>;
+    <span class="kw">let</span> <span class="ident">resp</span>: <span class="ident">serde_json</span>::<span class="ident">Value</span> <span class="op">=</span> <span class="ident">Client</span>::<span class="ident">make_request</span>(<span class="ident">req</span>)<span class="question-mark">?</span>.<span class="ident">json</span>()<span class="question-mark">?</span>;
+    <span class="prelude-val">Ok</span>(<span class="ident">resp</span>
+        .<span class="ident">get</span>(<span class="string">&quot;redirect&quot;</span>)
+        .<span class="ident">ok_or_else</span>(<span class="op">|</span><span class="op">|</span> <span class="ident">anyhow</span>::<span class="ident">Error</span>::<span class="ident">msg</span>(<span class="string">&quot;No redirect uri&quot;</span>))<span class="question-mark">?</span>
+        .<span class="ident">as_str</span>()
+        .<span class="ident">ok_or_else</span>(<span class="op">|</span><span class="op">|</span> <span class="ident">anyhow</span>::<span class="ident">Error</span>::<span class="ident">msg</span>(<span class="string">&quot;redirect URI is not a string&quot;</span>))<span class="question-mark">?</span>
+        .<span class="ident">to_string</span>())
+}
+
+<span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;integration_test&quot;</span>)]</span>
+<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">get_scoped_key_data_response</span>(
+    <span class="ident">scope</span>: <span class="kw-2">&amp;</span><span class="ident">str</span>,
+    <span class="ident">client_id</span>: <span class="kw-2">&amp;</span><span class="ident">str</span>,
+    <span class="ident">auth_key</span>: <span class="kw-2">&amp;</span>[<span class="ident">u8</span>],
+    <span class="ident">config</span>: <span class="kw-2">&amp;</span><span class="ident">Config</span>,
+) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">serde_json</span>::<span class="ident">Value</span><span class="op">&gt;</span> {
+    <span class="kw">let</span> <span class="ident">scoped_endpoint</span> <span class="op">=</span> <span class="ident">config</span>.<span class="ident">auth_url_path</span>(<span class="string">&quot;v1/account/scoped-key-data&quot;</span>)<span class="question-mark">?</span>;
+    <span class="kw">let</span> <span class="ident">body</span> <span class="op">=</span> <span class="macro">json</span><span class="macro">!</span>({
+        <span class="string">&quot;client_id&quot;</span>: <span class="ident">client_id</span>,
+        <span class="string">&quot;scope&quot;</span>: <span class="ident">scope</span>,
+    });
+    <span class="kw">let</span> <span class="ident">req</span> <span class="op">=</span> <span class="ident">HawkRequestBuilder</span>::<span class="ident">new</span>(<span class="ident">Method</span>::<span class="ident">Post</span>, <span class="ident">scoped_endpoint</span>, <span class="ident">auth_key</span>)
+        .<span class="ident">body</span>(<span class="ident">body</span>)
+        .<span class="ident">build</span>()<span class="question-mark">?</span>;
+    <span class="kw">let</span> <span class="ident">resp</span> <span class="op">=</span> <span class="ident">Client</span>::<span class="ident">make_request</span>(<span class="ident">req</span>)<span class="question-mark">?</span>.<span class="ident">json</span>()<span class="question-mark">?</span>;
+    <span class="prelude-val">Ok</span>(<span class="ident">resp</span>)
+}
+
+<span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;integration_test&quot;</span>)]</span>
+<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">get_keys_bundle</span>(<span class="ident">config</span>: <span class="kw-2">&amp;</span><span class="ident">Config</span>, <span class="ident">hkdf_sha256_key</span>: <span class="kw-2">&amp;</span>[<span class="ident">u8</span>]) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">Vec</span><span class="op">&lt;</span><span class="ident">u8</span><span class="op">&gt;</span><span class="op">&gt;</span> {
+    <span class="kw">let</span> <span class="ident">keys_url</span> <span class="op">=</span> <span class="ident">config</span>.<span class="ident">auth_url_path</span>(<span class="string">&quot;v1/account/keys&quot;</span>).<span class="ident">unwrap</span>();
+    <span class="kw">let</span> <span class="ident">req</span> <span class="op">=</span> <span class="ident">HawkRequestBuilder</span>::<span class="ident">new</span>(<span class="ident">Method</span>::<span class="ident">Get</span>, <span class="ident">keys_url</span>, <span class="ident">hkdf_sha256_key</span>).<span class="ident">build</span>()<span class="question-mark">?</span>;
+    <span class="kw">let</span> <span class="ident">resp</span>: <span class="ident">serde_json</span>::<span class="ident">Value</span> <span class="op">=</span> <span class="ident">Client</span>::<span class="ident">make_request</span>(<span class="ident">req</span>)<span class="question-mark">?</span>.<span class="ident">json</span>()<span class="question-mark">?</span>;
+    <span class="kw">let</span> <span class="ident">bundle</span> <span class="op">=</span> <span class="ident">hex</span>::<span class="ident">decode</span>(
+        <span class="kw-2">&amp;</span><span class="ident">resp</span>[<span class="string">&quot;bundle&quot;</span>]
+            .<span class="ident">as_str</span>()
+            .<span class="ident">ok_or_else</span>(<span class="op">|</span><span class="op">|</span> <span class="ident">ErrorKind</span>::<span class="ident">KeyGenerationFailed</span>)<span class="question-mark">?</span>,
+    )<span class="question-mark">?</span>;
+    <span class="prelude-val">Ok</span>(<span class="ident">bundle</span>)
+}
+
+<span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;integration_test&quot;</span>)]</span>
+<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">send_verification</span>(<span class="ident">config</span>: <span class="kw-2">&amp;</span><span class="ident">Config</span>, <span class="ident">body</span>: <span class="ident">serde_json</span>::<span class="ident">Value</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">Response</span><span class="op">&gt;</span> {
+    <span class="kw">let</span> <span class="ident">verify_endpoint</span> <span class="op">=</span> <span class="ident">config</span>
+        .<span class="ident">auth_url_path</span>(<span class="string">&quot;v1/recovery_email/verify_code&quot;</span>)
+        .<span class="ident">unwrap</span>();
+    <span class="kw">let</span> <span class="ident">resp</span> <span class="op">=</span> <span class="ident">Request</span>::<span class="ident">post</span>(<span class="ident">verify_endpoint</span>).<span class="ident">json</span>(<span class="kw-2">&amp;</span><span class="ident">body</span>).<span class="ident">send</span>()<span class="question-mark">?</span>;
+    <span class="prelude-val">Ok</span>(<span class="ident">resp</span>)
 }
 
 <span class="kw">struct</span> <span class="ident">HawkRequestBuilder</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span><span class="op">&gt;</span> {

@@ -585,6 +585,9 @@
 <span id="585">585</span>
 <span id="586">586</span>
 <span id="587">587</span>
+<span id="588">588</span>
+<span id="589">589</span>
+<span id="590">590</span>
 </pre><div class="example-wrap"><pre class="rust ">
 <span class="comment">/* This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
@@ -620,6 +623,9 @@
 <span class="kw">pub</span> <span class="kw">mod</span> <span class="ident">error</span>;
 <span class="kw">pub</span> <span class="kw">mod</span> <span class="ident">ffi</span>;
 <span class="kw">pub</span> <span class="kw">mod</span> <span class="ident">migrator</span>;
+
+<span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;integration_test&quot;</span>)]</span>
+<span class="kw">pub</span> <span class="kw">mod</span> <span class="ident">auth</span>;
 <span class="comment">// Include the `msg_types` module, which is generated from msg_types.proto.</span>
 <span class="kw">pub</span> <span class="kw">mod</span> <span class="ident">msg_types</span> {
     <span class="macro">include</span><span class="macro">!</span>(<span class="string">&quot;mozilla.appservices.fxaclient.protobuf.rs&quot;</span>);

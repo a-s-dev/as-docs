@@ -373,19 +373,53 @@
 <span id="373">373</span>
 <span id="374">374</span>
 <span id="375">375</span>
+<span id="376">376</span>
+<span id="377">377</span>
+<span id="378">378</span>
+<span id="379">379</span>
+<span id="380">380</span>
+<span id="381">381</span>
+<span id="382">382</span>
+<span id="383">383</span>
+<span id="384">384</span>
+<span id="385">385</span>
+<span id="386">386</span>
+<span id="387">387</span>
+<span id="388">388</span>
+<span id="389">389</span>
+<span id="390">390</span>
+<span id="391">391</span>
+<span id="392">392</span>
+<span id="393">393</span>
+<span id="394">394</span>
+<span id="395">395</span>
+<span id="396">396</span>
+<span id="397">397</span>
+<span id="398">398</span>
+<span id="399">399</span>
+<span id="400">400</span>
+<span id="401">401</span>
+<span id="402">402</span>
+<span id="403">403</span>
+<span id="404">404</span>
+<span id="405">405</span>
+<span id="406">406</span>
+<span id="407">407</span>
 </pre><div class="example-wrap"><pre class="rust ">
 <span class="comment">/* Any copyright is dedicated to the Public Domain.
 http://creativecommons.org/publicdomain/zero/1.0/ */</span>
 
-<span class="kw">use</span> <span class="kw">crate</span>::<span class="ident">Opts</span>;
+<span class="kw">use</span> <span class="kw">crate</span>::{<span class="ident">restmail</span>, <span class="ident">Opts</span>};
 <span class="kw">use</span> <span class="ident">anyhow</span>::<span class="prelude-ty">Result</span>;
-<span class="kw">use</span> <span class="ident">fxa_client</span>::{<span class="self">self</span>, <span class="ident">Config</span> <span class="kw">as</span> <span class="ident">FxaConfig</span>, <span class="ident">FirefoxAccount</span>};
+<span class="kw">use</span> <span class="ident">fxa_client</span>::{<span class="self">self</span>, <span class="ident">auth</span>, <span class="ident">Config</span> <span class="kw">as</span> <span class="ident">FxaConfig</span>, <span class="ident">FirefoxAccount</span>};
 <span class="kw">use</span> <span class="ident">logins</span>::<span class="ident">PasswordEngine</span>;
+<span class="kw">use</span> <span class="ident">serde_json</span>::<span class="ident">json</span>;
 <span class="kw">use</span> <span class="ident">std</span>::<span class="ident">collections</span>::<span class="ident">HashMap</span>;
-<span class="kw">use</span> <span class="ident">std</span>::<span class="ident">sync</span>::{<span class="ident">Arc</span>, <span class="ident">Once</span>};
+<span class="kw">use</span> <span class="ident">std</span>::<span class="ident">sync</span>::<span class="ident">Arc</span>;
 <span class="kw">use</span> <span class="ident">sync15</span>::{<span class="ident">KeyBundle</span>, <span class="ident">Sync15StorageClientInit</span>};
 <span class="kw">use</span> <span class="ident">tabs</span>::<span class="ident">TabsEngine</span>;
 <span class="kw">use</span> <span class="ident">url</span>::<span class="ident">Url</span>;
+<span class="kw">use</span> <span class="ident">viaduct</span>::<span class="ident">Request</span>;
 
 <span class="kw">pub</span> <span class="kw">const</span> <span class="ident">CLIENT_ID</span>: <span class="kw-2">&amp;</span><span class="ident">str</span> <span class="op">=</span> <span class="string">&quot;3c49430b43dfba77&quot;</span>; <span class="comment">// Hrm...</span>
 <span class="kw">pub</span> <span class="kw">const</span> <span class="ident">SYNC_SCOPE</span>: <span class="kw-2">&amp;</span><span class="ident">str</span> <span class="op">=</span> <span class="string">&quot;https://identity.mozilla.com/apps/oldsync&quot;</span>;
@@ -414,63 +448,6 @@ http://creativecommons.org/publicdomain/zero/1.0/ */</span>
     };
 }
 
-<span class="kw">fn</span> <span class="ident">run_helper_command</span>(<span class="ident">cmd</span>: <span class="kw-2">&amp;</span><span class="ident">str</span>, <span class="ident">cmd_args</span>: <span class="kw-2">&amp;</span>[<span class="kw-2">&amp;</span><span class="ident">str</span>]) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">String</span><span class="op">&gt;</span> {
-    <span class="kw">use</span> <span class="ident">std</span>::<span class="ident">process</span>::{<span class="self">self</span>, <span class="ident">Command</span>};
-    <span class="comment">// This `Once` is used to run `npm install` first time through.</span>
-    <span class="kw">static</span> <span class="ident">HELPER_SETUP</span>: <span class="ident">Once</span> <span class="op">=</span> <span class="ident">Once</span>::<span class="ident">new</span>();
-    <span class="ident">HELPER_SETUP</span>.<span class="ident">call_once</span>(<span class="op">|</span><span class="op">|</span> {
-        <span class="kw">let</span> <span class="ident">dir</span> <span class="op">=</span> <span class="kw-2">&amp;</span><span class="kw-2">*</span><span class="ident">HELPER_SCRIPT_DIR</span>;
-        <span class="ident">std</span>::<span class="ident">env</span>::<span class="ident">set_current_dir</span>(<span class="ident">dir</span>).<span class="ident">expect</span>(<span class="string">&quot;Failed to change directory...&quot;</span>);
-
-        <span class="comment">// Let users know why this is happening even if `log` isn&#39;t enabled.</span>
-        <span class="macro">println</span><span class="macro">!</span>(<span class="string">&quot;Running `npm install` in `integration-test-helper` to ensure it&#39;s usable&quot;</span>);
-
-        <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">child</span> <span class="op">=</span> <span class="ident">Command</span>::<span class="ident">new</span>(<span class="string">&quot;npm&quot;</span>)
-            .<span class="ident">args</span>(<span class="kw-2">&amp;</span>[<span class="string">&quot;install&quot;</span>])
-            .<span class="ident">spawn</span>()
-            .<span class="ident">expect</span>(<span class="string">&quot;Failed to spawn `npm install`! (This test currently requires `node`)&quot;</span>);
-
-        <span class="ident">child</span>
-            .<span class="ident">wait</span>()
-            .<span class="ident">expect</span>(<span class="string">&quot;Failed to install helper dependencies, can&#39;t run integration test&quot;</span>);
-    });
-    <span class="comment">// We should still be in the script dir from HELPER_SETUP&#39;s call_once.</span>
-    <span class="ident">log</span>::<span class="macro">info</span><span class="macro">!</span>(<span class="string">&quot;Running helper script with command \&quot;{}\&quot;&quot;</span>, <span class="ident">cmd</span>);
-
-    <span class="comment">// node_args = [&quot;index.js&quot;, cmd, ...cmd_args] in JavaScript parlance.</span>
-    <span class="kw">let</span> <span class="ident">node_args</span>: <span class="ident">Vec</span><span class="op">&lt;</span><span class="kw-2">&amp;</span><span class="ident">str</span><span class="op">&gt;</span> <span class="op">=</span> [<span class="string">&quot;index.js&quot;</span>, <span class="ident">cmd</span>]
-        .<span class="ident">iter</span>()
-        .<span class="ident">chain</span>(<span class="ident">cmd_args</span>.<span class="ident">iter</span>())
-        .<span class="ident">cloned</span>() <span class="comment">// &amp;&amp;str -&gt; &amp;str</span>
-        .<span class="ident">collect</span>();
-
-    <span class="kw">let</span> <span class="ident">child</span> <span class="op">=</span> <span class="ident">Command</span>::<span class="ident">new</span>(<span class="string">&quot;node&quot;</span>)
-        .<span class="ident">args</span>(<span class="kw-2">&amp;</span><span class="ident">node_args</span>)
-        <span class="comment">// Grab stdout, but inherit stderr.</span>
-        .<span class="ident">stdout</span>(<span class="ident">process</span>::<span class="ident">Stdio</span>::<span class="ident">piped</span>())
-        .<span class="ident">stderr</span>(<span class="ident">process</span>::<span class="ident">Stdio</span>::<span class="ident">inherit</span>())
-        .<span class="ident">spawn</span>()<span class="question-mark">?</span>;
-
-    <span class="kw">let</span> <span class="ident">output</span> <span class="op">=</span> <span class="ident">child</span>.<span class="ident">wait_with_output</span>()<span class="question-mark">?</span>;
-    <span class="kw">if</span> <span class="op">!</span><span class="ident">output</span>.<span class="ident">status</span>.<span class="ident">success</span>() {
-        <span class="kw">let</span> <span class="ident">exit_reason</span> <span class="op">=</span> <span class="ident">output</span>
-            .<span class="ident">status</span>
-            .<span class="ident">code</span>()
-            .<span class="ident">map</span>(<span class="op">|</span><span class="ident">code</span><span class="op">|</span> <span class="ident">code</span>.<span class="ident">to_string</span>())
-            .<span class="ident">unwrap_or_else</span>(<span class="op">|</span><span class="op">|</span> <span class="string">&quot;(process terminated by signal)&quot;</span>.<span class="ident">to_string</span>());
-        <span class="comment">// Print stdout in case something helpful was logged there, as well as the exit status</span>
-        <span class="macro">println</span><span class="macro">!</span>(
-            <span class="string">&quot;Helper script exited with {}, it&#39;s stdout was:```\n{}\n```&quot;</span>,
-            <span class="ident">exit_reason</span>,
-            <span class="ident">String</span>::<span class="ident">from_utf8_lossy</span>(<span class="kw-2">&amp;</span><span class="ident">output</span>.<span class="ident">stdout</span>)
-        );
-        <span class="ident">anyhow</span>::<span class="macro">bail</span><span class="macro">!</span>(<span class="string">&quot;Failed to run helper script&quot;</span>);
-    }
-    <span class="comment">// Note: from_utf8_lossy returns a Cow</span>
-    <span class="kw">let</span> <span class="ident">result</span> <span class="op">=</span> <span class="ident">String</span>::<span class="ident">from_utf8_lossy</span>(<span class="kw-2">&amp;</span><span class="ident">output</span>.<span class="ident">stdout</span>).<span class="ident">to_string</span>();
-    <span class="prelude-val">Ok</span>(<span class="ident">result</span>)
-}
-
 <span class="comment">// It&#39;s important that this doesn&#39;t implement Clone! (It destroys it&#39;s temporary fxaccount on drop)</span>
 <span class="attribute">#[<span class="ident">derive</span>(<span class="ident">Debug</span>)]</span>
 <span class="kw">pub</span> <span class="kw">struct</span> <span class="ident">TestAccount</span> {
@@ -478,6 +455,9 @@ http://creativecommons.org/publicdomain/zero/1.0/ */</span>
     <span class="kw">pub</span> <span class="ident">pass</span>: <span class="ident">String</span>,
     <span class="kw">pub</span> <span class="ident">cfg</span>: <span class="ident">FxaConfig</span>,
     <span class="kw">pub</span> <span class="ident">no_delete</span>: <span class="ident">bool</span>,
+    <span class="kw">pub</span> <span class="ident">auth_key</span>: <span class="ident">Vec</span><span class="op">&lt;</span><span class="ident">u8</span><span class="op">&gt;</span>,
+    <span class="kw">pub</span> <span class="ident">k_sync</span>: <span class="ident">Vec</span><span class="op">&lt;</span><span class="ident">u8</span><span class="op">&gt;</span>,
+    <span class="kw">pub</span> <span class="ident">xcs</span>: <span class="ident">Vec</span><span class="op">&lt;</span><span class="ident">u8</span><span class="op">&gt;</span>,
 }
 
 <span class="kw">impl</span> <span class="ident">TestAccount</span> {
@@ -488,14 +468,42 @@ http://creativecommons.org/publicdomain/zero/1.0/ */</span>
         <span class="ident">no_delete</span>: <span class="ident">bool</span>,
     ) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">Arc</span><span class="op">&lt;</span><span class="ident">TestAccount</span><span class="op">&gt;</span><span class="op">&gt;</span> {
         <span class="ident">log</span>::<span class="macro">info</span><span class="macro">!</span>(<span class="string">&quot;Creating temporary fx account&quot;</span>);
-        <span class="comment">// `create` doesn&#39;t return anything we care about.</span>
-        <span class="kw">let</span> <span class="ident">auth_url</span> <span class="op">=</span> <span class="ident">cfg</span>.<span class="ident">auth_url</span>()<span class="question-mark">?</span>;
-        <span class="ident">run_helper_command</span>(<span class="string">&quot;create&quot;</span>, <span class="kw-2">&amp;</span>[<span class="kw-2">&amp;</span><span class="ident">email</span>, <span class="kw-2">&amp;</span><span class="ident">pass</span>, <span class="ident">auth_url</span>.<span class="ident">as_str</span>()])<span class="question-mark">?</span>;
+
+        <span class="ident">restmail</span>::<span class="ident">clear_mailbox</span>(<span class="kw-2">&amp;</span><span class="ident">email</span>);
+
+        <span class="kw">let</span> <span class="ident">create_endpoint</span> <span class="op">=</span> <span class="ident">cfg</span>.<span class="ident">auth_url_path</span>(<span class="string">&quot;v1/account/create?keys=true&quot;</span>).<span class="ident">unwrap</span>();
+        <span class="kw">let</span> <span class="ident">body</span> <span class="op">=</span> <span class="macro">json</span><span class="macro">!</span>({
+            <span class="string">&quot;email&quot;</span>: <span class="kw-2">&amp;</span><span class="ident">email</span>,
+            <span class="string">&quot;authPW&quot;</span>: <span class="ident">auth</span>::<span class="ident">auth_pwd</span>(<span class="kw-2">&amp;</span><span class="ident">email</span>, <span class="kw-2">&amp;</span><span class="ident">pass</span>)<span class="question-mark">?</span>,
+            <span class="string">&quot;service&quot;</span>: <span class="kw-2">&amp;</span><span class="ident">cfg</span>.<span class="ident">client_id</span>,
+        });
+        <span class="kw">let</span> <span class="ident">req</span> <span class="op">=</span> <span class="ident">Request</span>::<span class="ident">post</span>(<span class="ident">create_endpoint</span>).<span class="ident">json</span>(<span class="kw-2">&amp;</span><span class="ident">body</span>).<span class="ident">send</span>()<span class="question-mark">?</span>;
+        <span class="kw">let</span> <span class="ident">resp</span>: <span class="ident">serde_json</span>::<span class="ident">Value</span> <span class="op">=</span> <span class="ident">req</span>.<span class="ident">json</span>()<span class="question-mark">?</span>;
+        <span class="kw">let</span> <span class="ident">uid</span> <span class="op">=</span> <span class="ident">resp</span>[<span class="string">&quot;uid&quot;</span>]
+            .<span class="ident">as_str</span>()
+            .<span class="ident">ok_or_else</span>(<span class="op">|</span><span class="op">|</span> <span class="ident">anyhow</span>::<span class="ident">Error</span>::<span class="ident">msg</span>(<span class="string">&quot;No Uid&quot;</span>))<span class="question-mark">?</span>;
+        <span class="kw">let</span> <span class="ident">session_token</span> <span class="op">=</span> <span class="ident">resp</span>[<span class="string">&quot;sessionToken&quot;</span>]
+            .<span class="ident">as_str</span>()
+            .<span class="ident">ok_or_else</span>(<span class="op">|</span><span class="op">|</span> <span class="ident">anyhow</span>::<span class="ident">Error</span>::<span class="ident">msg</span>(<span class="string">&quot;No session Token&quot;</span>))<span class="question-mark">?</span>;
+        <span class="kw">let</span> <span class="ident">key_fetch_token</span> <span class="op">=</span> <span class="ident">resp</span>[<span class="string">&quot;keyFetchToken&quot;</span>]
+            .<span class="ident">as_str</span>()
+            .<span class="ident">ok_or_else</span>(<span class="op">|</span><span class="op">|</span> <span class="ident">anyhow</span>::<span class="ident">Error</span>::<span class="ident">msg</span>(<span class="string">&quot;No Key fetch token&quot;</span>))<span class="question-mark">?</span>;
+        <span class="ident">log</span>::<span class="macro">info</span><span class="macro">!</span>(<span class="string">&quot;POST /v1/account/create succeeded&quot;</span>);
+
+        <span class="ident">log</span>::<span class="macro">info</span><span class="macro">!</span>(<span class="string">&quot;Autoverifying account on restmail... uid = {}&quot;</span>, <span class="ident">uid</span>);
+        <span class="kw">let</span> <span class="ident">auth_key</span> <span class="op">=</span> <span class="ident">auth</span>::<span class="ident">derive_auth_key_from_session_token</span>(<span class="kw-2">&amp;</span><span class="ident">session_token</span>)<span class="question-mark">?</span>;
+        <span class="self">Self</span>::<span class="ident">verify_account</span>(<span class="kw-2">&amp;</span><span class="ident">email</span>, <span class="kw-2">&amp;</span><span class="ident">cfg</span>, <span class="kw-2">&amp;</span><span class="ident">uid</span>)<span class="question-mark">?</span>;
+        <span class="kw">let</span> (<span class="ident">sync_key</span>, <span class="ident">xcs_key</span>) <span class="op">=</span> <span class="ident">auth</span>::<span class="ident">get_sync_keys</span>(<span class="kw-2">&amp;</span><span class="ident">cfg</span>, <span class="kw-2">&amp;</span><span class="ident">key_fetch_token</span>, <span class="kw-2">&amp;</span><span class="ident">email</span>, <span class="kw-2">&amp;</span><span class="ident">pass</span>)<span class="question-mark">?</span>;
+        <span class="ident">log</span>::<span class="macro">info</span><span class="macro">!</span>(<span class="string">&quot;Account created and verified!&quot;</span>);
+
         <span class="prelude-val">Ok</span>(<span class="ident">Arc</span>::<span class="ident">new</span>(<span class="ident">TestAccount</span> {
             <span class="ident">email</span>,
             <span class="ident">pass</span>,
             <span class="ident">cfg</span>,
             <span class="ident">no_delete</span>,
+            <span class="ident">auth_key</span>,
+            <span class="ident">k_sync</span>: <span class="ident">sync_key</span>,
+            <span class="ident">xcs</span>: <span class="ident">xcs_key</span>,
         }))
     }
 
@@ -526,6 +534,59 @@ http://creativecommons.org/publicdomain/zero/1.0/ */</span>
             <span class="ident">opts</span>.<span class="ident">no_delete_account</span>,
         )
     }
+
+    <span class="kw">fn</span> <span class="ident">verify_account</span>(<span class="ident">email_in</span>: <span class="kw-2">&amp;</span><span class="ident">str</span>, <span class="ident">config</span>: <span class="kw-2">&amp;</span><span class="ident">FxaConfig</span>, <span class="ident">uid</span>: <span class="kw-2">&amp;</span><span class="ident">str</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span>()<span class="op">&gt;</span> {
+        <span class="kw">let</span> <span class="ident">verification_email</span> <span class="op">=</span> <span class="ident">restmail</span>::<span class="ident">find_email</span>(<span class="ident">email_in</span>, <span class="op">|</span><span class="ident">email</span><span class="op">|</span> {
+            <span class="ident">email</span>[<span class="string">&quot;headers&quot;</span>][<span class="string">&quot;x-uid&quot;</span>] <span class="op">=</span><span class="op">=</span> <span class="ident">uid</span> <span class="kw-2">&amp;</span><span class="op">&amp;</span> <span class="ident">email</span>[<span class="string">&quot;headers&quot;</span>][<span class="string">&quot;x-template-name&quot;</span>] <span class="op">=</span><span class="op">=</span> <span class="string">&quot;verify&quot;</span>
+        });
+        <span class="kw">let</span> <span class="ident">code</span> <span class="op">=</span> <span class="ident">verification_email</span>[<span class="string">&quot;headers&quot;</span>][<span class="string">&quot;x-verify-code&quot;</span>]
+            .<span class="ident">as_str</span>()
+            .<span class="ident">unwrap</span>();
+        <span class="ident">log</span>::<span class="macro">info</span><span class="macro">!</span>(<span class="string">&quot;Code is: {}&quot;</span>, <span class="ident">code</span>);
+        <span class="kw">let</span> <span class="ident">body</span> <span class="op">=</span> <span class="macro">json</span><span class="macro">!</span>({
+            <span class="string">&quot;uid&quot;</span>: <span class="ident">uid</span>,
+            <span class="string">&quot;code&quot;</span>: <span class="ident">verification_email</span>[<span class="string">&quot;headers&quot;</span>][<span class="string">&quot;x-verify-code&quot;</span>].<span class="ident">as_str</span>().<span class="ident">unwrap</span>(),
+        });
+        <span class="kw">let</span> <span class="ident">resp</span> <span class="op">=</span> <span class="ident">auth</span>::<span class="ident">send_verification</span>(<span class="kw-2">&amp;</span><span class="ident">config</span>, <span class="ident">body</span>).<span class="ident">unwrap</span>();
+        <span class="kw">if</span> <span class="op">!</span><span class="ident">resp</span>.<span class="ident">is_success</span>() {
+            <span class="ident">log</span>::<span class="macro">warn</span><span class="macro">!</span>(
+                <span class="string">&quot;Error verifying account: {}&quot;</span>,
+                <span class="ident">resp</span>.<span class="ident">json</span>::<span class="op">&lt;</span><span class="ident">serde_json</span>::<span class="ident">Value</span><span class="op">&gt;</span>().<span class="ident">unwrap</span>()
+            );
+            <span class="ident">anyhow</span>::<span class="macro">bail</span><span class="macro">!</span>(<span class="string">&quot;Unable to verify account!&quot;</span>);
+        }
+        <span class="prelude-val">Ok</span>(())
+    }
+
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">execute_oauth_flow</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">oauth_url</span>: <span class="kw-2">&amp;</span><span class="ident">str</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">String</span><span class="op">&gt;</span> {
+        <span class="kw">let</span> <span class="ident">url</span> <span class="op">=</span> <span class="ident">Url</span>::<span class="ident">parse</span>(<span class="ident">oauth_url</span>)<span class="question-mark">?</span>;
+        <span class="kw">let</span> <span class="ident">query_map</span>: <span class="ident">HashMap</span><span class="op">&lt;</span><span class="ident">String</span>, <span class="ident">String</span><span class="op">&gt;</span> <span class="op">=</span> <span class="ident">url</span>.<span class="ident">query_pairs</span>().<span class="ident">into_owned</span>().<span class="ident">collect</span>();
+        <span class="kw">let</span> <span class="ident">jwk_base_64</span> <span class="op">=</span> <span class="ident">query_map</span>.<span class="ident">get</span>(<span class="string">&quot;keys_jwk&quot;</span>).<span class="ident">unwrap</span>();
+        <span class="kw">let</span> <span class="ident">decoded</span> <span class="op">=</span> <span class="ident">base64</span>::<span class="ident">decode</span>(<span class="kw-2">&amp;</span><span class="ident">jwk_base_64</span>).<span class="ident">unwrap</span>();
+        <span class="kw">let</span> <span class="ident">jwk</span> <span class="op">=</span> <span class="ident">std</span>::<span class="ident">str</span>::<span class="ident">from_utf8</span>(<span class="kw-2">&amp;</span><span class="ident">decoded</span>)<span class="question-mark">?</span>;
+        <span class="kw">let</span> <span class="ident">scope</span> <span class="op">=</span> <span class="ident">query_map</span>.<span class="ident">get</span>(<span class="string">&quot;scope&quot;</span>).<span class="ident">unwrap</span>();
+        <span class="kw">let</span> <span class="ident">client_id</span> <span class="op">=</span> <span class="ident">query_map</span>.<span class="ident">get</span>(<span class="string">&quot;client_id&quot;</span>).<span class="ident">unwrap</span>();
+        <span class="kw">let</span> <span class="ident">state</span> <span class="op">=</span> <span class="ident">query_map</span>.<span class="ident">get</span>(<span class="string">&quot;state&quot;</span>).<span class="ident">unwrap</span>();
+        <span class="kw">let</span> <span class="ident">code_challenge</span> <span class="op">=</span> <span class="ident">query_map</span>.<span class="ident">get</span>(<span class="string">&quot;code_challenge&quot;</span>).<span class="ident">unwrap</span>();
+        <span class="kw">let</span> <span class="ident">code_challenge_method</span> <span class="op">=</span> <span class="ident">query_map</span>.<span class="ident">get</span>(<span class="string">&quot;code_challenge_method&quot;</span>).<span class="ident">unwrap</span>();
+        <span class="kw">let</span> <span class="ident">keys_jwe</span> <span class="op">=</span> <span class="ident">auth</span>::<span class="ident">create_keys_jwe</span>(
+            <span class="kw-2">&amp;</span><span class="ident">client_id</span>,
+            <span class="kw-2">&amp;</span><span class="ident">scope</span>,
+            <span class="kw-2">&amp;</span><span class="ident">jwk</span>,
+            <span class="kw-2">&amp;</span><span class="self">self</span>.<span class="ident">auth_key</span>,
+            <span class="kw-2">&amp;</span><span class="self">self</span>.<span class="ident">cfg</span>,
+            (<span class="kw-2">&amp;</span><span class="self">self</span>.<span class="ident">k_sync</span>, <span class="kw-2">&amp;</span><span class="self">self</span>.<span class="ident">xcs</span>),
+        )<span class="question-mark">?</span>;
+        <span class="kw">let</span> <span class="ident">auth_params</span> <span class="op">=</span> <span class="ident">auth</span>::<span class="ident">AuthorizationParameters</span>::<span class="ident">new</span>(
+            <span class="ident">client_id</span>.<span class="ident">clone</span>(),
+            <span class="ident">code_challenge</span>.<span class="ident">clone</span>(),
+            <span class="ident">code_challenge_method</span>.<span class="ident">clone</span>(),
+            <span class="ident">scope</span>.<span class="ident">clone</span>(),
+            <span class="ident">keys_jwe</span>,
+            <span class="ident">state</span>.<span class="ident">clone</span>(),
+        );
+        <span class="ident">auth</span>::<span class="ident">send_authorization_request</span>(<span class="kw-2">&amp;</span><span class="self">self</span>.<span class="ident">cfg</span>, <span class="ident">auth_params</span>, <span class="kw-2">&amp;</span><span class="self">self</span>.<span class="ident">auth_key</span>)
+    }
 }
 
 <span class="kw">impl</span> <span class="ident">Drop</span> <span class="kw">for</span> <span class="ident">TestAccount</span> {
@@ -535,16 +596,28 @@ http://creativecommons.org/publicdomain/zero/1.0/ */</span>
             <span class="kw">return</span>;
         }
         <span class="ident">log</span>::<span class="macro">info</span><span class="macro">!</span>(<span class="string">&quot;Cleaning up temporary firefox account&quot;</span>);
-        <span class="kw">let</span> <span class="ident">auth_url</span> <span class="op">=</span> <span class="self">self</span>.<span class="ident">cfg</span>.<span class="ident">auth_url</span>().<span class="ident">unwrap</span>(); <span class="comment">// We already parsed this once.</span>
-        <span class="kw">if</span> <span class="kw">let</span> <span class="prelude-val">Err</span>(<span class="ident">e</span>) <span class="op">=</span> <span class="ident">run_helper_command</span>(<span class="string">&quot;destroy&quot;</span>, <span class="kw-2">&amp;</span>[<span class="kw-2">&amp;</span><span class="self">self</span>.<span class="ident">email</span>, <span class="kw-2">&amp;</span><span class="self">self</span>.<span class="ident">pass</span>, <span class="ident">auth_url</span>.<span class="ident">as_str</span>()])
-        {
-            <span class="ident">log</span>::<span class="macro">warn</span><span class="macro">!</span>(
-                <span class="string">&quot;Failed to destroy fxacct {} with pass {}!&quot;</span>,
-                <span class="self">self</span>.<span class="ident">email</span>,
-                <span class="self">self</span>.<span class="ident">pass</span>
-            );
-            <span class="ident">log</span>::<span class="macro">warn</span><span class="macro">!</span>(<span class="string">&quot;   Error: {}&quot;</span>, <span class="ident">e</span>);
+        <span class="kw">let</span> <span class="ident">destroy_endpoint</span> <span class="op">=</span> <span class="self">self</span>.<span class="ident">cfg</span>.<span class="ident">auth_url_path</span>(<span class="string">&quot;v1/account/destroy&quot;</span>).<span class="ident">unwrap</span>();
+        <span class="kw">let</span> <span class="ident">body</span> <span class="op">=</span> <span class="macro">json</span><span class="macro">!</span>({
+            <span class="string">&quot;email&quot;</span>: <span class="self">self</span>.<span class="ident">email</span>,
+            <span class="string">&quot;authPW&quot;</span>: <span class="ident">auth</span>::<span class="ident">auth_pwd</span>(<span class="kw-2">&amp;</span><span class="self">self</span>.<span class="ident">email</span>, <span class="kw-2">&amp;</span><span class="self">self</span>.<span class="ident">pass</span>).<span class="ident">unwrap</span>()
+        });
+        <span class="kw">let</span> <span class="ident">req</span> <span class="op">=</span> <span class="ident">Request</span>::<span class="ident">post</span>(<span class="ident">destroy_endpoint</span>).<span class="ident">json</span>(<span class="kw-2">&amp;</span><span class="ident">body</span>).<span class="ident">send</span>();
+        <span class="kw">match</span> <span class="ident">req</span> {
+            <span class="prelude-val">Ok</span>(<span class="ident">resp</span>) <span class="op">=</span><span class="op">&gt;</span> {
+                <span class="kw">if</span> <span class="ident">resp</span>.<span class="ident">is_success</span>() {
+                    <span class="ident">log</span>::<span class="macro">info</span><span class="macro">!</span>(<span class="string">&quot;Account destroyed successfully!&quot;</span>);
+                    <span class="kw">return</span>;
+                } <span class="kw">else</span> {
+                    <span class="ident">log</span>::<span class="macro">warn</span><span class="macro">!</span>(<span class="string">&quot;   Error: {}&quot;</span>, <span class="ident">resp</span>.<span class="ident">text</span>());
+                }
+            }
+            <span class="prelude-val">Err</span>(<span class="ident">e</span>) <span class="op">=</span><span class="op">&gt;</span> <span class="ident">log</span>::<span class="macro">warn</span><span class="macro">!</span>(<span class="string">&quot;   Error: {}&quot;</span>, <span class="ident">e</span>),
         }
+        <span class="ident">log</span>::<span class="macro">warn</span><span class="macro">!</span>(
+            <span class="string">&quot;Failed to destroy fxacct {} with pass {}!&quot;</span>,
+            <span class="self">self</span>.<span class="ident">email</span>,
+            <span class="self">self</span>.<span class="ident">pass</span>
+        );
     }
 }
 
@@ -559,23 +632,14 @@ http://creativecommons.org/publicdomain/zero/1.0/ */</span>
 <span class="kw">impl</span> <span class="ident">TestClient</span> {
     <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">new</span>(<span class="ident">acct</span>: <span class="ident">Arc</span><span class="op">&lt;</span><span class="ident">TestAccount</span><span class="op">&gt;</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="self">Self</span><span class="op">&gt;</span> {
         <span class="ident">log</span>::<span class="macro">info</span><span class="macro">!</span>(<span class="string">&quot;Doing oauth flow!&quot;</span>);
-
         <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">fxa</span> <span class="op">=</span> <span class="ident">FirefoxAccount</span>::<span class="ident">with_config</span>(<span class="ident">acct</span>.<span class="ident">cfg</span>.<span class="ident">clone</span>());
         <span class="kw">let</span> <span class="ident">oauth_uri</span> <span class="op">=</span> <span class="ident">fxa</span>.<span class="ident">begin_oauth_flow</span>(<span class="kw-2">&amp;</span>[<span class="ident">SYNC_SCOPE</span>])<span class="question-mark">?</span>;
-        <span class="kw">let</span> <span class="ident">auth_url</span> <span class="op">=</span> <span class="ident">acct</span>.<span class="ident">cfg</span>.<span class="ident">auth_url</span>()<span class="question-mark">?</span>;
-        <span class="kw">let</span> <span class="ident">redirected_to</span> <span class="op">=</span> <span class="ident">run_helper_command</span>(
-            <span class="string">&quot;oauth&quot;</span>,
-            <span class="kw-2">&amp;</span>[<span class="kw-2">&amp;</span><span class="ident">acct</span>.<span class="ident">email</span>, <span class="kw-2">&amp;</span><span class="ident">acct</span>.<span class="ident">pass</span>, <span class="ident">auth_url</span>.<span class="ident">as_str</span>(), <span class="kw-2">&amp;</span><span class="ident">oauth_uri</span>],
-        )<span class="question-mark">?</span>;
-
-        <span class="ident">log</span>::<span class="macro">info</span><span class="macro">!</span>(<span class="string">&quot;Helper command gave &#39;{}&#39;&quot;</span>, <span class="ident">redirected_to</span>);
-
+        <span class="kw">let</span> <span class="ident">redirected_to</span> <span class="op">=</span> <span class="ident">acct</span>.<span class="ident">execute_oauth_flow</span>(<span class="kw-2">&amp;</span><span class="ident">oauth_uri</span>)<span class="question-mark">?</span>;
         <span class="kw">let</span> <span class="ident">final_url</span> <span class="op">=</span> <span class="ident">Url</span>::<span class="ident">parse</span>(<span class="kw-2">&amp;</span><span class="ident">redirected_to</span>)<span class="question-mark">?</span>;
         <span class="kw">let</span> <span class="ident">query_params</span> <span class="op">=</span> <span class="ident">final_url</span>
             .<span class="ident">query_pairs</span>()
             .<span class="ident">into_owned</span>()
             .<span class="ident">collect</span>::<span class="op">&lt;</span><span class="ident">HashMap</span><span class="op">&lt;</span><span class="ident">String</span>, <span class="ident">String</span><span class="op">&gt;</span><span class="op">&gt;</span>();
-
         <span class="comment">// should we be using the OAuthInfo this returns?</span>
         <span class="ident">fxa</span>.<span class="ident">complete_oauth_flow</span>(<span class="kw-2">&amp;</span><span class="ident">query_params</span>[<span class="string">&quot;code&quot;</span>], <span class="kw-2">&amp;</span><span class="ident">query_params</span>[<span class="string">&quot;state&quot;</span>])<span class="question-mark">?</span>;
         <span class="ident">log</span>::<span class="macro">info</span><span class="macro">!</span>(<span class="string">&quot;OAuth flow finished&quot;</span>);
@@ -734,7 +798,7 @@ http://creativecommons.org/publicdomain/zero/1.0/ */</span>
 <span class="comment">// Required for arg parsing</span>
 <span class="kw">impl</span> <span class="ident">std</span>::<span class="ident">str</span>::<span class="ident">FromStr</span> <span class="kw">for</span> <span class="ident">FxaConfigUrl</span> {
     <span class="kw">type</span> <span class="prelude-val">Err</span> <span class="op">=</span> <span class="ident">anyhow</span>::<span class="ident">Error</span>;
-    <span class="kw">fn</span> <span class="ident">from_str</span>(<span class="ident">s</span>: <span class="kw-2">&amp;</span><span class="ident">str</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">std</span>::<span class="ident">result</span>::<span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="self">Self</span>, <span class="self">Self</span>::<span class="prelude-val">Err</span><span class="op">&gt;</span> {
+    <span class="kw">fn</span> <span class="ident">from_str</span>(<span class="ident">s</span>: <span class="kw-2">&amp;</span><span class="ident">str</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="self">Self</span><span class="op">&gt;</span> {
         <span class="prelude-val">Ok</span>(<span class="kw">match</span> <span class="ident">s</span> {
             <span class="string">&quot;release&quot;</span> <span class="op">=</span><span class="op">&gt;</span> <span class="ident">FxaConfigUrl</span>::<span class="ident">Release</span>,
             <span class="string">&quot;stage&quot;</span> <span class="op">=</span><span class="op">&gt;</span> <span class="ident">FxaConfigUrl</span>::<span class="ident">Stage</span>,

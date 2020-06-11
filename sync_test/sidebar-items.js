@@ -1,1 +1,1 @@
-initSidebarItems({"fn":[["init_testing",""],["main",""],["run_test_groups",""]],"mod":[["auth",""],["logins",""],["tabs",""],["testing",""]],"struct":[["Opts",""]]});
+initSidebarItems({"fn":[["init_testing",""],["main",""],["run_test_groups",""]],"mod":[["auth",""],["logins",""],["restmail",""],["tabs",""],["testing",""]],"struct":[["Opts",""]]});
