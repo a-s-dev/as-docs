@@ -505,7 +505,7 @@
 }
 
 <span class="doccomment">/// Delete all items in the temp tables we use for staging changes.</span>
-<span class="kw">pub</span>(<span class="kw">crate</span>) <span class="kw">fn</span> <span class="ident">delete_pending_temp_tables</span>(<span class="ident">conn</span>: <span class="kw-2">&amp;</span><span class="ident">PlacesDb</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span>()<span class="op">&gt;</span> {
+<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">delete_pending_temp_tables</span>(<span class="ident">conn</span>: <span class="kw-2">&amp;</span><span class="ident">PlacesDb</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span>()<span class="op">&gt;</span> {
     <span class="ident">conn</span>.<span class="ident">execute_batch</span>(
         <span class="string">&quot;DELETE FROM moz_updateoriginsupdate_temp;
          DELETE FROM moz_updateoriginsdelete_temp;

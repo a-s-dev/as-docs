@@ -2905,6 +2905,7 @@
 <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">apply_observation</span>(<span class="ident">db</span>: <span class="kw-2">&amp;</span><span class="ident">PlacesDb</span>, <span class="ident">visit_ob</span>: <span class="ident">VisitObservation</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">RowId</span><span class="op">&gt;</span><span class="op">&gt;</span> {
     <span class="kw">let</span> <span class="ident">tx</span> <span class="op">=</span> <span class="ident">db</span>.<span class="ident">begin_transaction</span>()<span class="question-mark">?</span>;
     <span class="kw">let</span> <span class="ident">result</span> <span class="op">=</span> <span class="ident">apply_observation_direct</span>(<span class="ident">db</span>, <span class="ident">visit_ob</span>)<span class="question-mark">?</span>;
+    <span class="ident">delete_pending_temp_tables</span>(<span class="ident">db</span>)<span class="question-mark">?</span>;
     <span class="ident">tx</span>.<span class="ident">commit</span>()<span class="question-mark">?</span>;
     <span class="prelude-val">Ok</span>(<span class="ident">result</span>)
 }
@@ -2991,7 +2992,6 @@
             <span class="prelude-val">Some</span>(<span class="ident">visit_ob</span>.<span class="ident">get_redirect_frecency_boost</span>()),
         )<span class="question-mark">?</span>;
     }
-    <span class="ident">delete_pending_temp_tables</span>(<span class="ident">db</span>)<span class="question-mark">?</span>;
     <span class="prelude-val">Ok</span>(<span class="ident">visit_row_id</span>)
 }
 
