@@ -170,6 +170,9 @@
 <span id="170">170</span>
 <span id="171">171</span>
 <span id="172">172</span>
+<span id="173">173</span>
+<span id="174">174</span>
+<span id="175">175</span>
 </pre><div class="example-wrap"><pre class="rust ">
 <span class="comment">/* This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
@@ -179,6 +182,9 @@
 <span class="kw">use</span> <span class="ident">std</span>::<span class="ident">string</span>;
 <span class="attribute">#[<span class="ident">derive</span>(<span class="ident">Debug</span>, <span class="ident">thiserror</span>::<span class="ident">Error</span>)]</span>
 <span class="kw">pub</span> <span class="kw">enum</span> <span class="ident">ErrorKind</span> {
+    <span class="attribute">#[<span class="ident">error</span>(<span class="string">&quot;Server asked the client to back off, please wait {0} seconds to try again&quot;</span>)]</span>
+    <span class="ident">BackoffError</span>(<span class="ident">u64</span>),
+
     <span class="attribute">#[<span class="ident">error</span>(<span class="string">&quot;Unknown OAuth State&quot;</span>)]</span>
     <span class="ident">UnknownOAuthState</span>,
 
