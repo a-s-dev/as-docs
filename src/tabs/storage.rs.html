@@ -190,6 +190,7 @@
 <span id="190">190</span>
 <span id="191">191</span>
 <span id="192">192</span>
+<span id="193">193</span>
 </pre><div class="example-wrap"><pre class="rust ">
 <span class="comment">/* This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
@@ -279,11 +280,12 @@
         <span class="ident">remote_tabs</span>.<span class="ident">replace</span>(<span class="ident">new_remote_tabs</span>);
     }
 
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">wipe</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">delete_local_tabs</span>: <span class="ident">bool</span>) {
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">wipe_remote_tabs</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) {
         <span class="self">self</span>.<span class="ident">remote_tabs</span>.<span class="ident">replace</span>(<span class="prelude-val">None</span>);
-        <span class="kw">if</span> <span class="ident">delete_local_tabs</span> {
-            <span class="self">self</span>.<span class="ident">local_tabs</span>.<span class="ident">replace</span>(<span class="prelude-val">None</span>);
-        }
+    }
+
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">wipe_local_tabs</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) {
+        <span class="self">self</span>.<span class="ident">local_tabs</span>.<span class="ident">replace</span>(<span class="prelude-val">None</span>);
     }
 }
 

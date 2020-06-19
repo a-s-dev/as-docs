@@ -2866,6 +2866,49 @@
 <span id="2866">2866</span>
 <span id="2867">2867</span>
 <span id="2868">2868</span>
+<span id="2869">2869</span>
+<span id="2870">2870</span>
+<span id="2871">2871</span>
+<span id="2872">2872</span>
+<span id="2873">2873</span>
+<span id="2874">2874</span>
+<span id="2875">2875</span>
+<span id="2876">2876</span>
+<span id="2877">2877</span>
+<span id="2878">2878</span>
+<span id="2879">2879</span>
+<span id="2880">2880</span>
+<span id="2881">2881</span>
+<span id="2882">2882</span>
+<span id="2883">2883</span>
+<span id="2884">2884</span>
+<span id="2885">2885</span>
+<span id="2886">2886</span>
+<span id="2887">2887</span>
+<span id="2888">2888</span>
+<span id="2889">2889</span>
+<span id="2890">2890</span>
+<span id="2891">2891</span>
+<span id="2892">2892</span>
+<span id="2893">2893</span>
+<span id="2894">2894</span>
+<span id="2895">2895</span>
+<span id="2896">2896</span>
+<span id="2897">2897</span>
+<span id="2898">2898</span>
+<span id="2899">2899</span>
+<span id="2900">2900</span>
+<span id="2901">2901</span>
+<span id="2902">2902</span>
+<span id="2903">2903</span>
+<span id="2904">2904</span>
+<span id="2905">2905</span>
+<span id="2906">2906</span>
+<span id="2907">2907</span>
+<span id="2908">2908</span>
+<span id="2909">2909</span>
+<span id="2910">2910</span>
+<span id="2911">2911</span>
 </pre><div class="example-wrap"><pre class="rust ">
 <span class="comment">/* This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
@@ -2890,6 +2933,7 @@
 <span class="kw">use</span> <span class="ident">rusqlite</span>::<span class="prelude-ty">Result</span> <span class="kw">as</span> <span class="ident">RusqliteResult</span>;
 <span class="kw">use</span> <span class="ident">rusqlite</span>::{<span class="ident">Row</span>, <span class="ident">NO_PARAMS</span>};
 <span class="kw">use</span> <span class="ident">sql_support</span>::{<span class="self">self</span>, <span class="ident">ConnExt</span>};
+<span class="kw">use</span> <span class="ident">sync15</span>::<span class="ident">StoreSyncAssociation</span>;
 <span class="kw">use</span> <span class="ident">sync_guid</span>::<span class="ident">Guid</span> <span class="kw">as</span> <span class="ident">SyncGuid</span>;
 <span class="kw">use</span> <span class="ident">url</span>::<span class="ident">Url</span>;
 
@@ -3296,9 +3340,7 @@
     <span class="ident">wipe_local_in_tx</span>(<span class="ident">db</span>)<span class="question-mark">?</span>;
 
     <span class="comment">// Remove Sync metadata, too.</span>
-    <span class="ident">put_meta</span>(<span class="ident">db</span>, <span class="ident">LAST_SYNC_META_KEY</span>, <span class="kw-2">&amp;</span><span class="number">0</span>)<span class="question-mark">?</span>;
-    <span class="ident">delete_meta</span>(<span class="ident">db</span>, <span class="ident">GLOBAL_SYNCID_META_KEY</span>)<span class="question-mark">?</span>;
-    <span class="ident">delete_meta</span>(<span class="ident">db</span>, <span class="ident">COLLECTION_SYNCID_META_KEY</span>)<span class="question-mark">?</span>;
+    <span class="ident">reset_in_tx</span>(<span class="kw-2">&amp;</span><span class="ident">db</span>, <span class="kw-2">&amp;</span><span class="ident">StoreSyncAssociation</span>::<span class="ident">Disconnected</span>)<span class="question-mark">?</span>;
 
     <span class="ident">tx</span>.<span class="ident">commit</span>()<span class="question-mark">?</span>;
 
@@ -3510,6 +3552,39 @@
         )<span class="question-mark">?</span>;
         <span class="prelude-val">Ok</span>(())
     })<span class="question-mark">?</span>;
+
+    <span class="prelude-val">Ok</span>(())
+}
+
+<span class="kw">fn</span> <span class="ident">reset_in_tx</span>(<span class="ident">db</span>: <span class="kw-2">&amp;</span><span class="ident">PlacesDb</span>, <span class="ident">assoc</span>: <span class="kw-2">&amp;</span><span class="ident">StoreSyncAssociation</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span>()<span class="op">&gt;</span> {
+    <span class="comment">// Reset change counters and sync statuses for all URLs.</span>
+    <span class="ident">db</span>.<span class="ident">execute_cached</span>(
+        <span class="kw-2">&amp;</span><span class="macro">format</span><span class="macro">!</span>(
+            <span class="string">&quot;
+            UPDATE moz_places
+                SET sync_change_counter = 0,
+                sync_status = {}&quot;</span>,
+            (<span class="ident">SyncStatus</span>::<span class="ident">New</span> <span class="kw">as</span> <span class="ident">u8</span>)
+        ),
+        <span class="ident">NO_PARAMS</span>,
+    )<span class="question-mark">?</span>;
+
+    <span class="comment">// Reset the last sync time, so that the next sync fetches fresh records</span>
+    <span class="comment">// from the server.</span>
+    <span class="ident">put_meta</span>(<span class="ident">db</span>, <span class="ident">LAST_SYNC_META_KEY</span>, <span class="kw-2">&amp;</span><span class="number">0</span>)<span class="question-mark">?</span>;
+
+    <span class="comment">// Clear the sync ID if we&#39;re signing out, or set it to whatever the</span>
+    <span class="comment">// server gave us if we&#39;re signing in.</span>
+    <span class="kw">match</span> <span class="ident">assoc</span> {
+        <span class="ident">StoreSyncAssociation</span>::<span class="ident">Disconnected</span> <span class="op">=</span><span class="op">&gt;</span> {
+            <span class="ident">delete_meta</span>(<span class="ident">db</span>, <span class="ident">GLOBAL_SYNCID_META_KEY</span>)<span class="question-mark">?</span>;
+            <span class="ident">delete_meta</span>(<span class="ident">db</span>, <span class="ident">COLLECTION_SYNCID_META_KEY</span>)<span class="question-mark">?</span>;
+        }
+        <span class="ident">StoreSyncAssociation</span>::<span class="ident">Connected</span>(<span class="ident">ids</span>) <span class="op">=</span><span class="op">&gt;</span> {
+            <span class="ident">put_meta</span>(<span class="ident">db</span>, <span class="ident">GLOBAL_SYNCID_META_KEY</span>, <span class="kw-2">&amp;</span><span class="ident">ids</span>.<span class="ident">global</span>)<span class="question-mark">?</span>;
+            <span class="ident">put_meta</span>(<span class="ident">db</span>, <span class="ident">COLLECTION_SYNCID_META_KEY</span>, <span class="kw-2">&amp;</span><span class="ident">ids</span>.<span class="ident">coll</span>)<span class="question-mark">?</span>;
+        }
+    }
 
     <span class="prelude-val">Ok</span>(())
 }
@@ -3941,28 +4016,10 @@
     <span class="doccomment">/// Resets all sync metadata, including change counters, sync statuses,</span>
     <span class="doccomment">/// the last sync time, and sync ID. This should be called when the user</span>
     <span class="doccomment">/// signs out of Sync.</span>
-    <span class="kw">pub</span>(<span class="kw">crate</span>) <span class="kw">fn</span> <span class="ident">reset</span>(<span class="ident">db</span>: <span class="kw-2">&amp;</span><span class="ident">PlacesDb</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span>()<span class="op">&gt;</span> {
+    <span class="kw">pub</span>(<span class="kw">crate</span>) <span class="kw">fn</span> <span class="ident">reset</span>(<span class="ident">db</span>: <span class="kw-2">&amp;</span><span class="ident">PlacesDb</span>, <span class="ident">assoc</span>: <span class="kw-2">&amp;</span><span class="ident">StoreSyncAssociation</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span>()<span class="op">&gt;</span> {
         <span class="kw">let</span> <span class="ident">tx</span> <span class="op">=</span> <span class="ident">db</span>.<span class="ident">begin_transaction</span>()<span class="question-mark">?</span>;
-        <span class="ident">reset_meta</span>(<span class="ident">db</span>)<span class="question-mark">?</span>;
-        <span class="ident">put_meta</span>(<span class="ident">db</span>, <span class="ident">LAST_SYNC_META_KEY</span>, <span class="kw-2">&amp;</span><span class="number">0</span>)<span class="question-mark">?</span>;
-        <span class="ident">delete_meta</span>(<span class="ident">db</span>, <span class="ident">GLOBAL_SYNCID_META_KEY</span>)<span class="question-mark">?</span>;
-        <span class="ident">delete_meta</span>(<span class="ident">db</span>, <span class="ident">COLLECTION_SYNCID_META_KEY</span>)<span class="question-mark">?</span>;
+        <span class="ident">reset_in_tx</span>(<span class="ident">db</span>, <span class="ident">assoc</span>)<span class="question-mark">?</span>;
         <span class="ident">tx</span>.<span class="ident">commit</span>()<span class="question-mark">?</span>;
-        <span class="prelude-val">Ok</span>(())
-    }
-
-    <span class="kw">pub</span>(<span class="kw">crate</span>) <span class="kw">fn</span> <span class="ident">reset_meta</span>(<span class="ident">db</span>: <span class="kw-2">&amp;</span><span class="ident">PlacesDb</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span>()<span class="op">&gt;</span> {
-        <span class="ident">db</span>.<span class="ident">conn</span>().<span class="ident">execute_cached</span>(
-            <span class="kw-2">&amp;</span><span class="macro">format</span><span class="macro">!</span>(
-                <span class="string">&quot;
-                UPDATE moz_places
-                    SET sync_change_counter = 0,
-                    sync_status = {}&quot;</span>,
-                (<span class="ident">SyncStatus</span>::<span class="ident">New</span> <span class="kw">as</span> <span class="ident">u8</span>)
-            ),
-            <span class="ident">NO_PARAMS</span>,
-        )<span class="question-mark">?</span>;
-        <span class="ident">put_meta</span>(<span class="ident">db</span>, <span class="ident">LAST_SYNC_META_KEY</span>, <span class="kw-2">&amp;</span><span class="number">0</span>)<span class="question-mark">?</span>;
         <span class="prelude-val">Ok</span>(())
     }
 } <span class="comment">// end of sync module.</span>
@@ -4207,6 +4264,7 @@
     <span class="kw">use</span> <span class="kw">crate</span>::<span class="ident">types</span>::{<span class="ident">Timestamp</span>, <span class="ident">VisitTransitionSet</span>};
     <span class="kw">use</span> <span class="ident">pretty_assertions</span>::<span class="ident">assert_eq</span>;
     <span class="kw">use</span> <span class="ident">std</span>::<span class="ident">time</span>::{<span class="ident">Duration</span>, <span class="ident">SystemTime</span>};
+    <span class="kw">use</span> <span class="ident">sync15</span>::<span class="ident">CollSyncIds</span>;
 
     <span class="attribute">#[<span class="ident">test</span>]</span>
     <span class="kw">fn</span> <span class="ident">test_get_visited_urls</span>() {
@@ -4962,7 +5020,18 @@
     }
 
     <span class="attribute">#[<span class="ident">test</span>]</span>
-    <span class="kw">fn</span> <span class="ident">test_sync_reset</span>() <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span>()<span class="op">&gt;</span> {
+    <span class="kw">fn</span> <span class="ident">test_reset</span>() <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span>()<span class="op">&gt;</span> {
+        <span class="kw">fn</span> <span class="ident">mark_all_as_synced</span>(<span class="ident">db</span>: <span class="kw-2">&amp;</span><span class="ident">PlacesDb</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span>()<span class="op">&gt;</span> {
+            <span class="ident">db</span>.<span class="ident">execute_cached</span>(
+                <span class="kw-2">&amp;</span><span class="macro">format</span><span class="macro">!</span>(
+                    <span class="string">&quot;UPDATE moz_places set sync_status = {}&quot;</span>,
+                    (<span class="ident">SyncStatus</span>::<span class="ident">Normal</span> <span class="kw">as</span> <span class="ident">u8</span>)
+                ),
+                <span class="ident">NO_PARAMS</span>,
+            )<span class="question-mark">?</span>;
+            <span class="prelude-val">Ok</span>(())
+        }
+
         <span class="kw">let</span> <span class="kw">_</span> <span class="op">=</span> <span class="ident">env_logger</span>::<span class="ident">try_init</span>();
         <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">conn</span> <span class="op">=</span> <span class="ident">PlacesDb</span>::<span class="ident">open_in_memory</span>(<span class="ident">ConnectionType</span>::<span class="ident">ReadWrite</span>)<span class="question-mark">?</span>;
         <span class="kw">let</span> <span class="kw">_</span> <span class="op">=</span> <span class="ident">env_logger</span>::<span class="ident">try_init</span>();
@@ -4977,19 +5046,30 @@
         <span class="ident">delete_everything</span>(<span class="kw-2">&amp;</span><span class="ident">conn</span>)<span class="question-mark">?</span>;
 
         <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">pi</span> <span class="op">=</span> <span class="ident">get_observed_page</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">conn</span>, <span class="string">&quot;http://example.com&quot;</span>)<span class="question-mark">?</span>;
-        <span class="ident">conn</span>.<span class="ident">execute_cached</span>(
-            <span class="kw-2">&amp;</span><span class="macro">format</span><span class="macro">!</span>(
-                <span class="string">&quot;UPDATE moz_places set sync_status = {}&quot;</span>,
-                (<span class="ident">SyncStatus</span>::<span class="ident">Normal</span> <span class="kw">as</span> <span class="ident">u8</span>)
-            ),
-            <span class="ident">NO_PARAMS</span>,
-        )<span class="question-mark">?</span>;
+        <span class="ident">mark_all_as_synced</span>(<span class="kw-2">&amp;</span><span class="ident">conn</span>)<span class="question-mark">?</span>;
         <span class="ident">pi</span> <span class="op">=</span> <span class="ident">fetch_page_info</span>(<span class="kw-2">&amp;</span><span class="ident">conn</span>, <span class="kw-2">&amp;</span><span class="ident">pi</span>.<span class="ident">url</span>)<span class="question-mark">?</span>
             .<span class="ident">expect</span>(<span class="string">&quot;page should exist&quot;</span>)
             .<span class="ident">page</span>;
         <span class="macro">assert_eq</span><span class="macro">!</span>(<span class="ident">pi</span>.<span class="ident">sync_change_counter</span>, <span class="number">1</span>);
         <span class="macro">assert_eq</span><span class="macro">!</span>(<span class="ident">pi</span>.<span class="ident">sync_status</span>, <span class="ident">SyncStatus</span>::<span class="ident">Normal</span>);
-        <span class="ident">history_sync</span>::<span class="ident">reset</span>(<span class="kw-2">&amp;</span><span class="ident">conn</span>)<span class="question-mark">?</span>;
+
+        <span class="kw">let</span> <span class="ident">sync_ids</span> <span class="op">=</span> <span class="ident">CollSyncIds</span> {
+            <span class="ident">global</span>: <span class="ident">SyncGuid</span>::<span class="ident">random</span>(),
+            <span class="ident">coll</span>: <span class="ident">SyncGuid</span>::<span class="ident">random</span>(),
+        };
+        <span class="ident">history_sync</span>::<span class="ident">reset</span>(<span class="kw-2">&amp;</span><span class="ident">conn</span>, <span class="kw-2">&amp;</span><span class="ident">StoreSyncAssociation</span>::<span class="ident">Connected</span>(<span class="ident">sync_ids</span>.<span class="ident">clone</span>()))<span class="question-mark">?</span>;
+
+        <span class="macro">assert_eq</span><span class="macro">!</span>(
+            <span class="ident">get_meta</span>::<span class="op">&lt;</span><span class="ident">SyncGuid</span><span class="op">&gt;</span>(<span class="kw-2">&amp;</span><span class="ident">conn</span>, <span class="ident">GLOBAL_SYNCID_META_KEY</span>)<span class="question-mark">?</span>,
+            <span class="prelude-val">Some</span>(<span class="ident">sync_ids</span>.<span class="ident">global</span>)
+        );
+        <span class="macro">assert_eq</span><span class="macro">!</span>(
+            <span class="ident">get_meta</span>::<span class="op">&lt;</span><span class="ident">SyncGuid</span><span class="op">&gt;</span>(<span class="kw-2">&amp;</span><span class="ident">conn</span>, <span class="ident">COLLECTION_SYNCID_META_KEY</span>)<span class="question-mark">?</span>,
+            <span class="prelude-val">Some</span>(<span class="ident">sync_ids</span>.<span class="ident">coll</span>)
+        );
+        <span class="macro">assert_eq</span><span class="macro">!</span>(<span class="ident">get_meta</span>::<span class="op">&lt;</span><span class="ident">i64</span><span class="op">&gt;</span>(<span class="kw-2">&amp;</span><span class="ident">conn</span>, <span class="ident">LAST_SYNC_META_KEY</span>)<span class="question-mark">?</span>, <span class="prelude-val">Some</span>(<span class="number">0</span>));
+        <span class="macro">assert</span><span class="macro">!</span>(<span class="ident">get_meta</span>::<span class="op">&lt;</span><span class="ident">Timestamp</span><span class="op">&gt;</span>(<span class="kw-2">&amp;</span><span class="ident">conn</span>, <span class="ident">DELETION_HIGH_WATER_MARK_META_KEY</span>)<span class="question-mark">?</span>.<span class="ident">is_some</span>());
+
         <span class="ident">pi</span> <span class="op">=</span> <span class="ident">fetch_page_info</span>(<span class="kw-2">&amp;</span><span class="ident">conn</span>, <span class="kw-2">&amp;</span><span class="ident">pi</span>.<span class="ident">url</span>)<span class="question-mark">?</span>
             .<span class="ident">expect</span>(<span class="string">&quot;page should exist&quot;</span>)
             .<span class="ident">page</span>;
@@ -4999,15 +5079,21 @@
         <span class="kw">let</span> <span class="ident">outgoing</span> <span class="op">=</span> <span class="ident">fetch_outgoing</span>(<span class="kw-2">&amp;</span><span class="ident">conn</span>, <span class="number">100</span>, <span class="number">100</span>)<span class="question-mark">?</span>;
         <span class="macro">assert_eq</span><span class="macro">!</span>(<span class="ident">outgoing</span>.<span class="ident">len</span>(), <span class="number">1</span>);
 
-        <span class="comment">// Ensure we reset Sync metadata, too.</span>
-        <span class="kw">let</span> <span class="ident">global</span> <span class="op">=</span> <span class="ident">get_meta</span>::<span class="op">&lt;</span><span class="ident">SyncGuid</span><span class="op">&gt;</span>(<span class="kw-2">&amp;</span><span class="ident">conn</span>, <span class="ident">GLOBAL_SYNCID_META_KEY</span>)<span class="question-mark">?</span>;
-        <span class="macro">assert</span><span class="macro">!</span>(<span class="ident">global</span>.<span class="ident">is_none</span>());
-        <span class="kw">let</span> <span class="ident">coll</span> <span class="op">=</span> <span class="ident">get_meta</span>::<span class="op">&lt;</span><span class="ident">SyncGuid</span><span class="op">&gt;</span>(<span class="kw-2">&amp;</span><span class="ident">conn</span>, <span class="ident">COLLECTION_SYNCID_META_KEY</span>)<span class="question-mark">?</span>;
-        <span class="macro">assert</span><span class="macro">!</span>(<span class="ident">coll</span>.<span class="ident">is_none</span>());
-        <span class="kw">let</span> <span class="ident">since</span> <span class="op">=</span> <span class="ident">get_meta</span>::<span class="op">&lt;</span><span class="ident">i64</span><span class="op">&gt;</span>(<span class="kw-2">&amp;</span><span class="ident">conn</span>, <span class="ident">LAST_SYNC_META_KEY</span>)<span class="question-mark">?</span>;
-        <span class="macro">assert_eq</span><span class="macro">!</span>(<span class="ident">since</span>, <span class="prelude-val">Some</span>(<span class="number">0</span>));
-        <span class="kw">let</span> <span class="ident">mark</span> <span class="op">=</span> <span class="ident">get_meta</span>::<span class="op">&lt;</span><span class="ident">Timestamp</span><span class="op">&gt;</span>(<span class="kw-2">&amp;</span><span class="ident">conn</span>, <span class="ident">DELETION_HIGH_WATER_MARK_META_KEY</span>)<span class="question-mark">?</span>;
-        <span class="macro">assert</span><span class="macro">!</span>(<span class="ident">mark</span>.<span class="ident">is_some</span>());
+        <span class="ident">mark_all_as_synced</span>(<span class="kw-2">&amp;</span><span class="ident">conn</span>)<span class="question-mark">?</span>;
+        <span class="macro">assert</span><span class="macro">!</span>(<span class="ident">fetch_outgoing</span>(<span class="kw-2">&amp;</span><span class="ident">conn</span>, <span class="number">100</span>, <span class="number">100</span>)<span class="question-mark">?</span>.<span class="ident">is_empty</span>());
+        <span class="comment">// ...</span>
+
+        <span class="comment">// Now simulate a reset on disconnect, and verify we&#39;ve removed all Sync</span>
+        <span class="comment">// metadata again.</span>
+        <span class="ident">history_sync</span>::<span class="ident">reset</span>(<span class="kw-2">&amp;</span><span class="ident">conn</span>, <span class="kw-2">&amp;</span><span class="ident">StoreSyncAssociation</span>::<span class="ident">Disconnected</span>)<span class="question-mark">?</span>;
+
+        <span class="macro">assert_eq</span><span class="macro">!</span>(<span class="ident">get_meta</span>::<span class="op">&lt;</span><span class="ident">SyncGuid</span><span class="op">&gt;</span>(<span class="kw-2">&amp;</span><span class="ident">conn</span>, <span class="ident">GLOBAL_SYNCID_META_KEY</span>)<span class="question-mark">?</span>, <span class="prelude-val">None</span>);
+        <span class="macro">assert_eq</span><span class="macro">!</span>(
+            <span class="ident">get_meta</span>::<span class="op">&lt;</span><span class="ident">SyncGuid</span><span class="op">&gt;</span>(<span class="kw-2">&amp;</span><span class="ident">conn</span>, <span class="ident">COLLECTION_SYNCID_META_KEY</span>)<span class="question-mark">?</span>,
+            <span class="prelude-val">None</span>
+        );
+        <span class="macro">assert_eq</span><span class="macro">!</span>(<span class="ident">get_meta</span>::<span class="op">&lt;</span><span class="ident">i64</span><span class="op">&gt;</span>(<span class="kw-2">&amp;</span><span class="ident">conn</span>, <span class="ident">LAST_SYNC_META_KEY</span>)<span class="question-mark">?</span>, <span class="prelude-val">Some</span>(<span class="number">0</span>));
+        <span class="macro">assert</span><span class="macro">!</span>(<span class="ident">get_meta</span>::<span class="op">&lt;</span><span class="ident">Timestamp</span><span class="op">&gt;</span>(<span class="kw-2">&amp;</span><span class="ident">conn</span>, <span class="ident">DELETION_HIGH_WATER_MARK_META_KEY</span>)<span class="question-mark">?</span>.<span class="ident">is_some</span>());
 
         <span class="prelude-val">Ok</span>(())
     }

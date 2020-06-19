@@ -2569,6 +2569,7 @@
 <span class="kw">use</span> <span class="ident">sql_support</span>::{<span class="self">self</span>, <span class="ident">ConnExt</span>};
 <span class="kw">use</span> <span class="ident">std</span>::<span class="ident">cmp</span>::{<span class="ident">max</span>, <span class="ident">min</span>};
 <span class="kw">use</span> <span class="ident">std</span>::<span class="ident">collections</span>::<span class="ident">HashMap</span>;
+<span class="kw">use</span> <span class="ident">sync15</span>::<span class="ident">StoreSyncAssociation</span>;
 <span class="kw">use</span> <span class="ident">sync_guid</span>::<span class="ident">Guid</span> <span class="kw">as</span> <span class="ident">SyncGuid</span>;
 <span class="kw">use</span> <span class="ident">url</span>::<span class="ident">Url</span>;
 
@@ -3622,34 +3623,17 @@
 <span class="doccomment">/// Erases all bookmarks and resets all Sync metadata.</span>
 <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">delete_everything</span>(<span class="ident">db</span>: <span class="kw-2">&amp;</span><span class="ident">PlacesDb</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span>()<span class="op">&gt;</span> {
     <span class="kw">let</span> <span class="ident">tx</span> <span class="op">=</span> <span class="ident">db</span>.<span class="ident">begin_transaction</span>()<span class="question-mark">?</span>;
-    <span class="ident">delete_everything_in_tx</span>(<span class="ident">db</span>)<span class="question-mark">?</span>;
-    <span class="ident">tx</span>.<span class="ident">commit</span>()<span class="question-mark">?</span>;
-    <span class="prelude-val">Ok</span>(())
-}
-
-<span class="kw">fn</span> <span class="ident">delete_everything_in_tx</span>(<span class="ident">db</span>: <span class="kw-2">&amp;</span><span class="ident">PlacesDb</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span>()<span class="op">&gt;</span> {
     <span class="ident">db</span>.<span class="ident">execute_batch</span>(<span class="kw-2">&amp;</span><span class="macro">format</span><span class="macro">!</span>(
-        <span class="string">&quot;DELETE FROM moz_bookmarks_synced;
-
-         DELETE FROM moz_bookmarks_deleted;
-
-         DELETE FROM moz_bookmarks
-         WHERE guid NOT IN (&#39;{}&#39;, &#39;{}&#39;, &#39;{}&#39;, &#39;{}&#39;, &#39;{}&#39;);
-
-         UPDATE moz_bookmarks
-         SET syncChangeCounter = 1,
-             syncStatus = {}&quot;</span>,
+        <span class="string">&quot;DELETE FROM moz_bookmarks
+         WHERE guid NOT IN (&#39;{}&#39;, &#39;{}&#39;, &#39;{}&#39;, &#39;{}&#39;, &#39;{}&#39;);&quot;</span>,
         <span class="ident">BookmarkRootGuid</span>::<span class="ident">Root</span>.<span class="ident">as_str</span>(),
         <span class="ident">BookmarkRootGuid</span>::<span class="ident">Menu</span>.<span class="ident">as_str</span>(),
         <span class="ident">BookmarkRootGuid</span>::<span class="ident">Mobile</span>.<span class="ident">as_str</span>(),
         <span class="ident">BookmarkRootGuid</span>::<span class="ident">Toolbar</span>.<span class="ident">as_str</span>(),
         <span class="ident">BookmarkRootGuid</span>::<span class="ident">Unfiled</span>.<span class="ident">as_str</span>(),
-        (<span class="ident">SyncStatus</span>::<span class="ident">New</span> <span class="kw">as</span> <span class="ident">u8</span>)
     ))<span class="question-mark">?</span>;
-    <span class="ident">bookmark_sync</span>::<span class="ident">create_synced_bookmark_roots</span>(<span class="ident">db</span>)<span class="question-mark">?</span>;
-    <span class="ident">put_meta</span>(<span class="ident">db</span>, <span class="ident">LAST_SYNC_META_KEY</span>, <span class="kw-2">&amp;</span><span class="number">0</span>)<span class="question-mark">?</span>;
-    <span class="ident">delete_meta</span>(<span class="ident">db</span>, <span class="ident">GLOBAL_SYNCID_META_KEY</span>)<span class="question-mark">?</span>;
-    <span class="ident">delete_meta</span>(<span class="ident">db</span>, <span class="ident">COLLECTION_SYNCID_META_KEY</span>)<span class="question-mark">?</span>;
+    <span class="ident">reset_in_tx</span>(<span class="ident">db</span>, <span class="kw-2">&amp;</span><span class="ident">StoreSyncAssociation</span>::<span class="ident">Disconnected</span>)<span class="question-mark">?</span>;
+    <span class="ident">tx</span>.<span class="ident">commit</span>()<span class="question-mark">?</span>;
     <span class="prelude-val">Ok</span>(())
 }
 
@@ -3991,6 +3975,44 @@
     )<span class="question-mark">?</span>)
 }
 
+<span class="kw">fn</span> <span class="ident">reset_in_tx</span>(<span class="ident">db</span>: <span class="kw-2">&amp;</span><span class="ident">PlacesDb</span>, <span class="ident">assoc</span>: <span class="kw-2">&amp;</span><span class="ident">StoreSyncAssociation</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span>()<span class="op">&gt;</span> {
+    <span class="comment">// Remove all synced bookmarks and pending tombstones, and mark all</span>
+    <span class="comment">// local bookmarks as new.</span>
+    <span class="ident">db</span>.<span class="ident">execute_batch</span>(<span class="kw-2">&amp;</span><span class="macro">format</span><span class="macro">!</span>(
+        <span class="string">&quot;DELETE FROM moz_bookmarks_synced;
+
+         DELETE FROM moz_bookmarks_deleted;
+
+         UPDATE moz_bookmarks
+         SET syncChangeCounter = 1,
+             syncStatus = {}&quot;</span>,
+        (<span class="ident">SyncStatus</span>::<span class="ident">New</span> <span class="kw">as</span> <span class="ident">u8</span>)
+    ))<span class="question-mark">?</span>;
+
+    <span class="comment">// Recreate the set of synced roots, since we just removed all synced</span>
+    <span class="comment">// bookmarks.</span>
+    <span class="ident">bookmark_sync</span>::<span class="ident">create_synced_bookmark_roots</span>(<span class="ident">db</span>)<span class="question-mark">?</span>;
+
+    <span class="comment">// Reset the last sync time, so that the next sync fetches fresh records</span>
+    <span class="comment">// from the server.</span>
+    <span class="ident">put_meta</span>(<span class="ident">db</span>, <span class="ident">LAST_SYNC_META_KEY</span>, <span class="kw-2">&amp;</span><span class="number">0</span>)<span class="question-mark">?</span>;
+
+    <span class="comment">// Clear the sync ID if we&#39;re signing out, or set it to whatever the</span>
+    <span class="comment">// server gave us if we&#39;re signing in.</span>
+    <span class="kw">match</span> <span class="ident">assoc</span> {
+        <span class="ident">StoreSyncAssociation</span>::<span class="ident">Disconnected</span> <span class="op">=</span><span class="op">&gt;</span> {
+            <span class="ident">delete_meta</span>(<span class="ident">db</span>, <span class="ident">GLOBAL_SYNCID_META_KEY</span>)<span class="question-mark">?</span>;
+            <span class="ident">delete_meta</span>(<span class="ident">db</span>, <span class="ident">COLLECTION_SYNCID_META_KEY</span>)<span class="question-mark">?</span>;
+        }
+        <span class="ident">StoreSyncAssociation</span>::<span class="ident">Connected</span>(<span class="ident">ids</span>) <span class="op">=</span><span class="op">&gt;</span> {
+            <span class="ident">put_meta</span>(<span class="ident">db</span>, <span class="ident">GLOBAL_SYNCID_META_KEY</span>, <span class="kw-2">&amp;</span><span class="ident">ids</span>.<span class="ident">global</span>)<span class="question-mark">?</span>;
+            <span class="ident">put_meta</span>(<span class="ident">db</span>, <span class="ident">COLLECTION_SYNCID_META_KEY</span>, <span class="kw-2">&amp;</span><span class="ident">ids</span>.<span class="ident">coll</span>)<span class="question-mark">?</span>;
+        }
+    }
+
+    <span class="prelude-val">Ok</span>(())
+}
+
 <span class="kw">pub</span> <span class="kw">mod</span> <span class="ident">bookmark_sync</span> {
     <span class="kw">use</span> <span class="kw">super</span>::<span class="kw-2">*</span>;
     <span class="kw">use</span> <span class="kw">crate</span>::<span class="ident">bookmark_sync</span>::<span class="ident">SyncedBookmarkKind</span>;
@@ -3998,32 +4020,10 @@
     <span class="doccomment">/// Removes all sync metadata, including synced bookmarks, pending tombstones,</span>
     <span class="doccomment">/// change counters, sync statuses, the last sync time, and sync ID. This</span>
     <span class="doccomment">/// should be called when the user signs out of Sync.</span>
-    <span class="kw">pub</span>(<span class="kw">crate</span>) <span class="kw">fn</span> <span class="ident">reset</span>(<span class="ident">db</span>: <span class="kw-2">&amp;</span><span class="ident">PlacesDb</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span>()<span class="op">&gt;</span> {
+    <span class="kw">pub</span>(<span class="kw">crate</span>) <span class="kw">fn</span> <span class="ident">reset</span>(<span class="ident">db</span>: <span class="kw-2">&amp;</span><span class="ident">PlacesDb</span>, <span class="ident">assoc</span>: <span class="kw-2">&amp;</span><span class="ident">StoreSyncAssociation</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span>()<span class="op">&gt;</span> {
         <span class="kw">let</span> <span class="ident">tx</span> <span class="op">=</span> <span class="ident">db</span>.<span class="ident">begin_transaction</span>()<span class="question-mark">?</span>;
-        <span class="ident">reset_meta</span>(<span class="ident">db</span>)<span class="question-mark">?</span>;
-        <span class="ident">delete_meta</span>(<span class="ident">db</span>, <span class="ident">GLOBAL_SYNCID_META_KEY</span>)<span class="question-mark">?</span>;
-        <span class="ident">delete_meta</span>(<span class="ident">db</span>, <span class="ident">COLLECTION_SYNCID_META_KEY</span>)<span class="question-mark">?</span>;
+        <span class="ident">reset_in_tx</span>(<span class="ident">db</span>, <span class="ident">assoc</span>)<span class="question-mark">?</span>;
         <span class="ident">tx</span>.<span class="ident">commit</span>()<span class="question-mark">?</span>;
-        <span class="prelude-val">Ok</span>(())
-    }
-
-    <span class="doccomment">/// Removes all synced bookmarks and pending tombstones, and forgets the</span>
-    <span class="doccomment">/// last sync time, without resetting the sync ID. This means the next</span>
-    <span class="doccomment">/// sync will be treated as a first sync with all new local data. This</span>
-    <span class="doccomment">/// function should be called from within an open transaction.</span>
-    <span class="kw">pub</span>(<span class="kw">crate</span>) <span class="kw">fn</span> <span class="ident">reset_meta</span>(<span class="ident">db</span>: <span class="kw-2">&amp;</span><span class="ident">PlacesDb</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span>()<span class="op">&gt;</span> {
-        <span class="ident">db</span>.<span class="ident">execute_batch</span>(<span class="kw-2">&amp;</span><span class="macro">format</span><span class="macro">!</span>(
-            <span class="string">&quot;DELETE FROM moz_bookmarks_synced;
-
-             DELETE FROM moz_bookmarks_deleted;
-
-             UPDATE moz_bookmarks
-             SET syncChangeCounter = 1,
-                 syncStatus = {}&quot;</span>,
-            (<span class="ident">SyncStatus</span>::<span class="ident">New</span> <span class="kw">as</span> <span class="ident">u8</span>)
-        ))<span class="question-mark">?</span>;
-        <span class="ident">create_synced_bookmark_roots</span>(<span class="ident">db</span>)<span class="question-mark">?</span>;
-        <span class="ident">put_meta</span>(<span class="ident">db</span>, <span class="ident">LAST_SYNC_META_KEY</span>, <span class="kw-2">&amp;</span><span class="number">0</span>)<span class="question-mark">?</span>;
         <span class="prelude-val">Ok</span>(())
     }
 
@@ -5071,7 +5071,7 @@
         <span class="macro">assert_eq</span><span class="macro">!</span>(<span class="ident">bmk</span>.<span class="ident">sync_change_counter</span>, <span class="number">0</span>);
         <span class="macro">assert_eq</span><span class="macro">!</span>(<span class="ident">bmk</span>.<span class="ident">sync_status</span>, <span class="ident">SyncStatus</span>::<span class="ident">Normal</span>);
 
-        <span class="ident">bookmark_sync</span>::<span class="ident">reset</span>(<span class="kw-2">&amp;</span><span class="ident">conn</span>)<span class="question-mark">?</span>;
+        <span class="ident">bookmark_sync</span>::<span class="ident">reset</span>(<span class="kw-2">&amp;</span><span class="ident">conn</span>, <span class="kw-2">&amp;</span><span class="ident">StoreSyncAssociation</span>::<span class="ident">Disconnected</span>)<span class="question-mark">?</span>;
 
         <span class="kw">let</span> <span class="ident">bmk</span> <span class="op">=</span> <span class="ident">get_raw_bookmark</span>(<span class="kw-2">&amp;</span><span class="ident">conn</span>, <span class="kw-2">&amp;</span><span class="string">&quot;bookmarkAAAA&quot;</span>.<span class="ident">into</span>())<span class="question-mark">?</span>
             .<span class="ident">expect</span>(<span class="string">&quot;Should fetch A after resetting&quot;</span>);

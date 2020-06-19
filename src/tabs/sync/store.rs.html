@@ -302,11 +302,6 @@
             <span class="ident">local_id</span>: <span class="ident">RefCell</span>::<span class="ident">default</span>(), <span class="comment">// Will get replaced in `prepare_for_sync`.</span>
         }
     }
-    <span class="kw">fn</span> <span class="ident">wipe_reset_helper</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">is_wipe</span>: <span class="ident">bool</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span>()<span class="op">&gt;</span> {
-        <span class="self">self</span>.<span class="ident">remote_clients</span>.<span class="ident">borrow_mut</span>().<span class="ident">clear</span>();
-        <span class="self">self</span>.<span class="ident">storage</span>.<span class="ident">wipe</span>(<span class="ident">is_wipe</span>);
-        <span class="prelude-val">Ok</span>(())
-    }
 }
 
 <span class="kw">impl</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span><span class="op">&gt;</span> <span class="ident">Store</span> <span class="kw">for</span> <span class="ident">TabsStore</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span><span class="op">&gt;</span> {
@@ -419,12 +414,17 @@
     }
 
     <span class="kw">fn</span> <span class="ident">reset</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">assoc</span>: <span class="kw-2">&amp;</span><span class="ident">StoreSyncAssociation</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span>()<span class="op">&gt;</span> {
+        <span class="self">self</span>.<span class="ident">remote_clients</span>.<span class="ident">borrow_mut</span>().<span class="ident">clear</span>();
         <span class="self">self</span>.<span class="ident">sync_store_assoc</span>.<span class="ident">replace</span>(<span class="ident">assoc</span>.<span class="ident">clone</span>());
-        <span class="self">self</span>.<span class="ident">wipe_reset_helper</span>(<span class="bool-val">false</span>)
+        <span class="self">self</span>.<span class="ident">last_sync</span>.<span class="ident">set</span>(<span class="prelude-val">None</span>);
+        <span class="self">self</span>.<span class="ident">storage</span>.<span class="ident">wipe_remote_tabs</span>();
+        <span class="prelude-val">Ok</span>(())
     }
 
     <span class="kw">fn</span> <span class="ident">wipe</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span>()<span class="op">&gt;</span> {
-        <span class="self">self</span>.<span class="ident">wipe_reset_helper</span>(<span class="bool-val">true</span>)
+        <span class="self">self</span>.<span class="ident">reset</span>(<span class="kw-2">&amp;</span><span class="ident">StoreSyncAssociation</span>::<span class="ident">Disconnected</span>)<span class="question-mark">?</span>;
+        <span class="self">self</span>.<span class="ident">storage</span>.<span class="ident">wipe_local_tabs</span>();
+        <span class="prelude-val">Ok</span>(())
     }
 }
 </pre></div>
