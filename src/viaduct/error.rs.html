@@ -53,13 +53,13 @@
 
 <span class="attribute">#[<span class="ident">derive</span>(<span class="ident">Debug</span>, <span class="ident">thiserror</span>::<span class="ident">Error</span>)]</span>
 <span class="kw">pub</span> <span class="kw">enum</span> <span class="ident">Error</span> {
-    <span class="attribute">#[<span class="ident">error</span>(<span class="string">&quot;Illegal characters in request header &#39;{0}&#39;&quot;</span>)]</span>
+    <span class="attribute">#[<span class="ident">error</span>(<span class="string">&quot;[no-sentry] Illegal characters in request header &#39;{0}&#39;&quot;</span>)]</span>
     <span class="ident">RequestHeaderError</span>(<span class="kw">crate</span>::<span class="ident">HeaderName</span>),
 
-    <span class="attribute">#[<span class="ident">error</span>(<span class="string">&quot;Backend error: {0}&quot;</span>)]</span>
+    <span class="attribute">#[<span class="ident">error</span>(<span class="string">&quot;[no-sentry] Backend error: {0}&quot;</span>)]</span>
     <span class="ident">BackendError</span>(<span class="ident">String</span>),
 
-    <span class="attribute">#[<span class="ident">error</span>(<span class="string">&quot;Network error: {0}&quot;</span>)]</span>
+    <span class="attribute">#[<span class="ident">error</span>(<span class="string">&quot;[no-sentry] Network error: {0}&quot;</span>)]</span>
     <span class="ident">NetworkError</span>(<span class="ident">String</span>),
 
     <span class="attribute">#[<span class="ident">error</span>(<span class="string">&quot;The rust-components network backend must be initialized before use!&quot;</span>)]</span>
@@ -70,10 +70,10 @@
 
     <span class="doccomment">/// Note: we return this if the server returns a bad URL with</span>
     <span class="doccomment">/// its response. This *probably* should never happen, but who knows.</span>
-    <span class="attribute">#[<span class="ident">error</span>(<span class="string">&quot;URL Parse Error: {0}&quot;</span>)]</span>
+    <span class="attribute">#[<span class="ident">error</span>(<span class="string">&quot;[no-sentry] URL Parse Error: {0}&quot;</span>)]</span>
     <span class="ident">UrlError</span>(<span class="attribute">#[<span class="ident">source</span>]</span> <span class="ident">url</span>::<span class="ident">ParseError</span>),
 
-    <span class="attribute">#[<span class="ident">error</span>(<span class="string">&quot;Validation error: URL does not use TLS protocol.&quot;</span>)]</span>
+    <span class="attribute">#[<span class="ident">error</span>(<span class="string">&quot;[no-sentry] Validation error: URL does not use TLS protocol.&quot;</span>)]</span>
     <span class="ident">NonTlsUrl</span>,
 }
 
