@@ -20,7 +20,7 @@ jobs:
         run: |
           git init .
           git remote add origin https://github.com/mozilla/application-services.git
-          git pull origin master
+          git pull origin main
           export SQLCIPHER_LIB_DIR=/home/runner/work/as-docs/as-docs/libs/desktop/linux-x86-64/sqlcipher/lib
           export SQLCIPHER_INCLUDE_DIR=/home/runner/work/as-docs/as-docs/libs/desktop/linux-x86-64/sqlcipher/include
           export NSS_DIR=/home/runner/work/as-docs/as-docs/libs/desktop/linux-x86-64/nss
