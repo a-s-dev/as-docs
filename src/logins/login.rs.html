@@ -1430,6 +1430,43 @@
 <span id="1430">1430</span>
 <span id="1431">1431</span>
 <span id="1432">1432</span>
+<span id="1433">1433</span>
+<span id="1434">1434</span>
+<span id="1435">1435</span>
+<span id="1436">1436</span>
+<span id="1437">1437</span>
+<span id="1438">1438</span>
+<span id="1439">1439</span>
+<span id="1440">1440</span>
+<span id="1441">1441</span>
+<span id="1442">1442</span>
+<span id="1443">1443</span>
+<span id="1444">1444</span>
+<span id="1445">1445</span>
+<span id="1446">1446</span>
+<span id="1447">1447</span>
+<span id="1448">1448</span>
+<span id="1449">1449</span>
+<span id="1450">1450</span>
+<span id="1451">1451</span>
+<span id="1452">1452</span>
+<span id="1453">1453</span>
+<span id="1454">1454</span>
+<span id="1455">1455</span>
+<span id="1456">1456</span>
+<span id="1457">1457</span>
+<span id="1458">1458</span>
+<span id="1459">1459</span>
+<span id="1460">1460</span>
+<span id="1461">1461</span>
+<span id="1462">1462</span>
+<span id="1463">1463</span>
+<span id="1464">1464</span>
+<span id="1465">1465</span>
+<span id="1466">1466</span>
+<span id="1467">1467</span>
+<span id="1468">1468</span>
+<span id="1469">1469</span>
 </pre><div class="example-wrap"><pre class="rust ">
 <span class="comment">/* This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
@@ -1925,7 +1962,7 @@
                 }
             }
             <span class="prelude-val">Some</span>(<span class="ident">href</span>) <span class="op">=</span><span class="op">&gt;</span> {
-                <span class="comment">// &quot;.&quot; and &quot;javascript:&quot; are special cases documented at the top of this file.</span>
+                <span class="comment">// &quot;&quot;, &quot;.&quot;, and &quot;javascript:&quot; are special cases documented at the top of this file.</span>
                 <span class="kw">if</span> <span class="ident">href</span> <span class="op">=</span><span class="op">=</span> <span class="string">&quot;.&quot;</span> {
                     <span class="comment">// A bit of a special case - if we are being asked to fixup, we replace</span>
                     <span class="comment">// &quot;.&quot; with an empty string - but if not fixing up we don&#39;t complain.</span>
@@ -1934,7 +1971,7 @@
                             .<span class="ident">get_or_insert_with</span>(<span class="op">|</span><span class="op">|</span> <span class="self">self</span>.<span class="ident">clone</span>())
                             .<span class="ident">form_submit_url</span> <span class="op">=</span> <span class="prelude-val">Some</span>(<span class="string">&quot;&quot;</span>.<span class="ident">into</span>());
                     }
-                } <span class="kw">else</span> <span class="kw">if</span> <span class="ident">href</span> <span class="op">!</span><span class="op">=</span> <span class="string">&quot;javascript:&quot;</span> {
+                } <span class="kw">else</span> <span class="kw">if</span> <span class="ident">href</span> <span class="op">!</span><span class="op">=</span> <span class="string">&quot;&quot;</span> <span class="kw-2">&amp;</span><span class="op">&amp;</span> <span class="ident">href</span> <span class="op">!</span><span class="op">=</span> <span class="string">&quot;javascript:&quot;</span> {
                     <span class="kw">if</span> <span class="kw">let</span> <span class="prelude-val">Some</span>(<span class="ident">fixed</span>) <span class="op">=</span> <span class="ident">Login</span>::<span class="ident">validate_and_fixup_origin</span>(<span class="kw-2">&amp;</span><span class="ident">href</span>)<span class="question-mark">?</span> {
                         <span class="macro">get_fixed_or_throw</span><span class="macro">!</span>(<span class="ident">InvalidLogin</span>::<span class="ident">IllegalFieldValue</span> {
                             <span class="ident">field_info</span>: <span class="string">&quot;formActionOrigin is not normalized&quot;</span>.<span class="ident">into</span>()
@@ -2458,6 +2495,7 @@
 
     <span class="attribute">#[<span class="ident">test</span>]</span>
     <span class="kw">fn</span> <span class="ident">test_check_valid</span>() {
+        <span class="attribute">#[<span class="ident">derive</span>(<span class="ident">Debug</span>, <span class="ident">Clone</span>)]</span>
         <span class="kw">struct</span> <span class="ident">TestCase</span> {
             <span class="ident">login</span>: <span class="ident">Login</span>,
             <span class="ident">should_err</span>: <span class="ident">bool</span>,
@@ -2733,17 +2771,27 @@
             <span class="kw">let</span> <span class="ident">actual</span> <span class="op">=</span> <span class="ident">tc</span>.<span class="ident">login</span>.<span class="ident">check_valid</span>();
 
             <span class="kw">if</span> <span class="ident">tc</span>.<span class="ident">should_err</span> {
-                <span class="macro">assert</span><span class="macro">!</span>(<span class="ident">actual</span>.<span class="ident">is_err</span>());
-                <span class="macro">assert_eq</span><span class="macro">!</span>(<span class="ident">tc</span>.<span class="ident">expected_err</span>, <span class="ident">actual</span>.<span class="ident">unwrap_err</span>().<span class="ident">to_string</span>());
+                <span class="macro">assert</span><span class="macro">!</span>(<span class="ident">actual</span>.<span class="ident">is_err</span>(), <span class="string">&quot;{:#?}&quot;</span>, <span class="ident">tc</span>);
+                <span class="macro">assert_eq</span><span class="macro">!</span>(
+                    <span class="ident">tc</span>.<span class="ident">expected_err</span>,
+                    <span class="ident">actual</span>.<span class="ident">unwrap_err</span>().<span class="ident">to_string</span>(),
+                    <span class="string">&quot;{:#?}&quot;</span>,
+                    <span class="ident">tc</span>,
+                );
             } <span class="kw">else</span> {
-                <span class="macro">assert</span><span class="macro">!</span>(<span class="ident">actual</span>.<span class="ident">is_ok</span>());
+                <span class="macro">assert</span><span class="macro">!</span>(<span class="ident">actual</span>.<span class="ident">is_ok</span>(), <span class="string">&quot;{:#?}&quot;</span>, <span class="ident">tc</span>);
+                <span class="macro">assert</span><span class="macro">!</span>(
+                    <span class="ident">tc</span>.<span class="ident">login</span>.<span class="ident">clone</span>().<span class="ident">fixup</span>().<span class="ident">is_ok</span>(),
+                    <span class="string">&quot;Fixup failed after check_valid passed: {:#?}&quot;</span>,
+                    <span class="kw-2">&amp;</span><span class="ident">tc</span>,
+                );
             }
         }
     }
 
     <span class="attribute">#[<span class="ident">test</span>]</span>
     <span class="kw">fn</span> <span class="ident">test_fixup</span>() {
-        <span class="attribute">#[<span class="ident">derive</span>(<span class="ident">Default</span>)]</span>
+        <span class="attribute">#[<span class="ident">derive</span>(<span class="ident">Debug</span>, <span class="ident">Default</span>)]</span>
         <span class="kw">struct</span> <span class="ident">TestCase</span> {
             <span class="ident">login</span>: <span class="ident">Login</span>,
             <span class="ident">fixedup_host</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="kw-2">&amp;</span><span class="lifetime">&#39;static</span> <span class="ident">str</span><span class="op">&gt;</span>,
@@ -2770,6 +2818,13 @@
         <span class="kw">let</span> <span class="ident">login_with_period_fsu</span> <span class="op">=</span> <span class="ident">Login</span> {
             <span class="ident">hostname</span>: <span class="string">&quot;https://example.com&quot;</span>.<span class="ident">into</span>(),
             <span class="ident">form_submit_url</span>: <span class="prelude-val">Some</span>(<span class="string">&quot;.&quot;</span>.<span class="ident">into</span>()),
+            <span class="ident">username</span>: <span class="string">&quot;test&quot;</span>.<span class="ident">into</span>(),
+            <span class="ident">password</span>: <span class="string">&quot;test&quot;</span>.<span class="ident">into</span>(),
+            ..<span class="ident">Login</span>::<span class="ident">default</span>()
+        };
+        <span class="kw">let</span> <span class="ident">login_with_empty_fsu</span> <span class="op">=</span> <span class="ident">Login</span> {
+            <span class="ident">hostname</span>: <span class="string">&quot;https://example.com&quot;</span>.<span class="ident">into</span>(),
+            <span class="ident">form_submit_url</span>: <span class="prelude-val">Some</span>(<span class="string">&quot;&quot;</span>.<span class="ident">into</span>()),
             <span class="ident">username</span>: <span class="string">&quot;test&quot;</span>.<span class="ident">into</span>(),
             <span class="ident">password</span>: <span class="string">&quot;test&quot;</span>.<span class="ident">into</span>(),
             ..<span class="ident">Login</span>::<span class="ident">default</span>()
@@ -2808,14 +2863,33 @@
                 <span class="ident">fixedup_form_submit_url</span>: <span class="prelude-val">Some</span>(<span class="string">&quot;https://www.example.com&quot;</span>.<span class="ident">into</span>()),
                 ..<span class="ident">TestCase</span>::<span class="ident">default</span>()
             },
+            <span class="ident">TestCase</span> {
+                <span class="ident">login</span>: <span class="ident">login_with_empty_fsu</span>,
+                <span class="comment">// Should still be empty.</span>
+                <span class="ident">fixedup_form_submit_url</span>: <span class="prelude-val">Some</span>(<span class="string">&quot;&quot;</span>.<span class="ident">into</span>()),
+                ..<span class="ident">TestCase</span>::<span class="ident">default</span>()
+            },
         ];
 
         <span class="kw">for</span> <span class="ident">tc</span> <span class="kw">in</span> <span class="kw-2">&amp;</span><span class="ident">test_cases</span> {
             <span class="kw">let</span> <span class="ident">login</span> <span class="op">=</span> <span class="ident">tc</span>.<span class="ident">login</span>.<span class="ident">clone</span>().<span class="ident">fixup</span>().<span class="ident">expect</span>(<span class="string">&quot;should work&quot;</span>);
             <span class="kw">if</span> <span class="kw">let</span> <span class="prelude-val">Some</span>(<span class="ident">expected</span>) <span class="op">=</span> <span class="ident">tc</span>.<span class="ident">fixedup_host</span> {
-                <span class="macro">assert_eq</span><span class="macro">!</span>(<span class="ident">login</span>.<span class="ident">hostname</span>, <span class="ident">expected</span>);
+                <span class="macro">assert_eq</span><span class="macro">!</span>(<span class="ident">login</span>.<span class="ident">hostname</span>, <span class="ident">expected</span>, <span class="string">&quot;hostname not fixed in {:#?}&quot;</span>, <span class="ident">tc</span>);
             }
-            <span class="macro">assert_eq</span><span class="macro">!</span>(<span class="ident">login</span>.<span class="ident">form_submit_url</span>, <span class="ident">tc</span>.<span class="ident">fixedup_form_submit_url</span>);
+            <span class="macro">assert_eq</span><span class="macro">!</span>(
+                <span class="ident">login</span>.<span class="ident">form_submit_url</span>, <span class="ident">tc</span>.<span class="ident">fixedup_form_submit_url</span>,
+                <span class="string">&quot;form_submit_url not fixed in {:#?}&quot;</span>,
+                <span class="ident">tc</span>,
+            );
+            <span class="ident">login</span>.<span class="ident">check_valid</span>().<span class="ident">unwrap_or_else</span>(<span class="op">|</span><span class="ident">e</span><span class="op">|</span> {
+                <span class="macro">panic</span><span class="macro">!</span>(<span class="string">&quot;Fixup produces invalid record: {:#?}&quot;</span>, (<span class="ident">e</span>, <span class="kw-2">&amp;</span><span class="ident">tc</span>, <span class="kw-2">&amp;</span><span class="ident">login</span>));
+            });
+            <span class="macro">assert_eq</span><span class="macro">!</span>(
+                <span class="ident">login</span>.<span class="ident">clone</span>().<span class="ident">fixup</span>().<span class="ident">unwrap</span>(),
+                <span class="ident">login</span>,
+                <span class="string">&quot;fixup did not reach fixed point for testcase: {:#?}&quot;</span>,
+                <span class="ident">tc</span>,
+            );
         }
     }
 

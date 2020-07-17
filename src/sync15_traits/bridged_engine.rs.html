@@ -194,6 +194,18 @@
 <span id="194">194</span>
 <span id="195">195</span>
 <span id="196">196</span>
+<span id="197">197</span>
+<span id="198">198</span>
+<span id="199">199</span>
+<span id="200">200</span>
+<span id="201">201</span>
+<span id="202">202</span>
+<span id="203">203</span>
+<span id="204">204</span>
+<span id="205">205</span>
+<span id="206">206</span>
+<span id="207">207</span>
+<span id="208">208</span>
 </pre><div class="example-wrap"><pre class="rust ">
 <span class="comment">/* This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
@@ -322,6 +334,8 @@
     <span class="kw">pub</span> <span class="ident">modified</span>: <span class="ident">ServerTimestamp</span>,
     <span class="attribute">#[<span class="ident">serde</span>(<span class="ident">default</span>)]</span>
     <span class="kw">pub</span> <span class="ident">sortindex</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">i32</span><span class="op">&gt;</span>,
+    <span class="attribute">#[<span class="ident">serde</span>(<span class="ident">default</span>)]</span>
+    <span class="kw">pub</span> <span class="ident">ttl</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">u32</span><span class="op">&gt;</span>,
     <span class="comment">// Don&#39;t provide access to the cleartext directly. We want all callers to</span>
     <span class="comment">// use `IncomingEnvelope::payload`, so that we can validate the cleartext.</span>
     <span class="ident">cleartext</span>: <span class="ident">String</span>,
@@ -339,7 +353,10 @@
                 <span class="ident">payload</span>: <span class="ident">payload</span>.<span class="ident">id</span>,
             });
         }
-        <span class="prelude-val">Ok</span>(<span class="ident">payload</span>)
+        <span class="comment">// Remove auto field data from payload and replace with real data</span>
+        <span class="prelude-val">Ok</span>(<span class="ident">payload</span>
+            .<span class="ident">with_auto_field</span>(<span class="string">&quot;ttl&quot;</span>, <span class="self">self</span>.<span class="ident">ttl</span>)
+            .<span class="ident">with_auto_field</span>(<span class="string">&quot;sortindex&quot;</span>, <span class="self">self</span>.<span class="ident">sortindex</span>))
     }
 }
 
@@ -350,14 +367,21 @@
 <span class="kw">pub</span> <span class="kw">struct</span> <span class="ident">OutgoingEnvelope</span> {
     <span class="ident">id</span>: <span class="ident">Guid</span>,
     <span class="ident">cleartext</span>: <span class="ident">String</span>,
+    <span class="ident">sortindex</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">i32</span><span class="op">&gt;</span>,
+    <span class="ident">ttl</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">u32</span><span class="op">&gt;</span>,
 }
 
 <span class="kw">impl</span> <span class="ident">From</span><span class="op">&lt;</span><span class="ident">Payload</span><span class="op">&gt;</span> <span class="kw">for</span> <span class="ident">OutgoingEnvelope</span> {
-    <span class="kw">fn</span> <span class="ident">from</span>(<span class="ident">payload</span>: <span class="ident">Payload</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="self">Self</span> {
+    <span class="kw">fn</span> <span class="ident">from</span>(<span class="kw-2">mut</span> <span class="ident">payload</span>: <span class="ident">Payload</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="self">Self</span> {
         <span class="kw">let</span> <span class="ident">id</span> <span class="op">=</span> <span class="ident">payload</span>.<span class="ident">id</span>.<span class="ident">clone</span>();
+        <span class="comment">// Remove auto field data from OutgoingEnvelope payload</span>
+        <span class="kw">let</span> <span class="ident">ttl</span> <span class="op">=</span> <span class="ident">payload</span>.<span class="ident">take_auto_field</span>(<span class="string">&quot;ttl&quot;</span>);
+        <span class="kw">let</span> <span class="ident">sortindex</span> <span class="op">=</span> <span class="ident">payload</span>.<span class="ident">take_auto_field</span>(<span class="string">&quot;sortindex&quot;</span>);
         <span class="ident">OutgoingEnvelope</span> {
             <span class="ident">id</span>,
             <span class="ident">cleartext</span>: <span class="ident">payload</span>.<span class="ident">into_json_string</span>(),
+            <span class="ident">sortindex</span>,
+            <span class="ident">ttl</span>,
         }
     }
 }

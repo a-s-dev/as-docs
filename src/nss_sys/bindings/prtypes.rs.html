@@ -16,11 +16,11 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at http://mozilla.org/MPL/2.0/. */</span>
 
-<span class="kw">use</span> <span class="ident">std</span>::<span class="ident">os</span>::<span class="ident">raw</span>::{<span class="ident">c_int</span>, <span class="ident">c_uint</span>, <span class="ident">c_ulong</span>};
+<span class="kw">use</span> <span class="ident">std</span>::<span class="ident">os</span>::<span class="ident">raw</span>::{<span class="ident">c_int</span>, <span class="ident">c_uint</span>};
 
 <span class="kw">pub</span> <span class="kw">type</span> <span class="ident">PRIntn</span> <span class="op">=</span> <span class="ident">c_int</span>;
 <span class="kw">pub</span> <span class="kw">type</span> <span class="ident">PRBool</span> <span class="op">=</span> <span class="ident">PRIntn</span>;
-<span class="kw">pub</span> <span class="kw">type</span> <span class="ident">PRUword</span> <span class="op">=</span> <span class="ident">c_ulong</span>;
+<span class="kw">pub</span> <span class="kw">type</span> <span class="ident">PRUword</span> <span class="op">=</span> <span class="ident">usize</span>;
 <span class="kw">pub</span> <span class="kw">type</span> <span class="ident">PRInt32</span> <span class="op">=</span> <span class="ident">c_int</span>;
 <span class="kw">pub</span> <span class="kw">type</span> <span class="ident">PRUint32</span> <span class="op">=</span> <span class="ident">c_uint</span>;
 <span class="kw">pub</span> <span class="kw">const</span> <span class="ident">PR_FALSE</span>: <span class="ident">PRBool</span> <span class="op">=</span> <span class="number">0</span>;

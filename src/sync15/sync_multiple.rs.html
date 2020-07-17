@@ -870,7 +870,7 @@
         <span class="kw">let</span> <span class="ident">changes</span> <span class="op">=</span> <span class="ident">state_machine</span>.<span class="ident">changes_needed</span>.<span class="ident">take</span>();
         <span class="comment">// The state machine might have updated our persisted_global_state, so</span>
         <span class="comment">// update the caller&#39;s repr of it.</span>
-        <span class="ident">mem</span>::<span class="ident">replace</span>(
+        <span class="kw">let</span> <span class="kw">_</span> <span class="op">=</span> <span class="ident">mem</span>::<span class="ident">replace</span>(
             <span class="self">self</span>.<span class="ident">persisted_global_state</span>,
             <span class="prelude-val">Some</span>(<span class="ident">serde_json</span>::<span class="ident">to_string</span>(<span class="kw-2">&amp;</span><span class="ident">pgs</span>)<span class="question-mark">?</span>),
         );

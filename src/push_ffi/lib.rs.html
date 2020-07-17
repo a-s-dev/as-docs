@@ -345,7 +345,7 @@
 <span class="comment">// Returns a bool indicating if channel_ids should resubscribe.</span>
 <span class="attribute">#[<span class="ident">no_mangle</span>]</span>
 <span class="kw">pub</span> <span class="kw">extern</span> <span class="string">&quot;C&quot;</span> <span class="kw">fn</span> <span class="ident">push_verify_connection</span>(<span class="ident">handle</span>: <span class="ident">u64</span>, <span class="ident">error</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">ExternError</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">ByteBuffer</span> {
-    <span class="ident">log</span>::<span class="macro">debug</span><span class="macro">!</span>(<span class="string">&quot;push_verify&quot;</span>);
+    <span class="ident">log</span>::<span class="macro">debug</span><span class="macro">!</span>(<span class="string">&quot;push_verify_connection&quot;</span>);
     <span class="kw">use</span> <span class="ident">push</span>::<span class="ident">msg_types</span>::<span class="ident">PushSubscriptionChanged</span>;
     <span class="kw">use</span> <span class="ident">push</span>::<span class="ident">msg_types</span>::<span class="ident">PushSubscriptionsChanged</span>;
 

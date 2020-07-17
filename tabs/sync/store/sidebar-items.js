@@ -1,1 +1,1 @@
-initSidebarItems({"struct":[["TabsStore",""]]});
+initSidebarItems({"constant":[["TTL_1_YEAR",""]],"struct":[["TabsStore",""]]});

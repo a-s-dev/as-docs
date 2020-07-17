@@ -1,1 +1,1 @@
-initSidebarItems({"fn":[["command_to_capability",""],["get_buffer",""],["get_code",""]],"mod":[["error_codes",""]]});
+initSidebarItems({"fn":[["command_to_capability",""],["from_protobuf_ptr","Safety data is a raw pointer to the protobuf data get_buffer will return an error if the length is invalid, or if the pointer is a null pointer"],["get_buffer",""],["get_code",""]],"mod":[["error_codes",""]],"struct":[["AuthorizationPKCEParams",""],["AuthorizationParameters",""],["MetricsParams",""]]});

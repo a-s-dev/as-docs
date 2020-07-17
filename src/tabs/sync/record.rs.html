@@ -29,6 +29,8 @@
 <span id="29">29</span>
 <span id="30">30</span>
 <span id="31">31</span>
+<span id="32">32</span>
+<span id="33">33</span>
 </pre><div class="example-wrap"><pre class="rust ">
 <span class="comment">/* This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
@@ -52,6 +54,8 @@
     <span class="kw">pub</span> <span class="ident">id</span>: <span class="ident">String</span>, <span class="comment">// `String` instead of `SyncGuid` because some IDs are FxA device ID.</span>
     <span class="kw">pub</span> <span class="ident">client_name</span>: <span class="ident">String</span>,
     <span class="kw">pub</span> <span class="ident">tabs</span>: <span class="ident">Vec</span><span class="op">&lt;</span><span class="ident">TabsRecordTab</span><span class="op">&gt;</span>,
+    <span class="attribute">#[<span class="ident">serde</span>(<span class="ident">default</span>)]</span>
+    <span class="kw">pub</span> <span class="ident">ttl</span>: <span class="ident">u32</span>,
 }
 
 <span class="kw">impl</span> <span class="ident">TabsRecord</span> {

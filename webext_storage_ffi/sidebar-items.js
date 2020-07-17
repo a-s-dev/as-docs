@@ -1,0 +1,1 @@
+initSidebarItems({"fn":[["webext_store_clear",""],["webext_store_destroy",""],["webext_store_get",""],["webext_store_new",""],["webext_store_remove",""],["webext_store_set",""]],"struct":[["STORES",""]]});

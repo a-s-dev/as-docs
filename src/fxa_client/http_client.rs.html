@@ -1078,39 +1078,6 @@
 <span id="1078">1078</span>
 <span id="1079">1079</span>
 <span id="1080">1080</span>
-<span id="1081">1081</span>
-<span id="1082">1082</span>
-<span id="1083">1083</span>
-<span id="1084">1084</span>
-<span id="1085">1085</span>
-<span id="1086">1086</span>
-<span id="1087">1087</span>
-<span id="1088">1088</span>
-<span id="1089">1089</span>
-<span id="1090">1090</span>
-<span id="1091">1091</span>
-<span id="1092">1092</span>
-<span id="1093">1093</span>
-<span id="1094">1094</span>
-<span id="1095">1095</span>
-<span id="1096">1096</span>
-<span id="1097">1097</span>
-<span id="1098">1098</span>
-<span id="1099">1099</span>
-<span id="1100">1100</span>
-<span id="1101">1101</span>
-<span id="1102">1102</span>
-<span id="1103">1103</span>
-<span id="1104">1104</span>
-<span id="1105">1105</span>
-<span id="1106">1106</span>
-<span id="1107">1107</span>
-<span id="1108">1108</span>
-<span id="1109">1109</span>
-<span id="1110">1110</span>
-<span id="1111">1111</span>
-<span id="1112">1112</span>
-<span id="1113">1113</span>
 </pre><div class="example-wrap"><pre class="rust ">
 <span class="comment">/* This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
@@ -1166,11 +1133,8 @@
     <span class="kw">fn</span> <span class="ident">authorization_code_using_session_token</span>(
         <span class="kw-2">&amp;</span><span class="self">self</span>,
         <span class="ident">config</span>: <span class="kw-2">&amp;</span><span class="ident">Config</span>,
-        <span class="ident">client_id</span>: <span class="kw-2">&amp;</span><span class="ident">str</span>,
         <span class="ident">session_token</span>: <span class="kw-2">&amp;</span><span class="ident">str</span>,
-        <span class="ident">scope</span>: <span class="kw-2">&amp;</span><span class="ident">str</span>,
-        <span class="ident">state</span>: <span class="kw-2">&amp;</span><span class="ident">str</span>,
-        <span class="ident">access_type</span>: <span class="kw-2">&amp;</span><span class="ident">str</span>,
+        <span class="ident">auth_params</span>: <span class="ident">AuthorizationRequestParameters</span>,
     ) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">OAuthAuthResponse</span><span class="op">&gt;</span>;
     <span class="kw">fn</span> <span class="ident">duplicate_session</span>(
         <span class="kw-2">&amp;</span><span class="self">self</span>,
@@ -1217,6 +1181,7 @@
         <span class="kw-2">&amp;</span><span class="self">self</span>,
         <span class="ident">config</span>: <span class="kw-2">&amp;</span><span class="ident">Config</span>,
         <span class="ident">session_token</span>: <span class="kw-2">&amp;</span><span class="ident">str</span>,
+        <span class="ident">client_id</span>: <span class="kw-2">&amp;</span><span class="ident">str</span>,
         <span class="ident">scope</span>: <span class="kw-2">&amp;</span><span class="ident">str</span>,
     ) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">HashMap</span><span class="op">&lt;</span><span class="ident">String</span>, <span class="ident">ScopedKeyDataResponse</span><span class="op">&gt;</span><span class="op">&gt;</span>;
 }
@@ -1335,19 +1300,10 @@
     <span class="kw">fn</span> <span class="ident">authorization_code_using_session_token</span>(
         <span class="kw-2">&amp;</span><span class="self">self</span>,
         <span class="ident">config</span>: <span class="kw-2">&amp;</span><span class="ident">Config</span>,
-        <span class="ident">client_id</span>: <span class="kw-2">&amp;</span><span class="ident">str</span>,
         <span class="ident">session_token</span>: <span class="kw-2">&amp;</span><span class="ident">str</span>,
-        <span class="ident">scope</span>: <span class="kw-2">&amp;</span><span class="ident">str</span>,
-        <span class="ident">state</span>: <span class="kw-2">&amp;</span><span class="ident">str</span>,
-        <span class="ident">access_type</span>: <span class="kw-2">&amp;</span><span class="ident">str</span>,
+        <span class="ident">auth_params</span>: <span class="ident">AuthorizationRequestParameters</span>,
     ) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">OAuthAuthResponse</span><span class="op">&gt;</span> {
-        <span class="kw">let</span> <span class="ident">parameters</span> <span class="op">=</span> <span class="macro">json</span><span class="macro">!</span>({
-            <span class="string">&quot;client_id&quot;</span>: <span class="ident">client_id</span>,
-            <span class="string">&quot;scope&quot;</span>: <span class="ident">scope</span>,
-            <span class="string">&quot;response_type&quot;</span>: <span class="string">&quot;code&quot;</span>,
-            <span class="string">&quot;state&quot;</span>: <span class="ident">state</span>,
-            <span class="string">&quot;access_type&quot;</span>: <span class="ident">access_type</span>,
-        });
+        <span class="kw">let</span> <span class="ident">parameters</span> <span class="op">=</span> <span class="ident">serde_json</span>::<span class="ident">to_value</span>(<span class="kw-2">&amp;</span><span class="ident">auth_params</span>)<span class="question-mark">?</span>;
         <span class="kw">let</span> <span class="ident">key</span> <span class="op">=</span> <span class="ident">derive_auth_key_from_session_token</span>(<span class="ident">session_token</span>)<span class="question-mark">?</span>;
         <span class="kw">let</span> <span class="ident">url</span> <span class="op">=</span> <span class="ident">config</span>.<span class="ident">auth_url_path</span>(<span class="string">&quot;v1/oauth/authorization&quot;</span>)<span class="question-mark">?</span>;
         <span class="kw">let</span> <span class="ident">request</span> <span class="op">=</span> <span class="ident">HawkRequestBuilder</span>::<span class="ident">new</span>(<span class="ident">Method</span>::<span class="ident">Post</span>, <span class="ident">url</span>, <span class="kw-2">&amp;</span><span class="ident">key</span>)
@@ -1490,10 +1446,11 @@
         <span class="kw-2">&amp;</span><span class="self">self</span>,
         <span class="ident">config</span>: <span class="kw-2">&amp;</span><span class="ident">Config</span>,
         <span class="ident">session_token</span>: <span class="kw-2">&amp;</span><span class="ident">str</span>,
+        <span class="ident">client_id</span>: <span class="kw-2">&amp;</span><span class="ident">str</span>,
         <span class="ident">scope</span>: <span class="kw-2">&amp;</span><span class="ident">str</span>,
     ) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">HashMap</span><span class="op">&lt;</span><span class="ident">String</span>, <span class="ident">ScopedKeyDataResponse</span><span class="op">&gt;</span><span class="op">&gt;</span> {
         <span class="kw">let</span> <span class="ident">body</span> <span class="op">=</span> <span class="macro">json</span><span class="macro">!</span>({
-            <span class="string">&quot;client_id&quot;</span>: <span class="ident">config</span>.<span class="ident">client_id</span>,
+            <span class="string">&quot;client_id&quot;</span>: <span class="ident">client_id</span>,
             <span class="string">&quot;scope&quot;</span>: <span class="ident">scope</span>,
         });
         <span class="kw">let</span> <span class="ident">url</span> <span class="op">=</span> <span class="ident">config</span>.<span class="ident">auth_url_path</span>(<span class="string">&quot;v1/account/scoped-key-data&quot;</span>)<span class="question-mark">?</span>;
@@ -1606,38 +1563,15 @@
     <span class="prelude-val">Ok</span>(<span class="ident">out</span>)
 }
 
-<span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;integration_test&quot;</span>)]</span>
 <span class="attribute">#[<span class="ident">derive</span>(<span class="ident">Serialize</span>, <span class="ident">Deserialize</span>)]</span>
-<span class="kw">pub</span> <span class="kw">struct</span> <span class="ident">AuthorizationParameters</span> {
-    <span class="ident">access_type</span>: <span class="ident">String</span>,
-    <span class="ident">client_id</span>: <span class="ident">String</span>,
-    <span class="ident">code_challenge</span>: <span class="ident">String</span>,
-    <span class="ident">code_challenge_method</span>: <span class="ident">String</span>,
-    <span class="ident">scope</span>: <span class="ident">String</span>,
-    <span class="ident">keys_jwe</span>: <span class="ident">String</span>,
-    <span class="ident">state</span>: <span class="ident">String</span>,
-}
-
-<span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;integration_test&quot;</span>)]</span>
-<span class="kw">impl</span> <span class="ident">AuthorizationParameters</span> {
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">new</span>(
-        <span class="ident">client_id</span>: <span class="ident">String</span>,
-        <span class="ident">code_challenge</span>: <span class="ident">String</span>,
-        <span class="ident">code_challenge_method</span>: <span class="ident">String</span>,
-        <span class="ident">scope</span>: <span class="ident">String</span>,
-        <span class="ident">keys_jwe</span>: <span class="ident">String</span>,
-        <span class="ident">state</span>: <span class="ident">String</span>,
-    ) <span class="op">-</span><span class="op">&gt;</span> <span class="self">Self</span> {
-        <span class="ident">AuthorizationParameters</span> {
-            <span class="ident">access_type</span>: <span class="string">&quot;offline&quot;</span>.<span class="ident">to_string</span>(),
-            <span class="ident">client_id</span>,
-            <span class="ident">code_challenge</span>,
-            <span class="ident">code_challenge_method</span>,
-            <span class="ident">scope</span>,
-            <span class="ident">keys_jwe</span>,
-            <span class="ident">state</span>,
-        }
-    }
+<span class="kw">pub</span> <span class="kw">struct</span> <span class="ident">AuthorizationRequestParameters</span> {
+    <span class="kw">pub</span> <span class="ident">client_id</span>: <span class="ident">String</span>,
+    <span class="kw">pub</span> <span class="ident">scope</span>: <span class="ident">String</span>,
+    <span class="kw">pub</span> <span class="ident">state</span>: <span class="ident">String</span>,
+    <span class="kw">pub</span> <span class="ident">access_type</span>: <span class="ident">String</span>,
+    <span class="kw">pub</span> <span class="ident">code_challenge</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">String</span><span class="op">&gt;</span>,
+    <span class="kw">pub</span> <span class="ident">code_challenge_method</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">String</span><span class="op">&gt;</span>,
+    <span class="kw">pub</span> <span class="ident">keys_jwe</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">String</span><span class="op">&gt;</span>,
 }
 
 <span class="comment">// Keeping those functions out of the FxAClient trate becouse functions in the</span>
@@ -1647,7 +1581,7 @@
 <span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;integration_test&quot;</span>)]</span>
 <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">send_authorization_request</span>(
     <span class="ident">config</span>: <span class="kw-2">&amp;</span><span class="ident">Config</span>,
-    <span class="ident">auth_params</span>: <span class="ident">AuthorizationParameters</span>,
+    <span class="ident">auth_params</span>: <span class="ident">AuthorizationRequestParameters</span>,
     <span class="ident">auth_key</span>: <span class="kw-2">&amp;</span>[<span class="ident">u8</span>],
 ) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">anyhow</span>::<span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">String</span><span class="op">&gt;</span> {
     <span class="kw">let</span> <span class="ident">auth_endpoint</span> <span class="op">=</span> <span class="ident">config</span>.<span class="ident">auth_url_path</span>(<span class="string">&quot;v1/oauth/authorization&quot;</span>)<span class="question-mark">?</span>;
@@ -2012,14 +1946,14 @@
 }
 
 <span class="attribute">#[<span class="ident">derive</span>(<span class="ident">Clone</span>, <span class="ident">Serialize</span>, <span class="ident">Deserialize</span>)]</span>
+<span class="attribute">#[<span class="ident">serde</span>(<span class="ident">rename_all</span> <span class="op">=</span> <span class="string">&quot;camelCase&quot;</span>)]</span>
 <span class="kw">pub</span> <span class="kw">struct</span> <span class="ident">ProfileResponse</span> {
     <span class="kw">pub</span> <span class="ident">uid</span>: <span class="ident">String</span>,
     <span class="kw">pub</span> <span class="ident">email</span>: <span class="ident">String</span>,
-    <span class="attribute">#[<span class="ident">serde</span>(<span class="ident">rename</span> <span class="op">=</span> <span class="string">&quot;displayName&quot;</span>)]</span>
     <span class="kw">pub</span> <span class="ident">display_name</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">String</span><span class="op">&gt;</span>,
     <span class="kw">pub</span> <span class="ident">avatar</span>: <span class="ident">String</span>,
-    <span class="attribute">#[<span class="ident">serde</span>(<span class="ident">rename</span> <span class="op">=</span> <span class="string">&quot;avatarDefault&quot;</span>)]</span>
     <span class="kw">pub</span> <span class="ident">avatar_default</span>: <span class="ident">bool</span>,
+    <span class="kw">pub</span> <span class="ident">ecosystem_anon_id</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">String</span><span class="op">&gt;</span>,
 }
 
 <span class="attribute">#[<span class="ident">derive</span>(<span class="ident">Deserialize</span>)]</span>

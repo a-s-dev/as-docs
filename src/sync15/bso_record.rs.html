@@ -450,48 +450,6 @@
 <span id="450">450</span>
 <span id="451">451</span>
 <span id="452">452</span>
-<span id="453">453</span>
-<span id="454">454</span>
-<span id="455">455</span>
-<span id="456">456</span>
-<span id="457">457</span>
-<span id="458">458</span>
-<span id="459">459</span>
-<span id="460">460</span>
-<span id="461">461</span>
-<span id="462">462</span>
-<span id="463">463</span>
-<span id="464">464</span>
-<span id="465">465</span>
-<span id="466">466</span>
-<span id="467">467</span>
-<span id="468">468</span>
-<span id="469">469</span>
-<span id="470">470</span>
-<span id="471">471</span>
-<span id="472">472</span>
-<span id="473">473</span>
-<span id="474">474</span>
-<span id="475">475</span>
-<span id="476">476</span>
-<span id="477">477</span>
-<span id="478">478</span>
-<span id="479">479</span>
-<span id="480">480</span>
-<span id="481">481</span>
-<span id="482">482</span>
-<span id="483">483</span>
-<span id="484">484</span>
-<span id="485">485</span>
-<span id="486">486</span>
-<span id="487">487</span>
-<span id="488">488</span>
-<span id="489">489</span>
-<span id="490">490</span>
-<span id="491">491</span>
-<span id="492">492</span>
-<span id="493">493</span>
-<span id="494">494</span>
 </pre><div class="example-wrap"><pre class="rust ">
 <span class="comment">/* This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
@@ -504,7 +462,6 @@
 <span class="kw">use</span> <span class="ident">serde</span>::<span class="ident">de</span>::{<span class="ident">Deserialize</span>, <span class="ident">DeserializeOwned</span>};
 <span class="kw">use</span> <span class="ident">serde</span>::<span class="ident">ser</span>::<span class="ident">Serialize</span>;
 <span class="kw">use</span> <span class="ident">serde_derive</span>::<span class="kw-2">*</span>;
-<span class="kw">use</span> <span class="ident">serde_json</span>::<span class="ident">Value</span> <span class="kw">as</span> <span class="ident">JsonValue</span>;
 <span class="kw">use</span> <span class="ident">std</span>::<span class="ident">ops</span>::{<span class="ident">Deref</span>, <span class="ident">DerefMut</span>};
 <span class="kw">pub</span> <span class="kw">use</span> <span class="ident">sync15_traits</span>::<span class="ident">Payload</span>;
 <span class="kw">use</span> <span class="ident">sync_guid</span>::<span class="ident">Guid</span>;
@@ -660,8 +617,8 @@
 <span class="kw">impl</span> <span class="ident">CleartextBso</span> {
     <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">from_payload</span>(<span class="kw-2">mut</span> <span class="ident">payload</span>: <span class="ident">Payload</span>, <span class="ident">collection</span>: <span class="kw">impl</span> <span class="ident">Into</span><span class="op">&lt;</span><span class="ident">String</span><span class="op">&gt;</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="self">Self</span> {
         <span class="kw">let</span> <span class="ident">id</span> <span class="op">=</span> <span class="ident">payload</span>.<span class="ident">id</span>.<span class="ident">clone</span>();
-        <span class="kw">let</span> <span class="ident">sortindex</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">i32</span><span class="op">&gt;</span> <span class="op">=</span> <span class="ident">take_auto_field</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">payload</span>, <span class="string">&quot;sortindex&quot;</span>);
-        <span class="kw">let</span> <span class="ident">ttl</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">u32</span><span class="op">&gt;</span> <span class="op">=</span> <span class="ident">take_auto_field</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">payload</span>, <span class="string">&quot;ttl&quot;</span>);
+        <span class="kw">let</span> <span class="ident">sortindex</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">i32</span><span class="op">&gt;</span> <span class="op">=</span> <span class="ident">payload</span>.<span class="ident">take_auto_field</span>(<span class="string">&quot;sortindex&quot;</span>);
+        <span class="kw">let</span> <span class="ident">ttl</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">u32</span><span class="op">&gt;</span> <span class="op">=</span> <span class="ident">payload</span>.<span class="ident">take_auto_field</span>(<span class="string">&quot;ttl&quot;</span>);
         <span class="ident">BsoRecord</span> {
             <span class="ident">id</span>,
             <span class="ident">collection</span>: <span class="ident">collection</span>.<span class="ident">into</span>(),
@@ -676,49 +633,6 @@
 <span class="kw">pub</span> <span class="kw">type</span> <span class="ident">EncryptedBso</span> <span class="op">=</span> <span class="ident">BsoRecord</span><span class="op">&lt;</span><span class="ident">EncryptedPayload</span><span class="op">&gt;</span>;
 <span class="kw">pub</span> <span class="kw">type</span> <span class="ident">CleartextBso</span> <span class="op">=</span> <span class="ident">BsoRecord</span><span class="op">&lt;</span><span class="ident">Payload</span><span class="op">&gt;</span>;
 
-<span class="doccomment">/// &quot;Auto&quot; fields are fields like &#39;sortindex&#39; (and potentially &#39;ttl&#39; in</span>
-<span class="doccomment">/// the future) which are:</span>
-<span class="doccomment">///</span>
-<span class="doccomment">/// - Added to the payload automatically when deserializing if present on</span>
-<span class="doccomment">///   the incoming BSO.</span>
-<span class="doccomment">/// - Removed from the payload automatically and attached to the BSO if</span>
-<span class="doccomment">///   present on the outgoing payload.</span>
-<span class="kw">fn</span> <span class="ident">add_auto_field</span><span class="op">&lt;</span><span class="ident">T</span>: <span class="ident">Into</span><span class="op">&lt;</span><span class="ident">JsonValue</span><span class="op">&gt;</span><span class="op">&gt;</span>(<span class="ident">p</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">Payload</span>, <span class="ident">name</span>: <span class="kw-2">&amp;</span><span class="ident">str</span>, <span class="ident">v</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">T</span><span class="op">&gt;</span>) {
-    <span class="comment">// This is a little dubious, but it seems like if we have a e.g. `sortindex` field on the payload</span>
-    <span class="comment">// it&#39;s going to be a bug if we use it instead of the &quot;real&quot; sort index.</span>
-    <span class="kw">if</span> <span class="ident">p</span>.<span class="ident">data</span>.<span class="ident">contains_key</span>(<span class="ident">name</span>) {
-        <span class="ident">log</span>::<span class="macro">warn</span><span class="macro">!</span>(
-            <span class="string">&quot;Payload for record {} already contains &#39;automatic&#39; field \&quot;{}\&quot;? \
-             Overwriting with &#39;real&#39; value&quot;</span>,
-            <span class="ident">p</span>.<span class="ident">id</span>,
-            <span class="ident">name</span>
-        );
-    }
-
-    <span class="kw">if</span> <span class="kw">let</span> <span class="prelude-val">Some</span>(<span class="ident">value</span>) <span class="op">=</span> <span class="ident">v</span> {
-        <span class="ident">p</span>.<span class="ident">data</span>.<span class="ident">insert</span>(<span class="ident">name</span>.<span class="ident">into</span>(), <span class="ident">value</span>.<span class="ident">into</span>());
-    } <span class="kw">else</span> {
-        <span class="ident">p</span>.<span class="ident">data</span>.<span class="ident">remove</span>(<span class="ident">name</span>);
-    }
-}
-
-<span class="kw">fn</span> <span class="ident">take_auto_field</span><span class="op">&lt;</span><span class="ident">V</span><span class="op">&gt;</span>(<span class="ident">p</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">Payload</span>, <span class="ident">name</span>: <span class="kw-2">&amp;</span><span class="ident">str</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">V</span><span class="op">&gt;</span>
-<span class="kw">where</span>
-    <span class="kw">for</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span><span class="op">&gt;</span> <span class="ident">V</span>: <span class="ident">Deserialize</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span><span class="op">&gt;</span>,
-{
-    <span class="kw">let</span> <span class="ident">v</span> <span class="op">=</span> <span class="ident">p</span>.<span class="ident">data</span>.<span class="ident">remove</span>(<span class="ident">name</span>)<span class="question-mark">?</span>;
-    <span class="kw">match</span> <span class="ident">serde_json</span>::<span class="ident">from_value</span>(<span class="ident">v</span>) {
-        <span class="prelude-val">Ok</span>(<span class="ident">v</span>) <span class="op">=</span><span class="op">&gt;</span> <span class="prelude-val">Some</span>(<span class="ident">v</span>),
-        <span class="prelude-val">Err</span>(<span class="ident">e</span>) <span class="op">=</span><span class="op">&gt;</span> {
-            <span class="ident">log</span>::<span class="macro">error</span><span class="macro">!</span>(
-                <span class="string">&quot;Automatic field {} exists on payload, but cannot be deserialized: {}&quot;</span>,
-                <span class="ident">name</span>,
-                <span class="ident">e</span>
-            );
-            <span class="prelude-val">None</span>
-        }
-    }
-}
 <span class="comment">// Contains the methods to automatically deserialize the payload to/from json.</span>
 <span class="kw">mod</span> <span class="ident">as_json</span> {
     <span class="kw">use</span> <span class="ident">serde</span>::<span class="ident">de</span>::{<span class="self">self</span>, <span class="ident">Deserialize</span>, <span class="ident">DeserializeOwned</span>, <span class="ident">Deserializer</span>};
@@ -792,10 +706,11 @@
 
 <span class="kw">impl</span> <span class="ident">EncryptedBso</span> {
     <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">decrypt</span>(<span class="self">self</span>, <span class="ident">key</span>: <span class="kw-2">&amp;</span><span class="ident">KeyBundle</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">error</span>::<span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">CleartextBso</span><span class="op">&gt;</span> {
-        <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">new_payload</span>: <span class="ident">Payload</span> <span class="op">=</span> <span class="self">self</span>.<span class="ident">payload</span>.<span class="ident">decrypt_and_parse_payload</span>(<span class="ident">key</span>)<span class="question-mark">?</span>;
-        <span class="comment">// This is a slightly dodgy place to do this, but whatever.</span>
-        <span class="ident">add_auto_field</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">new_payload</span>, <span class="string">&quot;sortindex&quot;</span>, <span class="self">self</span>.<span class="ident">sortindex</span>);
-        <span class="ident">add_auto_field</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">new_payload</span>, <span class="string">&quot;ttl&quot;</span>, <span class="self">self</span>.<span class="ident">ttl</span>);
+        <span class="kw">let</span> <span class="ident">new_payload</span> <span class="op">=</span> <span class="self">self</span>
+            .<span class="ident">payload</span>
+            .<span class="ident">decrypt_and_parse_payload</span>::<span class="op">&lt;</span><span class="ident">Payload</span><span class="op">&gt;</span>(<span class="ident">key</span>)<span class="question-mark">?</span>
+            .<span class="ident">with_auto_field</span>(<span class="string">&quot;sortindex&quot;</span>, <span class="self">self</span>.<span class="ident">sortindex</span>)
+            .<span class="ident">with_auto_field</span>(<span class="string">&quot;ttl&quot;</span>, <span class="self">self</span>.<span class="ident">ttl</span>);
 
         <span class="kw">let</span> <span class="ident">result</span> <span class="op">=</span> <span class="self">self</span>.<span class="ident">with_payload</span>(<span class="ident">new_payload</span>);
         <span class="prelude-val">Ok</span>(<span class="ident">result</span>)
@@ -827,6 +742,7 @@
 <span class="kw">mod</span> <span class="ident">tests</span> {
     <span class="kw">use</span> <span class="kw">super</span>::<span class="kw-2">*</span>;
     <span class="kw">use</span> <span class="ident">serde_json</span>::<span class="ident">json</span>;
+    <span class="kw">use</span> <span class="ident">serde_json</span>::<span class="ident">Value</span> <span class="kw">as</span> <span class="ident">JsonValue</span>;
 
     <span class="attribute">#[<span class="ident">test</span>]</span>
     <span class="kw">fn</span> <span class="ident">test_deserialize_enc</span>() {

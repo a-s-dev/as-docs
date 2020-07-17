@@ -281,10 +281,6 @@
 <span id="281">281</span>
 <span id="282">282</span>
 <span id="283">283</span>
-<span id="284">284</span>
-<span id="285">285</span>
-<span id="286">286</span>
-<span id="287">287</span>
 </pre><div class="example-wrap"><pre class="rust ">
 <span class="comment">/* This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
@@ -416,10 +412,6 @@
         <span class="prelude-val">Ok</span>(<span class="ident">peer_pub_key</span>)
     }
 
-    <span class="comment">// Currently only used in the integration tests workflow, Will be consumed</span>
-    <span class="comment">//   by other consumers, the #[allow(dead_code)] will be removed</span>
-    <span class="comment">//   once consumers that are not under a feature consume it</span>
-    <span class="attribute">#[<span class="ident">allow</span>(<span class="ident">dead_code</span>)]</span>
     <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">encrypt_keys_jwe</span>(<span class="self">self</span>, <span class="ident">jwk</span>: <span class="kw-2">&amp;</span><span class="ident">str</span>, <span class="ident">data</span>: <span class="kw-2">&amp;</span>[<span class="ident">u8</span>]) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">String</span><span class="op">&gt;</span> {
         <span class="kw">let</span> <span class="ident">jwk</span>: <span class="ident">Jwk</span> <span class="op">=</span> <span class="ident">serde_json</span>::<span class="ident">from_str</span>(<span class="kw-2">&amp;</span><span class="ident">jwk</span>)<span class="question-mark">?</span>;
         <span class="kw">let</span> <span class="ident">peer_public_key</span> <span class="op">=</span> <span class="self">Self</span>::<span class="ident">get_peer_public_from_jwk</span>(<span class="ident">jwk</span>)<span class="question-mark">?</span>;

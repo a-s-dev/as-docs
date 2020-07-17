@@ -35,7 +35,6 @@
 <span id="35">35</span>
 <span id="36">36</span>
 <span id="37">37</span>
-<span id="38">38</span>
 </pre><div class="example-wrap"><pre class="rust ">
 <span class="comment">/* This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
@@ -53,12 +52,12 @@
 <span class="doccomment">/// in the concept-fetch backend it would only store the settings, and populate</span>
 <span class="doccomment">/// things on the fly.</span>
 <span class="attribute">#[<span class="ident">derive</span>(<span class="ident">Debug</span>, <span class="ident">PartialEq</span>)]</span>
+<span class="attribute">#[<span class="ident">non_exhaustive</span>]</span>
 <span class="kw">pub</span> <span class="kw">struct</span> <span class="ident">Settings</span> {
     <span class="kw">pub</span> <span class="ident">read_timeout</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">Duration</span><span class="op">&gt;</span>,
     <span class="kw">pub</span> <span class="ident">connect_timeout</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">Duration</span><span class="op">&gt;</span>,
     <span class="kw">pub</span> <span class="ident">follow_redirects</span>: <span class="ident">bool</span>,
     <span class="kw">pub</span> <span class="ident">use_caches</span>: <span class="ident">bool</span>,
-    <span class="ident">_priv</span>: (),
 }
 
 <span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">target_os</span> <span class="op">=</span> <span class="string">&quot;ios&quot;</span>)]</span>
@@ -73,7 +72,6 @@
     <span class="ident">connect_timeout</span>: <span class="prelude-val">Some</span>(<span class="ident">TIMEOUT_DURATION</span>),
     <span class="ident">follow_redirects</span>: <span class="bool-val">true</span>,
     <span class="ident">use_caches</span>: <span class="bool-val">false</span>,
-    <span class="ident">_priv</span>: (),
 };
 </pre></div>
 </section><section id="search" class="content hidden"></section><section class="footer"></section><script>window.rootPath = "../../";window.currentCrate = "viaduct";</script><script src="../../main.js"></script><script src="../../source-script.js"></script><script src="../../source-files.js"></script><script defer src="../../search-index.js"></script></body></html>

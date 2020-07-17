@@ -1,1 +1,1 @@
-initSidebarItems({"constant":[["OAUTH_MIN_TIME_LEFT",""],["OAUTH_WEBCHANNEL_REDIRECT",""]],"mod":[["attached_clients",""]],"struct":[["AccessTokenInfo",""],["IntrospectInfo",""],["OAuthFlow",""],["RefreshToken",""]]});
+initSidebarItems({"constant":[["OAUTH_MIN_TIME_LEFT",""],["OAUTH_WEBCHANNEL_REDIRECT",""]],"mod":[["attached_clients",""]],"struct":[["AccessTokenInfo",""],["AuthorizationPKCEParams",""],["AuthorizationParameters",""],["IntrospectInfo",""],["MetricsParams",""],["OAuthFlow",""],["RefreshToken",""]]});
