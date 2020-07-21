@@ -1,1 +1,1 @@
-initSidebarItems({"mod":[["fxa_creds",""],["prompt",""]]});
+initSidebarItems({"fn":[["init_logging",""],["init_logging_with",""],["init_trace_logging",""]],"mod":[["fxa_creds",""],["prompt",""]]});
