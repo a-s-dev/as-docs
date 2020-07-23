@@ -1627,7 +1627,7 @@
     <span class="kw">let</span> <span class="ident">bundle</span> <span class="op">=</span> <span class="ident">hex</span>::<span class="ident">decode</span>(
         <span class="kw-2">&amp;</span><span class="ident">resp</span>[<span class="string">&quot;bundle&quot;</span>]
             .<span class="ident">as_str</span>()
-            .<span class="ident">ok_or_else</span>(<span class="op">|</span><span class="op">|</span> <span class="ident">ErrorKind</span>::<span class="ident">KeyGenerationFailed</span>)<span class="question-mark">?</span>,
+            .<span class="ident">ok_or_else</span>(<span class="op">|</span><span class="op">|</span> <span class="ident">ErrorKind</span>::<span class="ident">UnrecoverableServerError</span>(<span class="string">&quot;bundle not present&quot;</span>))<span class="question-mark">?</span>,
     )<span class="question-mark">?</span>;
     <span class="prelude-val">Ok</span>(<span class="ident">bundle</span>)
 }

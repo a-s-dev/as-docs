@@ -1,1 +1,1 @@
-initSidebarItems({"struct":[["JweHeader",""],["Jwk",""],["ScopedKey",""],["ScopedKeysFlow",""]]});
+initSidebarItems({"struct":[["ScopedKey",""],["ScopedKeysFlow",""]]});

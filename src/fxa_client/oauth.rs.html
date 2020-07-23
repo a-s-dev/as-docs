@@ -1011,6 +1011,11 @@
 <span id="1011">1011</span>
 <span id="1012">1012</span>
 <span id="1013">1013</span>
+<span id="1014">1014</span>
+<span id="1015">1015</span>
+<span id="1016">1016</span>
+<span id="1017">1017</span>
+<span id="1018">1018</span>
 </pre><div class="example-wrap"><pre class="rust ">
 <span class="comment">/* This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
@@ -1024,6 +1029,7 @@
     <span class="ident">scoped_keys</span>::{<span class="ident">ScopedKey</span>, <span class="ident">ScopedKeysFlow</span>},
     <span class="ident">util</span>, <span class="ident">FirefoxAccount</span>,
 };
+<span class="kw">use</span> <span class="ident">jwcrypto</span>::{<span class="ident">EncryptionAlgorithm</span>, <span class="ident">EncryptionParameters</span>};
 <span class="kw">use</span> <span class="ident">rc_crypto</span>::<span class="ident">digest</span>;
 <span class="kw">use</span> <span class="ident">serde_derive</span>::<span class="kw-2">*</span>;
 <span class="kw">use</span> <span class="ident">std</span>::<span class="ident">convert</span>::<span class="ident">TryFrom</span>;
@@ -1245,8 +1251,11 @@
             <span class="kw">let</span> <span class="ident">scoped_keys</span> <span class="op">=</span> <span class="ident">serde_json</span>::<span class="ident">to_string</span>(<span class="kw-2">&amp;</span><span class="ident">scoped_keys</span>)<span class="question-mark">?</span>;
             <span class="kw">let</span> <span class="ident">keys_jwk</span> <span class="op">=</span> <span class="ident">base64</span>::<span class="ident">decode_config</span>(<span class="ident">keys_jwk</span>, <span class="ident">base64</span>::<span class="ident">URL_SAFE_NO_PAD</span>)<span class="question-mark">?</span>;
             <span class="kw">let</span> <span class="ident">keys_jwk</span> <span class="op">=</span> <span class="ident">String</span>::<span class="ident">from_utf8</span>(<span class="ident">keys_jwk</span>)<span class="question-mark">?</span>;
-            <span class="kw">let</span> <span class="ident">client_keys_flow</span> <span class="op">=</span> <span class="ident">ScopedKeysFlow</span>::<span class="ident">with_random_key</span>()<span class="question-mark">?</span>;
-            <span class="prelude-val">Some</span>(<span class="ident">client_keys_flow</span>.<span class="ident">encrypt_keys_jwe</span>(<span class="kw-2">&amp;</span><span class="ident">keys_jwk</span>, <span class="ident">scoped_keys</span>.<span class="ident">as_bytes</span>())<span class="question-mark">?</span>)
+            <span class="kw">let</span> <span class="ident">params</span> <span class="op">=</span> <span class="ident">EncryptionParameters</span>::<span class="ident">ECDH_ES</span> {
+                <span class="ident">enc</span>: <span class="ident">EncryptionAlgorithm</span>::<span class="ident">A256GCM</span>,
+                <span class="ident">peer_jwk</span>: <span class="ident">serde_json</span>::<span class="ident">from_str</span>(<span class="kw-2">&amp;</span><span class="ident">keys_jwk</span>)<span class="question-mark">?</span>,
+            };
+            <span class="prelude-val">Some</span>(<span class="ident">jwcrypto</span>::<span class="ident">encrypt_to_jwe</span>(<span class="ident">scoped_keys</span>.<span class="ident">as_bytes</span>(), <span class="ident">params</span>)<span class="question-mark">?</span>)
         } <span class="kw">else</span> {
             <span class="prelude-val">None</span>
         };
@@ -1281,7 +1290,8 @@
         <span class="kw">let</span> <span class="ident">code_challenge</span> <span class="op">=</span> <span class="ident">digest</span>::<span class="ident">digest</span>(<span class="kw-2">&amp;</span><span class="ident">digest</span>::<span class="ident">SHA256</span>, <span class="kw-2">&amp;</span><span class="ident">code_verifier</span>.<span class="ident">as_bytes</span>())<span class="question-mark">?</span>;
         <span class="kw">let</span> <span class="ident">code_challenge</span> <span class="op">=</span> <span class="ident">base64</span>::<span class="ident">encode_config</span>(<span class="kw-2">&amp;</span><span class="ident">code_challenge</span>, <span class="ident">base64</span>::<span class="ident">URL_SAFE_NO_PAD</span>);
         <span class="kw">let</span> <span class="ident">scoped_keys_flow</span> <span class="op">=</span> <span class="ident">ScopedKeysFlow</span>::<span class="ident">with_random_key</span>()<span class="question-mark">?</span>;
-        <span class="kw">let</span> <span class="ident">jwk_json</span> <span class="op">=</span> <span class="ident">scoped_keys_flow</span>.<span class="ident">generate_keys_jwk</span>()<span class="question-mark">?</span>;
+        <span class="kw">let</span> <span class="ident">jwk</span> <span class="op">=</span> <span class="ident">scoped_keys_flow</span>.<span class="ident">get_public_key_jwk</span>()<span class="question-mark">?</span>;
+        <span class="kw">let</span> <span class="ident">jwk_json</span> <span class="op">=</span> <span class="ident">serde_json</span>::<span class="ident">to_string</span>(<span class="kw-2">&amp;</span><span class="ident">jwk</span>)<span class="question-mark">?</span>;
         <span class="kw">let</span> <span class="ident">keys_jwk</span> <span class="op">=</span> <span class="ident">base64</span>::<span class="ident">encode_config</span>(<span class="kw-2">&amp;</span><span class="ident">jwk_json</span>, <span class="ident">base64</span>::<span class="ident">URL_SAFE_NO_PAD</span>);
         <span class="ident">url</span>.<span class="ident">query_pairs_mut</span>()
             .<span class="ident">append_pair</span>(<span class="string">&quot;client_id&quot;</span>, <span class="kw-2">&amp;</span><span class="self">self</span>.<span class="ident">state</span>.<span class="ident">config</span>.<span class="ident">client_id</span>)
@@ -1365,7 +1375,7 @@
         <span class="kw">let</span> <span class="ident">old_refresh_token</span> <span class="op">=</span> <span class="self">self</span>.<span class="ident">state</span>.<span class="ident">refresh_token</span>.<span class="ident">clone</span>();
         <span class="kw">let</span> <span class="ident">new_refresh_token</span> <span class="op">=</span> <span class="ident">resp</span>
             .<span class="ident">refresh_token</span>
-            .<span class="ident">ok_or_else</span>(<span class="op">|</span><span class="op">|</span> <span class="ident">ErrorKind</span>::<span class="ident">RefreshTokenNotPresent</span>)<span class="question-mark">?</span>;
+            .<span class="ident">ok_or_else</span>(<span class="op">|</span><span class="op">|</span> <span class="ident">ErrorKind</span>::<span class="ident">UnrecoverableServerError</span>(<span class="string">&quot;No refresh token in response&quot;</span>))<span class="question-mark">?</span>;
         <span class="comment">// Destroying a refresh token also destroys its associated device,</span>
         <span class="comment">// grab the device information for replication later.</span>
         <span class="kw">let</span> <span class="ident">old_device_info</span> <span class="op">=</span> <span class="kw">match</span> <span class="ident">old_refresh_token</span> {
@@ -1429,7 +1439,7 @@
         )<span class="question-mark">?</span>;
         <span class="kw">let</span> <span class="ident">new_refresh_token</span> <span class="op">=</span> <span class="ident">resp</span>
             .<span class="ident">refresh_token</span>
-            .<span class="ident">ok_or_else</span>(<span class="op">|</span><span class="op">|</span> <span class="ident">ErrorKind</span>::<span class="ident">RefreshTokenNotPresent</span>)<span class="question-mark">?</span>;
+            .<span class="ident">ok_or_else</span>(<span class="op">|</span><span class="op">|</span> <span class="ident">ErrorKind</span>::<span class="ident">UnrecoverableServerError</span>(<span class="string">&quot;No refresh token in response&quot;</span>))<span class="question-mark">?</span>;
         <span class="self">self</span>.<span class="ident">state</span>.<span class="ident">refresh_token</span> <span class="op">=</span> <span class="prelude-val">Some</span>(<span class="ident">RefreshToken</span> {
             <span class="ident">token</span>: <span class="ident">new_refresh_token</span>,
             <span class="ident">scopes</span>: <span class="ident">HashSet</span>::<span class="ident">from_iter</span>(<span class="ident">resp</span>.<span class="ident">scope</span>.<span class="ident">split</span>(<span class="string">&#39; &#39;</span>).<span class="ident">map</span>(<span class="ident">ToString</span>::<span class="ident">to_string</span>)),
