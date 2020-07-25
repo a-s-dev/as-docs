@@ -1238,6 +1238,20 @@
 <span id="1238">1238</span>
 <span id="1239">1239</span>
 <span id="1240">1240</span>
+<span id="1241">1241</span>
+<span id="1242">1242</span>
+<span id="1243">1243</span>
+<span id="1244">1244</span>
+<span id="1245">1245</span>
+<span id="1246">1246</span>
+<span id="1247">1247</span>
+<span id="1248">1248</span>
+<span id="1249">1249</span>
+<span id="1250">1250</span>
+<span id="1251">1251</span>
+<span id="1252">1252</span>
+<span id="1253">1253</span>
+<span id="1254">1254</span>
 </pre><div class="example-wrap"><pre class="rust ">
 <span class="comment">/* Copyright 2018-2019 Mozilla Foundation
  *
@@ -2308,7 +2322,7 @@
     <span class="kw">use</span> <span class="kw">super</span>::<span class="kw-2">*</span>;
 
     <span class="attribute">#[<span class="ident">derive</span>(<span class="ident">PartialEq</span>, <span class="ident">Debug</span>)]</span>
-    <span class="kw">struct</span> <span class="ident">Foobar</span>(<span class="ident">usize</span>);
+    <span class="kw">pub</span>(<span class="kw">super</span>) <span class="kw">struct</span> <span class="ident">Foobar</span>(<span class="ident">usize</span>);
 
     <span class="attribute">#[<span class="ident">test</span>]</span>
     <span class="kw">fn</span> <span class="ident">test_invalid_handle</span>() {
@@ -2406,77 +2420,91 @@
         }
     }
 
-    <span class="kw">struct</span> <span class="ident">PanicOnDrop</span>(());
-    <span class="kw">impl</span> <span class="ident">Drop</span> <span class="kw">for</span> <span class="ident">PanicOnDrop</span> {
-        <span class="kw">fn</span> <span class="ident">drop</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>) {
-            <span class="macro">panic</span><span class="macro">!</span>(<span class="string">&quot;intentional panic (drop)&quot;</span>);
+    <span class="doccomment">/// Tests that check our behavior when panicing.</span>
+    <span class="doccomment">///</span>
+    <span class="doccomment">/// Naturally these require panic=unwind, which means we can&#39;t run them when</span>
+    <span class="doccomment">/// generating coverage (well, `-Zprofile`-based coverage can&#39;t -- although</span>
+    <span class="doccomment">/// ptrace-based coverage like tarpaulin can), and so we turn them off.</span>
+    <span class="doccomment">///</span>
+    <span class="doccomment">/// (For clarity, `cfg(coverage)` is not a standard thing. We add it in</span>
+    <span class="doccomment">/// `automation/emit_coverage_info.sh`, and you can force it by adding</span>
+    <span class="doccomment">/// &quot;--cfg coverage&quot; to your RUSTFLAGS manually if you need to do so).</span>
+    <span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">not</span>(<span class="ident">coverage</span>))]</span>
+    <span class="kw">mod</span> <span class="ident">panic_tests</span> {
+        <span class="kw">use</span> <span class="kw">super</span>::<span class="kw-2">*</span>;
+
+        <span class="kw">struct</span> <span class="ident">PanicOnDrop</span>(());
+        <span class="kw">impl</span> <span class="ident">Drop</span> <span class="kw">for</span> <span class="ident">PanicOnDrop</span> {
+            <span class="kw">fn</span> <span class="ident">drop</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>) {
+                <span class="macro">panic</span><span class="macro">!</span>(<span class="string">&quot;intentional panic (drop)&quot;</span>);
+            }
         }
-    }
 
-    <span class="attribute">#[<span class="ident">test</span>]</span>
-    <span class="kw">fn</span> <span class="ident">test_panicking_drop</span>() {
-        <span class="kw">let</span> <span class="ident">map</span> <span class="op">=</span> <span class="ident">ConcurrentHandleMap</span>::<span class="ident">new</span>();
-        <span class="kw">let</span> <span class="ident">h</span> <span class="op">=</span> <span class="ident">map</span>.<span class="ident">insert</span>(<span class="ident">PanicOnDrop</span>(())).<span class="ident">into_u64</span>();
-        <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">e</span> <span class="op">=</span> <span class="ident">ExternError</span>::<span class="ident">success</span>();
-        <span class="kw">crate</span>::<span class="ident">call_with_result</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">e</span>, <span class="op">|</span><span class="op">|</span> <span class="ident">map</span>.<span class="ident">delete_u64</span>(<span class="ident">h</span>));
-        <span class="macro">assert_eq</span><span class="macro">!</span>(<span class="ident">e</span>.<span class="ident">get_code</span>(), <span class="kw">crate</span>::<span class="ident">ErrorCode</span>::<span class="ident">PANIC</span>);
-        <span class="kw">let</span> <span class="kw">_</span> <span class="op">=</span> <span class="kw">unsafe</span> { <span class="ident">e</span>.<span class="ident">get_and_consume_message</span>() };
-        <span class="macro">assert</span><span class="macro">!</span>(<span class="op">!</span><span class="ident">map</span>.<span class="ident">map</span>.<span class="ident">is_poisoned</span>());
-        <span class="kw">let</span> <span class="ident">inner</span> <span class="op">=</span> <span class="ident">map</span>.<span class="ident">map</span>.<span class="ident">read</span>().<span class="ident">unwrap</span>();
-        <span class="ident">inner</span>.<span class="ident">assert_valid</span>();
-        <span class="macro">assert_eq</span><span class="macro">!</span>(<span class="ident">inner</span>.<span class="ident">len</span>(), <span class="number">0</span>);
-    }
-
-    <span class="attribute">#[<span class="ident">test</span>]</span>
-    <span class="kw">fn</span> <span class="ident">test_panicking_call_with</span>() {
-        <span class="kw">let</span> <span class="ident">map</span> <span class="op">=</span> <span class="ident">ConcurrentHandleMap</span>::<span class="ident">new</span>();
-        <span class="kw">let</span> <span class="ident">h</span> <span class="op">=</span> <span class="ident">map</span>.<span class="ident">insert</span>(<span class="ident">Foobar</span>(<span class="number">0</span>)).<span class="ident">into_u64</span>();
-        <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">e</span> <span class="op">=</span> <span class="ident">ExternError</span>::<span class="ident">success</span>();
-        <span class="ident">map</span>.<span class="ident">call_with_output</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">e</span>, <span class="ident">h</span>, <span class="op">|</span><span class="ident">_thing</span><span class="op">|</span> {
-            <span class="macro">panic</span><span class="macro">!</span>(<span class="string">&quot;intentional panic (call_with_output)&quot;</span>);
-        });
-
-        <span class="macro">assert_eq</span><span class="macro">!</span>(<span class="ident">e</span>.<span class="ident">get_code</span>(), <span class="kw">crate</span>::<span class="ident">ErrorCode</span>::<span class="ident">PANIC</span>);
-        <span class="kw">let</span> <span class="kw">_</span> <span class="op">=</span> <span class="kw">unsafe</span> { <span class="ident">e</span>.<span class="ident">get_and_consume_message</span>() };
-
-        {
+        <span class="attribute">#[<span class="ident">test</span>]</span>
+        <span class="kw">fn</span> <span class="ident">test_panicking_drop</span>() {
+            <span class="kw">let</span> <span class="ident">map</span> <span class="op">=</span> <span class="ident">ConcurrentHandleMap</span>::<span class="ident">new</span>();
+            <span class="kw">let</span> <span class="ident">h</span> <span class="op">=</span> <span class="ident">map</span>.<span class="ident">insert</span>(<span class="ident">PanicOnDrop</span>(())).<span class="ident">into_u64</span>();
+            <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">e</span> <span class="op">=</span> <span class="ident">ExternError</span>::<span class="ident">success</span>();
+            <span class="kw">crate</span>::<span class="ident">call_with_result</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">e</span>, <span class="op">|</span><span class="op">|</span> <span class="ident">map</span>.<span class="ident">delete_u64</span>(<span class="ident">h</span>));
+            <span class="macro">assert_eq</span><span class="macro">!</span>(<span class="ident">e</span>.<span class="ident">get_code</span>(), <span class="kw">crate</span>::<span class="ident">ErrorCode</span>::<span class="ident">PANIC</span>);
+            <span class="kw">let</span> <span class="kw">_</span> <span class="op">=</span> <span class="kw">unsafe</span> { <span class="ident">e</span>.<span class="ident">get_and_consume_message</span>() };
             <span class="macro">assert</span><span class="macro">!</span>(<span class="op">!</span><span class="ident">map</span>.<span class="ident">map</span>.<span class="ident">is_poisoned</span>());
             <span class="kw">let</span> <span class="ident">inner</span> <span class="op">=</span> <span class="ident">map</span>.<span class="ident">map</span>.<span class="ident">read</span>().<span class="ident">unwrap</span>();
             <span class="ident">inner</span>.<span class="ident">assert_valid</span>();
-            <span class="macro">assert_eq</span><span class="macro">!</span>(<span class="ident">inner</span>.<span class="ident">len</span>(), <span class="number">1</span>);
-            <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">seen</span> <span class="op">=</span> <span class="bool-val">false</span>;
-            <span class="kw">for</span> <span class="ident">e</span> <span class="kw">in</span> <span class="kw-2">&amp;</span><span class="ident">inner</span>.<span class="ident">entries</span> {
-                <span class="kw">if</span> <span class="kw">let</span> <span class="ident">EntryState</span>::<span class="ident">Active</span>(<span class="ident">v</span>) <span class="op">=</span> <span class="kw-2">&amp;</span><span class="ident">e</span>.<span class="ident">state</span> {
-                    <span class="macro">assert</span><span class="macro">!</span>(<span class="op">!</span><span class="ident">seen</span>);
-                    <span class="macro">assert</span><span class="macro">!</span>(<span class="ident">v</span>.<span class="ident">is_poisoned</span>());
-                    <span class="ident">seen</span> <span class="op">=</span> <span class="bool-val">true</span>;
+            <span class="macro">assert_eq</span><span class="macro">!</span>(<span class="ident">inner</span>.<span class="ident">len</span>(), <span class="number">0</span>);
+        }
+
+        <span class="attribute">#[<span class="ident">test</span>]</span>
+        <span class="kw">fn</span> <span class="ident">test_panicking_call_with</span>() {
+            <span class="kw">let</span> <span class="ident">map</span> <span class="op">=</span> <span class="ident">ConcurrentHandleMap</span>::<span class="ident">new</span>();
+            <span class="kw">let</span> <span class="ident">h</span> <span class="op">=</span> <span class="ident">map</span>.<span class="ident">insert</span>(<span class="ident">Foobar</span>(<span class="number">0</span>)).<span class="ident">into_u64</span>();
+            <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">e</span> <span class="op">=</span> <span class="ident">ExternError</span>::<span class="ident">success</span>();
+            <span class="ident">map</span>.<span class="ident">call_with_output</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">e</span>, <span class="ident">h</span>, <span class="op">|</span><span class="ident">_thing</span><span class="op">|</span> {
+                <span class="macro">panic</span><span class="macro">!</span>(<span class="string">&quot;intentional panic (call_with_output)&quot;</span>);
+            });
+
+            <span class="macro">assert_eq</span><span class="macro">!</span>(<span class="ident">e</span>.<span class="ident">get_code</span>(), <span class="kw">crate</span>::<span class="ident">ErrorCode</span>::<span class="ident">PANIC</span>);
+            <span class="kw">let</span> <span class="kw">_</span> <span class="op">=</span> <span class="kw">unsafe</span> { <span class="ident">e</span>.<span class="ident">get_and_consume_message</span>() };
+
+            {
+                <span class="macro">assert</span><span class="macro">!</span>(<span class="op">!</span><span class="ident">map</span>.<span class="ident">map</span>.<span class="ident">is_poisoned</span>());
+                <span class="kw">let</span> <span class="ident">inner</span> <span class="op">=</span> <span class="ident">map</span>.<span class="ident">map</span>.<span class="ident">read</span>().<span class="ident">unwrap</span>();
+                <span class="ident">inner</span>.<span class="ident">assert_valid</span>();
+                <span class="macro">assert_eq</span><span class="macro">!</span>(<span class="ident">inner</span>.<span class="ident">len</span>(), <span class="number">1</span>);
+                <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">seen</span> <span class="op">=</span> <span class="bool-val">false</span>;
+                <span class="kw">for</span> <span class="ident">e</span> <span class="kw">in</span> <span class="kw-2">&amp;</span><span class="ident">inner</span>.<span class="ident">entries</span> {
+                    <span class="kw">if</span> <span class="kw">let</span> <span class="ident">EntryState</span>::<span class="ident">Active</span>(<span class="ident">v</span>) <span class="op">=</span> <span class="kw-2">&amp;</span><span class="ident">e</span>.<span class="ident">state</span> {
+                        <span class="macro">assert</span><span class="macro">!</span>(<span class="op">!</span><span class="ident">seen</span>);
+                        <span class="macro">assert</span><span class="macro">!</span>(<span class="ident">v</span>.<span class="ident">is_poisoned</span>());
+                        <span class="ident">seen</span> <span class="op">=</span> <span class="bool-val">true</span>;
+                    }
                 }
             }
+            <span class="macro">assert</span><span class="macro">!</span>(<span class="ident">map</span>.<span class="ident">delete_u64</span>(<span class="ident">h</span>).<span class="ident">is_ok</span>());
+            <span class="macro">assert</span><span class="macro">!</span>(<span class="op">!</span><span class="ident">map</span>.<span class="ident">map</span>.<span class="ident">is_poisoned</span>());
+            <span class="kw">let</span> <span class="ident">inner</span> <span class="op">=</span> <span class="ident">map</span>.<span class="ident">map</span>.<span class="ident">read</span>().<span class="ident">unwrap</span>();
+            <span class="ident">inner</span>.<span class="ident">assert_valid</span>();
+            <span class="macro">assert_eq</span><span class="macro">!</span>(<span class="ident">inner</span>.<span class="ident">len</span>(), <span class="number">0</span>);
         }
-        <span class="macro">assert</span><span class="macro">!</span>(<span class="ident">map</span>.<span class="ident">delete_u64</span>(<span class="ident">h</span>).<span class="ident">is_ok</span>());
-        <span class="macro">assert</span><span class="macro">!</span>(<span class="op">!</span><span class="ident">map</span>.<span class="ident">map</span>.<span class="ident">is_poisoned</span>());
-        <span class="kw">let</span> <span class="ident">inner</span> <span class="op">=</span> <span class="ident">map</span>.<span class="ident">map</span>.<span class="ident">read</span>().<span class="ident">unwrap</span>();
-        <span class="ident">inner</span>.<span class="ident">assert_valid</span>();
-        <span class="macro">assert_eq</span><span class="macro">!</span>(<span class="ident">inner</span>.<span class="ident">len</span>(), <span class="number">0</span>);
-    }
 
-    <span class="attribute">#[<span class="ident">test</span>]</span>
-    <span class="kw">fn</span> <span class="ident">test_panicking_insert_with</span>() {
-        <span class="kw">let</span> <span class="ident">map</span> <span class="op">=</span> <span class="ident">ConcurrentHandleMap</span>::<span class="ident">new</span>();
-        <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">e</span> <span class="op">=</span> <span class="ident">ExternError</span>::<span class="ident">success</span>();
-        <span class="kw">let</span> <span class="ident">res</span> <span class="op">=</span> <span class="ident">map</span>.<span class="ident">insert_with_output</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">e</span>, <span class="op">|</span><span class="op">|</span> {
-            <span class="macro">panic</span><span class="macro">!</span>(<span class="string">&quot;intentional panic (insert_with_output)&quot;</span>);
-        });
+        <span class="attribute">#[<span class="ident">test</span>]</span>
+        <span class="kw">fn</span> <span class="ident">test_panicking_insert_with</span>() {
+            <span class="kw">let</span> <span class="ident">map</span> <span class="op">=</span> <span class="ident">ConcurrentHandleMap</span>::<span class="ident">new</span>();
+            <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">e</span> <span class="op">=</span> <span class="ident">ExternError</span>::<span class="ident">success</span>();
+            <span class="kw">let</span> <span class="ident">res</span> <span class="op">=</span> <span class="ident">map</span>.<span class="ident">insert_with_output</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">e</span>, <span class="op">|</span><span class="op">|</span> {
+                <span class="macro">panic</span><span class="macro">!</span>(<span class="string">&quot;intentional panic (insert_with_output)&quot;</span>);
+            });
 
-        <span class="macro">assert_eq</span><span class="macro">!</span>(<span class="ident">e</span>.<span class="ident">get_code</span>(), <span class="kw">crate</span>::<span class="ident">ErrorCode</span>::<span class="ident">PANIC</span>);
-        <span class="kw">let</span> <span class="kw">_</span> <span class="op">=</span> <span class="kw">unsafe</span> { <span class="ident">e</span>.<span class="ident">get_and_consume_message</span>() };
+            <span class="macro">assert_eq</span><span class="macro">!</span>(<span class="ident">e</span>.<span class="ident">get_code</span>(), <span class="kw">crate</span>::<span class="ident">ErrorCode</span>::<span class="ident">PANIC</span>);
+            <span class="kw">let</span> <span class="kw">_</span> <span class="op">=</span> <span class="kw">unsafe</span> { <span class="ident">e</span>.<span class="ident">get_and_consume_message</span>() };
 
-        <span class="macro">assert_eq</span><span class="macro">!</span>(<span class="ident">res</span>, <span class="number">0</span>);
+            <span class="macro">assert_eq</span><span class="macro">!</span>(<span class="ident">res</span>, <span class="number">0</span>);
 
-        <span class="macro">assert</span><span class="macro">!</span>(<span class="op">!</span><span class="ident">map</span>.<span class="ident">map</span>.<span class="ident">is_poisoned</span>());
-        <span class="kw">let</span> <span class="ident">inner</span> <span class="op">=</span> <span class="ident">map</span>.<span class="ident">map</span>.<span class="ident">read</span>().<span class="ident">unwrap</span>();
-        <span class="ident">inner</span>.<span class="ident">assert_valid</span>();
-        <span class="macro">assert_eq</span><span class="macro">!</span>(<span class="ident">inner</span>.<span class="ident">len</span>(), <span class="number">0</span>);
+            <span class="macro">assert</span><span class="macro">!</span>(<span class="op">!</span><span class="ident">map</span>.<span class="ident">map</span>.<span class="ident">is_poisoned</span>());
+            <span class="kw">let</span> <span class="ident">inner</span> <span class="op">=</span> <span class="ident">map</span>.<span class="ident">map</span>.<span class="ident">read</span>().<span class="ident">unwrap</span>();
+            <span class="ident">inner</span>.<span class="ident">assert_valid</span>();
+            <span class="macro">assert_eq</span><span class="macro">!</span>(<span class="ident">inner</span>.<span class="ident">len</span>(), <span class="number">0</span>);
+        }
     }
 }
 </pre></div>

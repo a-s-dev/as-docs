@@ -1,1 +1,1 @@
-initSidebarItems({"constant":[["OLD_SYNC",""],["PROFILE",""]]});
+initSidebarItems({"constant":[["OLD_SYNC",""],["PROFILE",""],["PROFILE_WRITE",""]]});

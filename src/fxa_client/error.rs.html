@@ -144,6 +144,9 @@
 <span id="144">144</span>
 <span id="145">145</span>
 <span id="146">146</span>
+<span id="147">147</span>
+<span id="148">148</span>
+<span id="149">149</span>
 </pre><div class="example-wrap"><pre class="rust ">
 <span class="comment">/* This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
@@ -203,6 +206,9 @@
 
     <span class="attribute">#[<span class="ident">error</span>(<span class="string">&quot;Remote key and local key mismatch&quot;</span>)]</span>
     <span class="ident">MismatchedKeys</span>,
+
+    <span class="attribute">#[<span class="ident">error</span>(<span class="string">&quot;Could not find a suitable anon_id key&quot;</span>)]</span>
+    <span class="ident">NoAnonIdKey</span>,
 
     <span class="attribute">#[<span class="ident">error</span>(<span class="string">&quot;Client: {0} is not allowed to request scope: {1}&quot;</span>)]</span>
     <span class="ident">ScopeNotAllowed</span>(<span class="ident">String</span>, <span class="ident">String</span>),

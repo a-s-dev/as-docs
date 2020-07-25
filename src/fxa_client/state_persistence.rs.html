@@ -302,6 +302,9 @@
 <span id="302">302</span>
 <span id="303">303</span>
 <span id="304">304</span>
+<span id="305">305</span>
+<span id="306">306</span>
+<span id="307">307</span>
 </pre><div class="example-wrap"><pre class="rust ">
 <span class="comment">/* This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
@@ -410,6 +413,7 @@
     <span class="kw">pub</span>(<span class="kw">crate</span>) <span class="ident">session_token</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">String</span><span class="op">&gt;</span>, <span class="comment">// Hex-formatted string.</span>
     <span class="kw">pub</span>(<span class="kw">crate</span>) <span class="ident">last_seen_profile</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">CachedResponse</span><span class="op">&lt;</span><span class="ident">Profile</span><span class="op">&gt;</span><span class="op">&gt;</span>,
     <span class="kw">pub</span>(<span class="kw">crate</span>) <span class="ident">in_flight_migration</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">MigrationData</span><span class="op">&gt;</span>,
+    <span class="kw">pub</span>(<span class="kw">crate</span>) <span class="ident">ecosystem_user_id</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">String</span><span class="op">&gt;</span>,
 }
 
 <span class="kw">impl</span> <span class="ident">StateV2</span> {
@@ -429,6 +433,7 @@
             <span class="ident">device_capabilities</span>: <span class="ident">HashSet</span>::<span class="ident">new</span>(),
             <span class="ident">session_token</span>: <span class="prelude-val">None</span>,
             <span class="ident">in_flight_migration</span>: <span class="prelude-val">None</span>,
+            <span class="ident">ecosystem_user_id</span>: <span class="prelude-val">None</span>,
         }
     }
 }
@@ -494,6 +499,7 @@
             <span class="ident">last_seen_profile</span>: <span class="prelude-val">None</span>,
             <span class="ident">in_flight_migration</span>: <span class="prelude-val">None</span>,
             <span class="ident">access_token_cache</span>: <span class="ident">HashMap</span>::<span class="ident">new</span>(),
+            <span class="ident">ecosystem_user_id</span>: <span class="prelude-val">None</span>,
         })
     }
 }
