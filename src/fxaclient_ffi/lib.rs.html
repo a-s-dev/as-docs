@@ -615,6 +615,14 @@
 <span id="615">615</span>
 <span id="616">616</span>
 <span id="617">617</span>
+<span id="618">618</span>
+<span id="619">619</span>
+<span id="620">620</span>
+<span id="621">621</span>
+<span id="622">622</span>
+<span id="623">623</span>
+<span id="624">624</span>
+<span id="625">625</span>
 </pre><div class="example-wrap"><pre class="rust ">
 <span class="comment">/* This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
@@ -630,7 +638,7 @@
     <span class="ident">ConcurrentHandleMap</span>, <span class="ident">ExternError</span>, <span class="ident">FfiStr</span>,
 };
 <span class="kw">use</span> <span class="ident">fxa_client</span>::{
-    <span class="ident">device</span>::{<span class="ident">Capability</span> <span class="kw">as</span> <span class="ident">DeviceCapability</span>, <span class="ident">PushSubscription</span>},
+    <span class="ident">device</span>::{<span class="ident">Capability</span> <span class="kw">as</span> <span class="ident">DeviceCapability</span>, <span class="ident">CommandFetchReason</span>, <span class="ident">PushSubscription</span>},
     <span class="ident">ffi</span>::{<span class="ident">from_protobuf_ptr</span>, <span class="ident">AuthorizationParameters</span>, <span class="ident">MetricsParams</span>},
     <span class="ident">migrator</span>::<span class="ident">MigrationState</span>,
     <span class="ident">msg_types</span>, <span class="ident">FirefoxAccount</span>,
@@ -1124,10 +1132,11 @@
 <span class="kw">pub</span> <span class="kw">extern</span> <span class="string">&quot;C&quot;</span> <span class="kw">fn</span> <span class="ident">fxa_poll_device_commands</span>(<span class="ident">handle</span>: <span class="ident">u64</span>, <span class="ident">error</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">ExternError</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">ByteBuffer</span> {
     <span class="ident">log</span>::<span class="macro">debug</span><span class="macro">!</span>(<span class="string">&quot;fxa_poll_device_commands&quot;</span>);
     <span class="ident">ACCOUNTS</span>.<span class="ident">call_with_result_mut</span>(<span class="ident">error</span>, <span class="ident">handle</span>, <span class="op">|</span><span class="ident">fxa</span><span class="op">|</span> {
-        <span class="ident">fxa</span>.<span class="ident">poll_device_commands</span>().<span class="ident">map</span>(<span class="op">|</span><span class="ident">cmds</span><span class="op">|</span> {
-            <span class="kw">let</span> <span class="ident">commands</span> <span class="op">=</span> <span class="ident">cmds</span>.<span class="ident">into_iter</span>().<span class="ident">map</span>(<span class="op">|</span><span class="ident">e</span><span class="op">|</span> <span class="ident">e</span>.<span class="ident">into</span>()).<span class="ident">collect</span>();
-            <span class="ident">fxa_client</span>::<span class="ident">msg_types</span>::<span class="ident">IncomingDeviceCommands</span> { <span class="ident">commands</span> }
-        })
+        <span class="ident">fxa</span>.<span class="ident">poll_device_commands</span>(<span class="ident">CommandFetchReason</span>::<span class="ident">Poll</span>)
+            .<span class="ident">map</span>(<span class="op">|</span><span class="ident">cmds</span><span class="op">|</span> {
+                <span class="kw">let</span> <span class="ident">commands</span> <span class="op">=</span> <span class="ident">cmds</span>.<span class="ident">into_iter</span>().<span class="ident">map</span>(<span class="op">|</span><span class="ident">e</span><span class="op">|</span> <span class="ident">e</span>.<span class="ident">into</span>()).<span class="ident">collect</span>();
+                <span class="ident">fxa_client</span>::<span class="ident">msg_types</span>::<span class="ident">IncomingDeviceCommands</span> { <span class="ident">commands</span> }
+            })
     })
 }
 
@@ -1233,5 +1242,12 @@
 <span class="macro">define_handle_map_deleter</span><span class="macro">!</span>(<span class="ident">ACCOUNTS</span>, <span class="ident">fxa_free</span>);
 <span class="macro">define_string_destructor</span><span class="macro">!</span>(<span class="ident">fxa_str_free</span>);
 <span class="macro">define_bytebuffer_destructor</span><span class="macro">!</span>(<span class="ident">fxa_bytebuffer_free</span>);
+
+<span class="doccomment">/// Gather telemetry collected by FxA.</span>
+<span class="attribute">#[<span class="ident">no_mangle</span>]</span>
+<span class="kw">pub</span> <span class="kw">extern</span> <span class="string">&quot;C&quot;</span> <span class="kw">fn</span> <span class="ident">fxa_gather_telemetry</span>(<span class="ident">handle</span>: <span class="ident">u64</span>, <span class="ident">error</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">ExternError</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="kw-2">*</span><span class="kw-2">mut</span> <span class="ident">c_char</span> {
+    <span class="ident">log</span>::<span class="macro">debug</span><span class="macro">!</span>(<span class="string">&quot;fxa_gather_telemetry&quot;</span>);
+    <span class="ident">ACCOUNTS</span>.<span class="ident">call_with_result_mut</span>(<span class="ident">error</span>, <span class="ident">handle</span>, <span class="op">|</span><span class="ident">fxa</span><span class="op">|</span> <span class="ident">fxa</span>.<span class="ident">gather_telemetry</span>())
+}
 </pre></div>
 </section><section id="search" class="content hidden"></section><section class="footer"></section><script>window.rootPath = "../../";window.currentCrate = "fxaclient_ffi";</script><script src="../../main.js"></script><script src="../../source-script.js"></script><script src="../../source-files.js"></script><script defer src="../../search-index.js"></script></body></html>

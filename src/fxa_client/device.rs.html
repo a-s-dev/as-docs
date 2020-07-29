@@ -763,6 +763,39 @@
 <span id="763">763</span>
 <span id="764">764</span>
 <span id="765">765</span>
+<span id="766">766</span>
+<span id="767">767</span>
+<span id="768">768</span>
+<span id="769">769</span>
+<span id="770">770</span>
+<span id="771">771</span>
+<span id="772">772</span>
+<span id="773">773</span>
+<span id="774">774</span>
+<span id="775">775</span>
+<span id="776">776</span>
+<span id="777">777</span>
+<span id="778">778</span>
+<span id="779">779</span>
+<span id="780">780</span>
+<span id="781">781</span>
+<span id="782">782</span>
+<span id="783">783</span>
+<span id="784">784</span>
+<span id="785">785</span>
+<span id="786">786</span>
+<span id="787">787</span>
+<span id="788">788</span>
+<span id="789">789</span>
+<span id="790">790</span>
+<span id="791">791</span>
+<span id="792">792</span>
+<span id="793">793</span>
+<span id="794">794</span>
+<span id="795">795</span>
+<span id="796">796</span>
+<span id="797">797</span>
+<span id="798">798</span>
 </pre><div class="example-wrap"><pre class="rust ">
 <span class="comment">/* This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
@@ -775,16 +808,24 @@
     <span class="ident">commands</span>,
     <span class="ident">error</span>::<span class="kw-2">*</span>,
     <span class="ident">http_client</span>::{
-        <span class="ident">CommandData</span>, <span class="ident">DeviceUpdateRequest</span>, <span class="ident">DeviceUpdateRequestBuilder</span>, <span class="ident">PendingCommand</span>,
-        <span class="ident">UpdateDeviceResponse</span>,
+        <span class="ident">DeviceUpdateRequest</span>, <span class="ident">DeviceUpdateRequestBuilder</span>, <span class="ident">PendingCommand</span>, <span class="ident">UpdateDeviceResponse</span>,
     },
-    <span class="ident">util</span>, <span class="ident">CachedResponse</span>, <span class="ident">FirefoxAccount</span>, <span class="ident">IncomingDeviceCommand</span>,
+    <span class="ident">telemetry</span>, <span class="ident">util</span>, <span class="ident">CachedResponse</span>, <span class="ident">FirefoxAccount</span>, <span class="ident">IncomingDeviceCommand</span>,
 };
 <span class="kw">use</span> <span class="ident">serde_derive</span>::<span class="kw-2">*</span>;
 <span class="kw">use</span> <span class="ident">std</span>::<span class="ident">collections</span>::{<span class="ident">HashMap</span>, <span class="ident">HashSet</span>};
 
 <span class="comment">// An devices response is considered fresh for `DEVICES_FRESHNESS_THRESHOLD` ms.</span>
 <span class="kw">const</span> <span class="ident">DEVICES_FRESHNESS_THRESHOLD</span>: <span class="ident">u64</span> <span class="op">=</span> <span class="number">60_000</span>; <span class="comment">// 1 minute</span>
+
+<span class="doccomment">/// The reason we are fetching commands.</span>
+<span class="attribute">#[<span class="ident">derive</span>(<span class="ident">Clone</span>, <span class="ident">Copy</span>)]</span>
+<span class="kw">pub</span> <span class="kw">enum</span> <span class="ident">CommandFetchReason</span> {
+    <span class="doccomment">/// We are polling in-case we&#39;ve missed some.</span>
+    <span class="ident">Poll</span>,
+    <span class="doccomment">/// We got a push notification with the index of the message.</span>
+    <span class="ident">Push</span>(<span class="ident">u64</span>),
+}
 
 <span class="kw">impl</span> <span class="ident">FirefoxAccount</span> {
     <span class="doccomment">/// Fetches the list of devices from the current account including</span>
@@ -928,19 +969,33 @@
     <span class="doccomment">/// Poll and parse any pending available command for our device.</span>
     <span class="doccomment">/// This should be called semi-regularly as the main method of</span>
     <span class="doccomment">/// commands delivery (push) can sometimes be unreliable on mobile devices.</span>
+    <span class="doccomment">/// Typically called even when a push notification is received, so that</span>
+    <span class="doccomment">/// any prior messages for which a push didn&#39;t arrive are still handled.</span>
     <span class="doccomment">///</span>
     <span class="doccomment">/// **💾 This method alters the persisted account state.**</span>
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">poll_device_commands</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">Vec</span><span class="op">&lt;</span><span class="ident">IncomingDeviceCommand</span><span class="op">&gt;</span><span class="op">&gt;</span> {
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">poll_device_commands</span>(
+        <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>,
+        <span class="ident">reason</span>: <span class="ident">CommandFetchReason</span>,
+    ) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">Vec</span><span class="op">&lt;</span><span class="ident">IncomingDeviceCommand</span><span class="op">&gt;</span><span class="op">&gt;</span> {
         <span class="kw">let</span> <span class="ident">last_command_index</span> <span class="op">=</span> <span class="self">self</span>.<span class="ident">state</span>.<span class="ident">last_handled_command</span>.<span class="ident">unwrap_or</span>(<span class="number">0</span>);
         <span class="comment">// We increment last_command_index by 1 because the server response includes the current index.</span>
-        <span class="self">self</span>.<span class="ident">fetch_and_parse_commands</span>(<span class="ident">last_command_index</span> <span class="op">+</span> <span class="number">1</span>, <span class="prelude-val">None</span>)
+        <span class="self">self</span>.<span class="ident">fetch_and_parse_commands</span>(<span class="ident">last_command_index</span> <span class="op">+</span> <span class="number">1</span>, <span class="prelude-val">None</span>, <span class="ident">reason</span>)
     }
 
     <span class="doccomment">/// Retrieve and parse a specific command designated by its index.</span>
     <span class="doccomment">///</span>
     <span class="doccomment">/// **💾 This method alters the persisted account state.**</span>
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">fetch_device_command</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>, <span class="ident">index</span>: <span class="ident">u64</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">IncomingDeviceCommand</span><span class="op">&gt;</span> {
-        <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">device_commands</span> <span class="op">=</span> <span class="self">self</span>.<span class="ident">fetch_and_parse_commands</span>(<span class="ident">index</span>, <span class="prelude-val">Some</span>(<span class="number">1</span>))<span class="question-mark">?</span>;
+    <span class="doccomment">///</span>
+    <span class="doccomment">/// Note that this should not be used if possible, as it does not correctly</span>
+    <span class="doccomment">/// handle missed messages. It&#39;s currently used only on iOS due to platform</span>
+    <span class="doccomment">/// restrictions (but we should still try and work out how to correctly</span>
+    <span class="doccomment">/// handle missed messages within those restrictions)</span>
+    <span class="doccomment">/// (What&#39;s wrong: if we get a push for tab-1 and a push for tab-3, and</span>
+    <span class="doccomment">/// between them I&#39;ve never explicitly polled, I&#39;ll miss tab-2, even if I</span>
+    <span class="doccomment">/// try polling now)</span>
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">ios_fetch_device_command</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>, <span class="ident">index</span>: <span class="ident">u64</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">IncomingDeviceCommand</span><span class="op">&gt;</span> {
+        <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">device_commands</span> <span class="op">=</span>
+            <span class="self">self</span>.<span class="ident">fetch_and_parse_commands</span>(<span class="ident">index</span>, <span class="prelude-val">Some</span>(<span class="number">1</span>), <span class="ident">CommandFetchReason</span>::<span class="ident">Push</span>(<span class="ident">index</span>))<span class="question-mark">?</span>;
         <span class="kw">let</span> <span class="ident">device_command</span> <span class="op">=</span> <span class="ident">device_commands</span>
             .<span class="ident">pop</span>()
             .<span class="ident">ok_or_else</span>(<span class="op">|</span><span class="op">|</span> <span class="ident">ErrorKind</span>::<span class="ident">IllegalState</span>(<span class="string">&quot;Index fetch came out empty.&quot;</span>))<span class="question-mark">?</span>;
@@ -954,6 +1009,7 @@
         <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>,
         <span class="ident">index</span>: <span class="ident">u64</span>,
         <span class="ident">limit</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">u64</span><span class="op">&gt;</span>,
+        <span class="ident">reason</span>: <span class="ident">CommandFetchReason</span>,
     ) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">Vec</span><span class="op">&lt;</span><span class="ident">IncomingDeviceCommand</span><span class="op">&gt;</span><span class="op">&gt;</span> {
         <span class="kw">let</span> <span class="ident">refresh_token</span> <span class="op">=</span> <span class="self">self</span>.<span class="ident">get_refresh_token</span>()<span class="question-mark">?</span>;
         <span class="kw">let</span> <span class="ident">pending_commands</span> <span class="op">=</span>
@@ -963,7 +1019,7 @@
             <span class="kw">return</span> <span class="prelude-val">Ok</span>(<span class="ident">Vec</span>::<span class="ident">new</span>());
         }
         <span class="ident">log</span>::<span class="macro">info</span><span class="macro">!</span>(<span class="string">&quot;Handling {} messages&quot;</span>, <span class="ident">pending_commands</span>.<span class="ident">messages</span>.<span class="ident">len</span>());
-        <span class="kw">let</span> <span class="ident">device_commands</span> <span class="op">=</span> <span class="self">self</span>.<span class="ident">parse_commands_messages</span>(<span class="ident">pending_commands</span>.<span class="ident">messages</span>)<span class="question-mark">?</span>;
+        <span class="kw">let</span> <span class="ident">device_commands</span> <span class="op">=</span> <span class="self">self</span>.<span class="ident">parse_commands_messages</span>(<span class="ident">pending_commands</span>.<span class="ident">messages</span>, <span class="ident">reason</span>)<span class="question-mark">?</span>;
         <span class="self">self</span>.<span class="ident">state</span>.<span class="ident">last_handled_command</span> <span class="op">=</span> <span class="prelude-val">Some</span>(<span class="ident">pending_commands</span>.<span class="ident">index</span>);
         <span class="prelude-val">Ok</span>(<span class="ident">device_commands</span>)
     }
@@ -971,11 +1027,12 @@
     <span class="kw">fn</span> <span class="ident">parse_commands_messages</span>(
         <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>,
         <span class="ident">messages</span>: <span class="ident">Vec</span><span class="op">&lt;</span><span class="ident">PendingCommand</span><span class="op">&gt;</span>,
+        <span class="ident">reason</span>: <span class="ident">CommandFetchReason</span>,
     ) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">Vec</span><span class="op">&lt;</span><span class="ident">IncomingDeviceCommand</span><span class="op">&gt;</span><span class="op">&gt;</span> {
         <span class="kw">let</span> <span class="ident">devices</span> <span class="op">=</span> <span class="self">self</span>.<span class="ident">get_devices</span>(<span class="bool-val">false</span>)<span class="question-mark">?</span>;
         <span class="kw">let</span> <span class="ident">parsed_commands</span> <span class="op">=</span> <span class="ident">messages</span>
             .<span class="ident">into_iter</span>()
-            .<span class="ident">filter_map</span>(<span class="op">|</span><span class="ident">msg</span><span class="op">|</span> <span class="kw">match</span> <span class="self">self</span>.<span class="ident">parse_command</span>(<span class="ident">msg</span>.<span class="ident">data</span>, <span class="kw-2">&amp;</span><span class="ident">devices</span>) {
+            .<span class="ident">filter_map</span>(<span class="op">|</span><span class="ident">msg</span><span class="op">|</span> <span class="kw">match</span> <span class="self">self</span>.<span class="ident">parse_command</span>(<span class="ident">msg</span>, <span class="kw-2">&amp;</span><span class="ident">devices</span>, <span class="ident">reason</span>) {
                 <span class="prelude-val">Ok</span>(<span class="ident">device_command</span>) <span class="op">=</span><span class="op">&gt;</span> <span class="prelude-val">Some</span>(<span class="ident">device_command</span>),
                 <span class="prelude-val">Err</span>(<span class="ident">e</span>) <span class="op">=</span><span class="op">&gt;</span> {
                     <span class="ident">log</span>::<span class="macro">error</span><span class="macro">!</span>(<span class="string">&quot;Error while processing command: {}&quot;</span>, <span class="ident">e</span>);
@@ -988,15 +1045,24 @@
 
     <span class="kw">fn</span> <span class="ident">parse_command</span>(
         <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>,
-        <span class="ident">command_data</span>: <span class="ident">CommandData</span>,
+        <span class="ident">command</span>: <span class="ident">PendingCommand</span>,
         <span class="ident">devices</span>: <span class="kw-2">&amp;</span>[<span class="ident">Device</span>],
+        <span class="ident">reason</span>: <span class="ident">CommandFetchReason</span>,
     ) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">IncomingDeviceCommand</span><span class="op">&gt;</span> {
+        <span class="kw">let</span> <span class="ident">telem_reason</span> <span class="op">=</span> <span class="kw">match</span> <span class="ident">reason</span> {
+            <span class="ident">CommandFetchReason</span>::<span class="ident">Poll</span> <span class="op">=</span><span class="op">&gt;</span> <span class="ident">telemetry</span>::<span class="ident">ReceivedReason</span>::<span class="ident">Poll</span>,
+            <span class="ident">CommandFetchReason</span>::<span class="ident">Push</span>(<span class="ident">index</span>) <span class="kw">if</span> <span class="ident">command</span>.<span class="ident">index</span> <span class="op">&lt;</span> <span class="ident">index</span> <span class="op">=</span><span class="op">&gt;</span> {
+                <span class="ident">telemetry</span>::<span class="ident">ReceivedReason</span>::<span class="ident">PushMissed</span>
+            }
+            <span class="kw">_</span> <span class="op">=</span><span class="op">&gt;</span> <span class="ident">telemetry</span>::<span class="ident">ReceivedReason</span>::<span class="ident">Push</span>,
+        };
+        <span class="kw">let</span> <span class="ident">command_data</span> <span class="op">=</span> <span class="ident">command</span>.<span class="ident">data</span>;
         <span class="kw">let</span> <span class="ident">sender</span> <span class="op">=</span> <span class="ident">command_data</span>
             .<span class="ident">sender</span>
             .<span class="ident">and_then</span>(<span class="op">|</span><span class="ident">s</span><span class="op">|</span> <span class="ident">devices</span>.<span class="ident">iter</span>().<span class="ident">find</span>(<span class="op">|</span><span class="ident">i</span><span class="op">|</span> <span class="ident">i</span>.<span class="ident">id</span> <span class="op">=</span><span class="op">=</span> <span class="ident">s</span>).<span class="ident">cloned</span>());
         <span class="kw">match</span> <span class="ident">command_data</span>.<span class="ident">command</span>.<span class="ident">as_str</span>() {
             <span class="ident">commands</span>::<span class="ident">send_tab</span>::<span class="ident">COMMAND_NAME</span> <span class="op">=</span><span class="op">&gt;</span> {
-                <span class="self">self</span>.<span class="ident">handle_send_tab_command</span>(<span class="ident">sender</span>, <span class="ident">command_data</span>.<span class="ident">payload</span>)
+                <span class="self">self</span>.<span class="ident">handle_send_tab_command</span>(<span class="ident">sender</span>, <span class="ident">command_data</span>.<span class="ident">payload</span>, <span class="ident">telem_reason</span>)
             }
             <span class="kw">_</span> <span class="op">=</span><span class="op">&gt;</span> <span class="prelude-val">Err</span>(<span class="ident">ErrorKind</span>::<span class="ident">UnknownCommand</span>(<span class="ident">command_data</span>.<span class="ident">command</span>).<span class="ident">into</span>()),
         }

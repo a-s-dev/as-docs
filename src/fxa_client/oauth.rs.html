@@ -1018,6 +1018,7 @@
 <span id="1018">1018</span>
 <span id="1019">1019</span>
 <span id="1020">1020</span>
+<span id="1021">1021</span>
 </pre><div class="example-wrap"><pre class="rust ">
 <span class="comment">/* This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
@@ -1450,6 +1451,7 @@
         });
         <span class="self">self</span>.<span class="ident">state</span>.<span class="ident">session_token</span> <span class="op">=</span> <span class="prelude-val">Some</span>(<span class="ident">session_token</span>.<span class="ident">to_owned</span>());
         <span class="self">self</span>.<span class="ident">clear_access_token_cache</span>();
+        <span class="self">self</span>.<span class="ident">clear_devices_and_attached_clients_cache</span>();
         <span class="comment">// When our keys change, we might need to re-register device capabilities with the server.</span>
         <span class="comment">// Ensure that this happens on the next call to ensure_capabilities.</span>
         <span class="self">self</span>.<span class="ident">state</span>.<span class="ident">device_capabilities</span>.<span class="ident">clear</span>();

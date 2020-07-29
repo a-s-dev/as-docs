@@ -267,6 +267,97 @@
 <span id="267">267</span>
 <span id="268">268</span>
 <span id="269">269</span>
+<span id="270">270</span>
+<span id="271">271</span>
+<span id="272">272</span>
+<span id="273">273</span>
+<span id="274">274</span>
+<span id="275">275</span>
+<span id="276">276</span>
+<span id="277">277</span>
+<span id="278">278</span>
+<span id="279">279</span>
+<span id="280">280</span>
+<span id="281">281</span>
+<span id="282">282</span>
+<span id="283">283</span>
+<span id="284">284</span>
+<span id="285">285</span>
+<span id="286">286</span>
+<span id="287">287</span>
+<span id="288">288</span>
+<span id="289">289</span>
+<span id="290">290</span>
+<span id="291">291</span>
+<span id="292">292</span>
+<span id="293">293</span>
+<span id="294">294</span>
+<span id="295">295</span>
+<span id="296">296</span>
+<span id="297">297</span>
+<span id="298">298</span>
+<span id="299">299</span>
+<span id="300">300</span>
+<span id="301">301</span>
+<span id="302">302</span>
+<span id="303">303</span>
+<span id="304">304</span>
+<span id="305">305</span>
+<span id="306">306</span>
+<span id="307">307</span>
+<span id="308">308</span>
+<span id="309">309</span>
+<span id="310">310</span>
+<span id="311">311</span>
+<span id="312">312</span>
+<span id="313">313</span>
+<span id="314">314</span>
+<span id="315">315</span>
+<span id="316">316</span>
+<span id="317">317</span>
+<span id="318">318</span>
+<span id="319">319</span>
+<span id="320">320</span>
+<span id="321">321</span>
+<span id="322">322</span>
+<span id="323">323</span>
+<span id="324">324</span>
+<span id="325">325</span>
+<span id="326">326</span>
+<span id="327">327</span>
+<span id="328">328</span>
+<span id="329">329</span>
+<span id="330">330</span>
+<span id="331">331</span>
+<span id="332">332</span>
+<span id="333">333</span>
+<span id="334">334</span>
+<span id="335">335</span>
+<span id="336">336</span>
+<span id="337">337</span>
+<span id="338">338</span>
+<span id="339">339</span>
+<span id="340">340</span>
+<span id="341">341</span>
+<span id="342">342</span>
+<span id="343">343</span>
+<span id="344">344</span>
+<span id="345">345</span>
+<span id="346">346</span>
+<span id="347">347</span>
+<span id="348">348</span>
+<span id="349">349</span>
+<span id="350">350</span>
+<span id="351">351</span>
+<span id="352">352</span>
+<span id="353">353</span>
+<span id="354">354</span>
+<span id="355">355</span>
+<span id="356">356</span>
+<span id="357">357</span>
+<span id="358">358</span>
+<span id="359">359</span>
+<span id="360">360</span>
 </pre><div class="example-wrap"><pre class="rust ">
 <span class="comment">/* This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
@@ -276,6 +367,8 @@
 <span class="kw">use</span> <span class="ident">jwcrypto</span>::{<span class="ident">EncryptionAlgorithm</span>, <span class="ident">EncryptionParameters</span>, <span class="ident">Jwk</span>};
 <span class="kw">use</span> <span class="ident">rand_rccrypto</span>::<span class="ident">rand</span>::<span class="ident">seq</span>::<span class="ident">SliceRandom</span>;
 <span class="kw">use</span> <span class="ident">rc_crypto</span>::<span class="ident">rand</span>;
+<span class="kw">use</span> <span class="ident">serde_derive</span>::<span class="kw-2">*</span>;
+<span class="kw">use</span> <span class="ident">sync_guid</span>::<span class="ident">Guid</span>;
 
 <span class="kw">impl</span> <span class="ident">FirefoxAccount</span> {
     <span class="doccomment">/// Get the ecosystem anon id, generating it if necessary.</span>
@@ -336,6 +429,20 @@
             .<span class="ident">choose</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">rng</span>)
             .<span class="ident">ok_or_else</span>(<span class="op">|</span><span class="op">|</span> <span class="ident">ErrorKind</span>::<span class="ident">NoAnonIdKey</span>)<span class="question-mark">?</span>
             .<span class="ident">clone</span>())
+    }
+
+    <span class="doccomment">/// Gathers and resets telemetry for this account instance.</span>
+    <span class="doccomment">/// This should be considered a short-term solution to telemetry gathering</span>
+    <span class="doccomment">/// and should called whenever consumers expect there might be telemetry,</span>
+    <span class="doccomment">/// and it should submit the telemetry to whatever telemetry system is in</span>
+    <span class="doccomment">/// use (probably glean).</span>
+    <span class="doccomment">///</span>
+    <span class="doccomment">/// The data is returned as a JSON string, which consumers should parse</span>
+    <span class="doccomment">/// forgivingly (eg, be tolerant of things not existing) to try and avoid</span>
+    <span class="doccomment">/// too many changes as telemetry comes and goes.</span>
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">gather_telemetry</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">String</span><span class="op">&gt;</span> {
+        <span class="kw">let</span> <span class="ident">telem</span> <span class="op">=</span> <span class="self">self</span>.<span class="ident">telemetry</span>.<span class="ident">replace</span>(<span class="ident">FxaTelemetry</span>::<span class="ident">new</span>());
+        <span class="prelude-val">Ok</span>(<span class="ident">serde_json</span>::<span class="ident">to_string</span>(<span class="kw-2">&amp;</span><span class="ident">telem</span>)<span class="question-mark">?</span>)
     }
 }
 
@@ -535,6 +642,81 @@
 
         <span class="macro">assert_eq</span><span class="macro">!</span>(<span class="ident">fxa</span>.<span class="ident">get_ecosystem_anon_id</span>().<span class="ident">unwrap</span>(), <span class="ident">ecosystem_anon_id</span>);
         <span class="macro">assert</span><span class="macro">!</span>(<span class="ident">fxa</span>.<span class="ident">state</span>.<span class="ident">ecosystem_user_id</span>.<span class="ident">is_none</span>());
+    }
+}
+
+<span class="comment">// A somewhat mixed-bag of all telemetry we want to collect. The idea is that</span>
+<span class="comment">// the app will &quot;pull&quot; telemetry via a new API whenever it thinks there might</span>
+<span class="comment">// be something to record.</span>
+<span class="comment">// It&#39;s considered a temporary solution until either we can record it directly</span>
+<span class="comment">// (eg, via glean) or we come up with something better.</span>
+<span class="comment">// Note that this means we&#39;ll lose telemetry if we crash between gathering it</span>
+<span class="comment">// here and the app submitting it, but that should be rare (in practice,</span>
+<span class="comment">// apps will submit it directly after an operation that generated telememtry)</span>
+
+<span class="doccomment">/// The reason a tab/command was received.</span>
+<span class="attribute">#[<span class="ident">derive</span>(<span class="ident">Debug</span>, <span class="ident">Serialize</span>)]</span>
+<span class="attribute">#[<span class="ident">serde</span>(<span class="ident">rename_all</span> <span class="op">=</span> <span class="string">&quot;kebab-case&quot;</span>)]</span>
+<span class="kw">pub</span> <span class="kw">enum</span> <span class="ident">ReceivedReason</span> {
+    <span class="doccomment">/// A push notification for the command was received.</span>
+    <span class="ident">Push</span>,
+    <span class="doccomment">/// Discovered while handling a push notification for a later message.</span>
+    <span class="ident">PushMissed</span>,
+    <span class="doccomment">/// Explicit polling for missed commands.</span>
+    <span class="ident">Poll</span>,
+}
+
+<span class="attribute">#[<span class="ident">derive</span>(<span class="ident">Debug</span>, <span class="ident">Serialize</span>)]</span>
+<span class="kw">pub</span> <span class="kw">struct</span> <span class="ident">SentCommand</span> {
+    <span class="kw">pub</span> <span class="ident">flow_id</span>: <span class="ident">String</span>,
+    <span class="kw">pub</span> <span class="ident">stream_id</span>: <span class="ident">String</span>,
+}
+
+<span class="kw">impl</span> <span class="ident">Default</span> <span class="kw">for</span> <span class="ident">SentCommand</span> {
+    <span class="kw">fn</span> <span class="ident">default</span>() <span class="op">-</span><span class="op">&gt;</span> <span class="self">Self</span> {
+        <span class="self">Self</span> {
+            <span class="ident">flow_id</span>: <span class="ident">Guid</span>::<span class="ident">random</span>().<span class="ident">to_string</span>(),
+            <span class="ident">stream_id</span>: <span class="ident">Guid</span>::<span class="ident">random</span>().<span class="ident">to_string</span>(),
+        }
+    }
+}
+
+<span class="attribute">#[<span class="ident">derive</span>(<span class="ident">Debug</span>, <span class="ident">Serialize</span>)]</span>
+<span class="kw">pub</span> <span class="kw">struct</span> <span class="ident">ReceivedCommand</span> {
+    <span class="kw">pub</span> <span class="ident">flow_id</span>: <span class="ident">String</span>,
+    <span class="kw">pub</span> <span class="ident">stream_id</span>: <span class="ident">String</span>,
+    <span class="kw">pub</span> <span class="ident">reason</span>: <span class="ident">ReceivedReason</span>,
+}
+
+<span class="comment">// We have a naive strategy to avoid unbounded memory growth - the intention</span>
+<span class="comment">// is that if any platform lets things grow to hit these limits, it&#39;s probably</span>
+<span class="comment">// never going to consume anything - so it doesn&#39;t matter what we discard (ie,</span>
+<span class="comment">// there&#39;s no good reason to have a smarter circular buffer etc)</span>
+<span class="kw">const</span> <span class="ident">MAX_TAB_EVENTS</span>: <span class="ident">usize</span> <span class="op">=</span> <span class="number">200</span>;
+
+<span class="attribute">#[<span class="ident">derive</span>(<span class="ident">Debug</span>, <span class="ident">Default</span>, <span class="ident">Serialize</span>)]</span>
+<span class="kw">pub</span> <span class="kw">struct</span> <span class="ident">FxaTelemetry</span> {
+    <span class="ident">commands_sent</span>: <span class="ident">Vec</span><span class="op">&lt;</span><span class="ident">SentCommand</span><span class="op">&gt;</span>,
+    <span class="ident">commands_received</span>: <span class="ident">Vec</span><span class="op">&lt;</span><span class="ident">ReceivedCommand</span><span class="op">&gt;</span>,
+}
+
+<span class="kw">impl</span> <span class="ident">FxaTelemetry</span> {
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">new</span>() <span class="op">-</span><span class="op">&gt;</span> <span class="self">Self</span> {
+        <span class="ident">FxaTelemetry</span> {
+            ..<span class="ident">Default</span>::<span class="ident">default</span>()
+        }
+    }
+
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">record_tab_sent</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>, <span class="ident">sent</span>: <span class="ident">SentCommand</span>) {
+        <span class="kw">if</span> <span class="self">self</span>.<span class="ident">commands_sent</span>.<span class="ident">len</span>() <span class="op">&lt;</span> <span class="ident">MAX_TAB_EVENTS</span> {
+            <span class="self">self</span>.<span class="ident">commands_sent</span>.<span class="ident">push</span>(<span class="ident">sent</span>);
+        }
+    }
+
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">record_tab_received</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>, <span class="ident">recd</span>: <span class="ident">ReceivedCommand</span>) {
+        <span class="kw">if</span> <span class="self">self</span>.<span class="ident">commands_received</span>.<span class="ident">len</span>() <span class="op">&lt;</span> <span class="ident">MAX_TAB_EVENTS</span> {
+            <span class="self">self</span>.<span class="ident">commands_received</span>.<span class="ident">push</span>(<span class="ident">recd</span>);
+        }
     }
 }
 </pre></div>

@@ -1,1 +1,1 @@
-initSidebarItems({});
+initSidebarItems({"constant":[["MAX_TAB_EVENTS",""]],"enum":[["ReceivedReason","The reason a tab/command was received."]],"struct":[["FxaTelemetry",""],["ReceivedCommand",""],["SentCommand",""]]});

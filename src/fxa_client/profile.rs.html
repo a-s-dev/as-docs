@@ -225,6 +225,7 @@
 <span id="225">225</span>
 <span id="226">226</span>
 <span id="227">227</span>
+<span id="228">228</span>
 </pre><div class="example-wrap"><pre class="rust ">
 <span class="comment">/* This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
@@ -255,6 +256,7 @@
                         <span class="string">&quot;Access token rejected, clearing the tokens cache and trying again.&quot;</span>
                     );
                     <span class="self">self</span>.<span class="ident">clear_access_token_cache</span>();
+                    <span class="self">self</span>.<span class="ident">clear_devices_and_attached_clients_cache</span>();
                     <span class="self">self</span>.<span class="ident">get_profile_helper</span>(<span class="ident">ignore_cache</span>)
                 }
                 <span class="kw">_</span> <span class="op">=</span><span class="op">&gt;</span> <span class="prelude-val">Err</span>(<span class="ident">e</span>),

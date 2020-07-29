@@ -233,11 +233,51 @@
 <span id="233">233</span>
 <span id="234">234</span>
 <span id="235">235</span>
+<span id="236">236</span>
+<span id="237">237</span>
+<span id="238">238</span>
+<span id="239">239</span>
+<span id="240">240</span>
+<span id="241">241</span>
+<span id="242">242</span>
+<span id="243">243</span>
+<span id="244">244</span>
+<span id="245">245</span>
+<span id="246">246</span>
+<span id="247">247</span>
+<span id="248">248</span>
+<span id="249">249</span>
+<span id="250">250</span>
+<span id="251">251</span>
+<span id="252">252</span>
+<span id="253">253</span>
+<span id="254">254</span>
+<span id="255">255</span>
+<span id="256">256</span>
+<span id="257">257</span>
+<span id="258">258</span>
+<span id="259">259</span>
+<span id="260">260</span>
+<span id="261">261</span>
+<span id="262">262</span>
+<span id="263">263</span>
+<span id="264">264</span>
+<span id="265">265</span>
+<span id="266">266</span>
+<span id="267">267</span>
+<span id="268">268</span>
+<span id="269">269</span>
+<span id="270">270</span>
+<span id="271">271</span>
+<span id="272">272</span>
+<span id="273">273</span>
+<span id="274">274</span>
 </pre><div class="example-wrap"><pre class="rust ">
 <span class="comment">/* This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at http://mozilla.org/MPL/2.0/. */</span>
 
+<span class="kw">use</span> <span class="kw">crate</span>::<span class="ident">device</span>::<span class="ident">CommandFetchReason</span>;
 <span class="kw">use</span> <span class="kw">crate</span>::{<span class="ident">error</span>::<span class="kw-2">*</span>, <span class="ident">AccountEvent</span>, <span class="ident">FirefoxAccount</span>};
 <span class="kw">use</span> <span class="ident">serde_derive</span>::<span class="ident">Deserialize</span>;
 
@@ -249,6 +289,8 @@
     <span class="doccomment">/// Since FxA sends one push notification per command received,</span>
     <span class="doccomment">/// we must only retrieve 1 command per push message,</span>
     <span class="doccomment">/// otherwise we risk receiving push messages for which the UI has already been shown.</span>
+    <span class="doccomment">/// However, note that this means iOS currently risks losing messages for</span>
+    <span class="doccomment">/// which a push notification doesn&#39;t arrive.</span>
     <span class="doccomment">///</span>
     <span class="doccomment">/// **💾 This method alters the persisted account state.**</span>
     <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">handle_push_message</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>, <span class="ident">payload</span>: <span class="kw-2">&amp;</span><span class="ident">str</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">Vec</span><span class="op">&lt;</span><span class="ident">AccountEvent</span><span class="op">&gt;</span><span class="op">&gt;</span> {
@@ -266,14 +308,15 @@
         <span class="kw">match</span> <span class="ident">payload</span> {
             <span class="ident">PushPayload</span>::<span class="ident">CommandReceived</span>(<span class="ident">CommandReceivedPushPayload</span> { <span class="ident">index</span>, .. }) <span class="op">=</span><span class="op">&gt;</span> {
                 <span class="kw">if</span> <span class="macro">cfg</span><span class="macro">!</span>(<span class="ident">target_os</span> <span class="op">=</span> <span class="string">&quot;ios&quot;</span>) {
-                    <span class="self">self</span>.<span class="ident">fetch_device_command</span>(<span class="ident">index</span>)
+                    <span class="self">self</span>.<span class="ident">ios_fetch_device_command</span>(<span class="ident">index</span>)
                         .<span class="ident">map</span>(<span class="op">|</span><span class="ident">cmd</span><span class="op">|</span> <span class="macro">vec</span><span class="macro">!</span>[<span class="ident">AccountEvent</span>::<span class="ident">IncomingDeviceCommand</span>(<span class="ident">Box</span>::<span class="ident">new</span>(<span class="ident">cmd</span>))])
                 } <span class="kw">else</span> {
-                    <span class="self">self</span>.<span class="ident">poll_device_commands</span>().<span class="ident">map</span>(<span class="op">|</span><span class="ident">cmds</span><span class="op">|</span> {
-                        <span class="ident">cmds</span>.<span class="ident">into_iter</span>()
-                            .<span class="ident">map</span>(<span class="op">|</span><span class="ident">cmd</span><span class="op">|</span> <span class="ident">AccountEvent</span>::<span class="ident">IncomingDeviceCommand</span>(<span class="ident">Box</span>::<span class="ident">new</span>(<span class="ident">cmd</span>)))
-                            .<span class="ident">collect</span>()
-                    })
+                    <span class="self">self</span>.<span class="ident">poll_device_commands</span>(<span class="ident">CommandFetchReason</span>::<span class="ident">Push</span>(<span class="ident">index</span>))
+                        .<span class="ident">map</span>(<span class="op">|</span><span class="ident">cmds</span><span class="op">|</span> {
+                            <span class="ident">cmds</span>.<span class="ident">into_iter</span>()
+                                .<span class="ident">map</span>(<span class="op">|</span><span class="ident">cmd</span><span class="op">|</span> <span class="ident">AccountEvent</span>::<span class="ident">IncomingDeviceCommand</span>(<span class="ident">Box</span>::<span class="ident">new</span>(<span class="ident">cmd</span>)))
+                                .<span class="ident">collect</span>()
+                        })
                 }
             }
             <span class="ident">PushPayload</span>::<span class="ident">ProfileUpdated</span> <span class="op">=</span><span class="op">&gt;</span> {
@@ -312,6 +355,8 @@
             }
             <span class="ident">PushPayload</span>::<span class="ident">PasswordChanged</span> <span class="op">|</span> <span class="ident">PushPayload</span>::<span class="ident">PasswordReset</span> <span class="op">=</span><span class="op">&gt;</span> {
                 <span class="kw">let</span> <span class="ident">status</span> <span class="op">=</span> <span class="self">self</span>.<span class="ident">check_authorization_status</span>()<span class="question-mark">?</span>;
+                <span class="comment">// clear any device or client data due to password change.</span>
+                <span class="self">self</span>.<span class="ident">clear_devices_and_attached_clients_cache</span>();
                 <span class="prelude-val">Ok</span>(<span class="kw">if</span> <span class="op">!</span><span class="ident">status</span>.<span class="ident">active</span> {
                     <span class="macro">vec</span><span class="macro">!</span>[<span class="ident">AccountEvent</span>::<span class="ident">AccountAuthStateChanged</span>]
                 } <span class="kw">else</span> {
@@ -376,6 +421,10 @@
 <span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">test</span>)]</span>
 <span class="kw">mod</span> <span class="ident">tests</span> {
     <span class="kw">use</span> <span class="kw">super</span>::<span class="kw-2">*</span>;
+    <span class="kw">use</span> <span class="kw">crate</span>::<span class="ident">http_client</span>::<span class="ident">FxAClientMock</span>;
+    <span class="kw">use</span> <span class="kw">crate</span>::<span class="ident">http_client</span>::<span class="ident">IntrospectResponse</span>;
+    <span class="kw">use</span> <span class="kw">crate</span>::<span class="ident">CachedResponse</span>;
+    <span class="kw">use</span> <span class="ident">std</span>::<span class="ident">sync</span>::<span class="ident">Arc</span>;
 
     <span class="attribute">#[<span class="ident">test</span>]</span>
     <span class="kw">fn</span> <span class="ident">test_deserialize_send_tab_command</span>() {
@@ -422,6 +471,35 @@
             }
             <span class="kw">_</span> <span class="op">=</span><span class="op">&gt;</span> <span class="macro">unreachable</span><span class="macro">!</span>(),
         };
+    }
+
+    <span class="attribute">#[<span class="ident">test</span>]</span>
+    <span class="kw">fn</span> <span class="ident">test_push_password_reset</span>() {
+        <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">fxa</span> <span class="op">=</span>
+            <span class="ident">FirefoxAccount</span>::<span class="ident">with_config</span>(<span class="kw">crate</span>::<span class="ident">Config</span>::<span class="ident">stable_dev</span>(<span class="string">&quot;12345678&quot;</span>, <span class="string">&quot;https://foo.bar&quot;</span>));
+        <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">client</span> <span class="op">=</span> <span class="ident">FxAClientMock</span>::<span class="ident">new</span>();
+        <span class="ident">client</span>
+            .<span class="ident">expect_oauth_introspect_refresh_token</span>(<span class="ident">mockiato</span>::<span class="ident">Argument</span>::<span class="ident">any</span>, <span class="op">|</span><span class="ident">token</span><span class="op">|</span> {
+                <span class="ident">token</span>.<span class="ident">partial_eq</span>(<span class="string">&quot;refresh_token&quot;</span>)
+            })
+            .<span class="ident">times</span>(<span class="number">1</span>)
+            .<span class="ident">returns_once</span>(<span class="prelude-val">Ok</span>(<span class="ident">IntrospectResponse</span> { <span class="ident">active</span>: <span class="bool-val">true</span> }));
+        <span class="ident">fxa</span>.<span class="ident">set_client</span>(<span class="ident">Arc</span>::<span class="ident">new</span>(<span class="ident">client</span>));
+        <span class="kw">let</span> <span class="ident">refresh_token_scopes</span> <span class="op">=</span> <span class="ident">std</span>::<span class="ident">collections</span>::<span class="ident">HashSet</span>::<span class="ident">new</span>();
+        <span class="ident">fxa</span>.<span class="ident">state</span>.<span class="ident">refresh_token</span> <span class="op">=</span> <span class="prelude-val">Some</span>(<span class="kw">crate</span>::<span class="ident">oauth</span>::<span class="ident">RefreshToken</span> {
+            <span class="ident">token</span>: <span class="string">&quot;refresh_token&quot;</span>.<span class="ident">to_owned</span>(),
+            <span class="ident">scopes</span>: <span class="ident">refresh_token_scopes</span>,
+        });
+        <span class="ident">fxa</span>.<span class="ident">state</span>.<span class="ident">current_device_id</span> <span class="op">=</span> <span class="prelude-val">Some</span>(<span class="string">&quot;my_id&quot;</span>.<span class="ident">to_owned</span>());
+        <span class="ident">fxa</span>.<span class="ident">devices_cache</span> <span class="op">=</span> <span class="prelude-val">Some</span>(<span class="ident">CachedResponse</span> {
+            <span class="ident">response</span>: <span class="macro">vec</span><span class="macro">!</span>[],
+            <span class="ident">cached_at</span>: <span class="number">0</span>,
+            <span class="ident">etag</span>: <span class="string">&quot;&quot;</span>.<span class="ident">to_string</span>(),
+        });
+        <span class="kw">let</span> <span class="ident">json</span> <span class="op">=</span> <span class="string">&quot;{\&quot;version\&quot;:1,\&quot;command\&quot;:\&quot;fxaccounts:password_reset\&quot;}&quot;</span>;
+        <span class="macro">assert</span><span class="macro">!</span>(<span class="ident">fxa</span>.<span class="ident">devices_cache</span>.<span class="ident">is_some</span>());
+        <span class="ident">fxa</span>.<span class="ident">handle_push_message</span>(<span class="ident">json</span>).<span class="ident">unwrap</span>();
+        <span class="macro">assert</span><span class="macro">!</span>(<span class="ident">fxa</span>.<span class="ident">devices_cache</span>.<span class="ident">is_none</span>());
     }
 
     <span class="attribute">#[<span class="ident">test</span>]</span>

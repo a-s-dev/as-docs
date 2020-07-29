@@ -589,6 +589,13 @@
 <span id="589">589</span>
 <span id="590">590</span>
 <span id="591">591</span>
+<span id="592">592</span>
+<span id="593">593</span>
+<span id="594">594</span>
+<span id="595">595</span>
+<span id="596">596</span>
+<span id="597">597</span>
+<span id="598">598</span>
 </pre><div class="example-wrap"><pre class="rust ">
 <span class="comment">/* This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
@@ -610,9 +617,11 @@
     <span class="ident">oauth</span>::<span class="ident">IntrospectInfo</span>,
     <span class="ident">oauth</span>::{<span class="ident">AccessTokenInfo</span>, <span class="ident">RefreshToken</span>},
     <span class="ident">profile</span>::<span class="ident">Profile</span>,
+    <span class="ident">telemetry</span>::<span class="ident">FxaTelemetry</span>,
 };
 <span class="kw">use</span> <span class="ident">serde_derive</span>::<span class="kw-2">*</span>;
 <span class="kw">use</span> <span class="ident">std</span>::{
+    <span class="ident">cell</span>::<span class="ident">RefCell</span>,
     <span class="ident">collections</span>::{<span class="ident">HashMap</span>, <span class="ident">HashSet</span>},
     <span class="ident">sync</span>::<span class="ident">Arc</span>,
 };
@@ -658,6 +667,9 @@
     <span class="ident">flow_store</span>: <span class="ident">HashMap</span><span class="op">&lt;</span><span class="ident">String</span>, <span class="ident">OAuthFlow</span><span class="op">&gt;</span>,
     <span class="ident">attached_clients_cache</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">CachedResponse</span><span class="op">&lt;</span><span class="ident">Vec</span><span class="op">&lt;</span><span class="ident">http_client</span>::<span class="ident">GetAttachedClientResponse</span><span class="op">&gt;</span><span class="op">&gt;</span><span class="op">&gt;</span>,
     <span class="ident">devices_cache</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">CachedResponse</span><span class="op">&lt;</span><span class="ident">Vec</span><span class="op">&lt;</span><span class="ident">http_client</span>::<span class="ident">GetDeviceResponse</span><span class="op">&gt;</span><span class="op">&gt;</span><span class="op">&gt;</span>,
+    <span class="comment">// &#39;telemetry&#39; is only currently used by `&amp;mut self` functions, but that&#39;s</span>
+    <span class="comment">// not something we want to insist on going forward, so RefCell&lt;&gt; it.</span>
+    <span class="ident">telemetry</span>: <span class="ident">RefCell</span><span class="op">&lt;</span><span class="ident">FxaTelemetry</span><span class="op">&gt;</span>,
 }
 
 <span class="kw">impl</span> <span class="ident">FirefoxAccount</span> {
@@ -668,6 +680,7 @@
             <span class="ident">flow_store</span>: <span class="ident">HashMap</span>::<span class="ident">new</span>(),
             <span class="ident">attached_clients_cache</span>: <span class="prelude-val">None</span>,
             <span class="ident">devices_cache</span>: <span class="prelude-val">None</span>,
+            <span class="ident">telemetry</span>: <span class="ident">RefCell</span>::<span class="ident">new</span>(<span class="ident">FxaTelemetry</span>::<span class="ident">new</span>()),
         }
     }
 
@@ -744,6 +757,7 @@
         <span class="self">self</span>.<span class="ident">state</span> <span class="op">=</span> <span class="self">self</span>.<span class="ident">state</span>.<span class="ident">start_over</span>();
         <span class="self">self</span>.<span class="ident">flow_store</span>.<span class="ident">clear</span>();
         <span class="self">self</span>.<span class="ident">clear_devices_and_attached_clients_cache</span>();
+        <span class="self">self</span>.<span class="ident">telemetry</span>.<span class="ident">replace</span>(<span class="ident">FxaTelemetry</span>::<span class="ident">new</span>());
     }
 
     <span class="doccomment">/// Get the Sync Token Server endpoint URL.</span>
