@@ -621,11 +621,6 @@
 <span id="621">621</span>
 <span id="622">622</span>
 <span id="623">623</span>
-<span id="624">624</span>
-<span id="625">625</span>
-<span id="626">626</span>
-<span id="627">627</span>
-<span id="628">628</span>
 </pre><div class="example-wrap"><pre class="rust ">
 <span class="comment">/* Copyright 2018-2019 Mozilla Foundation
  *
@@ -1087,11 +1082,6 @@
     <span class="attribute">#[<span class="ident">inline</span>]</span>
     <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">from_vec</span>(<span class="ident">bytes</span>: <span class="ident">Vec</span><span class="op">&lt;</span><span class="ident">u8</span><span class="op">&gt;</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="self">Self</span> {
         <span class="kw">use</span> <span class="ident">std</span>::<span class="ident">convert</span>::<span class="ident">TryFrom</span>;
-        <span class="kw">if</span> <span class="ident">bytes</span>.<span class="ident">is_empty</span>() {
-            <span class="comment">// Try and maintain the invariant that `len == 0` and</span>
-            <span class="comment">// `data.is_null()` are equivalent.</span>
-            <span class="kw">return</span> <span class="self">Self</span>::<span class="ident">default</span>();
-        }
         <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">buf</span> <span class="op">=</span> <span class="ident">bytes</span>.<span class="ident">into_boxed_slice</span>();
         <span class="kw">let</span> <span class="ident">data</span> <span class="op">=</span> <span class="ident">buf</span>.<span class="ident">as_mut_ptr</span>();
         <span class="kw">let</span> <span class="ident">len</span> <span class="op">=</span> <span class="ident">i64</span>::<span class="ident">try_from</span>(<span class="ident">buf</span>.<span class="ident">len</span>()).<span class="ident">expect</span>(<span class="string">&quot;buffer length cannot fit into a i64.&quot;</span>);
@@ -1246,12 +1236,12 @@
 
         <span class="kw">let</span> <span class="ident">bb</span> <span class="op">=</span> <span class="ident">ByteBuffer</span>::<span class="ident">new_with_size</span>(<span class="number">0</span>);
         <span class="macro">assert_eq</span><span class="macro">!</span>(<span class="ident">bb</span>.<span class="ident">as_slice</span>(), <span class="kw-2">&amp;</span>[]);
-        <span class="macro">assert</span><span class="macro">!</span>(<span class="ident">bb</span>.<span class="ident">data</span>.<span class="ident">is_null</span>());
+        <span class="macro">assert</span><span class="macro">!</span>(<span class="op">!</span><span class="ident">bb</span>.<span class="ident">data</span>.<span class="ident">is_null</span>());
         <span class="ident">bb</span>.<span class="ident">destroy</span>();
 
         <span class="kw">let</span> <span class="ident">bb</span> <span class="op">=</span> <span class="ident">ByteBuffer</span>::<span class="ident">from_vec</span>(<span class="macro">vec</span><span class="macro">!</span>[]);
         <span class="macro">assert_eq</span><span class="macro">!</span>(<span class="ident">bb</span>.<span class="ident">as_slice</span>(), <span class="kw-2">&amp;</span>[]);
-        <span class="macro">assert</span><span class="macro">!</span>(<span class="ident">bb</span>.<span class="ident">data</span>.<span class="ident">is_null</span>());
+        <span class="macro">assert</span><span class="macro">!</span>(<span class="op">!</span><span class="ident">bb</span>.<span class="ident">data</span>.<span class="ident">is_null</span>());
         <span class="ident">bb</span>.<span class="ident">destroy</span>();
     }
 }

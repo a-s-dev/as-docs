@@ -246,7 +246,7 @@
         <span class="kw">let</span> <span class="ident">response</span> <span class="op">=</span> <span class="kw">unsafe</span> { <span class="ident">fetch</span>(<span class="ident">buf</span>) };
         <span class="comment">// This way we&#39;ll Drop it if we panic, unlike if we just got a slice into</span>
         <span class="comment">// it. Besides, we already own it.</span>
-        <span class="kw">let</span> <span class="ident">response_bytes</span> <span class="op">=</span> <span class="ident">response</span>.<span class="ident">into_vec</span>();
+        <span class="kw">let</span> <span class="ident">response_bytes</span> <span class="op">=</span> <span class="ident">response</span>.<span class="ident">destroy_into_vec</span>();
 
         <span class="kw">let</span> <span class="ident">response</span>: <span class="ident">msg_types</span>::<span class="ident">Response</span> <span class="op">=</span> <span class="kw">match</span> <span class="ident">Message</span>::<span class="ident">decode</span>(<span class="ident">response_bytes</span>.<span class="ident">as_slice</span>()) {
             <span class="prelude-val">Ok</span>(<span class="ident">v</span>) <span class="op">=</span><span class="op">&gt;</span> <span class="ident">v</span>,
