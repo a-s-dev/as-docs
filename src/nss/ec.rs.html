@@ -757,7 +757,7 @@
     <span class="comment">// The following code is adapted from:</span>
     <span class="comment">// https://searchfox.org/mozilla-central/rev/ec489aa170b6486891cf3625717d6fa12bcd11c1/dom/crypto/WebCryptoCommon.h#299</span>
     <span class="kw">let</span> <span class="ident">curve_oid_tag</span> <span class="op">=</span> <span class="kw">match</span> <span class="ident">curve</span> {
-        <span class="ident">Curve</span>::<span class="ident">P256</span> <span class="op">=</span><span class="op">&gt;</span> <span class="ident">nss_sys</span>::<span class="ident">SECOidTag</span>::<span class="ident">SEC_OID_ANSIX962_EC_PRIME256V1</span>,
+        <span class="ident">Curve</span>::<span class="ident">P256</span> <span class="op">=</span><span class="op">&gt;</span> <span class="ident">nss_sys</span>::<span class="ident">SECOidTag</span>::<span class="ident">SEC_OID_SECG_EC_SECP256R1</span>,
         <span class="ident">Curve</span>::<span class="ident">P384</span> <span class="op">=</span><span class="op">&gt;</span> <span class="ident">nss_sys</span>::<span class="ident">SECOidTag</span>::<span class="ident">SEC_OID_SECG_EC_SECP384R1</span>,
     };
     <span class="comment">// Retrieve curve data by OID tag.</span>
