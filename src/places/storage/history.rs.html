@@ -2909,6 +2909,24 @@
 <span id="2909">2909</span>
 <span id="2910">2910</span>
 <span id="2911">2911</span>
+<span id="2912">2912</span>
+<span id="2913">2913</span>
+<span id="2914">2914</span>
+<span id="2915">2915</span>
+<span id="2916">2916</span>
+<span id="2917">2917</span>
+<span id="2918">2918</span>
+<span id="2919">2919</span>
+<span id="2920">2920</span>
+<span id="2921">2921</span>
+<span id="2922">2922</span>
+<span id="2923">2923</span>
+<span id="2924">2924</span>
+<span id="2925">2925</span>
+<span id="2926">2926</span>
+<span id="2927">2927</span>
+<span id="2928">2928</span>
+<span id="2929">2929</span>
 </pre><div class="example-wrap"><pre class="rust ">
 <span class="comment">/* This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
@@ -4107,16 +4125,34 @@
 }
 
 <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">get_top_frecent_site_infos</span>(<span class="ident">db</span>: <span class="kw-2">&amp;</span><span class="ident">PlacesDb</span>, <span class="ident">num_items</span>: <span class="ident">i32</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">TopFrecentSiteInfos</span><span class="op">&gt;</span> {
+    <span class="comment">// Get the complement of the visit types that should be excluded.</span>
+    <span class="kw">let</span> <span class="ident">allowed_types</span> <span class="op">=</span> <span class="ident">VisitTransitionSet</span>::<span class="ident">for_specific</span>(<span class="kw-2">&amp;</span>[
+        <span class="ident">VisitTransition</span>::<span class="ident">Download</span>,
+        <span class="ident">VisitTransition</span>::<span class="ident">Embed</span>,
+        <span class="ident">VisitTransition</span>::<span class="ident">RedirectPermanent</span>,
+        <span class="ident">VisitTransition</span>::<span class="ident">RedirectTemporary</span>,
+        <span class="ident">VisitTransition</span>::<span class="ident">FramedLink</span>,
+        <span class="ident">VisitTransition</span>::<span class="ident">Reload</span>,
+    ])
+    .<span class="ident">complement</span>();
+
     <span class="kw">let</span> <span class="ident">infos</span> <span class="op">=</span> <span class="ident">db</span>.<span class="ident">query_rows_and_then_named_cached</span>(
-        <span class="string">&quot;SELECT frecency, title, url
-         FROM moz_places
-         WHERE (SUBSTR(url, 1, 6) == &#39;https:&#39; OR SUBSTR(url, 1, 5) == &#39;http:&#39;)
-           AND (last_visit_date_local + last_visit_date_remote) != 0 AND
-           NOT hidden
-         ORDER BY frecency DESC
-         LIMIT :limit&quot;</span>,
+        <span class="string">&quot;SELECT h.frecency, h.title, h.url
+        FROM moz_places h
+        WHERE EXISTS (
+            SELECT v.visit_type
+            FROM moz_historyvisits v
+            WHERE h.id = v.place_id
+              AND (SUBSTR(h.url, 1, 6) == &#39;https:&#39; OR SUBSTR(h.url, 1, 5) == &#39;http:&#39;)
+              AND (h.last_visit_date_local + h.last_visit_date_remote) != 0
+              AND ((1 &lt;&lt; v.visit_type) &amp; :allowed_types) != 0 AND
+              NOT h.hidden
+        )
+        ORDER BY h.frecency DESC
+        LIMIT :limit&quot;</span>,
         <span class="ident">rusqlite</span>::<span class="macro">named_params</span><span class="macro">!</span> {
             <span class="string">&quot;:limit&quot;</span>: <span class="ident">num_items</span>,
+            <span class="string">&quot;:allowed_types&quot;</span>: <span class="ident">allowed_types</span>,
         },
         <span class="ident">TopFrecentSiteInfo</span>::<span class="ident">from_row</span>,
     )<span class="question-mark">?</span>;
