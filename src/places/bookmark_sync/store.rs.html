@@ -3935,6 +3935,78 @@
 <span id="3935">3935</span>
 <span id="3936">3936</span>
 <span id="3937">3937</span>
+<span id="3938">3938</span>
+<span id="3939">3939</span>
+<span id="3940">3940</span>
+<span id="3941">3941</span>
+<span id="3942">3942</span>
+<span id="3943">3943</span>
+<span id="3944">3944</span>
+<span id="3945">3945</span>
+<span id="3946">3946</span>
+<span id="3947">3947</span>
+<span id="3948">3948</span>
+<span id="3949">3949</span>
+<span id="3950">3950</span>
+<span id="3951">3951</span>
+<span id="3952">3952</span>
+<span id="3953">3953</span>
+<span id="3954">3954</span>
+<span id="3955">3955</span>
+<span id="3956">3956</span>
+<span id="3957">3957</span>
+<span id="3958">3958</span>
+<span id="3959">3959</span>
+<span id="3960">3960</span>
+<span id="3961">3961</span>
+<span id="3962">3962</span>
+<span id="3963">3963</span>
+<span id="3964">3964</span>
+<span id="3965">3965</span>
+<span id="3966">3966</span>
+<span id="3967">3967</span>
+<span id="3968">3968</span>
+<span id="3969">3969</span>
+<span id="3970">3970</span>
+<span id="3971">3971</span>
+<span id="3972">3972</span>
+<span id="3973">3973</span>
+<span id="3974">3974</span>
+<span id="3975">3975</span>
+<span id="3976">3976</span>
+<span id="3977">3977</span>
+<span id="3978">3978</span>
+<span id="3979">3979</span>
+<span id="3980">3980</span>
+<span id="3981">3981</span>
+<span id="3982">3982</span>
+<span id="3983">3983</span>
+<span id="3984">3984</span>
+<span id="3985">3985</span>
+<span id="3986">3986</span>
+<span id="3987">3987</span>
+<span id="3988">3988</span>
+<span id="3989">3989</span>
+<span id="3990">3990</span>
+<span id="3991">3991</span>
+<span id="3992">3992</span>
+<span id="3993">3993</span>
+<span id="3994">3994</span>
+<span id="3995">3995</span>
+<span id="3996">3996</span>
+<span id="3997">3997</span>
+<span id="3998">3998</span>
+<span id="3999">3999</span>
+<span id="4000">4000</span>
+<span id="4001">4001</span>
+<span id="4002">4002</span>
+<span id="4003">4003</span>
+<span id="4004">4004</span>
+<span id="4005">4005</span>
+<span id="4006">4006</span>
+<span id="4007">4007</span>
+<span id="4008">4008</span>
+<span id="4009">4009</span>
 </pre><div class="example-wrap"><pre class="rust ">
 <span class="comment">/* This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
@@ -6837,6 +6909,78 @@
         <span class="ident">tags_for_c</span>.<span class="ident">sort</span>();
         <span class="macro">assert_eq</span><span class="macro">!</span>(<span class="ident">tags_for_c</span>, <span class="kw-2">&amp;</span>[<span class="string">&quot;bar&quot;</span>, <span class="string">&quot;foo&quot;</span>]);
 
+        <span class="prelude-val">Ok</span>(())
+    }
+
+    <span class="attribute">#[<span class="ident">test</span>]</span>
+    <span class="kw">fn</span> <span class="ident">test_apply_invalid_url</span>() <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span>()<span class="op">&gt;</span> {
+        <span class="kw">let</span> <span class="ident">api</span> <span class="op">=</span> <span class="ident">new_mem_api</span>();
+        <span class="kw">let</span> <span class="ident">syncer</span> <span class="op">=</span> <span class="ident">api</span>.<span class="ident">open_sync_connection</span>()<span class="question-mark">?</span>;
+
+        <span class="ident">syncer</span>
+            .<span class="ident">execute</span>(<span class="string">&quot;UPDATE moz_bookmarks SET syncChangeCounter = 0&quot;</span>, <span class="ident">NO_PARAMS</span>)
+            .<span class="ident">expect</span>(<span class="string">&quot;should work&quot;</span>);
+
+        <span class="kw">let</span> <span class="ident">records</span> <span class="op">=</span> <span class="macro">vec</span><span class="macro">!</span>[
+            <span class="macro">json</span><span class="macro">!</span>({
+                <span class="string">&quot;id&quot;</span>: <span class="string">&quot;bookmarkXXXX&quot;</span>,
+                <span class="string">&quot;type&quot;</span>: <span class="string">&quot;bookmark&quot;</span>,
+                <span class="string">&quot;parentid&quot;</span>: <span class="string">&quot;menu&quot;</span>,
+                <span class="string">&quot;parentName&quot;</span>: <span class="string">&quot;menu&quot;</span>,
+                <span class="string">&quot;dateAdded&quot;</span>: <span class="number">1_552_183_116_885u64</span>,
+                <span class="string">&quot;title&quot;</span>: <span class="string">&quot;Invalid&quot;</span>,
+                <span class="string">&quot;bmkUri&quot;</span>: <span class="string">&quot;invalid url&quot;</span>,
+            }),
+            <span class="macro">json</span><span class="macro">!</span>({
+                <span class="string">&quot;id&quot;</span>: <span class="string">&quot;menu&quot;</span>,
+                <span class="string">&quot;type&quot;</span>: <span class="string">&quot;folder&quot;</span>,
+                <span class="string">&quot;parentid&quot;</span>: <span class="string">&quot;places&quot;</span>,
+                <span class="string">&quot;parentName&quot;</span>: <span class="string">&quot;&quot;</span>,
+                <span class="string">&quot;dateAdded&quot;</span>: <span class="number">0</span>,
+                <span class="string">&quot;title&quot;</span>: <span class="string">&quot;menu&quot;</span>,
+                <span class="string">&quot;children&quot;</span>: [<span class="string">&quot;bookmarkXXXX&quot;</span>],
+            }),
+        ];
+
+        <span class="kw">let</span> <span class="ident">interrupt_scope</span> <span class="op">=</span> <span class="ident">syncer</span>.<span class="ident">begin_interrupt_scope</span>();
+        <span class="kw">let</span> <span class="ident">store</span> <span class="op">=</span> <span class="ident">BookmarksStore</span>::<span class="ident">new</span>(<span class="kw-2">&amp;</span><span class="ident">syncer</span>, <span class="kw-2">&amp;</span><span class="ident">interrupt_scope</span>);
+
+        <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">incoming</span> <span class="op">=</span> <span class="ident">IncomingChangeset</span>::<span class="ident">new</span>(<span class="ident">store</span>.<span class="ident">collection_name</span>(), <span class="ident">ServerTimestamp</span>(<span class="number">0</span>));
+        <span class="kw">for</span> <span class="ident">record</span> <span class="kw">in</span> <span class="ident">records</span> {
+            <span class="kw">let</span> <span class="ident">payload</span> <span class="op">=</span> <span class="ident">Payload</span>::<span class="ident">from_json</span>(<span class="ident">record</span>).<span class="ident">unwrap</span>();
+            <span class="ident">incoming</span>.<span class="ident">changes</span>.<span class="ident">push</span>((<span class="ident">payload</span>, <span class="ident">ServerTimestamp</span>(<span class="number">0</span>)));
+        }
+
+        <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">outgoing</span> <span class="op">=</span> <span class="ident">store</span>
+            .<span class="ident">apply_incoming</span>(<span class="macro">vec</span><span class="macro">!</span>[<span class="ident">incoming</span>], <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">telemetry</span>::<span class="ident">Engine</span>::<span class="ident">new</span>(<span class="string">&quot;bookmarks&quot;</span>))
+            .<span class="ident">expect</span>(<span class="string">&quot;Should apply incoming and stage outgoing records&quot;</span>);
+        <span class="ident">outgoing</span>.<span class="ident">changes</span>.<span class="ident">sort_by</span>(<span class="op">|</span><span class="ident">a</span>, <span class="ident">b</span><span class="op">|</span> <span class="ident">a</span>.<span class="ident">id</span>.<span class="ident">cmp</span>(<span class="kw-2">&amp;</span><span class="ident">b</span>.<span class="ident">id</span>));
+        <span class="macro">assert_eq</span><span class="macro">!</span>(
+            <span class="ident">outgoing</span>
+                .<span class="ident">changes</span>
+                .<span class="ident">iter</span>()
+                .<span class="ident">map</span>(<span class="op">|</span><span class="ident">p</span><span class="op">|</span> <span class="ident">p</span>.<span class="ident">id</span>.<span class="ident">as_str</span>())
+                .<span class="ident">collect</span>::<span class="op">&lt;</span><span class="ident">Vec</span><span class="op">&lt;</span><span class="kw">_</span><span class="op">&gt;</span><span class="op">&gt;</span>(),
+            <span class="macro">vec</span><span class="macro">!</span>[<span class="string">&quot;bookmarkXXXX&quot;</span>, <span class="string">&quot;menu&quot;</span>,]
+        );
+
+        <span class="kw">let</span> <span class="ident">record_for_invalid</span> <span class="op">=</span> <span class="ident">outgoing</span>
+            .<span class="ident">changes</span>
+            .<span class="ident">iter</span>()
+            .<span class="ident">find</span>(<span class="op">|</span><span class="ident">p</span><span class="op">|</span> <span class="ident">p</span>.<span class="ident">id</span> <span class="op">=</span><span class="op">=</span> <span class="string">&quot;bookmarkXXXX&quot;</span>)
+            .<span class="ident">expect</span>(<span class="string">&quot;Should re-upload the invalid record&quot;</span>);
+        <span class="macro">assert</span><span class="macro">!</span>(<span class="ident">record_for_invalid</span>.<span class="ident">deleted</span>, <span class="string">&quot;should be a tombstone&quot;</span>);
+
+        <span class="kw">let</span> <span class="ident">record_for_menu</span> <span class="op">=</span> <span class="ident">outgoing</span>
+            .<span class="ident">changes</span>
+            .<span class="ident">iter</span>()
+            .<span class="ident">find</span>(<span class="op">|</span><span class="ident">p</span><span class="op">|</span> <span class="ident">p</span>.<span class="ident">id</span> <span class="op">=</span><span class="op">=</span> <span class="string">&quot;menu&quot;</span>)
+            .<span class="ident">expect</span>(<span class="string">&quot;Should upload menu&quot;</span>);
+        <span class="macro">assert_eq</span><span class="macro">!</span>(
+            <span class="ident">record_for_menu</span>.<span class="ident">data</span>.<span class="ident">get</span>(<span class="string">&quot;children&quot;</span>),
+            <span class="prelude-val">Some</span>(<span class="kw-2">&amp;</span><span class="macro">json</span><span class="macro">!</span>([])),
+            <span class="string">&quot;should have been removed from the parent&quot;</span>
+        );
         <span class="prelude-val">Ok</span>(())
     }
 
