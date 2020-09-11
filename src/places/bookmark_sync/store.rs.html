@@ -4007,6 +4007,117 @@
 <span id="4007">4007</span>
 <span id="4008">4008</span>
 <span id="4009">4009</span>
+<span id="4010">4010</span>
+<span id="4011">4011</span>
+<span id="4012">4012</span>
+<span id="4013">4013</span>
+<span id="4014">4014</span>
+<span id="4015">4015</span>
+<span id="4016">4016</span>
+<span id="4017">4017</span>
+<span id="4018">4018</span>
+<span id="4019">4019</span>
+<span id="4020">4020</span>
+<span id="4021">4021</span>
+<span id="4022">4022</span>
+<span id="4023">4023</span>
+<span id="4024">4024</span>
+<span id="4025">4025</span>
+<span id="4026">4026</span>
+<span id="4027">4027</span>
+<span id="4028">4028</span>
+<span id="4029">4029</span>
+<span id="4030">4030</span>
+<span id="4031">4031</span>
+<span id="4032">4032</span>
+<span id="4033">4033</span>
+<span id="4034">4034</span>
+<span id="4035">4035</span>
+<span id="4036">4036</span>
+<span id="4037">4037</span>
+<span id="4038">4038</span>
+<span id="4039">4039</span>
+<span id="4040">4040</span>
+<span id="4041">4041</span>
+<span id="4042">4042</span>
+<span id="4043">4043</span>
+<span id="4044">4044</span>
+<span id="4045">4045</span>
+<span id="4046">4046</span>
+<span id="4047">4047</span>
+<span id="4048">4048</span>
+<span id="4049">4049</span>
+<span id="4050">4050</span>
+<span id="4051">4051</span>
+<span id="4052">4052</span>
+<span id="4053">4053</span>
+<span id="4054">4054</span>
+<span id="4055">4055</span>
+<span id="4056">4056</span>
+<span id="4057">4057</span>
+<span id="4058">4058</span>
+<span id="4059">4059</span>
+<span id="4060">4060</span>
+<span id="4061">4061</span>
+<span id="4062">4062</span>
+<span id="4063">4063</span>
+<span id="4064">4064</span>
+<span id="4065">4065</span>
+<span id="4066">4066</span>
+<span id="4067">4067</span>
+<span id="4068">4068</span>
+<span id="4069">4069</span>
+<span id="4070">4070</span>
+<span id="4071">4071</span>
+<span id="4072">4072</span>
+<span id="4073">4073</span>
+<span id="4074">4074</span>
+<span id="4075">4075</span>
+<span id="4076">4076</span>
+<span id="4077">4077</span>
+<span id="4078">4078</span>
+<span id="4079">4079</span>
+<span id="4080">4080</span>
+<span id="4081">4081</span>
+<span id="4082">4082</span>
+<span id="4083">4083</span>
+<span id="4084">4084</span>
+<span id="4085">4085</span>
+<span id="4086">4086</span>
+<span id="4087">4087</span>
+<span id="4088">4088</span>
+<span id="4089">4089</span>
+<span id="4090">4090</span>
+<span id="4091">4091</span>
+<span id="4092">4092</span>
+<span id="4093">4093</span>
+<span id="4094">4094</span>
+<span id="4095">4095</span>
+<span id="4096">4096</span>
+<span id="4097">4097</span>
+<span id="4098">4098</span>
+<span id="4099">4099</span>
+<span id="4100">4100</span>
+<span id="4101">4101</span>
+<span id="4102">4102</span>
+<span id="4103">4103</span>
+<span id="4104">4104</span>
+<span id="4105">4105</span>
+<span id="4106">4106</span>
+<span id="4107">4107</span>
+<span id="4108">4108</span>
+<span id="4109">4109</span>
+<span id="4110">4110</span>
+<span id="4111">4111</span>
+<span id="4112">4112</span>
+<span id="4113">4113</span>
+<span id="4114">4114</span>
+<span id="4115">4115</span>
+<span id="4116">4116</span>
+<span id="4117">4117</span>
+<span id="4118">4118</span>
+<span id="4119">4119</span>
+<span id="4120">4120</span>
 </pre><div class="example-wrap"><pre class="rust ">
 <span class="comment">/* This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
@@ -4359,7 +4470,8 @@
                          )
                          SELECT b.fk, {now}
                          FROM moz_bookmarks b
-                         WHERE b.guid IN ({vars})&quot;</span>,
+                         WHERE b.guid IN ({vars})
+                         AND b.fk NOT NULL&quot;</span>,
                         <span class="ident">now</span> <span class="op">=</span> <span class="ident">now</span>,
                         <span class="ident">vars</span> <span class="op">=</span> <span class="ident">sql_support</span>::<span class="ident">repeat_sql_vars</span>(<span class="ident">chunk</span>.<span class="ident">len</span>())
                     ),
@@ -5123,7 +5235,7 @@
         <span class="kw">let</span> <span class="ident">driver</span> <span class="op">=</span> <span class="ident">Driver</span>::<span class="ident">default</span>();
         <span class="self">self</span>.<span class="ident">prepare</span>()<span class="question-mark">?</span>;
         <span class="kw">let</span> <span class="ident">result</span> <span class="op">=</span> <span class="self">self</span>.<span class="ident">merge_with_driver</span>(<span class="kw-2">&amp;</span><span class="ident">driver</span>, <span class="kw-2">&amp;</span><span class="ident">MergeInterruptee</span>(<span class="self">self</span>.<span class="ident">store</span>.<span class="ident">interruptee</span>));
-        <span class="ident">log</span>::<span class="macro">debug</span><span class="macro">!</span>(<span class="string">&quot;merge completed&quot;</span>);
+        <span class="ident">log</span>::<span class="macro">debug</span><span class="macro">!</span>(<span class="string">&quot;merge completed: {:?}&quot;</span>, <span class="ident">result</span>);
 
         <span class="comment">// Record telemetry in all cases, even if the merge fails.</span>
         <span class="kw">if</span> <span class="kw">let</span> <span class="prelude-val">Some</span>(<span class="kw-2">ref</span> <span class="kw-2">mut</span> <span class="ident">telem</span>) <span class="op">=</span> <span class="self">self</span>.<span class="ident">telem</span> {
@@ -6016,7 +6128,7 @@
             {
                 <span class="string">&quot;id&quot;</span>: <span class="string">&quot;unfiled&quot;</span>,
                 <span class="string">&quot;type&quot;</span>: <span class="string">&quot;folder&quot;</span>,
-                <span class="string">&quot;parentid&quot;</span>: <span class="string">&quot;root&quot;</span>,
+                <span class="string">&quot;parentid&quot;</span>: <span class="string">&quot;places&quot;</span>,
                 <span class="string">&quot;dateAdded&quot;</span>: <span class="number">1_381_542_355_843u64</span>,
                 <span class="string">&quot;title&quot;</span>: <span class="string">&quot;Unfiled&quot;</span>,
                 <span class="string">&quot;children&quot;</span>: [<span class="string">&quot;bookmark1___&quot;</span>],
@@ -6269,28 +6381,28 @@
         }, {
             <span class="string">&quot;id&quot;</span>: <span class="string">&quot;unfiled&quot;</span>,
             <span class="string">&quot;type&quot;</span>: <span class="string">&quot;folder&quot;</span>,
-            <span class="string">&quot;parentid&quot;</span>: <span class="string">&quot;root&quot;</span>,
+            <span class="string">&quot;parentid&quot;</span>: <span class="string">&quot;places&quot;</span>,
             <span class="string">&quot;dateAdded&quot;</span>: <span class="number">1_381_542_355_843u64</span>,
             <span class="string">&quot;title&quot;</span>: <span class="string">&quot;Unfiled&quot;</span>,
             <span class="string">&quot;children&quot;</span>: [<span class="string">&quot;bookmarkBBBB&quot;</span>, <span class="string">&quot;bookmarkCCC1&quot;</span>, <span class="string">&quot;bookmarkDDDD&quot;</span>],
         }, {
             <span class="string">&quot;id&quot;</span>: <span class="string">&quot;menu&quot;</span>,
             <span class="string">&quot;type&quot;</span>: <span class="string">&quot;folder&quot;</span>,
-            <span class="string">&quot;parentid&quot;</span>: <span class="string">&quot;root&quot;</span>,
+            <span class="string">&quot;parentid&quot;</span>: <span class="string">&quot;places&quot;</span>,
             <span class="string">&quot;dateAdded&quot;</span>: <span class="number">1_381_542_355_843u64</span>,
             <span class="string">&quot;title&quot;</span>: <span class="string">&quot;Menu&quot;</span>,
             <span class="string">&quot;children&quot;</span>: [<span class="string">&quot;bookmarkCCC2&quot;</span>, <span class="string">&quot;bookmarkCCC3&quot;</span>],
         }, {
             <span class="string">&quot;id&quot;</span>: <span class="string">&quot;toolbar&quot;</span>,
             <span class="string">&quot;type&quot;</span>: <span class="string">&quot;folder&quot;</span>,
-            <span class="string">&quot;parentid&quot;</span>: <span class="string">&quot;root&quot;</span>,
+            <span class="string">&quot;parentid&quot;</span>: <span class="string">&quot;places&quot;</span>,
             <span class="string">&quot;dateAdded&quot;</span>: <span class="number">1_381_542_355_843u64</span>,
             <span class="string">&quot;title&quot;</span>: <span class="string">&quot;Toolbar&quot;</span>,
             <span class="string">&quot;children&quot;</span>: [<span class="string">&quot;bookmarkEEE1&quot;</span>, <span class="string">&quot;bookmarkFFF1&quot;</span>],
         }, {
             <span class="string">&quot;id&quot;</span>: <span class="string">&quot;mobile&quot;</span>,
             <span class="string">&quot;type&quot;</span>: <span class="string">&quot;folder&quot;</span>,
-            <span class="string">&quot;parentid&quot;</span>: <span class="string">&quot;root&quot;</span>,
+            <span class="string">&quot;parentid&quot;</span>: <span class="string">&quot;places&quot;</span>,
             <span class="string">&quot;dateAdded&quot;</span>: <span class="number">1_381_542_355_843u64</span>,
             <span class="string">&quot;title&quot;</span>: <span class="string">&quot;Mobile&quot;</span>,
             <span class="string">&quot;children&quot;</span>: [<span class="string">&quot;bookmarkEEE2&quot;</span>, <span class="string">&quot;bookmarkFFF2&quot;</span>],
@@ -6562,7 +6674,7 @@
             }, {
                 <span class="string">&quot;id&quot;</span>: <span class="string">&quot;unfiled&quot;</span>,
                 <span class="string">&quot;type&quot;</span>: <span class="string">&quot;folder&quot;</span>,
-                <span class="string">&quot;parentid&quot;</span>: <span class="string">&quot;root&quot;</span>,
+                <span class="string">&quot;parentid&quot;</span>: <span class="string">&quot;places&quot;</span>,
                 <span class="string">&quot;dateAdded&quot;</span>: <span class="number">1_381_542_355_843u64</span>,
                 <span class="string">&quot;title&quot;</span>: <span class="string">&quot;Unfiled&quot;</span>,
                 <span class="string">&quot;children&quot;</span>: [<span class="string">&quot;bookmarkBBBB&quot;</span>, <span class="string">&quot;bookmarkCCCC&quot;</span>],
@@ -6638,7 +6750,7 @@
         {
             <span class="string">&quot;id&quot;</span>: <span class="string">&quot;unfiled&quot;</span>,
             <span class="string">&quot;type&quot;</span>: <span class="string">&quot;folder&quot;</span>,
-            <span class="string">&quot;parentid&quot;</span>: <span class="string">&quot;root&quot;</span>,
+            <span class="string">&quot;parentid&quot;</span>: <span class="string">&quot;places&quot;</span>,
             <span class="string">&quot;dateAdded&quot;</span>: <span class="number">1_381_542_355_843u64</span>,
             <span class="string">&quot;title&quot;</span>: <span class="string">&quot;Unfiled&quot;</span>,
             <span class="string">&quot;children&quot;</span>: [<span class="string">&quot;bookmarkAAAA&quot;</span>],
@@ -6716,7 +6828,7 @@
             {
                 <span class="string">&quot;id&quot;</span>: <span class="string">&quot;unfiled&quot;</span>,
                 <span class="string">&quot;type&quot;</span>: <span class="string">&quot;folder&quot;</span>,
-                <span class="string">&quot;parentid&quot;</span>: <span class="string">&quot;root&quot;</span>,
+                <span class="string">&quot;parentid&quot;</span>: <span class="string">&quot;places&quot;</span>,
                 <span class="string">&quot;dateAdded&quot;</span>: <span class="number">1_381_542_355_843u64</span>,
                 <span class="string">&quot;title&quot;</span>: <span class="string">&quot;Unfiled&quot;</span>,
                 <span class="string">&quot;children&quot;</span>: [<span class="string">&quot;query1______&quot;</span>],
@@ -6985,6 +7097,116 @@
     }
 
     <span class="attribute">#[<span class="ident">test</span>]</span>
+    <span class="kw">fn</span> <span class="ident">test_apply_tombstones</span>() <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span>()<span class="op">&gt;</span> {
+        <span class="kw">let</span> <span class="kw">_</span> <span class="op">=</span> <span class="ident">env_logger</span>::<span class="ident">try_init</span>();
+
+        <span class="kw">let</span> <span class="ident">local_modified</span> <span class="op">=</span> <span class="ident">Timestamp</span>::<span class="ident">now</span>();
+        <span class="kw">let</span> <span class="ident">api</span> <span class="op">=</span> <span class="ident">new_mem_api</span>();
+        <span class="kw">let</span> <span class="ident">writer</span> <span class="op">=</span> <span class="ident">api</span>.<span class="ident">open_connection</span>(<span class="ident">ConnectionType</span>::<span class="ident">ReadWrite</span>)<span class="question-mark">?</span>;
+        <span class="ident">insert_local_json_tree</span>(
+            <span class="kw-2">&amp;</span><span class="ident">writer</span>,
+            <span class="macro">json</span><span class="macro">!</span>({
+                <span class="string">&quot;guid&quot;</span>: <span class="kw-2">&amp;</span><span class="ident">BookmarkRootGuid</span>::<span class="ident">Unfiled</span>.<span class="ident">as_guid</span>(),
+                <span class="string">&quot;children&quot;</span>: [{
+                    <span class="string">&quot;guid&quot;</span>: <span class="string">&quot;bookmarkAAAA&quot;</span>,
+                    <span class="string">&quot;title&quot;</span>: <span class="string">&quot;A&quot;</span>,
+                    <span class="string">&quot;url&quot;</span>: <span class="string">&quot;http://example.com/a&quot;</span>,
+                    <span class="string">&quot;date_added&quot;</span>: <span class="ident">local_modified</span>,
+                    <span class="string">&quot;last_modified&quot;</span>: <span class="ident">local_modified</span>,
+                }, {
+                    <span class="string">&quot;guid&quot;</span>: <span class="string">&quot;separatorAAA&quot;</span>,
+                    <span class="string">&quot;type&quot;</span>: <span class="ident">BookmarkType</span>::<span class="ident">Separator</span> <span class="kw">as</span> <span class="ident">u8</span>,
+                    <span class="string">&quot;date_added&quot;</span>: <span class="ident">local_modified</span>,
+                    <span class="string">&quot;last_modified&quot;</span>: <span class="ident">local_modified</span>,
+                }, {
+                    <span class="string">&quot;guid&quot;</span>: <span class="string">&quot;folderAAAAAA&quot;</span>,
+                    <span class="string">&quot;children&quot;</span>: [{
+                        <span class="string">&quot;guid&quot;</span>: <span class="string">&quot;bookmarkBBBB&quot;</span>,
+                        <span class="string">&quot;title&quot;</span>: <span class="string">&quot;b&quot;</span>,
+                        <span class="string">&quot;url&quot;</span>: <span class="string">&quot;http://example.com/b&quot;</span>,
+                        <span class="string">&quot;date_added&quot;</span>: <span class="ident">local_modified</span>,
+                        <span class="string">&quot;last_modified&quot;</span>: <span class="ident">local_modified</span>,
+                    }],
+                }],
+            }),
+        );
+        <span class="comment">// a first sync, which will populate our mirror.</span>
+        <span class="kw">let</span> <span class="ident">syncer</span> <span class="op">=</span> <span class="ident">api</span>.<span class="ident">open_sync_connection</span>()<span class="question-mark">?</span>;
+        <span class="kw">let</span> <span class="ident">interrupt_scope</span> <span class="op">=</span> <span class="ident">syncer</span>.<span class="ident">begin_interrupt_scope</span>();
+        <span class="kw">let</span> <span class="ident">store</span> <span class="op">=</span> <span class="ident">BookmarksStore</span>::<span class="ident">new</span>(<span class="kw-2">&amp;</span><span class="ident">syncer</span>, <span class="kw-2">&amp;</span><span class="ident">interrupt_scope</span>);
+        <span class="kw">let</span> <span class="ident">outgoing</span> <span class="op">=</span> <span class="ident">store</span>
+            .<span class="ident">apply_incoming</span>(
+                <span class="macro">vec</span><span class="macro">!</span>[<span class="ident">IncomingChangeset</span>::<span class="ident">new</span>(
+                    <span class="ident">store</span>.<span class="ident">collection_name</span>(),
+                    <span class="ident">ServerTimestamp</span>(<span class="number">1000</span>),
+                )],
+                <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">telemetry</span>::<span class="ident">Engine</span>::<span class="ident">new</span>(<span class="string">&quot;bookmarks&quot;</span>),
+            )
+            .<span class="ident">expect</span>(<span class="string">&quot;should apply&quot;</span>);
+        <span class="kw">let</span> <span class="ident">outgoing_ids</span> <span class="op">=</span> <span class="ident">outgoing</span>
+            .<span class="ident">changes</span>
+            .<span class="ident">iter</span>()
+            .<span class="ident">map</span>(<span class="op">|</span><span class="ident">p</span><span class="op">|</span> <span class="ident">p</span>.<span class="ident">id</span>.<span class="ident">clone</span>())
+            .<span class="ident">collect</span>::<span class="op">&lt;</span><span class="ident">Vec</span><span class="op">&lt;</span><span class="kw">_</span><span class="op">&gt;</span><span class="op">&gt;</span>();
+        <span class="comment">// 4 roots + 4 items</span>
+        <span class="macro">assert_eq</span><span class="macro">!</span>(<span class="ident">outgoing_ids</span>.<span class="ident">len</span>(), <span class="number">8</span>, <span class="string">&quot;{:?}&quot;</span>, <span class="ident">outgoing_ids</span>);
+
+        <span class="ident">store</span>
+            .<span class="ident">sync_finished</span>(<span class="ident">ServerTimestamp</span>(<span class="number">0</span>), <span class="ident">outgoing_ids</span>)
+            .<span class="ident">expect</span>(<span class="string">&quot;should work&quot;</span>);
+
+        <span class="comment">// Now the next sync with incoming tombstones.</span>
+        <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">incoming</span> <span class="op">=</span> <span class="ident">IncomingChangeset</span>::<span class="ident">new</span>(<span class="ident">store</span>.<span class="ident">collection_name</span>(), <span class="ident">ServerTimestamp</span>(<span class="number">0</span>));
+        <span class="ident">incoming</span>
+            .<span class="ident">changes</span>
+            .<span class="ident">push</span>((<span class="ident">Payload</span>::<span class="ident">new_tombstone</span>(<span class="string">&quot;bookmarkAAAA&quot;</span>), <span class="ident">ServerTimestamp</span>(<span class="number">0</span>)));
+        <span class="ident">incoming</span>
+            .<span class="ident">changes</span>
+            .<span class="ident">push</span>((<span class="ident">Payload</span>::<span class="ident">new_tombstone</span>(<span class="string">&quot;separatorAAA&quot;</span>), <span class="ident">ServerTimestamp</span>(<span class="number">0</span>)));
+        <span class="ident">incoming</span>
+            .<span class="ident">changes</span>
+            .<span class="ident">push</span>((<span class="ident">Payload</span>::<span class="ident">new_tombstone</span>(<span class="string">&quot;folderAAAAAA&quot;</span>), <span class="ident">ServerTimestamp</span>(<span class="number">0</span>)));
+        <span class="ident">incoming</span>
+            .<span class="ident">changes</span>
+            .<span class="ident">push</span>((<span class="ident">Payload</span>::<span class="ident">new_tombstone</span>(<span class="string">&quot;bookmarkBBBB&quot;</span>), <span class="ident">ServerTimestamp</span>(<span class="number">0</span>)));
+
+        <span class="kw">let</span> <span class="ident">remote_unfiled</span> <span class="op">=</span> <span class="macro">json</span><span class="macro">!</span>({
+            <span class="string">&quot;id&quot;</span>: <span class="string">&quot;unfiled&quot;</span>,
+            <span class="string">&quot;type&quot;</span>: <span class="string">&quot;folder&quot;</span>,
+            <span class="string">&quot;parentid&quot;</span>: <span class="string">&quot;places&quot;</span>,
+            <span class="string">&quot;title&quot;</span>: <span class="string">&quot;Unfiled&quot;</span>,
+            <span class="string">&quot;children&quot;</span>: [],
+        });
+
+        <span class="ident">incoming</span>.<span class="ident">changes</span>.<span class="ident">push</span>((
+            <span class="ident">Payload</span>::<span class="ident">from_json</span>(<span class="ident">remote_unfiled</span>).<span class="ident">unwrap</span>(),
+            <span class="ident">ServerTimestamp</span>(<span class="number">0</span>),
+        ));
+
+        <span class="kw">let</span> <span class="ident">outgoing</span> <span class="op">=</span> <span class="ident">store</span>
+            .<span class="ident">apply_incoming</span>(<span class="macro">vec</span><span class="macro">!</span>[<span class="ident">incoming</span>], <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">telemetry</span>::<span class="ident">Engine</span>::<span class="ident">new</span>(<span class="string">&quot;bookmarks&quot;</span>))
+            .<span class="ident">expect</span>(<span class="string">&quot;should apply&quot;</span>);
+        <span class="kw">let</span> <span class="ident">outgoing_ids</span> <span class="op">=</span> <span class="ident">outgoing</span>
+            .<span class="ident">changes</span>
+            .<span class="ident">iter</span>()
+            .<span class="ident">map</span>(<span class="op">|</span><span class="ident">p</span><span class="op">|</span> <span class="ident">p</span>.<span class="ident">id</span>.<span class="ident">clone</span>())
+            .<span class="ident">collect</span>::<span class="op">&lt;</span><span class="ident">Vec</span><span class="op">&lt;</span><span class="kw">_</span><span class="op">&gt;</span><span class="op">&gt;</span>();
+        <span class="macro">assert_eq</span><span class="macro">!</span>(<span class="ident">outgoing_ids</span>.<span class="ident">len</span>(), <span class="number">0</span>, <span class="string">&quot;{:?}&quot;</span>, <span class="ident">outgoing_ids</span>);
+
+        <span class="ident">store</span>
+            .<span class="ident">sync_finished</span>(<span class="ident">ServerTimestamp</span>(<span class="number">0</span>), <span class="ident">outgoing_ids</span>)
+            .<span class="ident">expect</span>(<span class="string">&quot;should work&quot;</span>);
+
+        <span class="comment">// We deleted everything from unfiled.</span>
+        <span class="ident">assert_local_json_tree</span>(
+            <span class="kw-2">&amp;</span><span class="ident">syncer</span>,
+            <span class="kw-2">&amp;</span><span class="ident">BookmarkRootGuid</span>::<span class="ident">Unfiled</span>.<span class="ident">as_guid</span>(),
+            <span class="macro">json</span><span class="macro">!</span>({<span class="string">&quot;children&quot;</span> : []}),
+        );
+        <span class="prelude-val">Ok</span>(())
+    }
+
+    <span class="attribute">#[<span class="ident">test</span>]</span>
     <span class="kw">fn</span> <span class="ident">test_keywords</span>() <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span>()<span class="op">&gt;</span> {
         <span class="kw">use</span> <span class="kw">crate</span>::<span class="ident">storage</span>::<span class="ident">bookmarks</span>::<span class="ident">bookmarks_get_url_for_keyword</span>;
 
@@ -7182,13 +7404,13 @@
         }, {
             <span class="string">&quot;id&quot;</span>: <span class="string">&quot;unfiled&quot;</span>,
             <span class="string">&quot;type&quot;</span>: <span class="string">&quot;folder&quot;</span>,
-            <span class="string">&quot;parentid&quot;</span>: <span class="string">&quot;root&quot;</span>,
+            <span class="string">&quot;parentid&quot;</span>: <span class="string">&quot;places&quot;</span>,
             <span class="string">&quot;title&quot;</span>: <span class="string">&quot;Unfiled&quot;</span>,
             <span class="string">&quot;children&quot;</span>: [<span class="string">&quot;bookmarkAAA1&quot;</span>, <span class="string">&quot;bookmarkBBB1&quot;</span>, <span class="string">&quot;bookmarkCCC1&quot;</span>, <span class="string">&quot;bookmarkDDDD&quot;</span>],
         }, {
             <span class="string">&quot;id&quot;</span>: <span class="string">&quot;menu&quot;</span>,
             <span class="string">&quot;type&quot;</span>: <span class="string">&quot;folder&quot;</span>,
-            <span class="string">&quot;parentid&quot;</span>: <span class="string">&quot;root&quot;</span>,
+            <span class="string">&quot;parentid&quot;</span>: <span class="string">&quot;places&quot;</span>,
             <span class="string">&quot;title&quot;</span>: <span class="string">&quot;Menu&quot;</span>,
             <span class="string">&quot;children&quot;</span>: [<span class="string">&quot;bookmarkAAA2&quot;</span>, <span class="string">&quot;bookmarkBBB2&quot;</span>, <span class="string">&quot;bookmarkCCC2&quot;</span>],
         }]);
