@@ -1,1 +1,0 @@
-initSidebarItems({"enum":[["BooleanMerge",""],["NumberMerge",""],["TextMerge",""],["TimestampMerge",""],["UntypedMerge",""]]});

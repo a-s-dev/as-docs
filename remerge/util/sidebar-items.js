@@ -1,1 +1,0 @@
-initSidebarItems({"fn":[["into_obj",""],["is_base64url_byte","Returns true if the byte `b` is a valid base64url byte."],["is_default","For use with `#[serde(skip_serializing_if = )]`"]],"struct":[["FormatWriter","Helper to allow passing a std::fmt::Formatter to a function needing std::io::Write."]]});

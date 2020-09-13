@@ -1,1 +1,0 @@
-initSidebarItems({"fn":[["bootstrap",""],["load_or_bootstrap",""]]});

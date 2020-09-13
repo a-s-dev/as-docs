@@ -1,1 +1,0 @@
-initSidebarItems({"fn":[["clear_mailbox",""],["find_email","For a given restmail email, find the first email that satisfies the given predicate."],["restmail_url",""],["restmail_username",""]]});

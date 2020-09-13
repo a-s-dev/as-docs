@@ -1,1 +1,0 @@
-initSidebarItems({"struct":[["RemergeEngine","\"Friendly\" public api for using Remerge."]]});

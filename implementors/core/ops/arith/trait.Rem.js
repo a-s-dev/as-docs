@@ -1,3 +1,0 @@
-(function() {var implementors = {};
-implementors["remerge"] = [{"text":"impl <a class=\"trait\" href=\"https://doc.rust-lang.org/nightly/core/ops/arith/trait.Rem.html\" title=\"trait core::ops::arith::Rem\">Rem</a>&lt;<a class=\"primitive\" href=\"https://doc.rust-lang.org/nightly/std/primitive.usize.html\">usize</a>&gt; for <a class=\"struct\" href=\"remerge/schema/desc/struct.FieldIndex.html\" title=\"struct remerge::schema::desc::FieldIndex\">FieldIndex</a>","synthetic":false,"types":["remerge::schema::desc::FieldIndex"]}];
-if (window.register_implementors) {window.register_implementors(implementors);} else {window.pending_implementors = implementors;}})()

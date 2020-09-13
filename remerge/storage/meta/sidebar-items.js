@@ -1,1 +1,0 @@
-initSidebarItems({"constant":[["CHANGE_COUNTER",""],["COLLECTION_NAME",""],["LOCAL_SCHEMA_VERSION",""],["NATIVE_SCHEMA_VERSION",""],["OWN_CLIENT_ID",""]],"fn":[["get",""],["put",""],["try_get",""]],"struct":[["MetaKey",""]]});
