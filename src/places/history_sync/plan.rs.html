@@ -1056,6 +1056,8 @@
 <span id="1056">1056</span>
 <span id="1057">1057</span>
 <span id="1058">1058</span>
+<span id="1059">1059</span>
+<span id="1060">1060</span>
 </pre><div class="example-wrap"><pre class="rust ">
 <span class="comment">/* This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
@@ -1073,13 +1075,14 @@
         <span class="ident">fetch_visits</span>, <span class="ident">finish_outgoing</span>, <span class="ident">FetchedVisit</span>, <span class="ident">FetchedVisitPage</span>, <span class="ident">OutgoingInfo</span>,
     },
 };
-<span class="kw">use</span> <span class="kw">crate</span>::<span class="ident">types</span>::{<span class="ident">Timestamp</span>, <span class="ident">VisitTransition</span>};
+<span class="kw">use</span> <span class="kw">crate</span>::<span class="ident">types</span>::<span class="ident">VisitTransition</span>;
 <span class="kw">use</span> <span class="ident">interrupt_support</span>::<span class="ident">Interruptee</span>;
 <span class="kw">use</span> <span class="ident">std</span>::<span class="ident">collections</span>::<span class="ident">HashSet</span>;
 <span class="kw">use</span> <span class="ident">std</span>::<span class="ident">time</span>::{<span class="ident">SystemTime</span>, <span class="ident">UNIX_EPOCH</span>};
 <span class="kw">use</span> <span class="ident">sync15</span>::<span class="ident">telemetry</span>;
 <span class="kw">use</span> <span class="ident">sync15</span>::{<span class="ident">IncomingChangeset</span>, <span class="ident">OutgoingChangeset</span>, <span class="ident">Payload</span>};
 <span class="kw">use</span> <span class="ident">sync_guid</span>::<span class="ident">Guid</span> <span class="kw">as</span> <span class="ident">SyncGuid</span>;
+<span class="kw">use</span> <span class="ident">types</span>::<span class="ident">Timestamp</span>;
 <span class="kw">use</span> <span class="ident">url</span>::<span class="ident">Url</span>;
 
 <span class="doccomment">/// Clamps a history visit date between the current date and the earliest</span>
@@ -1360,12 +1363,13 @@
     <span class="kw">use</span> <span class="kw">crate</span>::<span class="ident">observation</span>::<span class="ident">VisitObservation</span>;
     <span class="kw">use</span> <span class="kw">crate</span>::<span class="ident">storage</span>::<span class="ident">history</span>::<span class="ident">history_sync</span>::<span class="ident">fetch_visits</span>;
     <span class="kw">use</span> <span class="kw">crate</span>::<span class="ident">storage</span>::<span class="ident">history</span>::{<span class="ident">apply_observation</span>, <span class="ident">delete_visits_for</span>, <span class="ident">url_to_guid</span>};
-    <span class="kw">use</span> <span class="kw">crate</span>::<span class="ident">types</span>::{<span class="ident">SyncStatus</span>, <span class="ident">Timestamp</span>};
+    <span class="kw">use</span> <span class="kw">crate</span>::<span class="ident">types</span>::<span class="ident">SyncStatus</span>;
     <span class="kw">use</span> <span class="ident">interrupt_support</span>::<span class="ident">NeverInterrupts</span>;
     <span class="kw">use</span> <span class="ident">serde_json</span>::<span class="ident">json</span>;
     <span class="kw">use</span> <span class="ident">sql_support</span>::<span class="ident">ConnExt</span>;
     <span class="kw">use</span> <span class="ident">std</span>::<span class="ident">time</span>::<span class="ident">Duration</span>;
     <span class="kw">use</span> <span class="ident">sync15</span>::{<span class="ident">IncomingChangeset</span>, <span class="ident">ServerTimestamp</span>};
+    <span class="kw">use</span> <span class="ident">types</span>::<span class="ident">Timestamp</span>;
     <span class="kw">use</span> <span class="ident">url</span>::<span class="ident">Url</span>;
 
     <span class="kw">fn</span> <span class="ident">get_existing_guid</span>(<span class="ident">conn</span>: <span class="kw-2">&amp;</span><span class="ident">PlacesDb</span>, <span class="ident">url</span>: <span class="kw-2">&amp;</span><span class="ident">Url</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">SyncGuid</span> {

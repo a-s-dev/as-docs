@@ -136,8 +136,8 @@
 
 <span class="kw">use</span> <span class="kw">crate</span>::<span class="ident">api</span>::<span class="ident">places_api</span>::<span class="ident">SyncConn</span>;
 <span class="kw">use</span> <span class="kw">crate</span>::<span class="ident">error</span>::<span class="kw-2">*</span>;
-<span class="kw">use</span> <span class="kw">crate</span>::<span class="ident">types</span>::<span class="ident">Timestamp</span>;
 <span class="kw">use</span> <span class="ident">rusqlite</span>::<span class="ident">named_params</span>;
+<span class="kw">use</span> <span class="ident">types</span>::<span class="ident">Timestamp</span>;
 <span class="kw">use</span> <span class="ident">url</span>::<span class="ident">Url</span>;
 
 <span class="comment">// sanitize_timestamp can&#39;t use `Timestamp::now();` directly because it needs</span>
@@ -155,9 +155,9 @@
 <span class="kw">pub</span> <span class="kw">mod</span> <span class="ident">sql_fns</span> {
     <span class="kw">use</span> <span class="kw">crate</span>::<span class="ident">import</span>::<span class="ident">common</span>::<span class="ident">NOW</span>;
     <span class="kw">use</span> <span class="kw">crate</span>::<span class="ident">storage</span>::<span class="ident">URL_LENGTH_MAX</span>;
-    <span class="kw">use</span> <span class="kw">crate</span>::<span class="ident">types</span>::<span class="ident">Timestamp</span>;
     <span class="kw">use</span> <span class="ident">rusqlite</span>::{<span class="ident">functions</span>::<span class="ident">Context</span>, <span class="ident">types</span>::<span class="ident">ValueRef</span>, <span class="prelude-ty">Result</span>};
     <span class="kw">use</span> <span class="ident">std</span>::<span class="ident">convert</span>::<span class="ident">TryFrom</span>;
+    <span class="kw">use</span> <span class="ident">types</span>::<span class="ident">Timestamp</span>;
     <span class="kw">use</span> <span class="ident">url</span>::<span class="ident">Url</span>;
 
     <span class="attribute">#[<span class="ident">inline</span>(<span class="ident">never</span>)]</span>

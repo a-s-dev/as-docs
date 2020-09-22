@@ -269,6 +269,7 @@
 <span id="269">269</span>
 <span id="270">270</span>
 <span id="271">271</span>
+<span id="272">272</span>
 </pre><div class="example-wrap"><pre class="rust ">
 <span class="comment">/* This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
@@ -284,7 +285,7 @@
 <span class="kw">use</span> <span class="kw">crate</span>::<span class="ident">db</span>::<span class="ident">PlacesDb</span>;
 <span class="kw">use</span> <span class="kw">crate</span>::<span class="ident">error</span>::{<span class="ident">ErrorKind</span>, <span class="ident">InvalidPlaceInfo</span>, <span class="prelude-ty">Result</span>};
 <span class="kw">use</span> <span class="kw">crate</span>::<span class="ident">msg_types</span>::{<span class="ident">HistoryVisitInfo</span>, <span class="ident">TopFrecentSiteInfo</span>};
-<span class="kw">use</span> <span class="kw">crate</span>::<span class="ident">types</span>::{<span class="ident">SyncStatus</span>, <span class="ident">Timestamp</span>, <span class="ident">VisitTransition</span>};
+<span class="kw">use</span> <span class="kw">crate</span>::<span class="ident">types</span>::{<span class="ident">SyncStatus</span>, <span class="ident">VisitTransition</span>};
 <span class="kw">use</span> <span class="ident">rusqlite</span>::<span class="ident">types</span>::{<span class="ident">FromSql</span>, <span class="ident">FromSqlResult</span>, <span class="ident">ToSql</span>, <span class="ident">ToSqlOutput</span>, <span class="ident">ValueRef</span>};
 <span class="kw">use</span> <span class="ident">rusqlite</span>::<span class="prelude-ty">Result</span> <span class="kw">as</span> <span class="ident">RusqliteResult</span>;
 <span class="kw">use</span> <span class="ident">rusqlite</span>::<span class="ident">Row</span>;
@@ -292,6 +293,7 @@
 <span class="kw">use</span> <span class="ident">sql_support</span>::{<span class="self">self</span>, <span class="ident">ConnExt</span>};
 <span class="kw">use</span> <span class="ident">std</span>::<span class="ident">fmt</span>;
 <span class="kw">use</span> <span class="ident">sync_guid</span>::<span class="ident">Guid</span> <span class="kw">as</span> <span class="ident">SyncGuid</span>;
+<span class="kw">use</span> <span class="ident">types</span>::<span class="ident">Timestamp</span>;
 <span class="kw">use</span> <span class="ident">url</span>::<span class="ident">Url</span>;
 
 <span class="doccomment">/// From https://searchfox.org/mozilla-central/rev/93905b660f/toolkit/components/places/PlacesUtils.jsm#189</span>

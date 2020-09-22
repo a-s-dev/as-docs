@@ -841,6 +841,7 @@
 <span id="841">841</span>
 <span id="842">842</span>
 <span id="843">843</span>
+<span id="844">844</span>
 </pre><div class="example-wrap"><pre class="rust ">
 <span class="comment">/* This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
@@ -1459,7 +1460,8 @@
     <span class="kw">use</span> <span class="kw">crate</span>::<span class="ident">api</span>::<span class="ident">places_api</span>::<span class="ident">test</span>::<span class="ident">new_mem_connection</span>;
     <span class="kw">use</span> <span class="kw">crate</span>::<span class="ident">observation</span>::<span class="ident">VisitObservation</span>;
     <span class="kw">use</span> <span class="kw">crate</span>::<span class="ident">storage</span>::<span class="ident">history</span>::<span class="ident">apply_observation</span>;
-    <span class="kw">use</span> <span class="kw">crate</span>::<span class="ident">types</span>::{<span class="ident">Timestamp</span>, <span class="ident">VisitTransition</span>};
+    <span class="kw">use</span> <span class="kw">crate</span>::<span class="ident">types</span>::<span class="ident">VisitTransition</span>;
+    <span class="kw">use</span> <span class="ident">types</span>::<span class="ident">Timestamp</span>;
 
     <span class="attribute">#[<span class="ident">test</span>]</span>
     <span class="kw">fn</span> <span class="ident">split</span>() {

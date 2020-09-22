@@ -2598,6 +2598,24 @@
 <span id="2598">2598</span>
 <span id="2599">2599</span>
 <span id="2600">2600</span>
+<span id="2601">2601</span>
+<span id="2602">2602</span>
+<span id="2603">2603</span>
+<span id="2604">2604</span>
+<span id="2605">2605</span>
+<span id="2606">2606</span>
+<span id="2607">2607</span>
+<span id="2608">2608</span>
+<span id="2609">2609</span>
+<span id="2610">2610</span>
+<span id="2611">2611</span>
+<span id="2612">2612</span>
+<span id="2613">2613</span>
+<span id="2614">2614</span>
+<span id="2615">2615</span>
+<span id="2616">2616</span>
+<span id="2617">2617</span>
+<span id="2618">2618</span>
 </pre><div class="example-wrap"><pre class="rust ">
 <span class="comment">/* This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
@@ -2611,7 +2629,7 @@
 };
 <span class="kw">use</span> <span class="kw">crate</span>::<span class="ident">db</span>::<span class="ident">PlacesDb</span>;
 <span class="kw">use</span> <span class="kw">crate</span>::<span class="ident">error</span>::<span class="kw-2">*</span>;
-<span class="kw">use</span> <span class="kw">crate</span>::<span class="ident">types</span>::{<span class="ident">BookmarkType</span>, <span class="ident">SyncStatus</span>, <span class="ident">Timestamp</span>};
+<span class="kw">use</span> <span class="kw">crate</span>::<span class="ident">types</span>::{<span class="ident">BookmarkType</span>, <span class="ident">SyncStatus</span>};
 <span class="kw">use</span> <span class="ident">rusqlite</span>::<span class="ident">types</span>::<span class="ident">ToSql</span>;
 <span class="kw">use</span> <span class="ident">rusqlite</span>::{<span class="ident">Connection</span>, <span class="ident">Row</span>};
 <span class="kw">use</span> <span class="ident">serde</span>::{
@@ -2626,6 +2644,7 @@
 <span class="kw">use</span> <span class="ident">std</span>::<span class="ident">collections</span>::<span class="ident">HashMap</span>;
 <span class="kw">use</span> <span class="ident">sync15</span>::<span class="ident">StoreSyncAssociation</span>;
 <span class="kw">use</span> <span class="ident">sync_guid</span>::<span class="ident">Guid</span> <span class="kw">as</span> <span class="ident">SyncGuid</span>;
+<span class="kw">use</span> <span class="ident">types</span>::<span class="ident">Timestamp</span>;
 <span class="kw">use</span> <span class="ident">url</span>::<span class="ident">Url</span>;
 
 <span class="kw">pub</span> <span class="kw">use</span> <span class="ident">public_node</span>::<span class="ident">PublicNode</span>;
@@ -4261,6 +4280,8 @@
         <span class="ident">conn</span>.<span class="ident">execute</span>(<span class="string">&quot;UPDATE moz_bookmarks SET syncChangeCounter = 0&quot;</span>, <span class="ident">NO_PARAMS</span>)
             .<span class="ident">expect</span>(<span class="string">&quot;should work&quot;</span>);
 
+        <span class="kw">let</span> <span class="ident">global_change_tracker</span> <span class="op">=</span> <span class="ident">conn</span>.<span class="ident">global_bookmark_change_tracker</span>();
+        <span class="macro">assert</span><span class="macro">!</span>(<span class="op">!</span><span class="ident">global_change_tracker</span>.<span class="ident">changed</span>(), <span class="string">&quot;can&#39;t start as changed!&quot;</span>);
         <span class="kw">let</span> <span class="ident">bm</span> <span class="op">=</span> <span class="ident">InsertableItem</span>::<span class="ident">Bookmark</span>(<span class="ident">InsertableBookmark</span> {
             <span class="ident">parent_guid</span>: <span class="ident">BookmarkRootGuid</span>::<span class="ident">Unfiled</span>.<span class="ident">into</span>(),
             <span class="ident">position</span>: <span class="ident">BookmarkPosition</span>::<span class="ident">Append</span>,
@@ -4283,6 +4304,7 @@
         <span class="macro">assert_eq</span><span class="macro">!</span>(<span class="ident">rb</span>.<span class="ident">url</span>, <span class="prelude-val">Some</span>(<span class="ident">url</span>));
         <span class="macro">assert_eq</span><span class="macro">!</span>(<span class="ident">rb</span>.<span class="ident">sync_status</span>, <span class="ident">SyncStatus</span>::<span class="ident">New</span>);
         <span class="macro">assert_eq</span><span class="macro">!</span>(<span class="ident">rb</span>.<span class="ident">sync_change_counter</span>, <span class="number">1</span>);
+        <span class="macro">assert</span><span class="macro">!</span>(<span class="ident">global_change_tracker</span>.<span class="ident">changed</span>());
         <span class="macro">assert_eq</span><span class="macro">!</span>(<span class="ident">rb</span>.<span class="ident">child_count</span>, <span class="number">0</span>);
 
         <span class="kw">let</span> <span class="ident">unfiled</span> <span class="op">=</span> <span class="ident">get_raw_bookmark</span>(<span class="kw-2">&amp;</span><span class="ident">conn</span>, <span class="kw-2">&amp;</span><span class="ident">BookmarkRootGuid</span>::<span class="ident">Unfiled</span>.<span class="ident">as_guid</span>())<span class="question-mark">?</span>
@@ -4365,10 +4387,21 @@
 
         <span class="ident">insert_json_tree</span>(<span class="kw-2">&amp;</span><span class="ident">conn</span>, <span class="ident">jtree</span>);
 
+        <span class="ident">conn</span>.<span class="ident">execute</span>(
+            <span class="kw-2">&amp;</span><span class="macro">format</span><span class="macro">!</span>(
+                <span class="string">&quot;UPDATE moz_bookmarks SET syncChangeCounter = 1, syncStatus = {}&quot;</span>,
+                <span class="ident">SyncStatus</span>::<span class="ident">Normal</span> <span class="kw">as</span> <span class="ident">u8</span>
+            ),
+            <span class="ident">NO_PARAMS</span>,
+        )
+        .<span class="ident">expect</span>(<span class="string">&quot;should work&quot;</span>);
+
         <span class="comment">// Make sure the positions are correct now.</span>
         <span class="macro">assert_eq</span><span class="macro">!</span>(<span class="ident">get_pos</span>(<span class="kw-2">&amp;</span><span class="ident">conn</span>, <span class="kw-2">&amp;</span><span class="ident">guid1</span>), <span class="number">0</span>);
         <span class="macro">assert_eq</span><span class="macro">!</span>(<span class="ident">get_pos</span>(<span class="kw-2">&amp;</span><span class="ident">conn</span>, <span class="kw-2">&amp;</span><span class="ident">guid2</span>), <span class="number">1</span>);
         <span class="macro">assert_eq</span><span class="macro">!</span>(<span class="ident">get_pos</span>(<span class="kw-2">&amp;</span><span class="ident">conn</span>, <span class="kw-2">&amp;</span><span class="ident">guid3</span>), <span class="number">2</span>);
+
+        <span class="kw">let</span> <span class="ident">global_change_tracker</span> <span class="op">=</span> <span class="ident">conn</span>.<span class="ident">global_bookmark_change_tracker</span>();
 
         <span class="comment">// Delete the middle folder.</span>
         <span class="ident">delete_bookmark</span>(<span class="kw-2">&amp;</span><span class="ident">conn</span>, <span class="kw-2">&amp;</span><span class="ident">guid2</span>)<span class="question-mark">?</span>;
@@ -4379,6 +4412,7 @@
         <span class="comment">// Positions of the remaining should be correct.</span>
         <span class="macro">assert_eq</span><span class="macro">!</span>(<span class="ident">get_pos</span>(<span class="kw-2">&amp;</span><span class="ident">conn</span>, <span class="kw-2">&amp;</span><span class="ident">guid1</span>), <span class="number">0</span>);
         <span class="macro">assert_eq</span><span class="macro">!</span>(<span class="ident">get_pos</span>(<span class="kw-2">&amp;</span><span class="ident">conn</span>, <span class="kw-2">&amp;</span><span class="ident">guid3</span>), <span class="number">1</span>);
+        <span class="macro">assert</span><span class="macro">!</span>(<span class="ident">global_change_tracker</span>.<span class="ident">changed</span>());
 
         <span class="prelude-val">Ok</span>(())
     }
@@ -4426,6 +4460,7 @@
 
         <span class="comment">// A helper to make the moves below more concise.</span>
         <span class="kw">let</span> <span class="ident">do_move</span> <span class="op">=</span> <span class="op">|</span><span class="ident">guid</span>: <span class="kw-2">&amp;</span><span class="ident">str</span>, <span class="ident">pos</span>: <span class="ident">BookmarkPosition</span><span class="op">|</span> {
+            <span class="kw">let</span> <span class="ident">global_change_tracker</span> <span class="op">=</span> <span class="ident">conn</span>.<span class="ident">global_bookmark_change_tracker</span>();
             <span class="ident">update_bookmark</span>(
                 <span class="kw-2">&amp;</span><span class="ident">conn</span>,
                 <span class="kw-2">&amp;</span><span class="ident">guid</span>.<span class="ident">into</span>(),
@@ -4436,6 +4471,7 @@
                 .<span class="ident">into</span>(),
             )
             .<span class="ident">expect</span>(<span class="string">&quot;update should work&quot;</span>);
+            <span class="macro">assert</span><span class="macro">!</span>(<span class="ident">global_change_tracker</span>.<span class="ident">changed</span>(), <span class="string">&quot;should be tracked&quot;</span>);
         };
 
         <span class="comment">// A helper to make the checks below more concise.</span>

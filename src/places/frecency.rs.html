@@ -328,14 +328,16 @@
 <span id="328">328</span>
 <span id="329">329</span>
 <span id="330">330</span>
+<span id="331">331</span>
 </pre><div class="example-wrap"><pre class="rust ">
 <span class="comment">/* This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at http://mozilla.org/MPL/2.0/. */</span>
 
 <span class="kw">use</span> <span class="kw">crate</span>::<span class="ident">error</span>::<span class="kw-2">*</span>;
-<span class="kw">use</span> <span class="kw">crate</span>::<span class="ident">types</span>::{<span class="ident">Timestamp</span>, <span class="ident">VisitTransition</span>};
+<span class="kw">use</span> <span class="kw">crate</span>::<span class="ident">types</span>::<span class="ident">VisitTransition</span>;
 <span class="kw">use</span> <span class="ident">rusqlite</span>::<span class="ident">Connection</span>;
+<span class="kw">use</span> <span class="ident">types</span>::<span class="ident">Timestamp</span>;
 
 <span class="attribute">#[<span class="ident">derive</span>(<span class="ident">Debug</span>, <span class="ident">Clone</span>, <span class="ident">Copy</span>, <span class="ident">PartialEq</span>)]</span>
 <span class="kw">enum</span> <span class="ident">RedirectBonus</span> {

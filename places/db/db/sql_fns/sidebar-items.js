@@ -1,1 +1,1 @@
-initSidebarItems({"fn":[["autocomplete_match",""],["generate_guid",""],["get_host_and_port",""],["get_prefix",""],["get_raw_opt_str",""],["get_raw_str",""],["hash",""],["now",""],["reverse_host",""],["strip_prefix_and_userinfo",""]]});
+initSidebarItems({"fn":[["autocomplete_match",""],["generate_guid",""],["get_host_and_port",""],["get_prefix",""],["get_raw_opt_str",""],["get_raw_str",""],["hash",""],["note_bookmarks_sync_change",""],["now",""],["reverse_host",""],["strip_prefix_and_userinfo",""]]});

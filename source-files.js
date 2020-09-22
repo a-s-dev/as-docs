@@ -1,4 +1,5 @@
 var N = null;var sourcesIndex = {};
+sourcesIndex["autofill"] = {"name":"","files":["api.rs","db.rs","error.rs","lib.rs","schema.rs","store.rs"]};
 sourcesIndex["cli_support"] = {"name":"","files":["fxa_creds.rs","lib.rs","prompt.rs"]};
 sourcesIndex["error_support"] = {"name":"","files":["lib.rs"]};
 sourcesIndex["ffi_support"] = {"name":"","files":["error.rs","ffistr.rs","handle_map.rs","into_ffi.rs","lib.rs","macros.rs","string.rs"]};
@@ -27,6 +28,7 @@ sourcesIndex["sync_manager_ffi"] = {"name":"","files":["lib.rs"]};
 sourcesIndex["sync_test"] = {"name":"","files":["auth.rs","logins.rs","main.rs","sync15.rs","tabs.rs","testing.rs"]};
 sourcesIndex["tabs"] = {"name":"","dirs":[{"name":"sync","files":["engine.rs","mod.rs","record.rs","store.rs"]}],"files":["error.rs","ffi.rs","lib.rs","mozilla.appservices.remotetabs.protobuf.rs","storage.rs"]};
 sourcesIndex["tabs_ffi"] = {"name":"","files":["lib.rs"]};
+sourcesIndex["types"] = {"name":"","files":["lib.rs"]};
 sourcesIndex["viaduct"] = {"name":"","dirs":[{"name":"backend","files":["ffi.rs"]},{"name":"headers","files":["name.rs"]}],"files":["backend.rs","error.rs","headers.rs","lib.rs","mozilla.appservices.httpconfig.protobuf.rs","settings.rs"]};
 sourcesIndex["viaduct_reqwest"] = {"name":"","files":["lib.rs"]};
 sourcesIndex["webext_storage"] = {"name":"","dirs":[{"name":"sync","files":["bridge.rs","incoming.rs","mod.rs","outgoing.rs"]}],"files":["api.rs","db.rs","error.rs","ffi.rs","lib.rs","migration.rs","schema.rs","store.rs"]};

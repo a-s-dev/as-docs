@@ -2927,6 +2927,8 @@
 <span id="2927">2927</span>
 <span id="2928">2928</span>
 <span id="2929">2929</span>
+<span id="2930">2930</span>
+<span id="2931">2931</span>
 </pre><div class="example-wrap"><pre class="rust ">
 <span class="comment">/* This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
@@ -2946,13 +2948,14 @@
 };
 <span class="kw">use</span> <span class="kw">crate</span>::<span class="ident">observation</span>::<span class="ident">VisitObservation</span>;
 <span class="kw">use</span> <span class="kw">crate</span>::<span class="ident">storage</span>::{<span class="ident">delete_meta</span>, <span class="ident">delete_pending_temp_tables</span>, <span class="ident">get_meta</span>, <span class="ident">put_meta</span>};
-<span class="kw">use</span> <span class="kw">crate</span>::<span class="ident">types</span>::{<span class="ident">SyncStatus</span>, <span class="ident">Timestamp</span>, <span class="ident">VisitTransition</span>, <span class="ident">VisitTransitionSet</span>};
+<span class="kw">use</span> <span class="kw">crate</span>::<span class="ident">types</span>::{<span class="ident">SyncStatus</span>, <span class="ident">VisitTransition</span>, <span class="ident">VisitTransitionSet</span>};
 <span class="kw">use</span> <span class="ident">rusqlite</span>::<span class="ident">types</span>::<span class="ident">ToSql</span>;
 <span class="kw">use</span> <span class="ident">rusqlite</span>::<span class="prelude-ty">Result</span> <span class="kw">as</span> <span class="ident">RusqliteResult</span>;
 <span class="kw">use</span> <span class="ident">rusqlite</span>::{<span class="ident">Row</span>, <span class="ident">NO_PARAMS</span>};
 <span class="kw">use</span> <span class="ident">sql_support</span>::{<span class="self">self</span>, <span class="ident">ConnExt</span>};
 <span class="kw">use</span> <span class="ident">sync15</span>::<span class="ident">StoreSyncAssociation</span>;
 <span class="kw">use</span> <span class="ident">sync_guid</span>::<span class="ident">Guid</span> <span class="kw">as</span> <span class="ident">SyncGuid</span>;
+<span class="kw">use</span> <span class="ident">types</span>::<span class="ident">Timestamp</span>;
 <span class="kw">use</span> <span class="ident">url</span>::<span class="ident">Url</span>;
 
 <span class="doccomment">/// When `delete_everything` is called (to perform a permanent local deletion), in</span>
@@ -4297,10 +4300,11 @@
     <span class="kw">use</span> <span class="kw">super</span>::<span class="kw-2">*</span>;
     <span class="kw">use</span> <span class="kw">crate</span>::<span class="ident">api</span>::<span class="ident">places_api</span>::<span class="ident">ConnectionType</span>;
     <span class="kw">use</span> <span class="kw">crate</span>::<span class="ident">history_sync</span>::<span class="ident">record</span>::{<span class="ident">HistoryRecord</span>, <span class="ident">HistoryRecordVisit</span>};
-    <span class="kw">use</span> <span class="kw">crate</span>::<span class="ident">types</span>::{<span class="ident">Timestamp</span>, <span class="ident">VisitTransitionSet</span>};
+    <span class="kw">use</span> <span class="kw">crate</span>::<span class="ident">types</span>::<span class="ident">VisitTransitionSet</span>;
     <span class="kw">use</span> <span class="ident">pretty_assertions</span>::<span class="ident">assert_eq</span>;
     <span class="kw">use</span> <span class="ident">std</span>::<span class="ident">time</span>::{<span class="ident">Duration</span>, <span class="ident">SystemTime</span>};
     <span class="kw">use</span> <span class="ident">sync15</span>::<span class="ident">CollSyncIds</span>;
+    <span class="kw">use</span> <span class="ident">types</span>::<span class="ident">Timestamp</span>;
 
     <span class="attribute">#[<span class="ident">test</span>]</span>
     <span class="kw">fn</span> <span class="ident">test_get_visited_urls</span>() {
