@@ -75,6 +75,7 @@
 <span id="75">75</span>
 <span id="76">76</span>
 <span id="77">77</span>
+<span id="78">78</span>
 </pre><div class="example-wrap"><pre class="rust ">
 <span class="comment">/* This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
@@ -108,6 +109,7 @@
     <span class="ident">ensure_nss_initialized</span>();
     <span class="kw">let</span> <span class="ident">oid_tag</span> <span class="op">=</span> <span class="kw">match</span> <span class="ident">hash_algorithm</span> {
         <span class="ident">HashAlgorithm</span>::<span class="ident">SHA256</span> <span class="op">=</span><span class="op">&gt;</span> <span class="ident">SECOidTag</span>::<span class="ident">SEC_OID_HMAC_SHA256</span> <span class="kw">as</span> <span class="ident">u32</span>,
+        <span class="ident">HashAlgorithm</span>::<span class="ident">SHA384</span> <span class="op">=</span><span class="op">&gt;</span> <span class="ident">SECOidTag</span>::<span class="ident">SEC_OID_HMAC_SHA384</span> <span class="kw">as</span> <span class="ident">u32</span>,
     };
     <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">sec_salt</span> <span class="op">=</span> <span class="ident">nss_sys</span>::<span class="ident">SECItem</span> {
         <span class="ident">len</span>: <span class="ident">u32</span>::<span class="ident">try_from</span>(<span class="ident">salt</span>.<span class="ident">len</span>())<span class="question-mark">?</span>,

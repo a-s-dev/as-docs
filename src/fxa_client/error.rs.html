@@ -147,6 +147,9 @@
 <span id="147">147</span>
 <span id="148">148</span>
 <span id="149">149</span>
+<span id="150">150</span>
+<span id="151">151</span>
+<span id="152">152</span>
 </pre><div class="example-wrap"><pre class="rust ">
 <span class="comment">/* This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
@@ -224,6 +227,9 @@
 
     <span class="attribute">#[<span class="ident">error</span>(<span class="string">&quot;Invalid buffer length: {0}&quot;</span>)]</span>
     <span class="ident">InvalidBufferLength</span>(<span class="ident">i32</span>),
+
+    <span class="attribute">#[<span class="ident">error</span>(<span class="string">&quot;Too many calls to auth introspection endpoint&quot;</span>)]</span>
+    <span class="ident">AuthCircuitBreakerError</span>,
 
     <span class="attribute">#[<span class="ident">error</span>(<span class="string">&quot;Remote server error: &#39;{code}&#39; &#39;{errno}&#39; &#39;{error}&#39; &#39;{message}&#39; &#39;{info}&#39;&quot;</span>)]</span>
     <span class="ident">RemoteError</span> {

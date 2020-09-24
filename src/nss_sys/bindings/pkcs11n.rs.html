@@ -25,6 +25,11 @@
 <span id="25">25</span>
 <span id="26">26</span>
 <span id="27">27</span>
+<span id="28">28</span>
+<span id="29">29</span>
+<span id="30">30</span>
+<span id="31">31</span>
+<span id="32">32</span>
 </pre><div class="example-wrap"><pre class="rust ">
 <span class="comment">/* This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
@@ -32,7 +37,12 @@
 
 <span class="kw">pub</span> <span class="kw">use</span> <span class="kw">crate</span>::<span class="kw-2">*</span>;
 
-<span class="kw">pub</span> <span class="kw">const</span> <span class="ident">CKM_NSS_HKDF_SHA256</span>: <span class="ident">u32</span> <span class="op">=</span> <span class="number">3_461_563_220</span>; <span class="comment">// (CKM_NSS + 4)</span>
+<span class="comment">// https://searchfox.org/nss/rev/4d480919bbf204df5e199b9fdedec8f2a6295778/lib/util/pkcs11n.h#27</span>
+<span class="kw">pub</span> <span class="kw">const</span> <span class="ident">NSSCK_VENDOR_NSS</span>: <span class="ident">u32</span> <span class="op">=</span> <span class="number">0x4E534350</span>;
+
+<span class="kw">pub</span> <span class="kw">const</span> <span class="ident">CKM_NSS</span>: <span class="ident">u32</span> <span class="op">=</span> <span class="ident">CKM_VENDOR_DEFINED</span> <span class="op">|</span> <span class="ident">NSSCK_VENDOR_NSS</span>;
+<span class="kw">pub</span> <span class="kw">const</span> <span class="ident">CKM_NSS_HKDF_SHA256</span>: <span class="ident">u32</span> <span class="op">=</span> <span class="ident">CKM_NSS</span> <span class="op">+</span> <span class="number">4</span>;
+<span class="kw">pub</span> <span class="kw">const</span> <span class="ident">CKM_NSS_HKDF_SHA384</span>: <span class="ident">u32</span> <span class="op">=</span> <span class="ident">CKM_NSS</span> <span class="op">+</span> <span class="number">5</span>;
 
 <span class="kw">pub</span> <span class="kw">type</span> <span class="ident">CK_GCM_PARAMS</span> <span class="op">=</span> <span class="ident">CK_GCM_PARAMS_V3</span>;
 <span class="attribute">#[<span class="ident">repr</span>(<span class="ident">C</span>)]</span>

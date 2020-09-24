@@ -2309,7 +2309,7 @@
             <span class="macro">assert_eq</span><span class="macro">!</span>(<span class="kw-2">*</span><span class="ident">backoff_end_duration</span>, <span class="ident">Duration</span>::<span class="ident">from_secs</span>(<span class="number">1_000_000</span>));
 
             <span class="kw">let</span> <span class="ident">path2</span> <span class="op">=</span> <span class="macro">format</span><span class="macro">!</span>(<span class="string">&quot;{}/{}&quot;</span>, <span class="ident">mockito</span>::<span class="ident">server_url</span>(), <span class="string">&quot;v1/account/device/commands&quot;</span>);
-            <span class="comment">// Hacky way to drop the mutex gaurd, so that the next call to</span>
+            <span class="comment">// Hacky way to drop the mutex guard, so that the next call to</span>
             <span class="comment">// client.make_request doesn&#39;t hang or panic</span>
             <span class="ident">std</span>::<span class="ident">mem</span>::<span class="ident">drop</span>(<span class="ident">state</span>);
             <span class="kw">let</span> <span class="ident">second_request</span> <span class="op">=</span> <span class="ident">Request</span>::<span class="ident">get</span>(<span class="ident">Url</span>::<span class="ident">parse</span>(<span class="kw-2">&amp;</span><span class="ident">path2</span>).<span class="ident">unwrap</span>());
