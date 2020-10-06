@@ -1,5 +1,5 @@
 var N = null;var sourcesIndex = {};
-sourcesIndex["autofill"] = {"name":"","files":["api.rs","db.rs","error.rs","lib.rs","schema.rs","store.rs"]};
+sourcesIndex["autofill"] = {"name":"","dirs":[{"name":"api","files":["addresses.rs","credit_cards.rs","mod.rs"]}],"files":["db.rs","error.rs","lib.rs","schema.rs","store.rs"]};
 sourcesIndex["cli_support"] = {"name":"","files":["fxa_creds.rs","lib.rs","prompt.rs"]};
 sourcesIndex["error_support"] = {"name":"","files":["lib.rs"]};
 sourcesIndex["ffi_support"] = {"name":"","files":["error.rs","ffistr.rs","handle_map.rs","into_ffi.rs","lib.rs","macros.rs","string.rs"]};

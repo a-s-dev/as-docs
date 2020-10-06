@@ -1,1 +1,1 @@
-initSidebarItems({"fn":[["add_address",""],["delete_address",""],["get_address",""],["get_all_addresses",""],["update_address",""]],"struct":[["Address",""],["NewAddressFields",""]]});
+initSidebarItems({"mod":[["addresses",""],["credit_cards",""]]});

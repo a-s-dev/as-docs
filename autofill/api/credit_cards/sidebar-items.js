@@ -1,0 +1,1 @@
+initSidebarItems({"fn":[["add_credit_card",""],["delete_credit_card",""],["get_all_credit_cards",""],["get_credit_card",""],["update_credit_card",""]],"struct":[["CreditCard",""],["NewCreditCardFields",""]]});

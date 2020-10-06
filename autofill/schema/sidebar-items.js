@@ -1,1 +1,1 @@
-initSidebarItems({"constant":[["COMMON_COLS",""],["CREATE_SHARED_SCHEMA_SQL",""],["CREATE_SHARED_TRIGGERS_SQL",""]],"fn":[["create",""],["init",""]]});
+initSidebarItems({"constant":[["ADDRESS_COMMON_COLS",""],["CREATE_SHARED_SCHEMA_SQL",""],["CREATE_SHARED_TRIGGERS_SQL",""],["CREDIT_CARD_COMMON_COLS",""]],"fn":[["create",""],["init",""]]});
