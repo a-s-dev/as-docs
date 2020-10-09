@@ -1,4 +1,5 @@
-<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source to the Rust file `components/sync15/src/request.rs`."><meta name="keywords" content="rust, rustlang, rust-lang"><title>request.rs.html -- source</title><link rel="stylesheet" type="text/css" href="../../normalize.css"><link rel="stylesheet" type="text/css" href="../../rustdoc.css" id="mainThemeStyle"><link rel="stylesheet" type="text/css" href="../../dark.css"><link rel="stylesheet" type="text/css" href="../../light.css" id="themeStyle"><script src="../../storage.js"></script><noscript><link rel="stylesheet" href="../../noscript.css"></noscript><link rel="shortcut icon" href="../../favicon.ico"><style type="text/css">#crate-search{background-image:url("../../down-arrow.svg");}</style></head><body class="rustdoc source"><!--[if lte IE 8]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="sidebar"><div class="sidebar-menu">&#9776;</div><a href='../../sync15/index.html'><div class='logo-container'><img src='../../rust-logo.png' alt='logo'></div></a></nav><div class="theme-picker"><button id="theme-picker" aria-label="Pick another theme!"><img src="../../brush.svg" width="18" alt="Pick another theme!"></button><div id="theme-choices"></div></div><script src="../../theme.js"></script><nav class="sub"><form class="search-form"><div class="search-container"><div><select id="crate-search"><option value="All crates">All crates</option></select><input class="search-input" name="search" disabled autocomplete="off" spellcheck="false" placeholder="Click or press ‘S’ to search, ‘?’ for more options…" type="search"></div><a id="settings-menu" href="../../settings.html"><img src="../../wheel.svg" width="18" alt="Change settings"></a></div></form></nav><section id="main" class="content"><pre class="line-numbers"><span id="1">   1</span>
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source to the Rust file `components/sync15/src/request.rs`."><meta name="keywords" content="rust, rustlang, rust-lang"><title>request.rs.html -- source</title><link rel="stylesheet" type="text/css" href="../../normalize.css"><link rel="stylesheet" type="text/css" href="../../rustdoc.css" id="mainThemeStyle"><link rel="stylesheet" type="text/css" href="../../light.css"  id="themeStyle"><link rel="stylesheet" type="text/css" href="../../dark.css" disabled ><link rel="stylesheet" type="text/css" href="../../ayu.css" disabled ><script src="../../storage.js"></script><noscript><link rel="stylesheet" href="../../noscript.css"></noscript><link rel="shortcut icon" href="../../favicon.ico"><style type="text/css">#crate-search{background-image:url("../../down-arrow.svg");}</style></head><body class="rustdoc source"><!--[if lte IE 8]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="sidebar"><div class="sidebar-menu">&#9776;</div><a href='../../sync15/index.html'><div class='logo-container rust-logo'><img src='../../rust-logo.png' alt='logo'></div></a></nav><div class="theme-picker"><button id="theme-picker" aria-label="Pick another theme!"><img src="../../brush.svg" width="18" alt="Pick another theme!"></button><div id="theme-choices"></div></div><script src="../../theme.js"></script><nav class="sub"><form class="search-form"><div class="search-container"><div><select id="crate-search"><option value="All crates">All crates</option></select><input class="search-input" name="search" disabled autocomplete="off" spellcheck="false" placeholder="Click or press ‘S’ to search, ‘?’ for more options…" type="search"></div><span class="help-button">?</span>
+                <a id="settings-menu" href="../../settings.html"><img src="../../wheel.svg" width="18" alt="Change settings"></a></div></form></nav><section id="main" class="content"><pre class="line-numbers"><span id="1">   1</span>
 <span id="2">   2</span>
 <span id="3">   3</span>
 <span id="4">   4</span>
@@ -1278,7 +1279,7 @@
 }
 
 <span class="kw">impl</span> <span class="ident">LimitTracker</span> {
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">new</span>(<span class="ident">max_bytes</span>: <span class="ident">usize</span>, <span class="ident">max_records</span>: <span class="ident">usize</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">LimitTracker</span> {
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">new</span>(<span class="ident">max_bytes</span>: <span class="ident">usize</span>, <span class="ident">max_records</span>: <span class="ident">usize</span>) <span class="op">-&gt;</span> <span class="ident">LimitTracker</span> {
         <span class="ident">LimitTracker</span> {
             <span class="ident">max_bytes</span>,
             <span class="ident">max_records</span>,
@@ -1292,14 +1293,14 @@
         <span class="self">self</span>.<span class="ident">cur_bytes</span> <span class="op">=</span> <span class="number">0</span>;
     }
 
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">can_add_record</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">payload_size</span>: <span class="ident">usize</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">bool</span> {
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">can_add_record</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">payload_size</span>: <span class="ident">usize</span>) <span class="op">-&gt;</span> <span class="ident">bool</span> {
         <span class="comment">// Desktop does the cur_bytes check as exclusive, but we shouldn&#39;t see any servers that</span>
         <span class="comment">// don&#39;t have https://github.com/mozilla-services/server-syncstorage/issues/73</span>
-        <span class="self">self</span>.<span class="ident">cur_records</span> <span class="op">&lt;</span> <span class="self">self</span>.<span class="ident">max_records</span> <span class="kw-2">&amp;</span><span class="op">&amp;</span> <span class="self">self</span>.<span class="ident">cur_bytes</span> <span class="op">+</span> <span class="ident">payload_size</span> <span class="op">&lt;</span><span class="op">=</span> <span class="self">self</span>.<span class="ident">max_bytes</span>
+        <span class="self">self</span>.<span class="ident">cur_records</span> <span class="op">&lt;</span> <span class="self">self</span>.<span class="ident">max_records</span> <span class="op">&amp;&amp;</span> <span class="self">self</span>.<span class="ident">cur_bytes</span> <span class="op">+</span> <span class="ident">payload_size</span> <span class="op">&lt;=</span> <span class="self">self</span>.<span class="ident">max_bytes</span>
     }
 
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">can_never_add</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">record_size</span>: <span class="ident">usize</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">bool</span> {
-        <span class="ident">record_size</span> <span class="op">&gt;</span><span class="op">=</span> <span class="self">self</span>.<span class="ident">max_bytes</span>
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">can_never_add</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">record_size</span>: <span class="ident">usize</span>) <span class="op">-&gt;</span> <span class="ident">bool</span> {
+        <span class="ident">record_size</span> <span class="op">&gt;=</span> <span class="self">self</span>.<span class="ident">max_bytes</span>
     }
 
     <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">record_added</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>, <span class="ident">record_size</span>: <span class="ident">usize</span>) {
@@ -1307,8 +1308,8 @@
             <span class="self">self</span>.<span class="ident">can_add_record</span>(<span class="ident">record_size</span>),
             <span class="string">&quot;LimitTracker::record_added caller must check can_add_record&quot;</span>
         );
-        <span class="self">self</span>.<span class="ident">cur_records</span> <span class="op">+</span><span class="op">=</span> <span class="number">1</span>;
-        <span class="self">self</span>.<span class="ident">cur_bytes</span> <span class="op">+</span><span class="op">=</span> <span class="ident">record_size</span>;
+        <span class="self">self</span>.<span class="ident">cur_records</span> <span class="op">+=</span> <span class="number">1</span>;
+        <span class="self">self</span>.<span class="ident">cur_bytes</span> <span class="op">+=</span> <span class="ident">record_size</span>;
     }
 }
 
@@ -1344,16 +1345,16 @@
 }
 
 <span class="comment">// This is annoying but seems to be the only way to do it...</span>
-<span class="kw">fn</span> <span class="ident">default_max_request_bytes</span>() <span class="op">-</span><span class="op">&gt;</span> <span class="ident">usize</span> {
+<span class="kw">fn</span> <span class="ident">default_max_request_bytes</span>() <span class="op">-&gt;</span> <span class="ident">usize</span> {
     <span class="number">260</span> <span class="op">*</span> <span class="number">1024</span>
 }
-<span class="kw">fn</span> <span class="ident">default_max_record_payload_bytes</span>() <span class="op">-</span><span class="op">&gt;</span> <span class="ident">usize</span> {
+<span class="kw">fn</span> <span class="ident">default_max_record_payload_bytes</span>() <span class="op">-&gt;</span> <span class="ident">usize</span> {
     <span class="number">256</span> <span class="op">*</span> <span class="number">1024</span>
 }
 
 <span class="kw">impl</span> <span class="ident">Default</span> <span class="kw">for</span> <span class="ident">InfoConfiguration</span> {
     <span class="attribute">#[<span class="ident">inline</span>]</span>
-    <span class="kw">fn</span> <span class="ident">default</span>() <span class="op">-</span><span class="op">&gt;</span> <span class="ident">InfoConfiguration</span> {
+    <span class="kw">fn</span> <span class="ident">default</span>() <span class="op">-&gt;</span> <span class="ident">InfoConfiguration</span> {
         <span class="ident">InfoConfiguration</span> {
             <span class="ident">max_request_bytes</span>: <span class="ident">default_max_request_bytes</span>(),
             <span class="ident">max_record_payload_bytes</span>: <span class="ident">default_max_record_payload_bytes</span>(),
@@ -1369,7 +1370,7 @@
 <span class="kw">pub</span> <span class="kw">struct</span> <span class="ident">InfoCollections</span>(<span class="kw">pub</span>(<span class="kw">crate</span>) <span class="ident">HashMap</span><span class="op">&lt;</span><span class="ident">String</span>, <span class="ident">ServerTimestamp</span><span class="op">&gt;</span>);
 
 <span class="kw">impl</span> <span class="ident">InfoCollections</span> {
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">new</span>(<span class="ident">collections</span>: <span class="ident">HashMap</span><span class="op">&lt;</span><span class="ident">String</span>, <span class="ident">ServerTimestamp</span><span class="op">&gt;</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">InfoCollections</span> {
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">new</span>(<span class="ident">collections</span>: <span class="ident">HashMap</span><span class="op">&lt;</span><span class="ident">String</span>, <span class="ident">ServerTimestamp</span><span class="op">&gt;</span>) <span class="op">-&gt;</span> <span class="ident">InfoCollections</span> {
         <span class="ident">InfoCollections</span>(<span class="ident">collections</span>)
     }
 }
@@ -1377,7 +1378,7 @@
 <span class="kw">impl</span> <span class="ident">Deref</span> <span class="kw">for</span> <span class="ident">InfoCollections</span> {
     <span class="kw">type</span> <span class="ident">Target</span> <span class="op">=</span> <span class="ident">HashMap</span><span class="op">&lt;</span><span class="ident">String</span>, <span class="ident">ServerTimestamp</span><span class="op">&gt;</span>;
 
-    <span class="kw">fn</span> <span class="ident">deref</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="kw-2">&amp;</span><span class="ident">HashMap</span><span class="op">&lt;</span><span class="ident">String</span>, <span class="ident">ServerTimestamp</span><span class="op">&gt;</span> {
+    <span class="kw">fn</span> <span class="ident">deref</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-&gt;</span> <span class="kw-2">&amp;</span><span class="ident">HashMap</span><span class="op">&lt;</span><span class="ident">String</span>, <span class="ident">ServerTimestamp</span><span class="op">&gt;</span> {
         <span class="kw-2">&amp;</span><span class="self">self</span>.<span class="number">0</span>
     }
 }
@@ -1425,14 +1426,14 @@
         <span class="ident">batch</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">String</span><span class="op">&gt;</span>,
         <span class="ident">commit</span>: <span class="ident">bool</span>,
         <span class="ident">queue</span>: <span class="kw-2">&amp;</span><span class="ident">PostQueue</span><span class="op">&lt;</span><span class="ident">P</span>, <span class="ident">O</span><span class="op">&gt;</span>,
-    ) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">PostResponse</span><span class="op">&gt;</span>;
+    ) <span class="op">-&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">PostResponse</span><span class="op">&gt;</span>;
 }
 
 <span class="comment">// We don&#39;t just use a FnMut here since we want to override it in mocking for RefCell&lt;TestType&gt;,</span>
 <span class="comment">// which we can&#39;t do for FnMut since neither FnMut nor RefCell are defined here. Also, this</span>
 <span class="comment">// is somewhat better for documentation.</span>
 <span class="kw">pub</span> <span class="kw">trait</span> <span class="ident">PostResponseHandler</span> {
-    <span class="kw">fn</span> <span class="ident">handle_response</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>, <span class="ident">r</span>: <span class="ident">PostResponse</span>, <span class="ident">mid_batch</span>: <span class="ident">bool</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span>()<span class="op">&gt;</span>;
+    <span class="kw">fn</span> <span class="ident">handle_response</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>, <span class="ident">r</span>: <span class="ident">PostResponse</span>, <span class="ident">mid_batch</span>: <span class="ident">bool</span>) <span class="op">-&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span>()<span class="op">&gt;</span>;
 }
 
 <span class="attribute">#[<span class="ident">derive</span>(<span class="ident">Debug</span>, <span class="ident">Clone</span>)]</span>
@@ -1445,7 +1446,7 @@
 }
 
 <span class="kw">impl</span> <span class="ident">NormalResponseHandler</span> {
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">new</span>(<span class="ident">allow_failed</span>: <span class="ident">bool</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">NormalResponseHandler</span> {
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">new</span>(<span class="ident">allow_failed</span>: <span class="ident">bool</span>) <span class="op">-&gt;</span> <span class="ident">NormalResponseHandler</span> {
         <span class="ident">NormalResponseHandler</span> {
             <span class="ident">failed_ids</span>: <span class="macro">vec</span><span class="macro">!</span>[],
             <span class="ident">successful_ids</span>: <span class="macro">vec</span><span class="macro">!</span>[],
@@ -1457,10 +1458,10 @@
 }
 
 <span class="kw">impl</span> <span class="ident">PostResponseHandler</span> <span class="kw">for</span> <span class="ident">NormalResponseHandler</span> {
-    <span class="kw">fn</span> <span class="ident">handle_response</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>, <span class="ident">r</span>: <span class="ident">PostResponse</span>, <span class="ident">mid_batch</span>: <span class="ident">bool</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">error</span>::<span class="prelude-ty">Result</span><span class="op">&lt;</span>()<span class="op">&gt;</span> {
+    <span class="kw">fn</span> <span class="ident">handle_response</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>, <span class="ident">r</span>: <span class="ident">PostResponse</span>, <span class="ident">mid_batch</span>: <span class="ident">bool</span>) <span class="op">-&gt;</span> <span class="ident">error</span>::<span class="prelude-ty">Result</span><span class="op">&lt;</span>()<span class="op">&gt;</span> {
         <span class="kw">match</span> <span class="ident">r</span> {
-            <span class="ident">Sync15ClientResponse</span>::<span class="ident">Success</span> { <span class="ident">record</span>, .. } <span class="op">=</span><span class="op">&gt;</span> {
-                <span class="kw">if</span> <span class="op">!</span><span class="ident">record</span>.<span class="ident">failed</span>.<span class="ident">is_empty</span>() <span class="kw-2">&amp;</span><span class="op">&amp;</span> <span class="op">!</span><span class="self">self</span>.<span class="ident">allow_failed</span> {
+            <span class="ident">Sync15ClientResponse</span>::<span class="ident">Success</span> { <span class="ident">record</span>, .. } <span class="op">=&gt;</span> {
+                <span class="kw">if</span> <span class="op">!</span><span class="ident">record</span>.<span class="ident">failed</span>.<span class="ident">is_empty</span>() <span class="op">&amp;&amp;</span> <span class="op">!</span><span class="self">self</span>.<span class="ident">allow_failed</span> {
                     <span class="kw">return</span> <span class="prelude-val">Err</span>(<span class="ident">ErrorKind</span>::<span class="ident">RecordUploadFailed</span>.<span class="ident">into</span>());
                 }
                 <span class="kw">for</span> <span class="ident">id</span> <span class="kw">in</span> <span class="ident">record</span>.<span class="ident">success</span>.<span class="ident">iter</span>() {
@@ -1475,7 +1476,7 @@
                 }
                 <span class="prelude-val">Ok</span>(())
             }
-            <span class="kw">_</span> <span class="op">=</span><span class="op">&gt;</span> <span class="prelude-val">Err</span>(<span class="ident">r</span>.<span class="ident">create_storage_error</span>().<span class="ident">into</span>()),
+            <span class="kw">_</span> <span class="op">=&gt;</span> <span class="prelude-val">Err</span>(<span class="ident">r</span>.<span class="ident">create_storage_error</span>().<span class="ident">into</span>()),
         }
     }
 }
@@ -1490,7 +1491,7 @@
         <span class="ident">ts</span>: <span class="ident">ServerTimestamp</span>,
         <span class="ident">poster</span>: <span class="ident">Poster</span>,
         <span class="ident">on_response</span>: <span class="ident">OnResponse</span>,
-    ) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">PostQueue</span><span class="op">&lt;</span><span class="ident">Poster</span>, <span class="ident">OnResponse</span><span class="op">&gt;</span> {
+    ) <span class="op">-&gt;</span> <span class="ident">PostQueue</span><span class="op">&lt;</span><span class="ident">Poster</span>, <span class="ident">OnResponse</span><span class="op">&gt;</span> {
         <span class="ident">PostQueue</span> {
             <span class="ident">poster</span>,
             <span class="ident">on_response</span>,
@@ -1505,19 +1506,19 @@
     }
 
     <span class="attribute">#[<span class="ident">inline</span>]</span>
-    <span class="kw">fn</span> <span class="ident">in_batch</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">bool</span> {
+    <span class="kw">fn</span> <span class="ident">in_batch</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-&gt;</span> <span class="ident">bool</span> {
         <span class="kw">match</span> <span class="kw-2">&amp;</span><span class="self">self</span>.<span class="ident">batch</span> {
-            <span class="ident">BatchState</span>::<span class="ident">Unsupported</span> <span class="op">|</span> <span class="ident">BatchState</span>::<span class="ident">NoBatch</span> <span class="op">=</span><span class="op">&gt;</span> <span class="bool-val">false</span>,
-            <span class="kw">_</span> <span class="op">=</span><span class="op">&gt;</span> <span class="bool-val">true</span>,
+            <span class="ident">BatchState</span>::<span class="ident">Unsupported</span> <span class="op">|</span> <span class="ident">BatchState</span>::<span class="ident">NoBatch</span> <span class="op">=&gt;</span> <span class="bool-val">false</span>,
+            <span class="kw">_</span> <span class="op">=&gt;</span> <span class="bool-val">true</span>,
         }
     }
 
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">enqueue</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>, <span class="ident">record</span>: <span class="kw-2">&amp;</span><span class="ident">EncryptedBso</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">bool</span><span class="op">&gt;</span> {
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">enqueue</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>, <span class="ident">record</span>: <span class="kw-2">&amp;</span><span class="ident">EncryptedBso</span>) <span class="op">-&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">bool</span><span class="op">&gt;</span> {
         <span class="kw">let</span> <span class="ident">payload_length</span> <span class="op">=</span> <span class="ident">record</span>.<span class="ident">payload</span>.<span class="ident">serialized_len</span>();
 
         <span class="kw">if</span> <span class="self">self</span>.<span class="ident">post_limits</span>.<span class="ident">can_never_add</span>(<span class="ident">payload_length</span>)
-            <span class="op">|</span><span class="op">|</span> <span class="self">self</span>.<span class="ident">batch_limits</span>.<span class="ident">can_never_add</span>(<span class="ident">payload_length</span>)
-            <span class="op">|</span><span class="op">|</span> <span class="ident">payload_length</span> <span class="op">&gt;</span><span class="op">=</span> <span class="self">self</span>.<span class="ident">max_payload_bytes</span>
+            <span class="op">||</span> <span class="self">self</span>.<span class="ident">batch_limits</span>.<span class="ident">can_never_add</span>(<span class="ident">payload_length</span>)
+            <span class="op">||</span> <span class="ident">payload_length</span> <span class="op">&gt;=</span> <span class="self">self</span>.<span class="ident">max_payload_bytes</span>
         {
             <span class="ident">log</span>::<span class="macro">warn</span><span class="macro">!</span>(
                 <span class="string">&quot;Single record too large to submit to server ({} b)&quot;</span>,
@@ -1547,14 +1548,14 @@
         <span class="kw">let</span> <span class="ident">item_end</span> <span class="op">=</span> <span class="self">self</span>.<span class="ident">queued</span>.<span class="ident">len</span>();
 
         <span class="macro">debug_assert</span><span class="macro">!</span>(
-            <span class="ident">item_end</span> <span class="op">&gt;</span><span class="op">=</span> <span class="ident">payload_length</span>,
+            <span class="ident">item_end</span> <span class="op">&gt;=</span> <span class="ident">payload_length</span>,
             <span class="string">&quot;EncryptedPayload::serialized_len is bugged&quot;</span>
         );
 
         <span class="comment">// The + 1 is only relevant for the final record, which will have a trailing &#39;]&#39;.</span>
         <span class="kw">let</span> <span class="ident">item_len</span> <span class="op">=</span> <span class="ident">item_end</span> <span class="op">-</span> <span class="ident">item_start</span> <span class="op">+</span> <span class="number">1</span>;
 
-        <span class="kw">if</span> <span class="ident">item_len</span> <span class="op">&gt;</span><span class="op">=</span> <span class="self">self</span>.<span class="ident">max_request_bytes</span> {
+        <span class="kw">if</span> <span class="ident">item_len</span> <span class="op">&gt;=</span> <span class="self">self</span>.<span class="ident">max_request_bytes</span> {
             <span class="self">self</span>.<span class="ident">queued</span>.<span class="ident">truncate</span>(<span class="ident">item_start</span>);
             <span class="ident">log</span>::<span class="macro">warn</span><span class="macro">!</span>(
                 <span class="string">&quot;Single record too large to submit to server ({} b)&quot;</span>,
@@ -1567,7 +1568,7 @@
         <span class="kw">let</span> <span class="ident">can_batch_record</span> <span class="op">=</span> <span class="self">self</span>.<span class="ident">batch_limits</span>.<span class="ident">can_add_record</span>(<span class="ident">payload_length</span>);
         <span class="kw">let</span> <span class="ident">can_send_record</span> <span class="op">=</span> <span class="self">self</span>.<span class="ident">queued</span>.<span class="ident">len</span>() <span class="op">&lt;</span> <span class="self">self</span>.<span class="ident">max_request_bytes</span>;
 
-        <span class="kw">if</span> <span class="op">!</span><span class="ident">can_post_record</span> <span class="op">|</span><span class="op">|</span> <span class="op">!</span><span class="ident">can_send_record</span> <span class="op">|</span><span class="op">|</span> <span class="op">!</span><span class="ident">can_batch_record</span> {
+        <span class="kw">if</span> <span class="op">!</span><span class="ident">can_post_record</span> <span class="op">||</span> <span class="op">!</span><span class="ident">can_send_record</span> <span class="op">||</span> <span class="op">!</span><span class="ident">can_batch_record</span> {
             <span class="ident">log</span>::<span class="macro">debug</span><span class="macro">!</span>(
                 <span class="string">&quot;PostQueue flushing! (can_post = {}, can_send = {}, can_batch = {})&quot;</span>,
                 <span class="ident">can_post_record</span>,
@@ -1590,7 +1591,7 @@
         <span class="prelude-val">Ok</span>(<span class="bool-val">true</span>)
     }
 
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">flush</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>, <span class="ident">want_commit</span>: <span class="ident">bool</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span>()<span class="op">&gt;</span> {
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">flush</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>, <span class="ident">want_commit</span>: <span class="ident">bool</span>) <span class="op">-&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span>()<span class="op">&gt;</span> {
         <span class="kw">if</span> <span class="self">self</span>.<span class="ident">queued</span>.<span class="ident">is_empty</span>() {
             <span class="macro">assert</span><span class="macro">!</span>(
                 <span class="op">!</span><span class="self">self</span>.<span class="ident">in_batch</span>(),
@@ -1603,11 +1604,11 @@
         <span class="self">self</span>.<span class="ident">queued</span>.<span class="ident">push</span>(<span class="string">b&#39;]&#39;</span>);
         <span class="kw">let</span> <span class="ident">batch_id</span> <span class="op">=</span> <span class="kw">match</span> <span class="kw-2">&amp;</span><span class="self">self</span>.<span class="ident">batch</span> {
             <span class="comment">// Not the first post and we know we have no batch semantics.</span>
-            <span class="ident">BatchState</span>::<span class="ident">Unsupported</span> <span class="op">=</span><span class="op">&gt;</span> <span class="prelude-val">None</span>,
+            <span class="ident">BatchState</span>::<span class="ident">Unsupported</span> <span class="op">=&gt;</span> <span class="prelude-val">None</span>,
             <span class="comment">// First commit in possible batch</span>
-            <span class="ident">BatchState</span>::<span class="ident">NoBatch</span> <span class="op">=</span><span class="op">&gt;</span> <span class="prelude-val">Some</span>(<span class="string">&quot;true&quot;</span>.<span class="ident">into</span>()),
+            <span class="ident">BatchState</span>::<span class="ident">NoBatch</span> <span class="op">=&gt;</span> <span class="prelude-val">Some</span>(<span class="string">&quot;true&quot;</span>.<span class="ident">into</span>()),
             <span class="comment">// In a batch and we have a batch id.</span>
-            <span class="ident">BatchState</span>::<span class="ident">InBatch</span>(<span class="kw-2">ref</span> <span class="ident">s</span>) <span class="op">=</span><span class="op">&gt;</span> <span class="prelude-val">Some</span>(<span class="ident">s</span>.<span class="ident">clone</span>()),
+            <span class="ident">BatchState</span>::<span class="ident">InBatch</span>(<span class="kw-2">ref</span> <span class="ident">s</span>) <span class="op">=&gt;</span> <span class="prelude-val">Some</span>(<span class="ident">s</span>.<span class="ident">clone</span>()),
         };
 
         <span class="ident">log</span>::<span class="macro">info</span><span class="macro">!</span>(
@@ -1616,7 +1617,7 @@
             <span class="self">self</span>.<span class="ident">queued</span>.<span class="ident">len</span>()
         );
 
-        <span class="kw">let</span> <span class="ident">is_commit</span> <span class="op">=</span> <span class="ident">want_commit</span> <span class="kw-2">&amp;</span><span class="op">&amp;</span> <span class="ident">batch_id</span>.<span class="ident">is_some</span>();
+        <span class="kw">let</span> <span class="ident">is_commit</span> <span class="op">=</span> <span class="ident">want_commit</span> <span class="op">&amp;&amp;</span> <span class="ident">batch_id</span>.<span class="ident">is_some</span>();
         <span class="comment">// Weird syntax for calling a function object that is a property.</span>
         <span class="kw">let</span> <span class="ident">resp_or_error</span> <span class="op">=</span> <span class="self">self</span>.<span class="ident">poster</span>.<span class="ident">post</span>(
             <span class="self">self</span>.<span class="ident">queued</span>.<span class="ident">clone</span>(),
@@ -1628,7 +1629,7 @@
 
         <span class="self">self</span>.<span class="ident">queued</span>.<span class="ident">truncate</span>(<span class="number">0</span>);
 
-        <span class="kw">if</span> <span class="ident">want_commit</span> <span class="op">|</span><span class="op">|</span> <span class="self">self</span>.<span class="ident">batch</span> <span class="op">=</span><span class="op">=</span> <span class="ident">BatchState</span>::<span class="ident">Unsupported</span> {
+        <span class="kw">if</span> <span class="ident">want_commit</span> <span class="op">||</span> <span class="self">self</span>.<span class="ident">batch</span> <span class="op">==</span> <span class="ident">BatchState</span>::<span class="ident">Unsupported</span> {
             <span class="self">self</span>.<span class="ident">batch_limits</span>.<span class="ident">clear</span>();
         }
         <span class="self">self</span>.<span class="ident">post_limits</span>.<span class="ident">clear</span>();
@@ -1641,15 +1642,15 @@
                 <span class="ident">last_modified</span>,
                 <span class="kw-2">ref</span> <span class="ident">record</span>,
                 ..
-            } <span class="op">=</span><span class="op">&gt;</span> (<span class="ident">status</span>, <span class="ident">last_modified</span>, <span class="ident">record</span>),
-            <span class="kw">_</span> <span class="op">=</span><span class="op">&gt;</span> {
+            } <span class="op">=&gt;</span> (<span class="ident">status</span>, <span class="ident">last_modified</span>, <span class="ident">record</span>),
+            <span class="kw">_</span> <span class="op">=&gt;</span> {
                 <span class="self">self</span>.<span class="ident">on_response</span>.<span class="ident">handle_response</span>(<span class="ident">resp</span>, <span class="op">!</span><span class="ident">want_commit</span>)<span class="question-mark">?</span>;
                 <span class="comment">// on_response() should always fail!</span>
                 <span class="macro">unreachable</span><span class="macro">!</span>();
             }
         };
 
-        <span class="kw">if</span> <span class="ident">want_commit</span> <span class="op">|</span><span class="op">|</span> <span class="self">self</span>.<span class="ident">batch</span> <span class="op">=</span><span class="op">=</span> <span class="ident">BatchState</span>::<span class="ident">Unsupported</span> {
+        <span class="kw">if</span> <span class="ident">want_commit</span> <span class="op">||</span> <span class="self">self</span>.<span class="ident">batch</span> <span class="op">==</span> <span class="ident">BatchState</span>::<span class="ident">Unsupported</span> {
             <span class="self">self</span>.<span class="ident">last_modified</span> <span class="op">=</span> <span class="ident">last_modified</span>;
         }
 
@@ -1660,7 +1661,7 @@
             <span class="kw">return</span> <span class="prelude-val">Ok</span>(());
         }
 
-        <span class="kw">if</span> <span class="ident">status</span> <span class="op">!</span><span class="op">=</span> <span class="ident">status_codes</span>::<span class="ident">ACCEPTED</span> {
+        <span class="kw">if</span> <span class="ident">status</span> <span class="op">!=</span> <span class="ident">status_codes</span>::<span class="ident">ACCEPTED</span> {
             <span class="kw">if</span> <span class="self">self</span>.<span class="ident">in_batch</span>() {
                 <span class="kw">return</span> <span class="prelude-val">Err</span>(<span class="ident">ErrorKind</span>::<span class="ident">ServerBatchProblem</span>(
                     <span class="string">&quot;Server responded non-202 success code while a batch was in progress&quot;</span>,
@@ -1677,25 +1678,25 @@
         <span class="kw">let</span> <span class="ident">batch_id</span> <span class="op">=</span> <span class="ident">record</span>
             .<span class="ident">batch</span>
             .<span class="ident">as_ref</span>()
-            .<span class="ident">ok_or_else</span>(<span class="op">|</span><span class="op">|</span> {
+            .<span class="ident">ok_or_else</span>(<span class="op">||</span> {
                 <span class="ident">ErrorKind</span>::<span class="ident">ServerBatchProblem</span>(<span class="string">&quot;Invalid server response: 202 without a batch ID&quot;</span>)
             })<span class="question-mark">?</span>
             .<span class="ident">clone</span>();
 
         <span class="kw">match</span> <span class="kw-2">&amp;</span><span class="self">self</span>.<span class="ident">batch</span> {
-            <span class="ident">BatchState</span>::<span class="ident">Unsupported</span> <span class="op">=</span><span class="op">&gt;</span> {
+            <span class="ident">BatchState</span>::<span class="ident">Unsupported</span> <span class="op">=&gt;</span> {
                 <span class="ident">log</span>::<span class="macro">warn</span><span class="macro">!</span>(<span class="string">&quot;Server changed its mind about supporting batching mid-batch...&quot;</span>);
             }
 
-            <span class="ident">BatchState</span>::<span class="ident">InBatch</span>(<span class="kw-2">ref</span> <span class="ident">cur_id</span>) <span class="op">=</span><span class="op">&gt;</span> {
-                <span class="kw">if</span> <span class="ident">cur_id</span> <span class="op">!</span><span class="op">=</span> <span class="kw-2">&amp;</span><span class="ident">batch_id</span> {
+            <span class="ident">BatchState</span>::<span class="ident">InBatch</span>(<span class="kw-2">ref</span> <span class="ident">cur_id</span>) <span class="op">=&gt;</span> {
+                <span class="kw">if</span> <span class="ident">cur_id</span> <span class="op">!=</span> <span class="kw-2">&amp;</span><span class="ident">batch_id</span> {
                     <span class="kw">return</span> <span class="prelude-val">Err</span>(<span class="ident">ErrorKind</span>::<span class="ident">ServerBatchProblem</span>(
                         <span class="string">&quot;Invalid server response: 202 without a batch ID&quot;</span>,
                     )
                     .<span class="ident">into</span>());
                 }
             }
-            <span class="kw">_</span> <span class="op">=</span><span class="op">&gt;</span> {}
+            <span class="kw">_</span> <span class="op">=&gt;</span> {}
         }
 
         <span class="comment">// Can&#39;t change this in match arms without NLL</span>
@@ -1717,7 +1718,7 @@
 
 <span class="kw">impl</span><span class="op">&lt;</span><span class="ident">Poster</span><span class="op">&gt;</span> <span class="ident">PostQueue</span><span class="op">&lt;</span><span class="ident">Poster</span>, <span class="ident">NormalResponseHandler</span><span class="op">&gt;</span> {
     <span class="comment">// TODO: should take by move</span>
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">completed_upload_info</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">UploadInfo</span> {
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">completed_upload_info</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>) <span class="op">-&gt;</span> <span class="ident">UploadInfo</span> {
         <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">result</span> <span class="op">=</span> <span class="ident">UploadInfo</span> {
             <span class="ident">successful_ids</span>: <span class="ident">Vec</span>::<span class="ident">with_capacity</span>(<span class="self">self</span>.<span class="ident">on_response</span>.<span class="ident">successful_ids</span>.<span class="ident">len</span>()),
             <span class="ident">failed_ids</span>: <span class="ident">Vec</span>::<span class="ident">with_capacity</span>(
@@ -1812,11 +1813,11 @@
     }
 
     <span class="kw">impl</span> <span class="ident">PostedData</span> {
-        <span class="kw">fn</span> <span class="ident">records_as_json</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">Vec</span><span class="op">&lt;</span><span class="ident">serde_json</span>::<span class="ident">Value</span><span class="op">&gt;</span> {
+        <span class="kw">fn</span> <span class="ident">records_as_json</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-&gt;</span> <span class="ident">Vec</span><span class="op">&lt;</span><span class="ident">serde_json</span>::<span class="ident">Value</span><span class="op">&gt;</span> {
             <span class="kw">let</span> <span class="ident">values</span> <span class="op">=</span>
                 <span class="ident">serde_json</span>::<span class="ident">from_str</span>::<span class="op">&lt;</span><span class="ident">serde_json</span>::<span class="ident">Value</span><span class="op">&gt;</span>(<span class="kw-2">&amp;</span><span class="self">self</span>.<span class="ident">body</span>).<span class="ident">expect</span>(<span class="string">&quot;Posted invalid json&quot;</span>);
             <span class="comment">// Check that they actually deserialize as what we want</span>
-            <span class="kw">let</span> <span class="ident">records_or_err</span> <span class="op">=</span> <span class="ident">serde_json</span>::<span class="ident">from_value</span>::<span class="op">&lt;</span><span class="ident">Vec</span><span class="op">&lt;</span><span class="ident">EncryptedBso</span><span class="op">&gt;</span><span class="op">&gt;</span>(<span class="ident">values</span>.<span class="ident">clone</span>());
+            <span class="kw">let</span> <span class="ident">records_or_err</span> <span class="op">=</span> <span class="ident">serde_json</span>::<span class="ident">from_value</span>::<span class="op">&lt;</span><span class="ident">Vec</span><span class="op">&lt;</span><span class="ident">EncryptedBso</span><span class="op">&gt;&gt;</span>(<span class="ident">values</span>.<span class="ident">clone</span>());
             <span class="ident">records_or_err</span>.<span class="ident">expect</span>(<span class="string">&quot;Failed to deserialize data&quot;</span>);
             <span class="ident">serde_json</span>::<span class="ident">from_value</span>(<span class="ident">values</span>).<span class="ident">unwrap</span>()
         }
@@ -1839,11 +1840,11 @@
         <span class="ident">cfg</span>: <span class="ident">InfoConfiguration</span>,
     }
 
-    <span class="kw">type</span> <span class="ident">TestPosterRef</span> <span class="op">=</span> <span class="ident">Rc</span><span class="op">&lt;</span><span class="ident">RefCell</span><span class="op">&lt;</span><span class="ident">TestPoster</span><span class="op">&gt;</span><span class="op">&gt;</span>;
+    <span class="kw">type</span> <span class="ident">TestPosterRef</span> <span class="op">=</span> <span class="ident">Rc</span><span class="op">&lt;</span><span class="ident">RefCell</span><span class="op">&lt;</span><span class="ident">TestPoster</span><span class="op">&gt;&gt;</span>;
     <span class="kw">impl</span> <span class="ident">TestPoster</span> {
-        <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">new</span><span class="op">&lt;</span><span class="ident">T</span><span class="op">&gt;</span>(<span class="ident">cfg</span>: <span class="kw-2">&amp;</span><span class="ident">InfoConfiguration</span>, <span class="ident">responses</span>: <span class="ident">T</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">TestPosterRef</span>
+        <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">new</span><span class="op">&lt;</span><span class="ident">T</span><span class="op">&gt;</span>(<span class="ident">cfg</span>: <span class="kw-2">&amp;</span><span class="ident">InfoConfiguration</span>, <span class="ident">responses</span>: <span class="ident">T</span>) <span class="op">-&gt;</span> <span class="ident">TestPosterRef</span>
         <span class="kw">where</span>
-            <span class="ident">T</span>: <span class="ident">Into</span><span class="op">&lt;</span><span class="ident">VecDeque</span><span class="op">&lt;</span><span class="ident">PostResponse</span><span class="op">&gt;</span><span class="op">&gt;</span>,
+            <span class="ident">T</span>: <span class="ident">Into</span><span class="op">&lt;</span><span class="ident">VecDeque</span><span class="op">&lt;</span><span class="ident">PostResponse</span><span class="op">&gt;&gt;</span>,
         {
             <span class="ident">Rc</span>::<span class="ident">new</span>(<span class="ident">RefCell</span>::<span class="ident">new</span>(<span class="ident">TestPoster</span> {
                 <span class="ident">all_posts</span>: <span class="macro">vec</span><span class="macro">!</span>[],
@@ -1861,7 +1862,7 @@
             <span class="ident">batch</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">String</span><span class="op">&gt;</span>,
             <span class="ident">commit</span>: <span class="ident">bool</span>,
             <span class="ident">queue</span>: <span class="kw-2">&amp;</span><span class="ident">PostQueue</span><span class="op">&lt;</span><span class="ident">T</span>, <span class="ident">O</span><span class="op">&gt;</span>,
-        ) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">PostResponse</span><span class="op">&gt;</span> {
+        ) <span class="op">-&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">PostResponse</span><span class="op">&gt;</span> {
             <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">post</span> <span class="op">=</span> <span class="ident">PostedData</span> {
                 <span class="ident">body</span>: <span class="ident">String</span>::<span class="ident">from_utf8</span>(<span class="ident">body</span>.<span class="ident">into</span>()).<span class="ident">expect</span>(<span class="string">&quot;Posted invalid utf8...&quot;</span>),
                 <span class="ident">batch</span>: <span class="ident">batch</span>.<span class="ident">clone</span>(),
@@ -1871,12 +1872,12 @@
                 <span class="ident">records</span>: <span class="number">0</span>,
             };
 
-            <span class="macro">assert</span><span class="macro">!</span>(<span class="ident">body</span>.<span class="ident">len</span>() <span class="op">&lt;</span><span class="op">=</span> <span class="self">self</span>.<span class="ident">cfg</span>.<span class="ident">max_request_bytes</span>);
+            <span class="macro">assert</span><span class="macro">!</span>(<span class="ident">body</span>.<span class="ident">len</span>() <span class="op">&lt;=</span> <span class="self">self</span>.<span class="ident">cfg</span>.<span class="ident">max_request_bytes</span>);
 
             <span class="kw">let</span> (<span class="ident">num_records</span>, <span class="ident">record_payload_bytes</span>) <span class="op">=</span> {
                 <span class="kw">let</span> <span class="ident">recs</span> <span class="op">=</span> <span class="ident">post</span>.<span class="ident">records_as_json</span>();
-                <span class="macro">assert</span><span class="macro">!</span>(<span class="ident">recs</span>.<span class="ident">len</span>() <span class="op">&lt;</span><span class="op">=</span> <span class="self">self</span>.<span class="ident">cfg</span>.<span class="ident">max_post_records</span>);
-                <span class="macro">assert</span><span class="macro">!</span>(<span class="ident">recs</span>.<span class="ident">len</span>() <span class="op">&lt;</span><span class="op">=</span> <span class="self">self</span>.<span class="ident">cfg</span>.<span class="ident">max_total_records</span>);
+                <span class="macro">assert</span><span class="macro">!</span>(<span class="ident">recs</span>.<span class="ident">len</span>() <span class="op">&lt;=</span> <span class="self">self</span>.<span class="ident">cfg</span>.<span class="ident">max_post_records</span>);
+                <span class="macro">assert</span><span class="macro">!</span>(<span class="ident">recs</span>.<span class="ident">len</span>() <span class="op">&lt;=</span> <span class="self">self</span>.<span class="ident">cfg</span>.<span class="ident">max_total_records</span>);
                 <span class="kw">let</span> <span class="ident">payload_bytes</span>: <span class="ident">usize</span> <span class="op">=</span> <span class="ident">recs</span>
                     .<span class="ident">iter</span>()
                     .<span class="ident">map</span>(<span class="op">|</span><span class="ident">r</span><span class="op">|</span> {
@@ -1884,12 +1885,12 @@
                             .<span class="ident">as_str</span>()
                             .<span class="ident">expect</span>(<span class="string">&quot;Non string payload property&quot;</span>)
                             .<span class="ident">len</span>();
-                        <span class="macro">assert</span><span class="macro">!</span>(<span class="ident">len</span> <span class="op">&lt;</span><span class="op">=</span> <span class="self">self</span>.<span class="ident">cfg</span>.<span class="ident">max_record_payload_bytes</span>);
+                        <span class="macro">assert</span><span class="macro">!</span>(<span class="ident">len</span> <span class="op">&lt;=</span> <span class="self">self</span>.<span class="ident">cfg</span>.<span class="ident">max_record_payload_bytes</span>);
                         <span class="ident">len</span>
                     })
                     .<span class="ident">sum</span>();
-                <span class="macro">assert</span><span class="macro">!</span>(<span class="ident">payload_bytes</span> <span class="op">&lt;</span><span class="op">=</span> <span class="self">self</span>.<span class="ident">cfg</span>.<span class="ident">max_post_bytes</span>);
-                <span class="macro">assert</span><span class="macro">!</span>(<span class="ident">payload_bytes</span> <span class="op">&lt;</span><span class="op">=</span> <span class="self">self</span>.<span class="ident">cfg</span>.<span class="ident">max_total_bytes</span>);
+                <span class="macro">assert</span><span class="macro">!</span>(<span class="ident">payload_bytes</span> <span class="op">&lt;=</span> <span class="self">self</span>.<span class="ident">cfg</span>.<span class="ident">max_post_bytes</span>);
+                <span class="macro">assert</span><span class="macro">!</span>(<span class="ident">payload_bytes</span> <span class="op">&lt;=</span> <span class="self">self</span>.<span class="ident">cfg</span>.<span class="ident">max_total_bytes</span>);
 
                 <span class="macro">assert_eq</span><span class="macro">!</span>(<span class="ident">queue</span>.<span class="ident">post_limits</span>.<span class="ident">cur_bytes</span>, <span class="ident">payload_bytes</span>);
                 <span class="macro">assert_eq</span><span class="macro">!</span>(<span class="ident">queue</span>.<span class="ident">post_limits</span>.<span class="ident">cur_records</span>, <span class="ident">recs</span>.<span class="ident">len</span>());
@@ -1902,15 +1903,15 @@
             <span class="kw">let</span> <span class="ident">response</span> <span class="op">=</span> <span class="self">self</span>.<span class="ident">responses</span>.<span class="ident">pop_front</span>().<span class="ident">unwrap</span>();
 
             <span class="kw">let</span> <span class="ident">record</span> <span class="op">=</span> <span class="kw">match</span> <span class="ident">response</span> {
-                <span class="ident">Sync15ClientResponse</span>::<span class="ident">Success</span> { <span class="kw-2">ref</span> <span class="ident">record</span>, .. } <span class="op">=</span><span class="op">&gt;</span> <span class="ident">record</span>,
-                <span class="kw">_</span> <span class="op">=</span><span class="op">&gt;</span> {
+                <span class="ident">Sync15ClientResponse</span>::<span class="ident">Success</span> { <span class="kw-2">ref</span> <span class="ident">record</span>, .. } <span class="op">=&gt;</span> <span class="ident">record</span>,
+                <span class="kw">_</span> <span class="op">=&gt;</span> {
                     <span class="macro">panic</span><span class="macro">!</span>(<span class="string">&quot;only success codes are used in this test&quot;</span>);
                 }
             };
 
             <span class="kw">if</span> <span class="self">self</span>.<span class="ident">cur_batch</span>.<span class="ident">is_none</span>() {
                 <span class="macro">assert</span><span class="macro">!</span>(
-                    <span class="ident">batch</span>.<span class="ident">is_none</span>() <span class="op">|</span><span class="op">|</span> <span class="ident">batch</span> <span class="op">=</span><span class="op">=</span> <span class="prelude-val">Some</span>(<span class="string">&quot;true&quot;</span>.<span class="ident">into</span>()),
+                    <span class="ident">batch</span>.<span class="ident">is_none</span>() <span class="op">||</span> <span class="ident">batch</span> <span class="op">==</span> <span class="prelude-val">Some</span>(<span class="string">&quot;true&quot;</span>.<span class="ident">into</span>()),
                     <span class="string">&quot;We shouldn&#39;t be in a batch now&quot;</span>
                 );
                 <span class="self">self</span>.<span class="ident">cur_batch</span> <span class="op">=</span> <span class="prelude-val">Some</span>(<span class="ident">BatchInfo</span> {
@@ -1930,17 +1931,17 @@
             {
                 <span class="kw">let</span> <span class="ident">batch</span> <span class="op">=</span> <span class="self">self</span>.<span class="ident">cur_batch</span>.<span class="ident">as_mut</span>().<span class="ident">unwrap</span>();
                 <span class="ident">batch</span>.<span class="ident">posts</span>.<span class="ident">push</span>(<span class="ident">post</span>);
-                <span class="ident">batch</span>.<span class="ident">records</span> <span class="op">+</span><span class="op">=</span> <span class="ident">num_records</span>;
-                <span class="ident">batch</span>.<span class="ident">bytes</span> <span class="op">+</span><span class="op">=</span> <span class="ident">record_payload_bytes</span>;
+                <span class="ident">batch</span>.<span class="ident">records</span> <span class="op">+=</span> <span class="ident">num_records</span>;
+                <span class="ident">batch</span>.<span class="ident">bytes</span> <span class="op">+=</span> <span class="ident">record_payload_bytes</span>;
 
-                <span class="macro">assert</span><span class="macro">!</span>(<span class="ident">batch</span>.<span class="ident">bytes</span> <span class="op">&lt;</span><span class="op">=</span> <span class="self">self</span>.<span class="ident">cfg</span>.<span class="ident">max_total_bytes</span>);
-                <span class="macro">assert</span><span class="macro">!</span>(<span class="ident">batch</span>.<span class="ident">records</span> <span class="op">&lt;</span><span class="op">=</span> <span class="self">self</span>.<span class="ident">cfg</span>.<span class="ident">max_total_records</span>);
+                <span class="macro">assert</span><span class="macro">!</span>(<span class="ident">batch</span>.<span class="ident">bytes</span> <span class="op">&lt;=</span> <span class="self">self</span>.<span class="ident">cfg</span>.<span class="ident">max_total_bytes</span>);
+                <span class="macro">assert</span><span class="macro">!</span>(<span class="ident">batch</span>.<span class="ident">records</span> <span class="op">&lt;=</span> <span class="self">self</span>.<span class="ident">cfg</span>.<span class="ident">max_total_records</span>);
 
                 <span class="macro">assert_eq</span><span class="macro">!</span>(<span class="ident">batch</span>.<span class="ident">records</span>, <span class="ident">queue</span>.<span class="ident">batch_limits</span>.<span class="ident">cur_records</span>);
                 <span class="macro">assert_eq</span><span class="macro">!</span>(<span class="ident">batch</span>.<span class="ident">bytes</span>, <span class="ident">queue</span>.<span class="ident">batch_limits</span>.<span class="ident">cur_bytes</span>);
             }
 
-            <span class="kw">if</span> <span class="ident">commit</span> <span class="op">|</span><span class="op">|</span> <span class="ident">record</span>.<span class="ident">batch</span>.<span class="ident">is_none</span>() {
+            <span class="kw">if</span> <span class="ident">commit</span> <span class="op">||</span> <span class="ident">record</span>.<span class="ident">batch</span>.<span class="ident">is_none</span>() {
                 <span class="kw">let</span> <span class="ident">batch</span> <span class="op">=</span> <span class="self">self</span>.<span class="ident">cur_batch</span>.<span class="ident">take</span>().<span class="ident">unwrap</span>();
                 <span class="self">self</span>.<span class="ident">batches</span>.<span class="ident">push</span>(<span class="ident">batch</span>);
             }
@@ -1948,7 +1949,7 @@
             <span class="prelude-val">Ok</span>(<span class="ident">response</span>)
         }
 
-        <span class="kw">fn</span> <span class="ident">do_handle_response</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>, <span class="kw">_</span>: <span class="ident">PostResponse</span>, <span class="ident">mid_batch</span>: <span class="ident">bool</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span>()<span class="op">&gt;</span> {
+        <span class="kw">fn</span> <span class="ident">do_handle_response</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>, <span class="kw">_</span>: <span class="ident">PostResponse</span>, <span class="ident">mid_batch</span>: <span class="ident">bool</span>) <span class="op">-&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span>()<span class="op">&gt;</span> {
             <span class="macro">assert_eq</span><span class="macro">!</span>(<span class="ident">mid_batch</span>, <span class="self">self</span>.<span class="ident">cur_batch</span>.<span class="ident">is_some</span>());
             <span class="prelude-val">Ok</span>(())
         }
@@ -1961,13 +1962,13 @@
             <span class="ident">batch</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">String</span><span class="op">&gt;</span>,
             <span class="ident">commit</span>: <span class="ident">bool</span>,
             <span class="ident">queue</span>: <span class="kw-2">&amp;</span><span class="ident">PostQueue</span><span class="op">&lt;</span><span class="ident">T</span>, <span class="ident">O</span><span class="op">&gt;</span>,
-        ) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">PostResponse</span><span class="op">&gt;</span> {
+        ) <span class="op">-&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">PostResponse</span><span class="op">&gt;</span> {
             <span class="self">self</span>.<span class="ident">borrow_mut</span>().<span class="ident">do_post</span>(<span class="kw-2">&amp;</span><span class="ident">body</span>, <span class="ident">xius</span>, <span class="ident">batch</span>, <span class="ident">commit</span>, <span class="ident">queue</span>)
         }
     }
 
     <span class="kw">impl</span> <span class="ident">PostResponseHandler</span> <span class="kw">for</span> <span class="ident">TestPosterRef</span> {
-        <span class="kw">fn</span> <span class="ident">handle_response</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>, <span class="ident">r</span>: <span class="ident">PostResponse</span>, <span class="ident">mid_batch</span>: <span class="ident">bool</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span>()<span class="op">&gt;</span> {
+        <span class="kw">fn</span> <span class="ident">handle_response</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>, <span class="ident">r</span>: <span class="ident">PostResponse</span>, <span class="ident">mid_batch</span>: <span class="ident">bool</span>) <span class="op">-&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span>()<span class="op">&gt;</span> {
             <span class="self">self</span>.<span class="ident">borrow_mut</span>().<span class="ident">do_handle_response</span>(<span class="ident">r</span>, <span class="ident">mid_batch</span>)
         }
     }
@@ -1978,13 +1979,13 @@
         <span class="ident">cfg</span>: <span class="ident">InfoConfiguration</span>,
         <span class="ident">lm</span>: <span class="ident">i64</span>,
         <span class="ident">resps</span>: <span class="ident">Vec</span><span class="op">&lt;</span><span class="ident">PostResponse</span><span class="op">&gt;</span>,
-    ) <span class="op">-</span><span class="op">&gt;</span> (<span class="ident">MockedPostQueue</span>, <span class="ident">TestPosterRef</span>) {
+    ) <span class="op">-&gt;</span> (<span class="ident">MockedPostQueue</span>, <span class="ident">TestPosterRef</span>) {
         <span class="kw">let</span> <span class="ident">tester</span> <span class="op">=</span> <span class="ident">TestPoster</span>::<span class="ident">new</span>(<span class="kw-2">&amp;</span><span class="ident">cfg</span>, <span class="ident">resps</span>);
         <span class="kw">let</span> <span class="ident">pq</span> <span class="op">=</span> <span class="ident">PostQueue</span>::<span class="ident">new</span>(<span class="kw-2">&amp;</span><span class="ident">cfg</span>, <span class="ident">ServerTimestamp</span>(<span class="ident">lm</span>), <span class="ident">tester</span>.<span class="ident">clone</span>(), <span class="ident">tester</span>.<span class="ident">clone</span>());
         (<span class="ident">pq</span>, <span class="ident">tester</span>)
     }
 
-    <span class="kw">fn</span> <span class="ident">fake_response</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span>, <span class="ident">T</span>: <span class="ident">Into</span><span class="op">&lt;</span><span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="kw-2">&amp;</span><span class="lifetime">&#39;a</span> <span class="ident">str</span><span class="op">&gt;</span><span class="op">&gt;</span><span class="op">&gt;</span>(<span class="ident">status</span>: <span class="ident">u16</span>, <span class="ident">lm</span>: <span class="ident">i64</span>, <span class="ident">batch</span>: <span class="ident">T</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">PostResponse</span> {
+    <span class="kw">fn</span> <span class="ident">fake_response</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span>, <span class="ident">T</span>: <span class="ident">Into</span><span class="op">&lt;</span><span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="kw-2">&amp;</span><span class="lifetime">&#39;a</span> <span class="ident">str</span><span class="op">&gt;&gt;</span><span class="op">&gt;</span>(<span class="ident">status</span>: <span class="ident">u16</span>, <span class="ident">lm</span>: <span class="ident">i64</span>, <span class="ident">batch</span>: <span class="ident">T</span>) <span class="op">-&gt;</span> <span class="ident">PostResponse</span> {
         <span class="macro">assert</span><span class="macro">!</span>(<span class="ident">status_codes</span>::<span class="ident">is_success_code</span>(<span class="ident">status</span>));
         <span class="ident">Sync15ClientResponse</span>::<span class="ident">Success</span> {
             <span class="ident">status</span>,
@@ -2034,7 +2035,7 @@
     }
 
     <span class="comment">// Actual record size (for max_request_len) will be larger by some amount</span>
-    <span class="kw">fn</span> <span class="ident">make_record</span>(<span class="ident">payload_size</span>: <span class="ident">usize</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">EncryptedBso</span> {
+    <span class="kw">fn</span> <span class="ident">make_record</span>(<span class="ident">payload_size</span>: <span class="ident">usize</span>) <span class="op">-&gt;</span> <span class="ident">EncryptedBso</span> {
         <span class="macro">assert</span><span class="macro">!</span>(<span class="ident">payload_size</span> <span class="op">&gt;</span> <span class="kw-2">*</span><span class="ident">PAYLOAD_OVERHEAD</span>);
         <span class="kw">let</span> <span class="ident">ciphertext_len</span> <span class="op">=</span> <span class="ident">payload_size</span> <span class="op">-</span> <span class="kw-2">*</span><span class="ident">PAYLOAD_OVERHEAD</span>;
         <span class="ident">BsoRecord</span> {
@@ -2051,7 +2052,7 @@
         }
     }
 
-    <span class="kw">fn</span> <span class="ident">request_bytes_for_payloads</span>(<span class="ident">payloads</span>: <span class="kw-2">&amp;</span>[<span class="ident">usize</span>]) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">usize</span> {
+    <span class="kw">fn</span> <span class="ident">request_bytes_for_payloads</span>(<span class="ident">payloads</span>: <span class="kw-2">&amp;</span>[<span class="ident">usize</span>]) <span class="op">-&gt;</span> <span class="ident">usize</span> {
         <span class="number">1</span> <span class="op">+</span> <span class="ident">payloads</span>
             .<span class="ident">iter</span>()
             .<span class="ident">map</span>(<span class="op">|</span><span class="kw-2">&amp;</span><span class="ident">size</span><span class="op">|</span> <span class="ident">size</span> <span class="op">+</span> <span class="number">1</span> <span class="op">+</span> <span class="kw-2">*</span><span class="ident">NON_PAYLOAD_OVERHEAD</span>)

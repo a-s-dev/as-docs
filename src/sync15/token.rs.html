@@ -1,4 +1,5 @@
-<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source to the Rust file `components/sync15/src/token.rs`."><meta name="keywords" content="rust, rustlang, rust-lang"><title>token.rs.html -- source</title><link rel="stylesheet" type="text/css" href="../../normalize.css"><link rel="stylesheet" type="text/css" href="../../rustdoc.css" id="mainThemeStyle"><link rel="stylesheet" type="text/css" href="../../dark.css"><link rel="stylesheet" type="text/css" href="../../light.css" id="themeStyle"><script src="../../storage.js"></script><noscript><link rel="stylesheet" href="../../noscript.css"></noscript><link rel="shortcut icon" href="../../favicon.ico"><style type="text/css">#crate-search{background-image:url("../../down-arrow.svg");}</style></head><body class="rustdoc source"><!--[if lte IE 8]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="sidebar"><div class="sidebar-menu">&#9776;</div><a href='../../sync15/index.html'><div class='logo-container'><img src='../../rust-logo.png' alt='logo'></div></a></nav><div class="theme-picker"><button id="theme-picker" aria-label="Pick another theme!"><img src="../../brush.svg" width="18" alt="Pick another theme!"></button><div id="theme-choices"></div></div><script src="../../theme.js"></script><nav class="sub"><form class="search-form"><div class="search-container"><div><select id="crate-search"><option value="All crates">All crates</option></select><input class="search-input" name="search" disabled autocomplete="off" spellcheck="false" placeholder="Click or press ‘S’ to search, ‘?’ for more options…" type="search"></div><a id="settings-menu" href="../../settings.html"><img src="../../wheel.svg" width="18" alt="Change settings"></a></div></form></nav><section id="main" class="content"><pre class="line-numbers"><span id="1">  1</span>
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source to the Rust file `components/sync15/src/token.rs`."><meta name="keywords" content="rust, rustlang, rust-lang"><title>token.rs.html -- source</title><link rel="stylesheet" type="text/css" href="../../normalize.css"><link rel="stylesheet" type="text/css" href="../../rustdoc.css" id="mainThemeStyle"><link rel="stylesheet" type="text/css" href="../../light.css"  id="themeStyle"><link rel="stylesheet" type="text/css" href="../../dark.css" disabled ><link rel="stylesheet" type="text/css" href="../../ayu.css" disabled ><script src="../../storage.js"></script><noscript><link rel="stylesheet" href="../../noscript.css"></noscript><link rel="shortcut icon" href="../../favicon.ico"><style type="text/css">#crate-search{background-image:url("../../down-arrow.svg");}</style></head><body class="rustdoc source"><!--[if lte IE 8]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="sidebar"><div class="sidebar-menu">&#9776;</div><a href='../../sync15/index.html'><div class='logo-container rust-logo'><img src='../../rust-logo.png' alt='logo'></div></a></nav><div class="theme-picker"><button id="theme-picker" aria-label="Pick another theme!"><img src="../../brush.svg" width="18" alt="Pick another theme!"></button><div id="theme-choices"></div></div><script src="../../theme.js"></script><nav class="sub"><form class="search-form"><div class="search-container"><div><select id="crate-search"><option value="All crates">All crates</option></select><input class="search-input" name="search" disabled autocomplete="off" spellcheck="false" placeholder="Click or press ‘S’ to search, ‘?’ for more options…" type="search"></div><span class="help-button">?</span>
+                <a id="settings-menu" href="../../settings.html"><img src="../../wheel.svg" width="18" alt="Change settings"></a></div></form></nav><section id="main" class="content"><pre class="line-numbers"><span id="1">  1</span>
 <span id="2">  2</span>
 <span id="3">  3</span>
 <span id="4">  4</span>
@@ -613,7 +614,7 @@
 }
 
 <span class="kw">impl</span> <span class="ident">std</span>::<span class="ident">fmt</span>::<span class="ident">Debug</span> <span class="kw">for</span> <span class="ident">TokenserverToken</span> {
-    <span class="kw">fn</span> <span class="ident">fmt</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">f</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">std</span>::<span class="ident">fmt</span>::<span class="ident">Formatter</span><span class="op">&lt;</span><span class="lifetime">&#39;_</span><span class="op">&gt;</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">std</span>::<span class="ident">fmt</span>::<span class="prelude-ty">Result</span> {
+    <span class="kw">fn</span> <span class="ident">fmt</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">f</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">std</span>::<span class="ident">fmt</span>::<span class="ident">Formatter</span><span class="op">&lt;</span><span class="lifetime">&#39;_</span><span class="op">&gt;</span>) <span class="op">-&gt;</span> <span class="ident">std</span>::<span class="ident">fmt</span>::<span class="prelude-ty">Result</span> {
         <span class="ident">f</span>.<span class="ident">debug_struct</span>(<span class="string">&quot;TokenserverToken&quot;</span>)
             .<span class="ident">field</span>(<span class="string">&quot;api_endpoint&quot;</span>, <span class="kw-2">&amp;</span><span class="self">self</span>.<span class="ident">api_endpoint</span>)
             .<span class="ident">field</span>(<span class="string">&quot;uid&quot;</span>, <span class="kw-2">&amp;</span><span class="self">self</span>.<span class="ident">uid</span>)
@@ -633,9 +634,9 @@
 <span class="comment">// The trait for fetching tokens - we&#39;ll provide a &quot;real&quot; implementation but</span>
 <span class="comment">// tests will re-implement it.</span>
 <span class="kw">trait</span> <span class="ident">TokenFetcher</span> {
-    <span class="kw">fn</span> <span class="ident">fetch_token</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="kw">super</span>::<span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">TokenFetchResult</span><span class="op">&gt;</span>;
+    <span class="kw">fn</span> <span class="ident">fetch_token</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-&gt;</span> <span class="kw">super</span>::<span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">TokenFetchResult</span><span class="op">&gt;</span>;
     <span class="comment">// We allow the trait to tell us what the time is so tests can get funky.</span>
-    <span class="kw">fn</span> <span class="ident">now</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">SystemTime</span>;
+    <span class="kw">fn</span> <span class="ident">now</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-&gt;</span> <span class="ident">SystemTime</span>;
 }
 
 <span class="comment">// Our &quot;real&quot; token fetcher, implementing the TokenFetcher trait, which hits</span>
@@ -648,7 +649,7 @@
     <span class="ident">key_id</span>: <span class="ident">String</span>,
 }
 
-<span class="kw">fn</span> <span class="ident">fixup_server_url</span>(<span class="kw-2">mut</span> <span class="ident">url</span>: <span class="ident">Url</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">Url</span><span class="op">&gt;</span> {
+<span class="kw">fn</span> <span class="ident">fixup_server_url</span>(<span class="kw-2">mut</span> <span class="ident">url</span>: <span class="ident">Url</span>) <span class="op">-&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">Url</span><span class="op">&gt;</span> {
     <span class="comment">// base_url is the end-point as returned by .well-known/fxa-client-configuration,</span>
     <span class="comment">// or as directly specified by self-hosters. As a result, it may or may not have</span>
     <span class="comment">// the sync 1.5 suffix of &quot;/1.0/sync/1.5&quot; - so add it on here if it does not.</span>
@@ -669,7 +670,7 @@
 }
 
 <span class="kw">impl</span> <span class="ident">TokenServerFetcher</span> {
-    <span class="kw">fn</span> <span class="ident">new</span>(<span class="ident">base_url</span>: <span class="ident">Url</span>, <span class="ident">access_token</span>: <span class="ident">String</span>, <span class="ident">key_id</span>: <span class="ident">String</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">TokenServerFetcher</span><span class="op">&gt;</span> {
+    <span class="kw">fn</span> <span class="ident">new</span>(<span class="ident">base_url</span>: <span class="ident">Url</span>, <span class="ident">access_token</span>: <span class="ident">String</span>, <span class="ident">key_id</span>: <span class="ident">String</span>) <span class="op">-&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">TokenServerFetcher</span><span class="op">&gt;</span> {
         <span class="prelude-val">Ok</span>(<span class="ident">TokenServerFetcher</span> {
             <span class="ident">server_url</span>: <span class="ident">fixup_server_url</span>(<span class="ident">base_url</span>)<span class="question-mark">?</span>,
             <span class="ident">access_token</span>,
@@ -679,7 +680,7 @@
 }
 
 <span class="kw">impl</span> <span class="ident">TokenFetcher</span> <span class="kw">for</span> <span class="ident">TokenServerFetcher</span> {
-    <span class="kw">fn</span> <span class="ident">fetch_token</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">TokenFetchResult</span><span class="op">&gt;</span> {
+    <span class="kw">fn</span> <span class="ident">fetch_token</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">TokenFetchResult</span><span class="op">&gt;</span> {
         <span class="ident">log</span>::<span class="macro">debug</span><span class="macro">!</span>(<span class="string">&quot;Fetching token from {}&quot;</span>, <span class="self">self</span>.<span class="ident">server_url</span>);
         <span class="kw">let</span> <span class="ident">resp</span> <span class="op">=</span> <span class="ident">Request</span>::<span class="ident">get</span>(<span class="self">self</span>.<span class="ident">server_url</span>.<span class="ident">clone</span>())
             .<span class="ident">header</span>(
@@ -710,14 +711,14 @@
         <span class="kw">let</span> <span class="ident">server_timestamp</span> <span class="op">=</span> <span class="ident">resp</span>
             .<span class="ident">headers</span>
             .<span class="ident">try_get</span>::<span class="op">&lt;</span><span class="ident">ServerTimestamp</span>, <span class="kw">_</span><span class="op">&gt;</span>(<span class="ident">header_names</span>::<span class="ident">X_TIMESTAMP</span>)
-            .<span class="ident">ok_or_else</span>(<span class="op">|</span><span class="op">|</span> <span class="ident">ErrorKind</span>::<span class="ident">MissingServerTimestamp</span>)<span class="question-mark">?</span>;
+            .<span class="ident">ok_or_else</span>(<span class="op">||</span> <span class="ident">ErrorKind</span>::<span class="ident">MissingServerTimestamp</span>)<span class="question-mark">?</span>;
         <span class="prelude-val">Ok</span>(<span class="ident">TokenFetchResult</span> {
             <span class="ident">token</span>,
             <span class="ident">server_timestamp</span>,
         })
     }
 
-    <span class="kw">fn</span> <span class="ident">now</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">SystemTime</span> {
+    <span class="kw">fn</span> <span class="ident">now</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-&gt;</span> <span class="ident">SystemTime</span> {
         <span class="ident">SystemTime</span>::<span class="ident">now</span>()
     }
 }
@@ -733,7 +734,7 @@
 
 <span class="comment">// hawk::Credentials doesn&#39;t implement debug -_-</span>
 <span class="kw">impl</span> <span class="ident">fmt</span>::<span class="ident">Debug</span> <span class="kw">for</span> <span class="ident">TokenContext</span> {
-    <span class="kw">fn</span> <span class="ident">fmt</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">f</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">fmt</span>::<span class="ident">Formatter</span><span class="op">&lt;</span><span class="lifetime">&#39;_</span><span class="op">&gt;</span>) <span class="op">-</span><span class="op">&gt;</span> ::<span class="ident">std</span>::<span class="ident">result</span>::<span class="prelude-ty">Result</span><span class="op">&lt;</span>(), <span class="ident">fmt</span>::<span class="ident">Error</span><span class="op">&gt;</span> {
+    <span class="kw">fn</span> <span class="ident">fmt</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">f</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">fmt</span>::<span class="ident">Formatter</span><span class="op">&lt;</span><span class="lifetime">&#39;_</span><span class="op">&gt;</span>) <span class="op">-&gt;</span> ::<span class="ident">std</span>::<span class="ident">result</span>::<span class="prelude-ty">Result</span><span class="op">&lt;</span>(), <span class="ident">fmt</span>::<span class="ident">Error</span><span class="op">&gt;</span> {
         <span class="ident">f</span>.<span class="ident">debug_struct</span>(<span class="string">&quot;TokenContext&quot;</span>)
             .<span class="ident">field</span>(<span class="string">&quot;token&quot;</span>, <span class="kw-2">&amp;</span><span class="self">self</span>.<span class="ident">token</span>)
             .<span class="ident">field</span>(<span class="string">&quot;credentials&quot;</span>, <span class="kw-2">&amp;</span><span class="string">&quot;(omitted)&quot;</span>)
@@ -749,7 +750,7 @@
         <span class="ident">credentials</span>: <span class="ident">hawk</span>::<span class="ident">Credentials</span>,
         <span class="ident">server_timestamp</span>: <span class="ident">ServerTimestamp</span>,
         <span class="ident">valid_until</span>: <span class="ident">SystemTime</span>,
-    ) <span class="op">-</span><span class="op">&gt;</span> <span class="self">Self</span> {
+    ) <span class="op">-&gt;</span> <span class="self">Self</span> {
         <span class="self">Self</span> {
             <span class="ident">token</span>,
             <span class="ident">credentials</span>,
@@ -758,7 +759,7 @@
         }
     }
 
-    <span class="kw">fn</span> <span class="ident">is_valid</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">now</span>: <span class="ident">SystemTime</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">bool</span> {
+    <span class="kw">fn</span> <span class="ident">is_valid</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">now</span>: <span class="ident">SystemTime</span>) <span class="op">-&gt;</span> <span class="ident">bool</span> {
         <span class="comment">// We could consider making the duration a little shorter - if it</span>
         <span class="comment">// only has 1 second validity there seems a reasonable chance it will</span>
         <span class="comment">// have expired by the time it gets presented to the remote that wants</span>
@@ -768,20 +769,20 @@
         <span class="ident">now</span> <span class="op">&lt;</span> <span class="self">self</span>.<span class="ident">valid_until</span>
     }
 
-    <span class="kw">fn</span> <span class="ident">authorization</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">req</span>: <span class="kw-2">&amp;</span><span class="ident">Request</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">String</span><span class="op">&gt;</span> {
+    <span class="kw">fn</span> <span class="ident">authorization</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">req</span>: <span class="kw-2">&amp;</span><span class="ident">Request</span>) <span class="op">-&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">String</span><span class="op">&gt;</span> {
         <span class="kw">let</span> <span class="ident">url</span> <span class="op">=</span> <span class="kw-2">&amp;</span><span class="ident">req</span>.<span class="ident">url</span>;
 
         <span class="kw">let</span> <span class="ident">path_and_query</span> <span class="op">=</span> <span class="kw">match</span> <span class="ident">url</span>.<span class="ident">query</span>() {
-            <span class="prelude-val">None</span> <span class="op">=</span><span class="op">&gt;</span> <span class="ident">Cow</span>::<span class="ident">from</span>(<span class="ident">url</span>.<span class="ident">path</span>()),
-            <span class="prelude-val">Some</span>(<span class="ident">qs</span>) <span class="op">=</span><span class="op">&gt;</span> <span class="ident">Cow</span>::<span class="ident">from</span>(<span class="macro">format</span><span class="macro">!</span>(<span class="string">&quot;{}?{}&quot;</span>, <span class="ident">url</span>.<span class="ident">path</span>(), <span class="ident">qs</span>)),
+            <span class="prelude-val">None</span> <span class="op">=&gt;</span> <span class="ident">Cow</span>::<span class="ident">from</span>(<span class="ident">url</span>.<span class="ident">path</span>()),
+            <span class="prelude-val">Some</span>(<span class="ident">qs</span>) <span class="op">=&gt;</span> <span class="ident">Cow</span>::<span class="ident">from</span>(<span class="macro">format</span><span class="macro">!</span>(<span class="string">&quot;{}?{}&quot;</span>, <span class="ident">url</span>.<span class="ident">path</span>(), <span class="ident">qs</span>)),
         };
 
         <span class="kw">let</span> <span class="ident">host</span> <span class="op">=</span> <span class="ident">url</span>
             .<span class="ident">host_str</span>()
-            .<span class="ident">ok_or_else</span>(<span class="op">|</span><span class="op">|</span> <span class="ident">ErrorKind</span>::<span class="ident">UnacceptableUrl</span>(<span class="string">&quot;Storage URL has no host&quot;</span>.<span class="ident">into</span>()))<span class="question-mark">?</span>;
+            .<span class="ident">ok_or_else</span>(<span class="op">||</span> <span class="ident">ErrorKind</span>::<span class="ident">UnacceptableUrl</span>(<span class="string">&quot;Storage URL has no host&quot;</span>.<span class="ident">into</span>()))<span class="question-mark">?</span>;
 
         <span class="comment">// Known defaults exist for https? (among others), so this should be impossible</span>
-        <span class="kw">let</span> <span class="ident">port</span> <span class="op">=</span> <span class="ident">url</span>.<span class="ident">port_or_known_default</span>().<span class="ident">ok_or_else</span>(<span class="op">|</span><span class="op">|</span> {
+        <span class="kw">let</span> <span class="ident">port</span> <span class="op">=</span> <span class="ident">url</span>.<span class="ident">port_or_known_default</span>().<span class="ident">ok_or_else</span>(<span class="op">||</span> {
             <span class="ident">ErrorKind</span>::<span class="ident">UnacceptableUrl</span>(
                 <span class="string">&quot;Storage URL has no port and no default port is known for the protocol&quot;</span>.<span class="ident">into</span>(),
             )
@@ -826,7 +827,7 @@
 }
 
 <span class="kw">impl</span><span class="op">&lt;</span><span class="ident">TF</span>: <span class="ident">TokenFetcher</span><span class="op">&gt;</span> <span class="ident">TokenProviderImpl</span><span class="op">&lt;</span><span class="ident">TF</span><span class="op">&gt;</span> {
-    <span class="kw">fn</span> <span class="ident">new</span>(<span class="ident">fetcher</span>: <span class="ident">TF</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="self">Self</span> {
+    <span class="kw">fn</span> <span class="ident">new</span>(<span class="ident">fetcher</span>: <span class="ident">TF</span>) <span class="op">-&gt;</span> <span class="self">Self</span> {
         <span class="comment">// We check this at the real entrypoint of the application, but tests</span>
         <span class="comment">// can/do bypass that, so check this here too.</span>
         <span class="ident">rc_crypto</span>::<span class="ident">ensure_initialized</span>();
@@ -838,7 +839,7 @@
 
     <span class="comment">// Uses our fetcher to grab a new token and if successfull, derives other</span>
     <span class="comment">// info from that token into a usable TokenContext.</span>
-    <span class="kw">fn</span> <span class="ident">fetch_context</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">TokenContext</span><span class="op">&gt;</span> {
+    <span class="kw">fn</span> <span class="ident">fetch_context</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">TokenContext</span><span class="op">&gt;</span> {
         <span class="kw">let</span> <span class="ident">result</span> <span class="op">=</span> <span class="self">self</span>.<span class="ident">fetcher</span>.<span class="ident">fetch_token</span>()<span class="question-mark">?</span>;
         <span class="kw">let</span> <span class="ident">token</span> <span class="op">=</span> <span class="ident">result</span>.<span class="ident">token</span>;
         <span class="kw">let</span> <span class="ident">valid_until</span> <span class="op">=</span> <span class="ident">SystemTime</span>::<span class="ident">now</span>() <span class="op">+</span> <span class="ident">Duration</span>::<span class="ident">from_secs</span>(<span class="ident">token</span>.<span class="ident">duration</span>);
@@ -859,14 +860,14 @@
     <span class="comment">// Attempt to fetch a new token and return a new state reflecting that</span>
     <span class="comment">// operation. If it worked a TokenState will be returned, but errors may</span>
     <span class="comment">// cause other states.</span>
-    <span class="kw">fn</span> <span class="ident">fetch_token</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">previous_endpoint</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="kw-2">&amp;</span><span class="ident">str</span><span class="op">&gt;</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">TokenState</span> {
+    <span class="kw">fn</span> <span class="ident">fetch_token</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">previous_endpoint</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="kw-2">&amp;</span><span class="ident">str</span><span class="op">&gt;</span>) <span class="op">-&gt;</span> <span class="ident">TokenState</span> {
         <span class="kw">match</span> <span class="self">self</span>.<span class="ident">fetch_context</span>() {
-            <span class="prelude-val">Ok</span>(<span class="ident">tc</span>) <span class="op">=</span><span class="op">&gt;</span> {
+            <span class="prelude-val">Ok</span>(<span class="ident">tc</span>) <span class="op">=&gt;</span> {
                 <span class="comment">// We got a new token - check that the endpoint is the same</span>
                 <span class="comment">// as a previous endpoint we saw (if any)</span>
                 <span class="kw">match</span> <span class="ident">previous_endpoint</span> {
-                    <span class="prelude-val">Some</span>(<span class="ident">prev</span>) <span class="op">=</span><span class="op">&gt;</span> {
-                        <span class="kw">if</span> <span class="ident">prev</span> <span class="op">=</span><span class="op">=</span> <span class="ident">tc</span>.<span class="ident">token</span>.<span class="ident">api_endpoint</span> {
+                    <span class="prelude-val">Some</span>(<span class="ident">prev</span>) <span class="op">=&gt;</span> {
+                        <span class="kw">if</span> <span class="ident">prev</span> <span class="op">==</span> <span class="ident">tc</span>.<span class="ident">token</span>.<span class="ident">api_endpoint</span> {
                             <span class="ident">TokenState</span>::<span class="ident">Token</span>(<span class="ident">tc</span>)
                         } <span class="kw">else</span> {
                             <span class="ident">log</span>::<span class="macro">warn</span><span class="macro">!</span>(
@@ -877,13 +878,13 @@
                             <span class="ident">TokenState</span>::<span class="ident">NodeReassigned</span>
                         }
                     }
-                    <span class="prelude-val">None</span> <span class="op">=</span><span class="op">&gt;</span> {
+                    <span class="prelude-val">None</span> <span class="op">=&gt;</span> {
                         <span class="comment">// Never had an api_endpoint in the past, so this is OK.</span>
                         <span class="ident">TokenState</span>::<span class="ident">Token</span>(<span class="ident">tc</span>)
                     }
                 }
             }
-            <span class="prelude-val">Err</span>(<span class="ident">e</span>) <span class="op">=</span><span class="op">&gt;</span> {
+            <span class="prelude-val">Err</span>(<span class="ident">e</span>) <span class="op">=&gt;</span> {
                 <span class="comment">// Early to avoid nll issues...</span>
                 <span class="kw">if</span> <span class="kw">let</span> <span class="ident">ErrorKind</span>::<span class="ident">BackoffError</span>(<span class="ident">be</span>) <span class="op">=</span> <span class="ident">e</span>.<span class="ident">kind</span>() {
                     <span class="kw">return</span> <span class="ident">TokenState</span>::<span class="ident">Backoff</span>(<span class="kw-2">*</span><span class="ident">be</span>, <span class="ident">previous_endpoint</span>.<span class="ident">map</span>(<span class="ident">ToString</span>::<span class="ident">to_string</span>));
@@ -897,20 +898,20 @@
     <span class="comment">// Returns None if the current state should be used (eg, if we are</span>
     <span class="comment">// holding a token that remains valid) or Some() if the state has changed</span>
     <span class="comment">// (which may have changed to a state with a token or an error state)</span>
-    <span class="kw">fn</span> <span class="ident">advance_state</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">state</span>: <span class="kw-2">&amp;</span><span class="ident">TokenState</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">TokenState</span><span class="op">&gt;</span> {
+    <span class="kw">fn</span> <span class="ident">advance_state</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">state</span>: <span class="kw-2">&amp;</span><span class="ident">TokenState</span>) <span class="op">-&gt;</span> <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">TokenState</span><span class="op">&gt;</span> {
         <span class="kw">match</span> <span class="ident">state</span> {
-            <span class="ident">TokenState</span>::<span class="ident">NoToken</span> <span class="op">=</span><span class="op">&gt;</span> <span class="prelude-val">Some</span>(<span class="self">self</span>.<span class="ident">fetch_token</span>(<span class="prelude-val">None</span>)),
-            <span class="ident">TokenState</span>::<span class="ident">Failed</span>(<span class="kw">_</span>, <span class="ident">existing_endpoint</span>) <span class="op">=</span><span class="op">&gt;</span> {
+            <span class="ident">TokenState</span>::<span class="ident">NoToken</span> <span class="op">=&gt;</span> <span class="prelude-val">Some</span>(<span class="self">self</span>.<span class="ident">fetch_token</span>(<span class="prelude-val">None</span>)),
+            <span class="ident">TokenState</span>::<span class="ident">Failed</span>(<span class="kw">_</span>, <span class="ident">existing_endpoint</span>) <span class="op">=&gt;</span> {
                 <span class="prelude-val">Some</span>(<span class="self">self</span>.<span class="ident">fetch_token</span>(<span class="ident">existing_endpoint</span>.<span class="ident">as_ref</span>().<span class="ident">map</span>(<span class="ident">String</span>::<span class="ident">as_str</span>)))
             }
-            <span class="ident">TokenState</span>::<span class="ident">Token</span>(<span class="ident">existing_context</span>) <span class="op">=</span><span class="op">&gt;</span> {
+            <span class="ident">TokenState</span>::<span class="ident">Token</span>(<span class="ident">existing_context</span>) <span class="op">=&gt;</span> {
                 <span class="kw">if</span> <span class="ident">existing_context</span>.<span class="ident">is_valid</span>(<span class="self">self</span>.<span class="ident">fetcher</span>.<span class="ident">now</span>()) {
                     <span class="prelude-val">None</span>
                 } <span class="kw">else</span> {
                     <span class="prelude-val">Some</span>(<span class="self">self</span>.<span class="ident">fetch_token</span>(<span class="prelude-val">Some</span>(<span class="ident">existing_context</span>.<span class="ident">token</span>.<span class="ident">api_endpoint</span>.<span class="ident">as_str</span>())))
                 }
             }
-            <span class="ident">TokenState</span>::<span class="ident">Backoff</span>(<span class="kw-2">ref</span> <span class="ident">until</span>, <span class="kw-2">ref</span> <span class="ident">existing_endpoint</span>) <span class="op">=</span><span class="op">&gt;</span> {
+            <span class="ident">TokenState</span>::<span class="ident">Backoff</span>(<span class="kw-2">ref</span> <span class="ident">until</span>, <span class="kw-2">ref</span> <span class="ident">existing_endpoint</span>) <span class="op">=&gt;</span> {
                 <span class="kw">if</span> <span class="kw">let</span> <span class="prelude-val">Ok</span>(<span class="ident">remaining</span>) <span class="op">=</span> <span class="ident">until</span>.<span class="ident">duration_since</span>(<span class="self">self</span>.<span class="ident">fetcher</span>.<span class="ident">now</span>()) {
                     <span class="ident">log</span>::<span class="macro">debug</span><span class="macro">!</span>(<span class="string">&quot;enforcing existing backoff - {:?} remains&quot;</span>, <span class="ident">remaining</span>);
                     <span class="prelude-val">None</span>
@@ -919,16 +920,16 @@
                     <span class="prelude-val">Some</span>(<span class="self">self</span>.<span class="ident">fetch_token</span>(<span class="ident">existing_endpoint</span>.<span class="ident">as_ref</span>().<span class="ident">map</span>(<span class="ident">String</span>::<span class="ident">as_str</span>)))
                 }
             }
-            <span class="ident">TokenState</span>::<span class="ident">NodeReassigned</span> <span class="op">=</span><span class="op">&gt;</span> {
+            <span class="ident">TokenState</span>::<span class="ident">NodeReassigned</span> <span class="op">=&gt;</span> {
                 <span class="comment">// We never leave this state.</span>
                 <span class="prelude-val">None</span>
             }
         }
     }
 
-    <span class="kw">fn</span> <span class="ident">with_token</span><span class="op">&lt;</span><span class="ident">T</span>, <span class="ident">F</span><span class="op">&gt;</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">func</span>: <span class="ident">F</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">T</span><span class="op">&gt;</span>
+    <span class="kw">fn</span> <span class="ident">with_token</span><span class="op">&lt;</span><span class="ident">T</span>, <span class="ident">F</span><span class="op">&gt;</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">func</span>: <span class="ident">F</span>) <span class="op">-&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">T</span><span class="op">&gt;</span>
     <span class="kw">where</span>
-        <span class="ident">F</span>: <span class="ident">FnOnce</span>(<span class="kw-2">&amp;</span><span class="ident">TokenContext</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">T</span><span class="op">&gt;</span>,
+        <span class="ident">F</span>: <span class="ident">FnOnce</span>(<span class="kw-2">&amp;</span><span class="ident">TokenContext</span>) <span class="op">-&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">T</span><span class="op">&gt;</span>,
     {
         <span class="comment">// first get a mutable ref to our existing state, advance to the</span>
         <span class="comment">// state we will use, then re-stash that state for next time.</span>
@@ -940,37 +941,37 @@
         <span class="comment">// Now re-fetch the state we should use for this call - if it&#39;s</span>
         <span class="comment">// anything other than TokenState::Token we will fail.</span>
         <span class="kw">match</span> <span class="ident">state</span> {
-            <span class="ident">TokenState</span>::<span class="ident">NoToken</span> <span class="op">=</span><span class="op">&gt;</span> {
+            <span class="ident">TokenState</span>::<span class="ident">NoToken</span> <span class="op">=&gt;</span> {
                 <span class="comment">// it should be impossible to get here.</span>
                 <span class="macro">panic</span><span class="macro">!</span>(<span class="string">&quot;Can&#39;t be in NoToken state after advancing&quot;</span>);
             }
-            <span class="ident">TokenState</span>::<span class="ident">Token</span>(<span class="kw-2">ref</span> <span class="ident">token_context</span>) <span class="op">=</span><span class="op">&gt;</span> {
+            <span class="ident">TokenState</span>::<span class="ident">Token</span>(<span class="kw-2">ref</span> <span class="ident">token_context</span>) <span class="op">=&gt;</span> {
                 <span class="comment">// make the call.</span>
                 <span class="ident">func</span>(<span class="ident">token_context</span>)
             }
-            <span class="ident">TokenState</span>::<span class="ident">Failed</span>(<span class="ident">e</span>, <span class="kw">_</span>) <span class="op">=</span><span class="op">&gt;</span> {
+            <span class="ident">TokenState</span>::<span class="ident">Failed</span>(<span class="ident">e</span>, <span class="kw">_</span>) <span class="op">=&gt;</span> {
                 <span class="comment">// We swap the error out of the state enum and return it.</span>
                 <span class="prelude-val">Err</span>(<span class="ident">e</span>.<span class="ident">take</span>().<span class="ident">unwrap</span>())
             }
-            <span class="ident">TokenState</span>::<span class="ident">NodeReassigned</span> <span class="op">=</span><span class="op">&gt;</span> {
+            <span class="ident">TokenState</span>::<span class="ident">NodeReassigned</span> <span class="op">=&gt;</span> {
                 <span class="comment">// this is unrecoverable.</span>
                 <span class="prelude-val">Err</span>(<span class="ident">ErrorKind</span>::<span class="ident">StorageResetError</span>.<span class="ident">into</span>())
             }
-            <span class="ident">TokenState</span>::<span class="ident">Backoff</span>(<span class="kw-2">ref</span> <span class="ident">remaining</span>, <span class="kw">_</span>) <span class="op">=</span><span class="op">&gt;</span> {
+            <span class="ident">TokenState</span>::<span class="ident">Backoff</span>(<span class="kw-2">ref</span> <span class="ident">remaining</span>, <span class="kw">_</span>) <span class="op">=&gt;</span> {
                 <span class="prelude-val">Err</span>(<span class="ident">ErrorKind</span>::<span class="ident">BackoffError</span>(<span class="kw-2">*</span><span class="ident">remaining</span>).<span class="ident">into</span>())
             }
         }
     }
 
-    <span class="kw">fn</span> <span class="ident">hashed_uid</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">String</span><span class="op">&gt;</span> {
+    <span class="kw">fn</span> <span class="ident">hashed_uid</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">String</span><span class="op">&gt;</span> {
         <span class="self">self</span>.<span class="ident">with_token</span>(<span class="op">|</span><span class="ident">ctx</span><span class="op">|</span> <span class="prelude-val">Ok</span>(<span class="ident">ctx</span>.<span class="ident">token</span>.<span class="ident">hashed_fxa_uid</span>.<span class="ident">clone</span>()))
     }
 
-    <span class="kw">fn</span> <span class="ident">authorization</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">req</span>: <span class="kw-2">&amp;</span><span class="ident">Request</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">String</span><span class="op">&gt;</span> {
+    <span class="kw">fn</span> <span class="ident">authorization</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">req</span>: <span class="kw-2">&amp;</span><span class="ident">Request</span>) <span class="op">-&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">String</span><span class="op">&gt;</span> {
         <span class="self">self</span>.<span class="ident">with_token</span>(<span class="op">|</span><span class="ident">ctx</span><span class="op">|</span> <span class="ident">ctx</span>.<span class="ident">authorization</span>(<span class="ident">req</span>))
     }
 
-    <span class="kw">fn</span> <span class="ident">api_endpoint</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">String</span><span class="op">&gt;</span> {
+    <span class="kw">fn</span> <span class="ident">api_endpoint</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">String</span><span class="op">&gt;</span> {
         <span class="self">self</span>.<span class="ident">with_token</span>(<span class="op">|</span><span class="ident">ctx</span><span class="op">|</span> <span class="prelude-val">Ok</span>(<span class="ident">ctx</span>.<span class="ident">token</span>.<span class="ident">api_endpoint</span>.<span class="ident">clone</span>()))
     }
     <span class="comment">// TODO: we probably want a &quot;drop_token/context&quot; type method so that when</span>
@@ -985,22 +986,22 @@
 }
 
 <span class="kw">impl</span> <span class="ident">TokenProvider</span> {
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">new</span>(<span class="ident">url</span>: <span class="ident">Url</span>, <span class="ident">access_token</span>: <span class="ident">String</span>, <span class="ident">key_id</span>: <span class="ident">String</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="self">Self</span><span class="op">&gt;</span> {
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">new</span>(<span class="ident">url</span>: <span class="ident">Url</span>, <span class="ident">access_token</span>: <span class="ident">String</span>, <span class="ident">key_id</span>: <span class="ident">String</span>) <span class="op">-&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="self">Self</span><span class="op">&gt;</span> {
         <span class="kw">let</span> <span class="ident">fetcher</span> <span class="op">=</span> <span class="ident">TokenServerFetcher</span>::<span class="ident">new</span>(<span class="ident">url</span>, <span class="ident">access_token</span>, <span class="ident">key_id</span>)<span class="question-mark">?</span>;
         <span class="prelude-val">Ok</span>(<span class="self">Self</span> {
             <span class="ident">imp</span>: <span class="ident">TokenProviderImpl</span>::<span class="ident">new</span>(<span class="ident">fetcher</span>),
         })
     }
 
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">hashed_uid</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">String</span><span class="op">&gt;</span> {
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">hashed_uid</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">String</span><span class="op">&gt;</span> {
         <span class="self">self</span>.<span class="ident">imp</span>.<span class="ident">hashed_uid</span>()
     }
 
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">authorization</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">req</span>: <span class="kw-2">&amp;</span><span class="ident">Request</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">String</span><span class="op">&gt;</span> {
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">authorization</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">req</span>: <span class="kw-2">&amp;</span><span class="ident">Request</span>) <span class="op">-&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">String</span><span class="op">&gt;</span> {
         <span class="self">self</span>.<span class="ident">imp</span>.<span class="ident">authorization</span>(<span class="ident">req</span>)
     }
 
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">api_endpoint</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">String</span><span class="op">&gt;</span> {
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">api_endpoint</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">String</span><span class="op">&gt;</span> {
         <span class="self">self</span>.<span class="ident">imp</span>.<span class="ident">api_endpoint</span>()
     }
 }
@@ -1012,29 +1013,29 @@
 
     <span class="kw">struct</span> <span class="ident">TestFetcher</span><span class="op">&lt;</span><span class="ident">FF</span>, <span class="ident">FN</span><span class="op">&gt;</span>
     <span class="kw">where</span>
-        <span class="ident">FF</span>: <span class="ident">Fn</span>() <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">TokenFetchResult</span><span class="op">&gt;</span>,
-        <span class="ident">FN</span>: <span class="ident">Fn</span>() <span class="op">-</span><span class="op">&gt;</span> <span class="ident">SystemTime</span>,
+        <span class="ident">FF</span>: <span class="ident">Fn</span>() <span class="op">-&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">TokenFetchResult</span><span class="op">&gt;</span>,
+        <span class="ident">FN</span>: <span class="ident">Fn</span>() <span class="op">-&gt;</span> <span class="ident">SystemTime</span>,
     {
         <span class="ident">fetch</span>: <span class="ident">FF</span>,
         <span class="ident">now</span>: <span class="ident">FN</span>,
     }
     <span class="kw">impl</span><span class="op">&lt;</span><span class="ident">FF</span>, <span class="ident">FN</span><span class="op">&gt;</span> <span class="ident">TokenFetcher</span> <span class="kw">for</span> <span class="ident">TestFetcher</span><span class="op">&lt;</span><span class="ident">FF</span>, <span class="ident">FN</span><span class="op">&gt;</span>
     <span class="kw">where</span>
-        <span class="ident">FF</span>: <span class="ident">Fn</span>() <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">TokenFetchResult</span><span class="op">&gt;</span>,
-        <span class="ident">FN</span>: <span class="ident">Fn</span>() <span class="op">-</span><span class="op">&gt;</span> <span class="ident">SystemTime</span>,
+        <span class="ident">FF</span>: <span class="ident">Fn</span>() <span class="op">-&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">TokenFetchResult</span><span class="op">&gt;</span>,
+        <span class="ident">FN</span>: <span class="ident">Fn</span>() <span class="op">-&gt;</span> <span class="ident">SystemTime</span>,
     {
-        <span class="kw">fn</span> <span class="ident">fetch_token</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">TokenFetchResult</span><span class="op">&gt;</span> {
+        <span class="kw">fn</span> <span class="ident">fetch_token</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">TokenFetchResult</span><span class="op">&gt;</span> {
             (<span class="self">self</span>.<span class="ident">fetch</span>)()
         }
-        <span class="kw">fn</span> <span class="ident">now</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">SystemTime</span> {
+        <span class="kw">fn</span> <span class="ident">now</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-&gt;</span> <span class="ident">SystemTime</span> {
             (<span class="self">self</span>.<span class="ident">now</span>)()
         }
     }
 
-    <span class="kw">fn</span> <span class="ident">make_tsc</span><span class="op">&lt;</span><span class="ident">FF</span>, <span class="ident">FN</span><span class="op">&gt;</span>(<span class="ident">fetch</span>: <span class="ident">FF</span>, <span class="ident">now</span>: <span class="ident">FN</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">TokenProviderImpl</span><span class="op">&lt;</span><span class="ident">TestFetcher</span><span class="op">&lt;</span><span class="ident">FF</span>, <span class="ident">FN</span><span class="op">&gt;</span><span class="op">&gt;</span>
+    <span class="kw">fn</span> <span class="ident">make_tsc</span><span class="op">&lt;</span><span class="ident">FF</span>, <span class="ident">FN</span><span class="op">&gt;</span>(<span class="ident">fetch</span>: <span class="ident">FF</span>, <span class="ident">now</span>: <span class="ident">FN</span>) <span class="op">-&gt;</span> <span class="ident">TokenProviderImpl</span><span class="op">&lt;</span><span class="ident">TestFetcher</span><span class="op">&lt;</span><span class="ident">FF</span>, <span class="ident">FN</span><span class="op">&gt;&gt;</span>
     <span class="kw">where</span>
-        <span class="ident">FF</span>: <span class="ident">Fn</span>() <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">TokenFetchResult</span><span class="op">&gt;</span>,
-        <span class="ident">FN</span>: <span class="ident">Fn</span>() <span class="op">-</span><span class="op">&gt;</span> <span class="ident">SystemTime</span>,
+        <span class="ident">FF</span>: <span class="ident">Fn</span>() <span class="op">-&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">TokenFetchResult</span><span class="op">&gt;</span>,
+        <span class="ident">FN</span>: <span class="ident">Fn</span>() <span class="op">-&gt;</span> <span class="ident">SystemTime</span>,
     {
         <span class="kw">let</span> <span class="ident">fetcher</span>: <span class="ident">TestFetcher</span><span class="op">&lt;</span><span class="ident">FF</span>, <span class="ident">FN</span><span class="op">&gt;</span> <span class="op">=</span> <span class="ident">TestFetcher</span> { <span class="ident">fetch</span>, <span class="ident">now</span> };
         <span class="ident">TokenProviderImpl</span>::<span class="ident">new</span>(<span class="ident">fetcher</span>)
@@ -1044,7 +1045,7 @@
     <span class="kw">fn</span> <span class="ident">test_endpoint</span>() {
         <span class="comment">// Use a cell to avoid the closure having a mutable ref to this scope.</span>
         <span class="kw">let</span> <span class="ident">counter</span>: <span class="ident">Cell</span><span class="op">&lt;</span><span class="ident">u32</span><span class="op">&gt;</span> <span class="op">=</span> <span class="ident">Cell</span>::<span class="ident">new</span>(<span class="number">0</span>);
-        <span class="kw">let</span> <span class="ident">fetch</span> <span class="op">=</span> <span class="op">|</span><span class="op">|</span> {
+        <span class="kw">let</span> <span class="ident">fetch</span> <span class="op">=</span> <span class="op">||</span> {
             <span class="ident">counter</span>.<span class="ident">set</span>(<span class="ident">counter</span>.<span class="ident">get</span>() <span class="op">+</span> <span class="number">1</span>);
             <span class="prelude-val">Ok</span>(<span class="ident">TokenFetchResult</span> {
                 <span class="ident">token</span>: <span class="ident">TokenserverToken</span> {
@@ -1074,13 +1075,13 @@
     <span class="attribute">#[<span class="ident">test</span>]</span>
     <span class="kw">fn</span> <span class="ident">test_backoff</span>() {
         <span class="kw">let</span> <span class="ident">counter</span>: <span class="ident">Cell</span><span class="op">&lt;</span><span class="ident">u32</span><span class="op">&gt;</span> <span class="op">=</span> <span class="ident">Cell</span>::<span class="ident">new</span>(<span class="number">0</span>);
-        <span class="kw">let</span> <span class="ident">fetch</span> <span class="op">=</span> <span class="op">|</span><span class="op">|</span> {
+        <span class="kw">let</span> <span class="ident">fetch</span> <span class="op">=</span> <span class="op">||</span> {
             <span class="ident">counter</span>.<span class="ident">set</span>(<span class="ident">counter</span>.<span class="ident">get</span>() <span class="op">+</span> <span class="number">1</span>);
             <span class="kw">let</span> <span class="ident">when</span> <span class="op">=</span> <span class="ident">SystemTime</span>::<span class="ident">now</span>() <span class="op">+</span> <span class="ident">Duration</span>::<span class="ident">from_millis</span>(<span class="number">10000</span>);
             <span class="prelude-val">Err</span>(<span class="ident">error</span>::<span class="ident">Error</span>::<span class="ident">from</span>(<span class="ident">ErrorKind</span>::<span class="ident">BackoffError</span>(<span class="ident">when</span>)))
         };
         <span class="kw">let</span> <span class="ident">now</span>: <span class="ident">Cell</span><span class="op">&lt;</span><span class="ident">SystemTime</span><span class="op">&gt;</span> <span class="op">=</span> <span class="ident">Cell</span>::<span class="ident">new</span>(<span class="ident">SystemTime</span>::<span class="ident">now</span>());
-        <span class="kw">let</span> <span class="ident">tsc</span> <span class="op">=</span> <span class="ident">make_tsc</span>(<span class="ident">fetch</span>, <span class="op">|</span><span class="op">|</span> <span class="ident">now</span>.<span class="ident">get</span>());
+        <span class="kw">let</span> <span class="ident">tsc</span> <span class="op">=</span> <span class="ident">make_tsc</span>(<span class="ident">fetch</span>, <span class="op">||</span> <span class="ident">now</span>.<span class="ident">get</span>());
 
         <span class="ident">tsc</span>.<span class="ident">api_endpoint</span>().<span class="ident">expect_err</span>(<span class="string">&quot;should bail&quot;</span>);
         <span class="comment">// XXX - check error type.</span>
@@ -1102,7 +1103,7 @@
     <span class="attribute">#[<span class="ident">test</span>]</span>
     <span class="kw">fn</span> <span class="ident">test_validity</span>() {
         <span class="kw">let</span> <span class="ident">counter</span>: <span class="ident">Cell</span><span class="op">&lt;</span><span class="ident">u32</span><span class="op">&gt;</span> <span class="op">=</span> <span class="ident">Cell</span>::<span class="ident">new</span>(<span class="number">0</span>);
-        <span class="kw">let</span> <span class="ident">fetch</span> <span class="op">=</span> <span class="op">|</span><span class="op">|</span> {
+        <span class="kw">let</span> <span class="ident">fetch</span> <span class="op">=</span> <span class="op">||</span> {
             <span class="ident">counter</span>.<span class="ident">set</span>(<span class="ident">counter</span>.<span class="ident">get</span>() <span class="op">+</span> <span class="number">1</span>);
             <span class="prelude-val">Ok</span>(<span class="ident">TokenFetchResult</span> {
                 <span class="ident">token</span>: <span class="ident">TokenserverToken</span> {
@@ -1117,7 +1118,7 @@
             })
         };
         <span class="kw">let</span> <span class="ident">now</span>: <span class="ident">Cell</span><span class="op">&lt;</span><span class="ident">SystemTime</span><span class="op">&gt;</span> <span class="op">=</span> <span class="ident">Cell</span>::<span class="ident">new</span>(<span class="ident">SystemTime</span>::<span class="ident">now</span>());
-        <span class="kw">let</span> <span class="ident">tsc</span> <span class="op">=</span> <span class="ident">make_tsc</span>(<span class="ident">fetch</span>, <span class="op">|</span><span class="op">|</span> <span class="ident">now</span>.<span class="ident">get</span>());
+        <span class="kw">let</span> <span class="ident">tsc</span> <span class="op">=</span> <span class="ident">make_tsc</span>(<span class="ident">fetch</span>, <span class="op">||</span> <span class="ident">now</span>.<span class="ident">get</span>());
 
         <span class="ident">tsc</span>.<span class="ident">api_endpoint</span>().<span class="ident">expect</span>(<span class="string">&quot;should get a valid token&quot;</span>);
         <span class="macro">assert_eq</span><span class="macro">!</span>(<span class="ident">counter</span>.<span class="ident">get</span>(), <span class="number">1</span>);

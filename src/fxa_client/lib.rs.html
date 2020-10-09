@@ -1,4 +1,5 @@
-<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source to the Rust file `components/fxa-client/src/lib.rs`."><meta name="keywords" content="rust, rustlang, rust-lang"><title>lib.rs.html -- source</title><link rel="stylesheet" type="text/css" href="../../normalize.css"><link rel="stylesheet" type="text/css" href="../../rustdoc.css" id="mainThemeStyle"><link rel="stylesheet" type="text/css" href="../../dark.css"><link rel="stylesheet" type="text/css" href="../../light.css" id="themeStyle"><script src="../../storage.js"></script><noscript><link rel="stylesheet" href="../../noscript.css"></noscript><link rel="shortcut icon" href="../../favicon.ico"><style type="text/css">#crate-search{background-image:url("../../down-arrow.svg");}</style></head><body class="rustdoc source"><!--[if lte IE 8]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="sidebar"><div class="sidebar-menu">&#9776;</div><a href='../../fxa_client/index.html'><div class='logo-container'><img src='../../rust-logo.png' alt='logo'></div></a></nav><div class="theme-picker"><button id="theme-picker" aria-label="Pick another theme!"><img src="../../brush.svg" width="18" alt="Pick another theme!"></button><div id="theme-choices"></div></div><script src="../../theme.js"></script><nav class="sub"><form class="search-form"><div class="search-container"><div><select id="crate-search"><option value="All crates">All crates</option></select><input class="search-input" name="search" disabled autocomplete="off" spellcheck="false" placeholder="Click or press ‘S’ to search, ‘?’ for more options…" type="search"></div><a id="settings-menu" href="../../settings.html"><img src="../../wheel.svg" width="18" alt="Change settings"></a></div></form></nav><section id="main" class="content"><pre class="line-numbers"><span id="1">  1</span>
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source to the Rust file `components/fxa-client/src/lib.rs`."><meta name="keywords" content="rust, rustlang, rust-lang"><title>lib.rs.html -- source</title><link rel="stylesheet" type="text/css" href="../../normalize.css"><link rel="stylesheet" type="text/css" href="../../rustdoc.css" id="mainThemeStyle"><link rel="stylesheet" type="text/css" href="../../light.css"  id="themeStyle"><link rel="stylesheet" type="text/css" href="../../dark.css" disabled ><link rel="stylesheet" type="text/css" href="../../ayu.css" disabled ><script src="../../storage.js"></script><noscript><link rel="stylesheet" href="../../noscript.css"></noscript><link rel="shortcut icon" href="../../favicon.ico"><style type="text/css">#crate-search{background-image:url("../../down-arrow.svg");}</style></head><body class="rustdoc source"><!--[if lte IE 8]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="sidebar"><div class="sidebar-menu">&#9776;</div><a href='../../fxa_client/index.html'><div class='logo-container rust-logo'><img src='../../rust-logo.png' alt='logo'></div></a></nav><div class="theme-picker"><button id="theme-picker" aria-label="Pick another theme!"><img src="../../brush.svg" width="18" alt="Pick another theme!"></button><div id="theme-choices"></div></div><script src="../../theme.js"></script><nav class="sub"><form class="search-form"><div class="search-container"><div><select id="crate-search"><option value="All crates">All crates</option></select><input class="search-input" name="search" disabled autocomplete="off" spellcheck="false" placeholder="Click or press ‘S’ to search, ‘?’ for more options…" type="search"></div><span class="help-button">?</span>
+                <a id="settings-menu" href="../../settings.html"><img src="../../wheel.svg" width="18" alt="Change settings"></a></div></form></nav><section id="main" class="content"><pre class="line-numbers"><span id="1">  1</span>
 <span id="2">  2</span>
 <span id="3">  3</span>
 <span id="4">  4</span>
@@ -665,8 +666,8 @@
     <span class="ident">client</span>: <span class="ident">Arc</span><span class="op">&lt;</span><span class="ident">FxAClient</span><span class="op">&gt;</span>,
     <span class="ident">state</span>: <span class="ident">State</span>,
     <span class="ident">flow_store</span>: <span class="ident">HashMap</span><span class="op">&lt;</span><span class="ident">String</span>, <span class="ident">OAuthFlow</span><span class="op">&gt;</span>,
-    <span class="ident">attached_clients_cache</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">CachedResponse</span><span class="op">&lt;</span><span class="ident">Vec</span><span class="op">&lt;</span><span class="ident">http_client</span>::<span class="ident">GetAttachedClientResponse</span><span class="op">&gt;</span><span class="op">&gt;</span><span class="op">&gt;</span>,
-    <span class="ident">devices_cache</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">CachedResponse</span><span class="op">&lt;</span><span class="ident">Vec</span><span class="op">&lt;</span><span class="ident">http_client</span>::<span class="ident">GetDeviceResponse</span><span class="op">&gt;</span><span class="op">&gt;</span><span class="op">&gt;</span>,
+    <span class="ident">attached_clients_cache</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">CachedResponse</span><span class="op">&lt;</span><span class="ident">Vec</span><span class="op">&lt;</span><span class="ident">http_client</span>::<span class="ident">GetAttachedClientResponse</span><span class="op">&gt;&gt;</span><span class="op">&gt;</span>,
+    <span class="ident">devices_cache</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">CachedResponse</span><span class="op">&lt;</span><span class="ident">Vec</span><span class="op">&lt;</span><span class="ident">http_client</span>::<span class="ident">GetDeviceResponse</span><span class="op">&gt;&gt;</span><span class="op">&gt;</span>,
     <span class="ident">auth_circuit_breaker</span>: <span class="ident">AuthCircuitBreaker</span>,
     <span class="comment">// &#39;telemetry&#39; is only currently used by `&amp;mut self` functions, but that&#39;s</span>
     <span class="comment">// not something we want to insist on going forward, so RefCell&lt;&gt; it.</span>
@@ -674,7 +675,7 @@
 }
 
 <span class="kw">impl</span> <span class="ident">FirefoxAccount</span> {
-    <span class="kw">fn</span> <span class="ident">from_state</span>(<span class="ident">state</span>: <span class="ident">State</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="self">Self</span> {
+    <span class="kw">fn</span> <span class="ident">from_state</span>(<span class="ident">state</span>: <span class="ident">State</span>) <span class="op">-&gt;</span> <span class="self">Self</span> {
         <span class="self">Self</span> {
             <span class="ident">client</span>: <span class="ident">Arc</span>::<span class="ident">new</span>(<span class="ident">http_client</span>::<span class="ident">Client</span>::<span class="ident">new</span>()),
             <span class="ident">state</span>,
@@ -689,7 +690,7 @@
     <span class="doccomment">/// Create a new `FirefoxAccount` instance using a `Config`.</span>
     <span class="doccomment">///</span>
     <span class="doccomment">/// **💾 This method alters the persisted account state.**</span>
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">with_config</span>(<span class="ident">config</span>: <span class="ident">Config</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="self">Self</span> {
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">with_config</span>(<span class="ident">config</span>: <span class="ident">Config</span>) <span class="op">-&gt;</span> <span class="self">Self</span> {
         <span class="self">Self</span>::<span class="ident">from_state</span>(<span class="ident">State</span> {
             <span class="ident">config</span>,
             <span class="ident">refresh_token</span>: <span class="prelude-val">None</span>,
@@ -720,7 +721,7 @@
         <span class="ident">client_id</span>: <span class="kw-2">&amp;</span><span class="ident">str</span>,
         <span class="ident">redirect_uri</span>: <span class="kw-2">&amp;</span><span class="ident">str</span>,
         <span class="ident">token_server_url_override</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="kw-2">&amp;</span><span class="ident">str</span><span class="op">&gt;</span>,
-    ) <span class="op">-</span><span class="op">&gt;</span> <span class="self">Self</span> {
+    ) <span class="op">-&gt;</span> <span class="self">Self</span> {
         <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">config</span> <span class="op">=</span> <span class="ident">Config</span>::<span class="ident">new</span>(<span class="ident">content_url</span>, <span class="ident">client_id</span>, <span class="ident">redirect_uri</span>);
         <span class="kw">if</span> <span class="kw">let</span> <span class="prelude-val">Some</span>(<span class="ident">token_server_url_override</span>) <span class="op">=</span> <span class="ident">token_server_url_override</span> {
             <span class="ident">config</span>.<span class="ident">override_token_server_url</span>(<span class="ident">token_server_url_override</span>);
@@ -736,14 +737,14 @@
 
     <span class="doccomment">/// Restore a `FirefoxAccount` instance from a serialized state</span>
     <span class="doccomment">/// created using `to_json`.</span>
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">from_json</span>(<span class="ident">data</span>: <span class="kw-2">&amp;</span><span class="ident">str</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="self">Self</span><span class="op">&gt;</span> {
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">from_json</span>(<span class="ident">data</span>: <span class="kw-2">&amp;</span><span class="ident">str</span>) <span class="op">-&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="self">Self</span><span class="op">&gt;</span> {
         <span class="kw">let</span> <span class="ident">state</span> <span class="op">=</span> <span class="ident">state_persistence</span>::<span class="ident">state_from_json</span>(<span class="ident">data</span>)<span class="question-mark">?</span>;
         <span class="prelude-val">Ok</span>(<span class="self">Self</span>::<span class="ident">from_state</span>(<span class="ident">state</span>))
     }
 
     <span class="doccomment">/// Serialize a `FirefoxAccount` instance internal state</span>
     <span class="doccomment">/// to be restored later using `from_json`.</span>
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">to_json</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">String</span><span class="op">&gt;</span> {
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">to_json</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">String</span><span class="op">&gt;</span> {
         <span class="ident">state_persistence</span>::<span class="ident">state_to_json</span>(<span class="kw-2">&amp;</span><span class="self">self</span>.<span class="ident">state</span>)
     }
 
@@ -763,19 +764,19 @@
     }
 
     <span class="doccomment">/// Get the Sync Token Server endpoint URL.</span>
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">get_token_server_endpoint_url</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">Url</span><span class="op">&gt;</span> {
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">get_token_server_endpoint_url</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">Url</span><span class="op">&gt;</span> {
         <span class="self">self</span>.<span class="ident">state</span>.<span class="ident">config</span>.<span class="ident">token_server_endpoint_url</span>()
     }
 
     <span class="doccomment">/// Get the pairing URL to navigate to on the Auth side (typically</span>
     <span class="doccomment">/// a computer).</span>
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">get_pairing_authority_url</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">Url</span><span class="op">&gt;</span> {
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">get_pairing_authority_url</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">Url</span><span class="op">&gt;</span> {
         <span class="comment">// Special case for the production server, we use the shorter firefox.com/pair URL.</span>
-        <span class="kw">if</span> <span class="self">self</span>.<span class="ident">state</span>.<span class="ident">config</span>.<span class="ident">content_url</span>()<span class="question-mark">?</span> <span class="op">=</span><span class="op">=</span> <span class="ident">Url</span>::<span class="ident">parse</span>(<span class="ident">config</span>::<span class="ident">CONTENT_URL_RELEASE</span>)<span class="question-mark">?</span> {
+        <span class="kw">if</span> <span class="self">self</span>.<span class="ident">state</span>.<span class="ident">config</span>.<span class="ident">content_url</span>()<span class="question-mark">?</span> <span class="op">==</span> <span class="ident">Url</span>::<span class="ident">parse</span>(<span class="ident">config</span>::<span class="ident">CONTENT_URL_RELEASE</span>)<span class="question-mark">?</span> {
             <span class="kw">return</span> <span class="prelude-val">Ok</span>(<span class="ident">Url</span>::<span class="ident">parse</span>(<span class="string">&quot;https://firefox.com/pair&quot;</span>)<span class="question-mark">?</span>);
         }
         <span class="comment">// Similarly special case for the China server.</span>
-        <span class="kw">if</span> <span class="self">self</span>.<span class="ident">state</span>.<span class="ident">config</span>.<span class="ident">content_url</span>()<span class="question-mark">?</span> <span class="op">=</span><span class="op">=</span> <span class="ident">Url</span>::<span class="ident">parse</span>(<span class="ident">config</span>::<span class="ident">CONTENT_URL_CHINA</span>)<span class="question-mark">?</span> {
+        <span class="kw">if</span> <span class="self">self</span>.<span class="ident">state</span>.<span class="ident">config</span>.<span class="ident">content_url</span>()<span class="question-mark">?</span> <span class="op">==</span> <span class="ident">Url</span>::<span class="ident">parse</span>(<span class="ident">config</span>::<span class="ident">CONTENT_URL_CHINA</span>)<span class="question-mark">?</span> {
             <span class="kw">return</span> <span class="prelude-val">Ok</span>(<span class="ident">Url</span>::<span class="ident">parse</span>(<span class="string">&quot;https://firefox.com.cn/pair&quot;</span>)<span class="question-mark">?</span>);
         }
         <span class="prelude-val">Ok</span>(<span class="self">self</span>.<span class="ident">state</span>.<span class="ident">config</span>.<span class="ident">pair_url</span>()<span class="question-mark">?</span>)
@@ -785,7 +786,7 @@
     <span class="doccomment">/// It is typically used to redirect the user after</span>
     <span class="doccomment">/// having intercepted the OAuth login-flow state/code</span>
     <span class="doccomment">/// redirection.</span>
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">get_connection_success_url</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">Url</span><span class="op">&gt;</span> {
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">get_connection_success_url</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">Url</span><span class="op">&gt;</span> {
         <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">url</span> <span class="op">=</span> <span class="self">self</span>.<span class="ident">state</span>.<span class="ident">config</span>.<span class="ident">connect_another_device_url</span>()<span class="question-mark">?</span>;
         <span class="ident">url</span>.<span class="ident">query_pairs_mut</span>()
             .<span class="ident">append_pair</span>(<span class="string">&quot;showSuccessMessage&quot;</span>, <span class="string">&quot;true&quot;</span>);
@@ -799,10 +800,10 @@
     <span class="doccomment">///</span>
     <span class="doccomment">/// * `entrypoint` - Application-provided string identifying the UI touchpoint</span>
     <span class="doccomment">///                  through which the page was accessed, for metrics purposes.</span>
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">get_manage_account_url</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>, <span class="ident">entrypoint</span>: <span class="kw-2">&amp;</span><span class="ident">str</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">Url</span><span class="op">&gt;</span> {
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">get_manage_account_url</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>, <span class="ident">entrypoint</span>: <span class="kw-2">&amp;</span><span class="ident">str</span>) <span class="op">-&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">Url</span><span class="op">&gt;</span> {
         <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">url</span> <span class="op">=</span> <span class="self">self</span>.<span class="ident">state</span>.<span class="ident">config</span>.<span class="ident">settings_url</span>()<span class="question-mark">?</span>;
         <span class="ident">url</span>.<span class="ident">query_pairs_mut</span>().<span class="ident">append_pair</span>(<span class="string">&quot;entrypoint&quot;</span>, <span class="ident">entrypoint</span>);
-        <span class="kw">if</span> <span class="self">self</span>.<span class="ident">state</span>.<span class="ident">config</span>.<span class="ident">redirect_uri</span> <span class="op">=</span><span class="op">=</span> <span class="ident">OAUTH_WEBCHANNEL_REDIRECT</span> {
+        <span class="kw">if</span> <span class="self">self</span>.<span class="ident">state</span>.<span class="ident">config</span>.<span class="ident">redirect_uri</span> <span class="op">==</span> <span class="ident">OAUTH_WEBCHANNEL_REDIRECT</span> {
             <span class="ident">url</span>.<span class="ident">query_pairs_mut</span>()
                 .<span class="ident">append_pair</span>(<span class="string">&quot;context&quot;</span>, <span class="string">&quot;oauth_webchannel_v1&quot;</span>);
         }
@@ -816,13 +817,13 @@
     <span class="doccomment">///</span>
     <span class="doccomment">/// * `entrypoint` - Application-provided string identifying the UI touchpoint</span>
     <span class="doccomment">///                  through which the page was accessed, for metrics purposes.</span>
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">get_manage_devices_url</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>, <span class="ident">entrypoint</span>: <span class="kw-2">&amp;</span><span class="ident">str</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">Url</span><span class="op">&gt;</span> {
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">get_manage_devices_url</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>, <span class="ident">entrypoint</span>: <span class="kw-2">&amp;</span><span class="ident">str</span>) <span class="op">-&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">Url</span><span class="op">&gt;</span> {
         <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">url</span> <span class="op">=</span> <span class="self">self</span>.<span class="ident">state</span>.<span class="ident">config</span>.<span class="ident">settings_clients_url</span>()<span class="question-mark">?</span>;
         <span class="ident">url</span>.<span class="ident">query_pairs_mut</span>().<span class="ident">append_pair</span>(<span class="string">&quot;entrypoint&quot;</span>, <span class="ident">entrypoint</span>);
         <span class="self">self</span>.<span class="ident">add_account_identifiers_to_url</span>(<span class="ident">url</span>)
     }
 
-    <span class="kw">fn</span> <span class="ident">add_account_identifiers_to_url</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>, <span class="kw-2">mut</span> <span class="ident">url</span>: <span class="ident">Url</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">Url</span><span class="op">&gt;</span> {
+    <span class="kw">fn</span> <span class="ident">add_account_identifiers_to_url</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>, <span class="kw-2">mut</span> <span class="ident">url</span>: <span class="ident">Url</span>) <span class="op">-&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">Url</span><span class="op">&gt;</span> {
         <span class="kw">let</span> <span class="ident">profile</span> <span class="op">=</span> <span class="self">self</span>.<span class="ident">get_profile</span>(<span class="bool-val">false</span>)<span class="question-mark">?</span>;
         <span class="ident">url</span>.<span class="ident">query_pairs_mut</span>()
             .<span class="ident">append_pair</span>(<span class="string">&quot;uid&quot;</span>, <span class="kw-2">&amp;</span><span class="ident">profile</span>.<span class="ident">uid</span>)
@@ -830,10 +831,10 @@
         <span class="prelude-val">Ok</span>(<span class="ident">url</span>)
     }
 
-    <span class="kw">fn</span> <span class="ident">get_refresh_token</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="kw-2">&amp;</span><span class="ident">str</span><span class="op">&gt;</span> {
+    <span class="kw">fn</span> <span class="ident">get_refresh_token</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="kw-2">&amp;</span><span class="ident">str</span><span class="op">&gt;</span> {
         <span class="kw">match</span> <span class="self">self</span>.<span class="ident">state</span>.<span class="ident">refresh_token</span> {
-            <span class="prelude-val">Some</span>(<span class="kw-2">ref</span> <span class="ident">token_info</span>) <span class="op">=</span><span class="op">&gt;</span> <span class="prelude-val">Ok</span>(<span class="kw-2">&amp;</span><span class="ident">token_info</span>.<span class="ident">token</span>),
-            <span class="prelude-val">None</span> <span class="op">=</span><span class="op">&gt;</span> <span class="prelude-val">Err</span>(<span class="ident">ErrorKind</span>::<span class="ident">NoRefreshToken</span>.<span class="ident">into</span>()),
+            <span class="prelude-val">Some</span>(<span class="kw-2">ref</span> <span class="ident">token_info</span>) <span class="op">=&gt;</span> <span class="prelude-val">Ok</span>(<span class="kw-2">&amp;</span><span class="ident">token_info</span>.<span class="ident">token</span>),
+            <span class="prelude-val">None</span> <span class="op">=&gt;</span> <span class="prelude-val">Err</span>(<span class="ident">ErrorKind</span>::<span class="ident">NoRefreshToken</span>.<span class="ident">into</span>()),
         }
     }
 
@@ -855,11 +856,11 @@
             <span class="kw">let</span> <span class="ident">destroy_result</span> <span class="op">=</span> <span class="kw">match</span> <span class="ident">current_device_result</span> {
                 <span class="comment">// If we get an error trying to fetch our device record we&#39;ll at least</span>
                 <span class="comment">// still try to delete the refresh token itself.</span>
-                <span class="prelude-val">Ok</span>(<span class="prelude-val">Some</span>(<span class="ident">device</span>)) <span class="op">=</span><span class="op">&gt;</span> {
+                <span class="prelude-val">Ok</span>(<span class="prelude-val">Some</span>(<span class="ident">device</span>)) <span class="op">=&gt;</span> {
                     <span class="self">self</span>.<span class="ident">client</span>
                         .<span class="ident">destroy_device</span>(<span class="kw-2">&amp;</span><span class="self">self</span>.<span class="ident">state</span>.<span class="ident">config</span>, <span class="kw-2">&amp;</span><span class="ident">refresh_token</span>.<span class="ident">token</span>, <span class="kw-2">&amp;</span><span class="ident">device</span>.<span class="ident">id</span>)
                 }
-                <span class="kw">_</span> <span class="op">=</span><span class="op">&gt;</span> <span class="self">self</span>
+                <span class="kw">_</span> <span class="op">=&gt;</span> <span class="self">self</span>
                     .<span class="ident">client</span>
                     .<span class="ident">destroy_refresh_token</span>(<span class="kw-2">&amp;</span><span class="self">self</span>.<span class="ident">state</span>.<span class="ident">config</span>, <span class="kw-2">&amp;</span><span class="ident">refresh_token</span>.<span class="ident">token</span>),
             };
@@ -948,8 +949,8 @@
         <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">fxa</span> <span class="op">=</span> <span class="ident">FirefoxAccount</span>::<span class="ident">with_config</span>(<span class="ident">config</span>);
         <span class="comment">// No current user -&gt; Error.</span>
         <span class="kw">match</span> <span class="ident">fxa</span>.<span class="ident">get_manage_account_url</span>(<span class="string">&quot;test&quot;</span>).<span class="ident">unwrap_err</span>().<span class="ident">kind</span>() {
-            <span class="ident">ErrorKind</span>::<span class="ident">NoCachedToken</span>(<span class="kw">_</span>) <span class="op">=</span><span class="op">&gt;</span> {}
-            <span class="kw">_</span> <span class="op">=</span><span class="op">&gt;</span> <span class="macro">panic</span><span class="macro">!</span>(<span class="string">&quot;error not NoCachedToken&quot;</span>),
+            <span class="ident">ErrorKind</span>::<span class="ident">NoCachedToken</span>(<span class="kw">_</span>) <span class="op">=&gt;</span> {}
+            <span class="kw">_</span> <span class="op">=&gt;</span> <span class="macro">panic</span><span class="macro">!</span>(<span class="string">&quot;error not NoCachedToken&quot;</span>),
         };
         <span class="comment">// With current user -&gt; expected Url.</span>
         <span class="ident">fxa</span>.<span class="ident">add_cached_profile</span>(<span class="string">&quot;123&quot;</span>, <span class="string">&quot;test@example.com&quot;</span>);
@@ -984,8 +985,8 @@
         <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">fxa</span> <span class="op">=</span> <span class="ident">FirefoxAccount</span>::<span class="ident">with_config</span>(<span class="ident">config</span>);
         <span class="comment">// No current user -&gt; Error.</span>
         <span class="kw">match</span> <span class="ident">fxa</span>.<span class="ident">get_manage_devices_url</span>(<span class="string">&quot;test&quot;</span>).<span class="ident">unwrap_err</span>().<span class="ident">kind</span>() {
-            <span class="ident">ErrorKind</span>::<span class="ident">NoCachedToken</span>(<span class="kw">_</span>) <span class="op">=</span><span class="op">&gt;</span> {}
-            <span class="kw">_</span> <span class="op">=</span><span class="op">&gt;</span> <span class="macro">panic</span><span class="macro">!</span>(<span class="string">&quot;error not NoCachedToken&quot;</span>),
+            <span class="ident">ErrorKind</span>::<span class="ident">NoCachedToken</span>(<span class="kw">_</span>) <span class="op">=&gt;</span> {}
+            <span class="kw">_</span> <span class="op">=&gt;</span> <span class="macro">panic</span><span class="macro">!</span>(<span class="string">&quot;error not NoCachedToken&quot;</span>),
         };
         <span class="comment">// With current user -&gt; expected Url.</span>
         <span class="ident">fxa</span>.<span class="ident">add_cached_profile</span>(<span class="string">&quot;123&quot;</span>, <span class="string">&quot;test@example.com&quot;</span>);

@@ -1,4 +1,5 @@
-<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source to the Rust file `components/support/rc_crypto/nss/nss_build_common/src/lib.rs`."><meta name="keywords" content="rust, rustlang, rust-lang"><title>lib.rs.html -- source</title><link rel="stylesheet" type="text/css" href="../../normalize.css"><link rel="stylesheet" type="text/css" href="../../rustdoc.css" id="mainThemeStyle"><link rel="stylesheet" type="text/css" href="../../dark.css"><link rel="stylesheet" type="text/css" href="../../light.css" id="themeStyle"><script src="../../storage.js"></script><noscript><link rel="stylesheet" href="../../noscript.css"></noscript><link rel="shortcut icon" href="../../favicon.ico"><style type="text/css">#crate-search{background-image:url("../../down-arrow.svg");}</style></head><body class="rustdoc source"><!--[if lte IE 8]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="sidebar"><div class="sidebar-menu">&#9776;</div><a href='../../nss_build_common/index.html'><div class='logo-container'><img src='../../rust-logo.png' alt='logo'></div></a></nav><div class="theme-picker"><button id="theme-picker" aria-label="Pick another theme!"><img src="../../brush.svg" width="18" alt="Pick another theme!"></button><div id="theme-choices"></div></div><script src="../../theme.js"></script><nav class="sub"><form class="search-form"><div class="search-container"><div><select id="crate-search"><option value="All crates">All crates</option></select><input class="search-input" name="search" disabled autocomplete="off" spellcheck="false" placeholder="Click or press ‘S’ to search, ‘?’ for more options…" type="search"></div><a id="settings-menu" href="../../settings.html"><img src="../../wheel.svg" width="18" alt="Change settings"></a></div></form></nav><section id="main" class="content"><pre class="line-numbers"><span id="1">  1</span>
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source to the Rust file `components/support/rc_crypto/nss/nss_build_common/src/lib.rs`."><meta name="keywords" content="rust, rustlang, rust-lang"><title>lib.rs.html -- source</title><link rel="stylesheet" type="text/css" href="../../normalize.css"><link rel="stylesheet" type="text/css" href="../../rustdoc.css" id="mainThemeStyle"><link rel="stylesheet" type="text/css" href="../../light.css"  id="themeStyle"><link rel="stylesheet" type="text/css" href="../../dark.css" disabled ><link rel="stylesheet" type="text/css" href="../../ayu.css" disabled ><script src="../../storage.js"></script><noscript><link rel="stylesheet" href="../../noscript.css"></noscript><link rel="shortcut icon" href="../../favicon.ico"><style type="text/css">#crate-search{background-image:url("../../down-arrow.svg");}</style></head><body class="rustdoc source"><!--[if lte IE 8]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="sidebar"><div class="sidebar-menu">&#9776;</div><a href='../../nss_build_common/index.html'><div class='logo-container rust-logo'><img src='../../rust-logo.png' alt='logo'></div></a></nav><div class="theme-picker"><button id="theme-picker" aria-label="Pick another theme!"><img src="../../brush.svg" width="18" alt="Pick another theme!"></button><div id="theme-choices"></div></div><script src="../../theme.js"></script><nav class="sub"><form class="search-form"><div class="search-container"><div><select id="crate-search"><option value="All crates">All crates</option></select><input class="search-input" name="search" disabled autocomplete="off" spellcheck="false" placeholder="Click or press ‘S’ to search, ‘?’ for more options…" type="search"></div><span class="help-button">?</span>
+                <a id="settings-menu" href="../../settings.html"><img src="../../wheel.svg" width="18" alt="Change settings"></a></div></form></nav><section id="main" class="content"><pre class="line-numbers"><span id="1">  1</span>
 <span id="2">  2</span>
 <span id="3">  3</span>
 <span id="4">  4</span>
@@ -190,7 +191,7 @@
 <span class="attribute">#[<span class="ident">derive</span>(<span class="ident">Debug</span>, <span class="ident">PartialEq</span>, <span class="ident">Clone</span>)]</span>
 <span class="kw">pub</span> <span class="kw">struct</span> <span class="ident">NoNssDir</span>;
 
-<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">link_nss</span>() <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span>(), <span class="ident">NoNssDir</span><span class="op">&gt;</span> {
+<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">link_nss</span>() <span class="op">-&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span>(), <span class="ident">NoNssDir</span><span class="op">&gt;</span> {
     <span class="kw">let</span> <span class="ident">is_gecko</span> <span class="op">=</span> <span class="ident">env</span>::<span class="ident">var_os</span>(<span class="string">&quot;MOZ_TOPOBJDIR&quot;</span>).<span class="ident">is_some</span>();
     <span class="kw">if</span> <span class="op">!</span><span class="ident">is_gecko</span> {
         <span class="kw">let</span> (<span class="ident">lib_dir</span>, <span class="ident">include_dir</span>) <span class="op">=</span> <span class="ident">get_nss</span>()<span class="question-mark">?</span>;
@@ -206,8 +207,8 @@
             .<span class="ident">as_ref</span>()
             .<span class="ident">map</span>(<span class="ident">std</span>::<span class="ident">string</span>::<span class="ident">String</span>::<span class="ident">as_str</span>)
         {
-            <span class="prelude-val">Ok</span>(<span class="string">&quot;android&quot;</span>) <span class="op">|</span> <span class="prelude-val">Ok</span>(<span class="string">&quot;macos&quot;</span>) <span class="op">=</span><span class="op">&gt;</span> <span class="macro">vec</span><span class="macro">!</span>[<span class="string">&quot;nss3&quot;</span>],
-            <span class="kw">_</span> <span class="op">=</span><span class="op">&gt;</span> <span class="macro">vec</span><span class="macro">!</span>[<span class="string">&quot;nssutil3&quot;</span>, <span class="string">&quot;nss3&quot;</span>, <span class="string">&quot;plds4&quot;</span>, <span class="string">&quot;plc4&quot;</span>, <span class="string">&quot;nspr4&quot;</span>],
+            <span class="prelude-val">Ok</span>(<span class="string">&quot;android&quot;</span>) <span class="op">|</span> <span class="prelude-val">Ok</span>(<span class="string">&quot;macos&quot;</span>) <span class="op">=&gt;</span> <span class="macro">vec</span><span class="macro">!</span>[<span class="string">&quot;nss3&quot;</span>],
+            <span class="kw">_</span> <span class="op">=&gt;</span> <span class="macro">vec</span><span class="macro">!</span>[<span class="string">&quot;nssutil3&quot;</span>, <span class="string">&quot;nss3&quot;</span>, <span class="string">&quot;plds4&quot;</span>, <span class="string">&quot;plc4&quot;</span>, <span class="string">&quot;nspr4&quot;</span>],
         };
         <span class="kw">for</span> <span class="ident">lib</span> <span class="kw">in</span> <span class="kw-2">&amp;</span><span class="ident">libs</span> {
             <span class="macro">println</span><span class="macro">!</span>(<span class="string">&quot;cargo:rustc-link-lib=dylib={}&quot;</span>, <span class="ident">lib</span>);
@@ -216,7 +217,7 @@
     <span class="prelude-val">Ok</span>(())
 }
 
-<span class="kw">fn</span> <span class="ident">get_nss</span>() <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span>(<span class="ident">PathBuf</span>, <span class="ident">PathBuf</span>), <span class="ident">NoNssDir</span><span class="op">&gt;</span> {
+<span class="kw">fn</span> <span class="ident">get_nss</span>() <span class="op">-&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span>(<span class="ident">PathBuf</span>, <span class="ident">PathBuf</span>), <span class="ident">NoNssDir</span><span class="op">&gt;</span> {
     <span class="kw">let</span> <span class="ident">nss_dir</span> <span class="op">=</span> <span class="ident">env</span>(<span class="string">&quot;NSS_DIR&quot;</span>).<span class="ident">ok_or</span>(<span class="ident">NoNssDir</span>)<span class="question-mark">?</span>;
     <span class="kw">let</span> <span class="ident">nss_dir</span> <span class="op">=</span> <span class="ident">Path</span>::<span class="ident">new</span>(<span class="kw-2">&amp;</span><span class="ident">nss_dir</span>);
     <span class="kw">if</span> <span class="op">!</span><span class="ident">nss_dir</span>.<span class="ident">exists</span>() {
@@ -227,7 +228,7 @@
     <span class="prelude-val">Ok</span>((<span class="ident">lib_dir</span>, <span class="ident">include_dir</span>))
 }
 
-<span class="kw">fn</span> <span class="ident">determine_kind</span>() <span class="op">-</span><span class="op">&gt;</span> <span class="ident">LinkingKind</span> {
+<span class="kw">fn</span> <span class="ident">determine_kind</span>() <span class="op">-&gt;</span> <span class="ident">LinkingKind</span> {
     <span class="kw">if</span> <span class="ident">env_flag</span>(<span class="string">&quot;NSS_STATIC&quot;</span>) {
         <span class="ident">LinkingKind</span>::<span class="ident">Static</span>
     } <span class="kw">else</span> {
@@ -240,17 +241,17 @@
     <span class="kw">let</span> <span class="ident">libs</span> <span class="op">=</span> <span class="ident">get_nss_libs</span>(<span class="ident">kind</span>);
     <span class="comment">// Emit -L flags</span>
     <span class="kw">let</span> <span class="ident">kind_str</span> <span class="op">=</span> <span class="kw">match</span> <span class="ident">kind</span> {
-        <span class="ident">LinkingKind</span>::<span class="ident">Dynamic</span> { .. } <span class="op">=</span><span class="op">&gt;</span> <span class="string">&quot;dylib&quot;</span>,
-        <span class="ident">LinkingKind</span>::<span class="ident">Static</span> <span class="op">=</span><span class="op">&gt;</span> <span class="string">&quot;static&quot;</span>,
+        <span class="ident">LinkingKind</span>::<span class="ident">Dynamic</span> { .. } <span class="op">=&gt;</span> <span class="string">&quot;dylib&quot;</span>,
+        <span class="ident">LinkingKind</span>::<span class="ident">Static</span> <span class="op">=&gt;</span> <span class="string">&quot;static&quot;</span>,
     };
     <span class="kw">for</span> <span class="ident">lib</span> <span class="kw">in</span> <span class="ident">libs</span> {
         <span class="macro">println</span><span class="macro">!</span>(<span class="string">&quot;cargo:rustc-link-lib={}={}&quot;</span>, <span class="ident">kind_str</span>, <span class="ident">lib</span>);
     }
 }
 
-<span class="kw">fn</span> <span class="ident">get_nss_libs</span>(<span class="ident">kind</span>: <span class="ident">LinkingKind</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">Vec</span><span class="op">&lt;</span><span class="kw-2">&amp;</span><span class="lifetime">&#39;static</span> <span class="ident">str</span><span class="op">&gt;</span> {
+<span class="kw">fn</span> <span class="ident">get_nss_libs</span>(<span class="ident">kind</span>: <span class="ident">LinkingKind</span>) <span class="op">-&gt;</span> <span class="ident">Vec</span><span class="op">&lt;</span><span class="kw-2">&amp;</span><span class="lifetime">&#39;static</span> <span class="ident">str</span><span class="op">&gt;</span> {
     <span class="kw">match</span> <span class="ident">kind</span> {
-        <span class="ident">LinkingKind</span>::<span class="ident">Static</span> <span class="op">=</span><span class="op">&gt;</span> {
+        <span class="ident">LinkingKind</span>::<span class="ident">Static</span> <span class="op">=&gt;</span> {
             <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">static_libs</span> <span class="op">=</span> <span class="macro">vec</span><span class="macro">!</span>[
                 <span class="string">&quot;certdb&quot;</span>,
                 <span class="string">&quot;certhi&quot;</span>,
@@ -271,35 +272,35 @@
             <span class="kw">let</span> <span class="ident">target_arch</span> <span class="op">=</span> <span class="ident">env</span>::<span class="ident">var</span>(<span class="string">&quot;CARGO_CFG_TARGET_ARCH&quot;</span>).<span class="ident">unwrap</span>();
             <span class="kw">let</span> <span class="ident">target_os</span> <span class="op">=</span> <span class="ident">env</span>::<span class="ident">var</span>(<span class="string">&quot;CARGO_CFG_TARGET_OS&quot;</span>).<span class="ident">unwrap</span>();
             <span class="comment">// https://searchfox.org/nss/rev/08c4d05078d00089f8d7540651b0717a9d66f87e/lib/freebl/freebl.gyp#278-296</span>
-            <span class="kw">if</span> <span class="ident">target_arch</span> <span class="op">=</span><span class="op">=</span> <span class="string">&quot;arm&quot;</span> <span class="op">|</span><span class="op">|</span> <span class="ident">target_arch</span> <span class="op">=</span><span class="op">=</span> <span class="string">&quot;aarch64&quot;</span> {
+            <span class="kw">if</span> <span class="ident">target_arch</span> <span class="op">==</span> <span class="string">&quot;arm&quot;</span> <span class="op">||</span> <span class="ident">target_arch</span> <span class="op">==</span> <span class="string">&quot;aarch64&quot;</span> {
                 <span class="ident">static_libs</span>.<span class="ident">push</span>(<span class="string">&quot;armv8_c_lib&quot;</span>);
             }
-            <span class="kw">if</span> <span class="ident">target_arch</span> <span class="op">=</span><span class="op">=</span> <span class="string">&quot;x86_64&quot;</span> <span class="op">|</span><span class="op">|</span> <span class="ident">target_arch</span> <span class="op">=</span><span class="op">=</span> <span class="string">&quot;x86&quot;</span> {
+            <span class="kw">if</span> <span class="ident">target_arch</span> <span class="op">==</span> <span class="string">&quot;x86_64&quot;</span> <span class="op">||</span> <span class="ident">target_arch</span> <span class="op">==</span> <span class="string">&quot;x86&quot;</span> {
                 <span class="ident">static_libs</span>.<span class="ident">push</span>(<span class="string">&quot;gcm-aes-x86_c_lib&quot;</span>);
             }
-            <span class="kw">if</span> <span class="ident">target_arch</span> <span class="op">=</span><span class="op">=</span> <span class="string">&quot;arm&quot;</span> {
+            <span class="kw">if</span> <span class="ident">target_arch</span> <span class="op">==</span> <span class="string">&quot;arm&quot;</span> {
                 <span class="ident">static_libs</span>.<span class="ident">push</span>(<span class="string">&quot;gcm-aes-arm32-neon_c_lib&quot;</span>)
             }
-            <span class="kw">if</span> <span class="ident">target_arch</span> <span class="op">=</span><span class="op">=</span> <span class="string">&quot;aarch64&quot;</span> {
+            <span class="kw">if</span> <span class="ident">target_arch</span> <span class="op">==</span> <span class="string">&quot;aarch64&quot;</span> {
                 <span class="ident">static_libs</span>.<span class="ident">push</span>(<span class="string">&quot;gcm-aes-aarch64_c_lib&quot;</span>);
             }
-            <span class="kw">if</span> <span class="ident">target_arch</span> <span class="op">=</span><span class="op">=</span> <span class="string">&quot;x86_64&quot;</span> {
+            <span class="kw">if</span> <span class="ident">target_arch</span> <span class="op">==</span> <span class="string">&quot;x86_64&quot;</span> {
                 <span class="ident">static_libs</span>.<span class="ident">push</span>(<span class="string">&quot;hw-acc-crypto-avx&quot;</span>);
                 <span class="ident">static_libs</span>.<span class="ident">push</span>(<span class="string">&quot;hw-acc-crypto-avx2&quot;</span>);
             }
             <span class="comment">// https://searchfox.org/nss/rev/08c4d05078d00089f8d7540651b0717a9d66f87e/lib/freebl/freebl.gyp#315-324</span>
-            <span class="kw">if</span> ((<span class="ident">target_os</span> <span class="op">=</span><span class="op">=</span> <span class="string">&quot;android&quot;</span> <span class="op">|</span><span class="op">|</span> <span class="ident">target_os</span> <span class="op">=</span><span class="op">=</span> <span class="string">&quot;linux&quot;</span>) <span class="kw-2">&amp;</span><span class="op">&amp;</span> <span class="ident">target_arch</span> <span class="op">=</span><span class="op">=</span> <span class="string">&quot;x86_64&quot;</span>)
-                <span class="op">|</span><span class="op">|</span> <span class="ident">target_os</span> <span class="op">=</span><span class="op">=</span> <span class="string">&quot;windows&quot;</span>
+            <span class="kw">if</span> ((<span class="ident">target_os</span> <span class="op">==</span> <span class="string">&quot;android&quot;</span> <span class="op">||</span> <span class="ident">target_os</span> <span class="op">==</span> <span class="string">&quot;linux&quot;</span>) <span class="op">&amp;&amp;</span> <span class="ident">target_arch</span> <span class="op">==</span> <span class="string">&quot;x86_64&quot;</span>)
+                <span class="op">||</span> <span class="ident">target_os</span> <span class="op">==</span> <span class="string">&quot;windows&quot;</span>
             {
                 <span class="ident">static_libs</span>.<span class="ident">push</span>(<span class="string">&quot;intel-gcm-wrap_c_lib&quot;</span>);
                 <span class="comment">// https://searchfox.org/nss/rev/08c4d05078d00089f8d7540651b0717a9d66f87e/lib/freebl/freebl.gyp#43-47</span>
-                <span class="kw">if</span> (<span class="ident">target_os</span> <span class="op">=</span><span class="op">=</span> <span class="string">&quot;android&quot;</span> <span class="op">|</span><span class="op">|</span> <span class="ident">target_os</span> <span class="op">=</span><span class="op">=</span> <span class="string">&quot;linux&quot;</span>) <span class="kw-2">&amp;</span><span class="op">&amp;</span> <span class="ident">target_arch</span> <span class="op">=</span><span class="op">=</span> <span class="string">&quot;x86_64&quot;</span> {
+                <span class="kw">if</span> (<span class="ident">target_os</span> <span class="op">==</span> <span class="string">&quot;android&quot;</span> <span class="op">||</span> <span class="ident">target_os</span> <span class="op">==</span> <span class="string">&quot;linux&quot;</span>) <span class="op">&amp;&amp;</span> <span class="ident">target_arch</span> <span class="op">==</span> <span class="string">&quot;x86_64&quot;</span> {
                     <span class="ident">static_libs</span>.<span class="ident">push</span>(<span class="string">&quot;intel-gcm-s_lib&quot;</span>);
                 }
             }
             <span class="ident">static_libs</span>
         }
-        <span class="ident">LinkingKind</span>::<span class="ident">Dynamic</span> { <span class="ident">folded_libs</span> } <span class="op">=</span><span class="op">&gt;</span> {
+        <span class="ident">LinkingKind</span>::<span class="ident">Dynamic</span> { <span class="ident">folded_libs</span> } <span class="op">=&gt;</span> {
             <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">dylibs</span> <span class="op">=</span> <span class="macro">vec</span><span class="macro">!</span>[<span class="string">&quot;freebl3&quot;</span>, <span class="string">&quot;nss3&quot;</span>, <span class="string">&quot;nssckbi&quot;</span>, <span class="string">&quot;softokn3&quot;</span>];
             <span class="kw">if</span> <span class="op">!</span><span class="ident">folded_libs</span> {
                 <span class="ident">dylibs</span>.<span class="ident">append</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="macro">vec</span><span class="macro">!</span>[<span class="string">&quot;nspr4&quot;</span>, <span class="string">&quot;nssutil3&quot;</span>, <span class="string">&quot;plc4&quot;</span>, <span class="string">&quot;plds4&quot;</span>]);
@@ -309,28 +310,28 @@
     }
 }
 
-<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">env</span>(<span class="ident">name</span>: <span class="kw-2">&amp;</span><span class="ident">str</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">OsString</span><span class="op">&gt;</span> {
+<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">env</span>(<span class="ident">name</span>: <span class="kw-2">&amp;</span><span class="ident">str</span>) <span class="op">-&gt;</span> <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">OsString</span><span class="op">&gt;</span> {
     <span class="macro">println</span><span class="macro">!</span>(<span class="string">&quot;cargo:rerun-if-env-changed={}&quot;</span>, <span class="ident">name</span>);
     <span class="ident">env</span>::<span class="ident">var_os</span>(<span class="ident">name</span>)
 }
 
-<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">env_str</span>(<span class="ident">name</span>: <span class="kw-2">&amp;</span><span class="ident">str</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">String</span><span class="op">&gt;</span> {
+<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">env_str</span>(<span class="ident">name</span>: <span class="kw-2">&amp;</span><span class="ident">str</span>) <span class="op">-&gt;</span> <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">String</span><span class="op">&gt;</span> {
     <span class="macro">println</span><span class="macro">!</span>(<span class="string">&quot;cargo:rerun-if-env-changed={}&quot;</span>, <span class="ident">name</span>);
     <span class="ident">env</span>::<span class="ident">var</span>(<span class="ident">name</span>).<span class="ident">ok</span>()
 }
 
-<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">env_flag</span>(<span class="ident">name</span>: <span class="kw-2">&amp;</span><span class="ident">str</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">bool</span> {
+<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">env_flag</span>(<span class="ident">name</span>: <span class="kw-2">&amp;</span><span class="ident">str</span>) <span class="op">-&gt;</span> <span class="ident">bool</span> {
     <span class="kw">match</span> <span class="ident">env_str</span>(<span class="ident">name</span>).<span class="ident">as_ref</span>().<span class="ident">map</span>(<span class="ident">String</span>::<span class="ident">as_ref</span>) {
-        <span class="prelude-val">Some</span>(<span class="string">&quot;1&quot;</span>) <span class="op">=</span><span class="op">&gt;</span> <span class="bool-val">true</span>,
-        <span class="prelude-val">Some</span>(<span class="string">&quot;0&quot;</span>) <span class="op">=</span><span class="op">&gt;</span> <span class="bool-val">false</span>,
-        <span class="prelude-val">Some</span>(<span class="ident">s</span>) <span class="op">=</span><span class="op">&gt;</span> {
+        <span class="prelude-val">Some</span>(<span class="string">&quot;1&quot;</span>) <span class="op">=&gt;</span> <span class="bool-val">true</span>,
+        <span class="prelude-val">Some</span>(<span class="string">&quot;0&quot;</span>) <span class="op">=&gt;</span> <span class="bool-val">false</span>,
+        <span class="prelude-val">Some</span>(<span class="ident">s</span>) <span class="op">=&gt;</span> {
             <span class="macro">println</span><span class="macro">!</span>(
                 <span class="string">&quot;cargo:warning=unknown value for environment var {:?}: {:?}. Ignoring&quot;</span>,
                 <span class="ident">name</span>, <span class="ident">s</span>
             );
             <span class="bool-val">false</span>
         }
-        <span class="prelude-val">None</span> <span class="op">=</span><span class="op">&gt;</span> <span class="bool-val">false</span>,
+        <span class="prelude-val">None</span> <span class="op">=&gt;</span> <span class="bool-val">false</span>,
     }
 }
 </pre></div>

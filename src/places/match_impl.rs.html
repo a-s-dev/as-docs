@@ -1,4 +1,5 @@
-<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source to the Rust file `components/places/src/match_impl.rs`."><meta name="keywords" content="rust, rustlang, rust-lang"><title>match_impl.rs.html -- source</title><link rel="stylesheet" type="text/css" href="../../normalize.css"><link rel="stylesheet" type="text/css" href="../../rustdoc.css" id="mainThemeStyle"><link rel="stylesheet" type="text/css" href="../../dark.css"><link rel="stylesheet" type="text/css" href="../../light.css" id="themeStyle"><script src="../../storage.js"></script><noscript><link rel="stylesheet" href="../../noscript.css"></noscript><link rel="shortcut icon" href="../../favicon.ico"><style type="text/css">#crate-search{background-image:url("../../down-arrow.svg");}</style></head><body class="rustdoc source"><!--[if lte IE 8]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="sidebar"><div class="sidebar-menu">&#9776;</div><a href='../../places/index.html'><div class='logo-container'><img src='../../rust-logo.png' alt='logo'></div></a></nav><div class="theme-picker"><button id="theme-picker" aria-label="Pick another theme!"><img src="../../brush.svg" width="18" alt="Pick another theme!"></button><div id="theme-choices"></div></div><script src="../../theme.js"></script><nav class="sub"><form class="search-form"><div class="search-container"><div><select id="crate-search"><option value="All crates">All crates</option></select><input class="search-input" name="search" disabled autocomplete="off" spellcheck="false" placeholder="Click or press ‘S’ to search, ‘?’ for more options…" type="search"></div><a id="settings-menu" href="../../settings.html"><img src="../../wheel.svg" width="18" alt="Change settings"></a></div></form></nav><section id="main" class="content"><pre class="line-numbers"><span id="1">  1</span>
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source to the Rust file `components/places/src/match_impl.rs`."><meta name="keywords" content="rust, rustlang, rust-lang"><title>match_impl.rs.html -- source</title><link rel="stylesheet" type="text/css" href="../../normalize.css"><link rel="stylesheet" type="text/css" href="../../rustdoc.css" id="mainThemeStyle"><link rel="stylesheet" type="text/css" href="../../light.css"  id="themeStyle"><link rel="stylesheet" type="text/css" href="../../dark.css" disabled ><link rel="stylesheet" type="text/css" href="../../ayu.css" disabled ><script src="../../storage.js"></script><noscript><link rel="stylesheet" href="../../noscript.css"></noscript><link rel="shortcut icon" href="../../favicon.ico"><style type="text/css">#crate-search{background-image:url("../../down-arrow.svg");}</style></head><body class="rustdoc source"><!--[if lte IE 8]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="sidebar"><div class="sidebar-menu">&#9776;</div><a href='../../places/index.html'><div class='logo-container rust-logo'><img src='../../rust-logo.png' alt='logo'></div></a></nav><div class="theme-picker"><button id="theme-picker" aria-label="Pick another theme!"><img src="../../brush.svg" width="18" alt="Pick another theme!"></button><div id="theme-choices"></div></div><script src="../../theme.js"></script><nav class="sub"><form class="search-form"><div class="search-container"><div><select id="crate-search"><option value="All crates">All crates</option></select><input class="search-input" name="search" disabled autocomplete="off" spellcheck="false" placeholder="Click or press ‘S’ to search, ‘?’ for more options…" type="search"></div><span class="help-button">?</span>
+                <a id="settings-menu" href="../../settings.html"><img src="../../wheel.svg" width="18" alt="Change settings"></a></div></form></nav><section id="main" class="content"><pre class="line-numbers"><span id="1">  1</span>
 <span id="2">  2</span>
 <span id="3">  3</span>
 <span id="4">  4</span>
@@ -558,22 +559,22 @@
 
 <span class="kw">impl</span> <span class="ident">FromSql</span> <span class="kw">for</span> <span class="ident">MatchBehavior</span> {
     <span class="attribute">#[<span class="ident">inline</span>]</span>
-    <span class="kw">fn</span> <span class="ident">column_result</span>(<span class="ident">value</span>: <span class="ident">ValueRef</span><span class="op">&lt;</span><span class="lifetime">&#39;_</span><span class="op">&gt;</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">FromSqlResult</span><span class="op">&lt;</span><span class="self">Self</span><span class="op">&gt;</span> {
+    <span class="kw">fn</span> <span class="ident">column_result</span>(<span class="ident">value</span>: <span class="ident">ValueRef</span><span class="op">&lt;</span><span class="lifetime">&#39;_</span><span class="op">&gt;</span>) <span class="op">-&gt;</span> <span class="ident">FromSqlResult</span><span class="op">&lt;</span><span class="self">Self</span><span class="op">&gt;</span> {
         <span class="prelude-val">Ok</span>(<span class="kw">match</span> <span class="ident">value</span>.<span class="ident">as_i64</span>()<span class="question-mark">?</span> {
-            <span class="number">0</span> <span class="op">=</span><span class="op">&gt;</span> <span class="ident">MatchBehavior</span>::<span class="ident">Anywhere</span>,
-            <span class="number">1</span> <span class="op">=</span><span class="op">&gt;</span> <span class="ident">MatchBehavior</span>::<span class="ident">BoundaryAnywhere</span>,
-            <span class="number">2</span> <span class="op">=</span><span class="op">&gt;</span> <span class="ident">MatchBehavior</span>::<span class="ident">Boundary</span>,
-            <span class="number">3</span> <span class="op">=</span><span class="op">&gt;</span> <span class="ident">MatchBehavior</span>::<span class="ident">Beginning</span>,
-            <span class="number">4</span> <span class="op">=</span><span class="op">&gt;</span> <span class="ident">MatchBehavior</span>::<span class="ident">AnywhereUnmodified</span>,
-            <span class="number">5</span> <span class="op">=</span><span class="op">&gt;</span> <span class="ident">MatchBehavior</span>::<span class="ident">BeginningCaseSensitive</span>,
-            <span class="kw">_</span> <span class="op">=</span><span class="op">&gt;</span> <span class="kw">return</span> <span class="prelude-val">Err</span>(<span class="ident">FromSqlError</span>::<span class="ident">InvalidType</span>),
+            <span class="number">0</span> <span class="op">=&gt;</span> <span class="ident">MatchBehavior</span>::<span class="ident">Anywhere</span>,
+            <span class="number">1</span> <span class="op">=&gt;</span> <span class="ident">MatchBehavior</span>::<span class="ident">BoundaryAnywhere</span>,
+            <span class="number">2</span> <span class="op">=&gt;</span> <span class="ident">MatchBehavior</span>::<span class="ident">Boundary</span>,
+            <span class="number">3</span> <span class="op">=&gt;</span> <span class="ident">MatchBehavior</span>::<span class="ident">Beginning</span>,
+            <span class="number">4</span> <span class="op">=&gt;</span> <span class="ident">MatchBehavior</span>::<span class="ident">AnywhereUnmodified</span>,
+            <span class="number">5</span> <span class="op">=&gt;</span> <span class="ident">MatchBehavior</span>::<span class="ident">BeginningCaseSensitive</span>,
+            <span class="kw">_</span> <span class="op">=&gt;</span> <span class="kw">return</span> <span class="prelude-val">Err</span>(<span class="ident">FromSqlError</span>::<span class="ident">InvalidType</span>),
         })
     }
 }
 
 <span class="kw">impl</span> <span class="ident">ToSql</span> <span class="kw">for</span> <span class="ident">MatchBehavior</span> {
     <span class="attribute">#[<span class="ident">inline</span>]</span>
-    <span class="kw">fn</span> <span class="ident">to_sql</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">rusqlite</span>::<span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">ToSqlOutput</span><span class="op">&lt;</span><span class="lifetime">&#39;_</span><span class="op">&gt;</span><span class="op">&gt;</span> {
+    <span class="kw">fn</span> <span class="ident">to_sql</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-&gt;</span> <span class="ident">rusqlite</span>::<span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">ToSqlOutput</span><span class="op">&lt;</span><span class="lifetime">&#39;_</span><span class="op">&gt;&gt;</span> {
         <span class="prelude-val">Ok</span>(<span class="ident">ToSqlOutput</span>::<span class="ident">from</span>(<span class="kw-2">*</span><span class="self">self</span> <span class="kw">as</span> <span class="ident">u32</span>))
     }
 }
@@ -584,39 +585,39 @@
         <span class="kw">const</span> <span class="ident">HISTORY</span> <span class="op">=</span> <span class="number">1</span>;
 
         <span class="doccomment">/// Search through bookmarks.</span>
-        <span class="kw">const</span> <span class="ident">BOOKMARK</span> <span class="op">=</span> <span class="number">1</span> <span class="op">&lt;</span><span class="op">&lt;</span> <span class="number">1</span>;
+        <span class="kw">const</span> <span class="ident">BOOKMARK</span> <span class="op">=</span> <span class="number">1</span> <span class="op">&lt;&lt;</span> <span class="number">1</span>;
 
         <span class="doccomment">/// Search through tags.</span>
-        <span class="kw">const</span> <span class="ident">TAG</span> <span class="op">=</span> <span class="number">1</span> <span class="op">&lt;</span><span class="op">&lt;</span> <span class="number">2</span>;
+        <span class="kw">const</span> <span class="ident">TAG</span> <span class="op">=</span> <span class="number">1</span> <span class="op">&lt;&lt;</span> <span class="number">2</span>;
 
         <span class="doccomment">/// Search through the title of pages.</span>
-        <span class="kw">const</span> <span class="ident">TITLE</span> <span class="op">=</span> <span class="number">1</span> <span class="op">&lt;</span><span class="op">&lt;</span> <span class="number">3</span>;
+        <span class="kw">const</span> <span class="ident">TITLE</span> <span class="op">=</span> <span class="number">1</span> <span class="op">&lt;&lt;</span> <span class="number">3</span>;
 
         <span class="doccomment">/// Search the URL of pages.</span>
-        <span class="kw">const</span> <span class="ident">URL</span> <span class="op">=</span> <span class="number">1</span> <span class="op">&lt;</span><span class="op">&lt;</span> <span class="number">4</span>;
+        <span class="kw">const</span> <span class="ident">URL</span> <span class="op">=</span> <span class="number">1</span> <span class="op">&lt;&lt;</span> <span class="number">4</span>;
 
         <span class="doccomment">/// Search for typed pages</span>
-        <span class="kw">const</span> <span class="ident">TYPED</span> <span class="op">=</span> <span class="number">1</span> <span class="op">&lt;</span><span class="op">&lt;</span> <span class="number">5</span>;
+        <span class="kw">const</span> <span class="ident">TYPED</span> <span class="op">=</span> <span class="number">1</span> <span class="op">&lt;&lt;</span> <span class="number">5</span>;
 
         <span class="doccomment">/// Search for javascript: urls</span>
-        <span class="kw">const</span> <span class="ident">JAVASCRIPT</span> <span class="op">=</span> <span class="number">1</span> <span class="op">&lt;</span><span class="op">&lt;</span> <span class="number">6</span>;
+        <span class="kw">const</span> <span class="ident">JAVASCRIPT</span> <span class="op">=</span> <span class="number">1</span> <span class="op">&lt;&lt;</span> <span class="number">6</span>;
 
         <span class="doccomment">/// Search for open pages (currently not meaningfully implemented)</span>
-        <span class="kw">const</span> <span class="ident">OPENPAGE</span> <span class="op">=</span> <span class="number">1</span> <span class="op">&lt;</span><span class="op">&lt;</span> <span class="number">7</span>;
+        <span class="kw">const</span> <span class="ident">OPENPAGE</span> <span class="op">=</span> <span class="number">1</span> <span class="op">&lt;&lt;</span> <span class="number">7</span>;
 
         <span class="doccomment">/// Use intersection between history, typed, bookmark, tag and openpage</span>
         <span class="doccomment">/// instead of union, when the restrict bit is set.</span>
-        <span class="kw">const</span> <span class="ident">RESTRICT</span> <span class="op">=</span> <span class="number">1</span> <span class="op">&lt;</span><span class="op">&lt;</span> <span class="number">8</span>;
+        <span class="kw">const</span> <span class="ident">RESTRICT</span> <span class="op">=</span> <span class="number">1</span> <span class="op">&lt;&lt;</span> <span class="number">8</span>;
 
         <span class="doccomment">/// Include search suggestions from the currently selected search provider</span>
         <span class="doccomment">/// (currently not implemented)</span>
-        <span class="kw">const</span> <span class="ident">SEARCHES</span> <span class="op">=</span> <span class="number">1</span> <span class="op">&lt;</span><span class="op">&lt;</span> <span class="number">9</span>;
+        <span class="kw">const</span> <span class="ident">SEARCHES</span> <span class="op">=</span> <span class="number">1</span> <span class="op">&lt;&lt;</span> <span class="number">9</span>;
     }
 }
 
 <span class="kw">impl</span> <span class="ident">Default</span> <span class="kw">for</span> <span class="ident">SearchBehavior</span> {
     <span class="comment">// See `defaultBehavior` in Desktop&#39;s `UrlbarPrefs.jsm`.</span>
-    <span class="kw">fn</span> <span class="ident">default</span>() <span class="op">-</span><span class="op">&gt;</span> <span class="ident">SearchBehavior</span> {
+    <span class="kw">fn</span> <span class="ident">default</span>() <span class="op">-&gt;</span> <span class="ident">SearchBehavior</span> {
         <span class="ident">SearchBehavior</span>::<span class="ident">HISTORY</span>
             <span class="op">|</span> <span class="ident">SearchBehavior</span>::<span class="ident">BOOKMARK</span>
             <span class="op">|</span> <span class="ident">SearchBehavior</span>::<span class="ident">OPENPAGE</span>
@@ -626,22 +627,22 @@
 
 <span class="kw">impl</span> <span class="ident">SearchBehavior</span> {
     <span class="attribute">#[<span class="ident">inline</span>]</span>
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">any</span>() <span class="op">-</span><span class="op">&gt;</span> <span class="self">Self</span> {
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">any</span>() <span class="op">-&gt;</span> <span class="self">Self</span> {
         <span class="ident">SearchBehavior</span>::<span class="ident">all</span>() <span class="op">&amp;</span> <span class="op">!</span><span class="ident">SearchBehavior</span>::<span class="ident">RESTRICT</span>
     }
 }
 
 <span class="kw">impl</span> <span class="ident">FromSql</span> <span class="kw">for</span> <span class="ident">SearchBehavior</span> {
     <span class="attribute">#[<span class="ident">inline</span>]</span>
-    <span class="kw">fn</span> <span class="ident">column_result</span>(<span class="ident">value</span>: <span class="ident">ValueRef</span><span class="op">&lt;</span><span class="lifetime">&#39;_</span><span class="op">&gt;</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">FromSqlResult</span><span class="op">&lt;</span><span class="self">Self</span><span class="op">&gt;</span> {
+    <span class="kw">fn</span> <span class="ident">column_result</span>(<span class="ident">value</span>: <span class="ident">ValueRef</span><span class="op">&lt;</span><span class="lifetime">&#39;_</span><span class="op">&gt;</span>) <span class="op">-&gt;</span> <span class="ident">FromSqlResult</span><span class="op">&lt;</span><span class="self">Self</span><span class="op">&gt;</span> {
         <span class="ident">SearchBehavior</span>::<span class="ident">from_bits</span>(<span class="ident">u32</span>::<span class="ident">column_result</span>(<span class="ident">value</span>)<span class="question-mark">?</span>)
-            .<span class="ident">ok_or_else</span>(<span class="op">|</span><span class="op">|</span> <span class="ident">FromSqlError</span>::<span class="ident">InvalidType</span>)
+            .<span class="ident">ok_or_else</span>(<span class="op">||</span> <span class="ident">FromSqlError</span>::<span class="ident">InvalidType</span>)
     }
 }
 
 <span class="kw">impl</span> <span class="ident">ToSql</span> <span class="kw">for</span> <span class="ident">SearchBehavior</span> {
     <span class="attribute">#[<span class="ident">inline</span>]</span>
-    <span class="kw">fn</span> <span class="ident">to_sql</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">rusqlite</span>::<span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">ToSqlOutput</span><span class="op">&lt;</span><span class="lifetime">&#39;_</span><span class="op">&gt;</span><span class="op">&gt;</span> {
+    <span class="kw">fn</span> <span class="ident">to_sql</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-&gt;</span> <span class="ident">rusqlite</span>::<span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">ToSqlOutput</span><span class="op">&lt;</span><span class="lifetime">&#39;_</span><span class="op">&gt;&gt;</span> {
         <span class="prelude-val">Ok</span>(<span class="ident">ToSqlOutput</span>::<span class="ident">from</span>(<span class="self">self</span>.<span class="ident">bits</span>()))
     }
 }
@@ -650,7 +651,7 @@
 <span class="doccomment">/// not. Just returns `c | 0x20`. I don&#39;t know if I actually believe this is faster in a way that</span>
 <span class="doccomment">/// matters than the saner version.</span>
 <span class="attribute">#[<span class="ident">inline</span>(<span class="ident">always</span>)]</span>
-<span class="kw">fn</span> <span class="ident">dubious_to_ascii_lower</span>(<span class="ident">c</span>: <span class="ident">u8</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">u8</span> {
+<span class="kw">fn</span> <span class="ident">dubious_to_ascii_lower</span>(<span class="ident">c</span>: <span class="ident">u8</span>) <span class="op">-&gt;</span> <span class="ident">u8</span> {
     <span class="ident">c</span> <span class="op">|</span> <span class="number">0x20</span>
 }
 
@@ -662,7 +663,7 @@
 <span class="doccomment">///</span>
 <span class="doccomment">/// It returns the byte index of the first character that could possibly match.</span>
 <span class="attribute">#[<span class="ident">inline</span>(<span class="ident">always</span>)]</span>
-<span class="kw">fn</span> <span class="ident">next_search_candidate</span>(<span class="ident">to_search</span>: <span class="kw-2">&amp;</span><span class="ident">str</span>, <span class="ident">search_for</span>: <span class="ident">char</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">usize</span><span class="op">&gt;</span> {
+<span class="kw">fn</span> <span class="ident">next_search_candidate</span>(<span class="ident">to_search</span>: <span class="kw-2">&amp;</span><span class="ident">str</span>, <span class="ident">search_for</span>: <span class="ident">char</span>) <span class="op">-&gt;</span> <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">usize</span><span class="op">&gt;</span> {
     <span class="comment">// If the character we search for is ASCII, then we can scan until we find</span>
     <span class="comment">// it or its ASCII uppercase character, modulo the special cases</span>
     <span class="comment">// U+0130 LATIN CAPITAL LETTER I WITH DOT ABOVE and U+212A KELVIN SIGN</span>
@@ -684,9 +685,9 @@
         <span class="comment">// in the loop below.  For other characters we fall back to 0xff, which</span>
         <span class="comment">// is not a valid UTF-8 byte.</span>
         <span class="kw">let</span> <span class="ident">target</span> <span class="op">=</span> <span class="ident">dubious_to_ascii_lower</span>(<span class="ident">search_for</span> <span class="kw">as</span> <span class="ident">u8</span>);
-        <span class="kw">let</span> <span class="ident">special</span> <span class="op">=</span> <span class="kw">if</span> <span class="ident">target</span> <span class="op">=</span><span class="op">=</span> <span class="string">b&#39;i&#39;</span> {
+        <span class="kw">let</span> <span class="ident">special</span> <span class="op">=</span> <span class="kw">if</span> <span class="ident">target</span> <span class="op">==</span> <span class="string">b&#39;i&#39;</span> {
             <span class="number">0xc4u8</span>
-        } <span class="kw">else</span> <span class="kw">if</span> <span class="ident">target</span> <span class="op">=</span><span class="op">=</span> <span class="string">b&#39;k&#39;</span> {
+        } <span class="kw">else</span> <span class="kw">if</span> <span class="ident">target</span> <span class="op">==</span> <span class="string">b&#39;k&#39;</span> {
             <span class="number">0xe2u8</span>
         } <span class="kw">else</span> {
             <span class="number">0xffu8</span>
@@ -696,28 +697,28 @@
         <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">ci</span> <span class="op">=</span> <span class="number">0</span>;
         <span class="kw">while</span> <span class="ident">ci</span> <span class="op">&lt;</span> <span class="ident">search_bytes</span>.<span class="ident">len</span>() {
             <span class="kw">let</span> <span class="ident">cur</span> <span class="op">=</span> <span class="ident">search_bytes</span>[<span class="ident">ci</span>];
-            <span class="kw">if</span> <span class="ident">dubious_to_ascii_lower</span>(<span class="ident">cur</span>) <span class="op">=</span><span class="op">=</span> <span class="ident">target</span> <span class="op">|</span><span class="op">|</span> <span class="ident">cur</span> <span class="op">=</span><span class="op">=</span> <span class="ident">special</span> {
+            <span class="kw">if</span> <span class="ident">dubious_to_ascii_lower</span>(<span class="ident">cur</span>) <span class="op">==</span> <span class="ident">target</span> <span class="op">||</span> <span class="ident">cur</span> <span class="op">==</span> <span class="ident">special</span> {
                 <span class="kw">return</span> <span class="prelude-val">Some</span>(<span class="ident">ci</span>);
             }
-            <span class="ident">ci</span> <span class="op">+</span><span class="op">=</span> <span class="number">1</span>;
+            <span class="ident">ci</span> <span class="op">+=</span> <span class="number">1</span>;
         }
     } <span class="kw">else</span> {
         <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">ci</span> <span class="op">=</span> <span class="number">0</span>;
         <span class="kw">while</span> <span class="ident">ci</span> <span class="op">&lt;</span> <span class="ident">search_bytes</span>.<span class="ident">len</span>() {
             <span class="kw">let</span> <span class="ident">cur</span> <span class="op">=</span> <span class="ident">search_bytes</span>[<span class="ident">ci</span>];
-            <span class="kw">if</span> (<span class="ident">cur</span> <span class="op">&amp;</span> <span class="number">0x80</span>) <span class="op">!</span><span class="op">=</span> <span class="number">0</span> {
+            <span class="kw">if</span> (<span class="ident">cur</span> <span class="op">&amp;</span> <span class="number">0x80</span>) <span class="op">!=</span> <span class="number">0</span> {
                 <span class="kw">return</span> <span class="prelude-val">Some</span>(<span class="ident">ci</span>);
             }
-            <span class="ident">ci</span> <span class="op">+</span><span class="op">=</span> <span class="number">1</span>;
+            <span class="ident">ci</span> <span class="op">+=</span> <span class="number">1</span>;
         }
     }
     <span class="prelude-val">None</span>
 }
 
 <span class="attribute">#[<span class="ident">inline</span>(<span class="ident">always</span>)]</span>
-<span class="kw">fn</span> <span class="ident">is_ascii_lower_alpha</span>(<span class="ident">c</span>: <span class="ident">u8</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">bool</span> {
+<span class="kw">fn</span> <span class="ident">is_ascii_lower_alpha</span>(<span class="ident">c</span>: <span class="ident">u8</span>) <span class="op">-&gt;</span> <span class="ident">bool</span> {
     <span class="comment">// Equivalent to (but fewer operations than) `b&#39;a&#39; &lt;= c &amp;&amp; c &lt;= b&#39;z&#39;`</span>
-    <span class="ident">c</span>.<span class="ident">wrapping_sub</span>(<span class="string">b&#39;a&#39;</span>) <span class="op">&lt;</span><span class="op">=</span> (<span class="string">b&#39;z&#39;</span> <span class="op">-</span> <span class="string">b&#39;a&#39;</span>)
+    <span class="ident">c</span>.<span class="ident">wrapping_sub</span>(<span class="string">b&#39;a&#39;</span>) <span class="op">&lt;=</span> (<span class="string">b&#39;z&#39;</span> <span class="op">-</span> <span class="string">b&#39;a&#39;</span>)
 }
 
 <span class="doccomment">/// port of isOnBoundary from gecko places.</span>
@@ -727,8 +728,8 @@
 <span class="doccomment">/// &gt; between [a-zA-Z] and [a-z] -- this lets us match CamelCase words.</span>
 <span class="doccomment">/// &gt; TODO: support non-latin alphabets.</span>
 <span class="attribute">#[<span class="ident">inline</span>(<span class="ident">always</span>)]</span>
-<span class="kw">fn</span> <span class="ident">is_on_boundary</span>(<span class="ident">text</span>: <span class="kw-2">&amp;</span><span class="ident">str</span>, <span class="ident">index</span>: <span class="ident">usize</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">bool</span> {
-    <span class="kw">if</span> <span class="ident">index</span> <span class="op">=</span><span class="op">=</span> <span class="number">0</span> {
+<span class="kw">fn</span> <span class="ident">is_on_boundary</span>(<span class="ident">text</span>: <span class="kw-2">&amp;</span><span class="ident">str</span>, <span class="ident">index</span>: <span class="ident">usize</span>) <span class="op">-&gt;</span> <span class="ident">bool</span> {
+    <span class="kw">if</span> <span class="ident">index</span> <span class="op">==</span> <span class="number">0</span> {
         <span class="kw">return</span> <span class="bool-val">true</span>;
     }
     <span class="kw">let</span> <span class="ident">bytes</span> <span class="op">=</span> <span class="ident">text</span>.<span class="ident">as_bytes</span>();
@@ -745,7 +746,7 @@
 <span class="doccomment">/// Loose port of stringMatch from places, which we&#39;ve modified to perform more correct case</span>
 <span class="doccomment">/// folding (if this turns out to be a perf issue we can always address it then).</span>
 <span class="attribute">#[<span class="ident">inline</span>]</span>
-<span class="kw">fn</span> <span class="ident">string_match</span>(<span class="ident">token</span>: <span class="kw-2">&amp;</span><span class="ident">str</span>, <span class="ident">source</span>: <span class="kw-2">&amp;</span><span class="ident">str</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">bool</span> {
+<span class="kw">fn</span> <span class="ident">string_match</span>(<span class="ident">token</span>: <span class="kw-2">&amp;</span><span class="ident">str</span>, <span class="ident">source</span>: <span class="kw-2">&amp;</span><span class="ident">str</span>) <span class="op">-&gt;</span> <span class="ident">bool</span> {
     <span class="kw">if</span> <span class="ident">source</span>.<span class="ident">len</span>() <span class="op">&lt;</span> <span class="ident">token</span>.<span class="ident">len</span>() {
         <span class="kw">return</span> <span class="bool-val">false</span>;
     }
@@ -753,10 +754,10 @@
     <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">si</span> <span class="op">=</span> <span class="ident">source</span>.<span class="ident">chars</span>().<span class="ident">default_case_fold</span>();
     <span class="kw">loop</span> {
         <span class="kw">match</span> (<span class="ident">ti</span>.<span class="ident">next</span>(), <span class="ident">si</span>.<span class="ident">next</span>()) {
-            (<span class="prelude-val">None</span>, <span class="kw">_</span>) <span class="op">=</span><span class="op">&gt;</span> <span class="kw">return</span> <span class="bool-val">true</span>,
-            (<span class="prelude-val">Some</span>(<span class="kw">_</span>), <span class="prelude-val">None</span>) <span class="op">=</span><span class="op">&gt;</span> <span class="kw">return</span> <span class="bool-val">false</span>,
-            (<span class="prelude-val">Some</span>(<span class="ident">x</span>), <span class="prelude-val">Some</span>(<span class="ident">y</span>)) <span class="op">=</span><span class="op">&gt;</span> {
-                <span class="kw">if</span> <span class="ident">x</span> <span class="op">!</span><span class="op">=</span> <span class="ident">y</span> {
+            (<span class="prelude-val">None</span>, <span class="kw">_</span>) <span class="op">=&gt;</span> <span class="kw">return</span> <span class="bool-val">true</span>,
+            (<span class="prelude-val">Some</span>(<span class="kw">_</span>), <span class="prelude-val">None</span>) <span class="op">=&gt;</span> <span class="kw">return</span> <span class="bool-val">false</span>,
+            (<span class="prelude-val">Some</span>(<span class="ident">x</span>), <span class="prelude-val">Some</span>(<span class="ident">y</span>)) <span class="op">=&gt;</span> {
+                <span class="kw">if</span> <span class="ident">x</span> <span class="op">!=</span> <span class="ident">y</span> {
                     <span class="kw">return</span> <span class="bool-val">false</span>;
                 }
             }
@@ -767,14 +768,14 @@
 <span class="doccomment">/// This performs single-codepoint case folding. It will do the wrong thing</span>
 <span class="doccomment">/// for characters which have lowercase equivalents with multiple characters.</span>
 <span class="attribute">#[<span class="ident">inline</span>]</span>
-<span class="kw">fn</span> <span class="ident">char_to_lower_single</span>(<span class="ident">c</span>: <span class="ident">char</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">char</span> {
+<span class="kw">fn</span> <span class="ident">char_to_lower_single</span>(<span class="ident">c</span>: <span class="ident">char</span>) <span class="op">-&gt;</span> <span class="ident">char</span> {
     <span class="ident">c</span>.<span class="ident">to_lowercase</span>().<span class="ident">next</span>().<span class="ident">unwrap</span>()
 }
 
 <span class="doccomment">/// Read the next codepoint out of `s` and return it&#39;s lowercase variant, and the index of the</span>
 <span class="doccomment">/// codepoint after it.</span>
 <span class="attribute">#[<span class="ident">inline</span>]</span>
-<span class="kw">fn</span> <span class="ident">next_codepoint_lower</span>(<span class="ident">s</span>: <span class="kw-2">&amp;</span><span class="ident">str</span>) <span class="op">-</span><span class="op">&gt;</span> (<span class="ident">char</span>, <span class="ident">usize</span>) {
+<span class="kw">fn</span> <span class="ident">next_codepoint_lower</span>(<span class="ident">s</span>: <span class="kw-2">&amp;</span><span class="ident">str</span>) <span class="op">-&gt;</span> (<span class="ident">char</span>, <span class="ident">usize</span>) {
     <span class="comment">// This is super convoluted, and I wish a more direct way to do it was exposed. (In theory</span>
     <span class="comment">// this should be more efficient than this implementation is)</span>
     <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">indices</span> <span class="op">=</span> <span class="ident">s</span>.<span class="ident">char_indices</span>();
@@ -782,12 +783,12 @@
     <span class="kw">let</span> <span class="ident">next_index</span> <span class="op">=</span> <span class="ident">indices</span>
         .<span class="ident">next</span>()
         .<span class="ident">map</span>(<span class="op">|</span>(<span class="ident">index</span>, <span class="kw">_</span>)<span class="op">|</span> <span class="ident">index</span>)
-        .<span class="ident">unwrap_or_else</span>(<span class="op">|</span><span class="op">|</span> <span class="ident">s</span>.<span class="ident">len</span>());
+        .<span class="ident">unwrap_or_else</span>(<span class="op">||</span> <span class="ident">s</span>.<span class="ident">len</span>());
     (<span class="ident">char_to_lower_single</span>(<span class="ident">next_char</span>), <span class="ident">next_index</span>)
 }
 
 <span class="comment">// Port of places `findInString`.</span>
-<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">find_in_string</span>(<span class="ident">token</span>: <span class="kw-2">&amp;</span><span class="ident">str</span>, <span class="ident">src</span>: <span class="kw-2">&amp;</span><span class="ident">str</span>, <span class="ident">only_boundary</span>: <span class="ident">bool</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">bool</span> {
+<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">find_in_string</span>(<span class="ident">token</span>: <span class="kw-2">&amp;</span><span class="ident">str</span>, <span class="ident">src</span>: <span class="kw-2">&amp;</span><span class="ident">str</span>, <span class="ident">only_boundary</span>: <span class="ident">bool</span>) <span class="op">-&gt;</span> <span class="ident">bool</span> {
     <span class="comment">// Place&#39;s version has this restriction too</span>
     <span class="macro">assert</span><span class="macro">!</span>(<span class="op">!</span><span class="ident">token</span>.<span class="ident">is_empty</span>(), <span class="string">&quot;Don&#39;t search for an empty string&quot;</span>);
     <span class="kw">if</span> <span class="ident">src</span>.<span class="ident">len</span>() <span class="op">&lt;</span> <span class="ident">token</span>.<span class="ident">len</span>() {
@@ -804,10 +805,10 @@
     <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">cur_offset</span> <span class="op">=</span> <span class="number">0</span>;
     <span class="comment">// Scan forward to the next viable candidate (if any).</span>
     <span class="kw">while</span> <span class="kw">let</span> <span class="prelude-val">Some</span>(<span class="ident">src_idx</span>) <span class="op">=</span> <span class="ident">next_search_candidate</span>(<span class="kw-2">&amp;</span><span class="ident">src</span>[<span class="ident">cur_offset</span>..], <span class="ident">token_first_char</span>) {
-        <span class="kw">if</span> <span class="ident">cur_offset</span> <span class="op">+</span> <span class="ident">src_idx</span> <span class="op">&gt;</span><span class="op">=</span> <span class="ident">src</span>.<span class="ident">len</span>() {
+        <span class="kw">if</span> <span class="ident">cur_offset</span> <span class="op">+</span> <span class="ident">src_idx</span> <span class="op">&gt;=</span> <span class="ident">src</span>.<span class="ident">len</span>() {
             <span class="kw">break</span>;
         }
-        <span class="ident">cur_offset</span> <span class="op">+</span><span class="op">=</span> <span class="ident">src_idx</span>;
+        <span class="ident">cur_offset</span> <span class="op">+=</span> <span class="ident">src_idx</span>;
         <span class="kw">let</span> <span class="ident">src_cur</span> <span class="op">=</span> <span class="kw-2">&amp;</span><span class="ident">src</span>[<span class="ident">cur_offset</span>..];
 
         <span class="comment">// Check whether the first character in the token matches the character</span>
@@ -817,35 +818,35 @@
 
         <span class="comment">// If it is the first character, and we either don&#39;t care about boundaries or</span>
         <span class="comment">// we&#39;re on one, do the more expensive string matching and return true if it hits.</span>
-        <span class="kw">if</span> <span class="ident">src_next_char</span> <span class="op">=</span><span class="op">=</span> <span class="ident">token_first_char</span>
-            <span class="kw-2">&amp;</span><span class="op">&amp;</span> (<span class="op">!</span><span class="ident">only_boundary</span> <span class="op">|</span><span class="op">|</span> <span class="ident">is_on_boundary</span>(<span class="ident">src</span>, <span class="ident">cur_offset</span>))
-            <span class="kw-2">&amp;</span><span class="op">&amp;</span> <span class="ident">string_match</span>(<span class="ident">token</span>, <span class="ident">src_cur</span>)
+        <span class="kw">if</span> <span class="ident">src_next_char</span> <span class="op">==</span> <span class="ident">token_first_char</span>
+            <span class="op">&amp;&amp;</span> (<span class="op">!</span><span class="ident">only_boundary</span> <span class="op">||</span> <span class="ident">is_on_boundary</span>(<span class="ident">src</span>, <span class="ident">cur_offset</span>))
+            <span class="op">&amp;&amp;</span> <span class="ident">string_match</span>(<span class="ident">token</span>, <span class="ident">src_cur</span>)
         {
             <span class="kw">return</span> <span class="bool-val">true</span>;
         }
-        <span class="ident">cur_offset</span> <span class="op">+</span><span class="op">=</span> <span class="ident">next_offset_in_cur</span>;
+        <span class="ident">cur_offset</span> <span class="op">+=</span> <span class="ident">next_offset_in_cur</span>;
     }
     <span class="bool-val">false</span>
 }
 
 <span class="comment">// Search functions used as function pointers by AutocompleteMatch::Invoke</span>
 
-<span class="kw">fn</span> <span class="ident">find_anywhere</span>(<span class="ident">token</span>: <span class="kw-2">&amp;</span><span class="ident">str</span>, <span class="ident">source</span>: <span class="kw-2">&amp;</span><span class="ident">str</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">bool</span> {
+<span class="kw">fn</span> <span class="ident">find_anywhere</span>(<span class="ident">token</span>: <span class="kw-2">&amp;</span><span class="ident">str</span>, <span class="ident">source</span>: <span class="kw-2">&amp;</span><span class="ident">str</span>) <span class="op">-&gt;</span> <span class="ident">bool</span> {
     <span class="macro">assert</span><span class="macro">!</span>(<span class="op">!</span><span class="ident">token</span>.<span class="ident">is_empty</span>(), <span class="string">&quot;Don&#39;t search for an empty token&quot;</span>);
     <span class="ident">find_in_string</span>(<span class="ident">token</span>, <span class="ident">source</span>, <span class="bool-val">false</span>)
 }
 
-<span class="kw">fn</span> <span class="ident">find_on_boundary</span>(<span class="ident">token</span>: <span class="kw-2">&amp;</span><span class="ident">str</span>, <span class="ident">source</span>: <span class="kw-2">&amp;</span><span class="ident">str</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">bool</span> {
+<span class="kw">fn</span> <span class="ident">find_on_boundary</span>(<span class="ident">token</span>: <span class="kw-2">&amp;</span><span class="ident">str</span>, <span class="ident">source</span>: <span class="kw-2">&amp;</span><span class="ident">str</span>) <span class="op">-&gt;</span> <span class="ident">bool</span> {
     <span class="macro">assert</span><span class="macro">!</span>(<span class="op">!</span><span class="ident">token</span>.<span class="ident">is_empty</span>(), <span class="string">&quot;Don&#39;t search for an empty token&quot;</span>);
     <span class="ident">find_in_string</span>(<span class="ident">token</span>, <span class="ident">source</span>, <span class="bool-val">true</span>)
 }
 
-<span class="kw">fn</span> <span class="ident">find_beginning</span>(<span class="ident">token</span>: <span class="kw-2">&amp;</span><span class="ident">str</span>, <span class="ident">source</span>: <span class="kw-2">&amp;</span><span class="ident">str</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">bool</span> {
+<span class="kw">fn</span> <span class="ident">find_beginning</span>(<span class="ident">token</span>: <span class="kw-2">&amp;</span><span class="ident">str</span>, <span class="ident">source</span>: <span class="kw-2">&amp;</span><span class="ident">str</span>) <span class="op">-&gt;</span> <span class="ident">bool</span> {
     <span class="macro">assert</span><span class="macro">!</span>(<span class="op">!</span><span class="ident">token</span>.<span class="ident">is_empty</span>(), <span class="string">&quot;Don&#39;t search for an empty token&quot;</span>);
     <span class="ident">string_match</span>(<span class="ident">token</span>, <span class="ident">source</span>)
 }
 
-<span class="kw">fn</span> <span class="ident">find_beginning_case_sensitive</span>(<span class="ident">token</span>: <span class="kw-2">&amp;</span><span class="ident">str</span>, <span class="ident">source</span>: <span class="kw-2">&amp;</span><span class="ident">str</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">bool</span> {
+<span class="kw">fn</span> <span class="ident">find_beginning_case_sensitive</span>(<span class="ident">token</span>: <span class="kw-2">&amp;</span><span class="ident">str</span>, <span class="ident">source</span>: <span class="kw-2">&amp;</span><span class="ident">str</span>) <span class="op">-&gt;</span> <span class="ident">bool</span> {
     <span class="macro">assert</span><span class="macro">!</span>(<span class="op">!</span><span class="ident">token</span>.<span class="ident">is_empty</span>(), <span class="string">&quot;Don&#39;t search for an empty token&quot;</span>);
     <span class="ident">source</span>.<span class="ident">starts_with</span>(<span class="ident">token</span>)
 }
@@ -865,17 +866,17 @@
 }
 
 <span class="kw">impl</span><span class="op">&lt;</span><span class="lifetime">&#39;search</span>, <span class="lifetime">&#39;url</span>, <span class="lifetime">&#39;title</span>, <span class="lifetime">&#39;tags</span><span class="op">&gt;</span> <span class="ident">AutocompleteMatch</span><span class="op">&lt;</span><span class="lifetime">&#39;search</span>, <span class="lifetime">&#39;url</span>, <span class="lifetime">&#39;title</span>, <span class="lifetime">&#39;tags</span><span class="op">&gt;</span> {
-    <span class="kw">fn</span> <span class="ident">get_search_fn</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="kw">fn</span>(<span class="kw-2">&amp;</span><span class="ident">str</span>, <span class="kw-2">&amp;</span><span class="ident">str</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">bool</span> {
+    <span class="kw">fn</span> <span class="ident">get_search_fn</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-&gt;</span> <span class="kw">fn</span>(<span class="kw-2">&amp;</span><span class="ident">str</span>, <span class="kw-2">&amp;</span><span class="ident">str</span>) <span class="op">-&gt;</span> <span class="ident">bool</span> {
         <span class="kw">match</span> <span class="self">self</span>.<span class="ident">match_behavior</span> {
-            <span class="ident">MatchBehavior</span>::<span class="ident">Anywhere</span> <span class="op">|</span> <span class="ident">MatchBehavior</span>::<span class="ident">AnywhereUnmodified</span> <span class="op">=</span><span class="op">&gt;</span> <span class="ident">find_anywhere</span>,
-            <span class="ident">MatchBehavior</span>::<span class="ident">Beginning</span> <span class="op">=</span><span class="op">&gt;</span> <span class="ident">find_beginning</span>,
-            <span class="ident">MatchBehavior</span>::<span class="ident">BeginningCaseSensitive</span> <span class="op">=</span><span class="op">&gt;</span> <span class="ident">find_beginning_case_sensitive</span>,
-            <span class="kw">_</span> <span class="op">=</span><span class="op">&gt;</span> <span class="ident">find_on_boundary</span>,
+            <span class="ident">MatchBehavior</span>::<span class="ident">Anywhere</span> <span class="op">|</span> <span class="ident">MatchBehavior</span>::<span class="ident">AnywhereUnmodified</span> <span class="op">=&gt;</span> <span class="ident">find_anywhere</span>,
+            <span class="ident">MatchBehavior</span>::<span class="ident">Beginning</span> <span class="op">=&gt;</span> <span class="ident">find_beginning</span>,
+            <span class="ident">MatchBehavior</span>::<span class="ident">BeginningCaseSensitive</span> <span class="op">=&gt;</span> <span class="ident">find_beginning_case_sensitive</span>,
+            <span class="kw">_</span> <span class="op">=&gt;</span> <span class="ident">find_on_boundary</span>,
         }
     }
 
-    <span class="kw">fn</span> <span class="ident">fixup_url_str</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span><span class="op">&gt;</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="kw-2">mut</span> <span class="ident">s</span>: <span class="kw-2">&amp;</span><span class="lifetime">&#39;a</span> <span class="ident">str</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">Cow</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span>, <span class="ident">str</span><span class="op">&gt;</span> {
-        <span class="kw">if</span> <span class="self">self</span>.<span class="ident">match_behavior</span> <span class="op">!</span><span class="op">=</span> <span class="ident">MatchBehavior</span>::<span class="ident">AnywhereUnmodified</span> {
+    <span class="kw">fn</span> <span class="ident">fixup_url_str</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span><span class="op">&gt;</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="kw-2">mut</span> <span class="ident">s</span>: <span class="kw-2">&amp;</span><span class="lifetime">&#39;a</span> <span class="ident">str</span>) <span class="op">-&gt;</span> <span class="ident">Cow</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span>, <span class="ident">str</span><span class="op">&gt;</span> {
+        <span class="kw">if</span> <span class="self">self</span>.<span class="ident">match_behavior</span> <span class="op">!=</span> <span class="ident">MatchBehavior</span>::<span class="ident">AnywhereUnmodified</span> {
             <span class="kw">if</span> <span class="ident">s</span>.<span class="ident">starts_with</span>(<span class="string">&quot;http://&quot;</span>) {
                 <span class="ident">s</span> <span class="op">=</span> <span class="kw-2">&amp;</span><span class="ident">s</span>[<span class="number">7</span>..];
             } <span class="kw">else</span> <span class="kw">if</span> <span class="ident">s</span>.<span class="ident">starts_with</span>(<span class="string">&quot;https://&quot;</span>) {
@@ -893,38 +894,38 @@
         <span class="comment">// TODO: would be nice to decode punycode here too, but for now</span>
         <span class="comment">// this is probably fine.</span>
         <span class="kw">match</span> <span class="ident">percent_encoding</span>::<span class="ident">percent_decode</span>(<span class="ident">s</span>.<span class="ident">as_bytes</span>()).<span class="ident">decode_utf8</span>() {
-            <span class="prelude-val">Err</span>(<span class="kw">_</span>) <span class="op">=</span><span class="op">&gt;</span> <span class="ident">Cow</span>::<span class="ident">Borrowed</span>(<span class="ident">s</span>),
-            <span class="prelude-val">Ok</span>(<span class="ident">decoded</span>) <span class="op">=</span><span class="op">&gt;</span> <span class="ident">decoded</span>,
+            <span class="prelude-val">Err</span>(<span class="kw">_</span>) <span class="op">=&gt;</span> <span class="ident">Cow</span>::<span class="ident">Borrowed</span>(<span class="ident">s</span>),
+            <span class="prelude-val">Ok</span>(<span class="ident">decoded</span>) <span class="op">=&gt;</span> <span class="ident">decoded</span>,
         }
     }
 
     <span class="attribute">#[<span class="ident">inline</span>]</span>
-    <span class="kw">fn</span> <span class="ident">has_behavior</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">behavior</span>: <span class="ident">SearchBehavior</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">bool</span> {
+    <span class="kw">fn</span> <span class="ident">has_behavior</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">behavior</span>: <span class="ident">SearchBehavior</span>) <span class="op">-&gt;</span> <span class="ident">bool</span> {
         <span class="self">self</span>.<span class="ident">search_behavior</span>.<span class="ident">intersects</span>(<span class="ident">behavior</span>)
     }
 
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">invoke</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">bool</span> {
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">invoke</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-&gt;</span> <span class="ident">bool</span> {
         <span class="comment">// We only want to filter javascript: URLs if we are not supposed to search</span>
         <span class="comment">// for them, and the search does not start with &quot;javascript:&quot;.</span>
-        <span class="kw">if</span> <span class="self">self</span>.<span class="ident">match_behavior</span> <span class="op">=</span><span class="op">=</span> <span class="ident">MatchBehavior</span>::<span class="ident">AnywhereUnmodified</span>
-            <span class="kw-2">&amp;</span><span class="op">&amp;</span> <span class="self">self</span>.<span class="ident">url_str</span>.<span class="ident">starts_with</span>(<span class="string">&quot;javascript:&quot;</span>)
-            <span class="kw-2">&amp;</span><span class="op">&amp;</span> <span class="op">!</span><span class="self">self</span>.<span class="ident">has_behavior</span>(<span class="ident">SearchBehavior</span>::<span class="ident">JAVASCRIPT</span>)
-            <span class="kw-2">&amp;</span><span class="op">&amp;</span> <span class="op">!</span><span class="self">self</span>.<span class="ident">search_str</span>.<span class="ident">starts_with</span>(<span class="string">&quot;javascript:&quot;</span>)
+        <span class="kw">if</span> <span class="self">self</span>.<span class="ident">match_behavior</span> <span class="op">==</span> <span class="ident">MatchBehavior</span>::<span class="ident">AnywhereUnmodified</span>
+            <span class="op">&amp;&amp;</span> <span class="self">self</span>.<span class="ident">url_str</span>.<span class="ident">starts_with</span>(<span class="string">&quot;javascript:&quot;</span>)
+            <span class="op">&amp;&amp;</span> <span class="op">!</span><span class="self">self</span>.<span class="ident">has_behavior</span>(<span class="ident">SearchBehavior</span>::<span class="ident">JAVASCRIPT</span>)
+            <span class="op">&amp;&amp;</span> <span class="op">!</span><span class="self">self</span>.<span class="ident">search_str</span>.<span class="ident">starts_with</span>(<span class="string">&quot;javascript:&quot;</span>)
         {
             <span class="kw">return</span> <span class="bool-val">false</span>;
         }
         <span class="kw">let</span> <span class="ident">matches</span> <span class="op">=</span> <span class="kw">if</span> <span class="self">self</span>.<span class="ident">has_behavior</span>(<span class="ident">SearchBehavior</span>::<span class="ident">RESTRICT</span>) {
-            (<span class="op">!</span><span class="self">self</span>.<span class="ident">has_behavior</span>(<span class="ident">SearchBehavior</span>::<span class="ident">HISTORY</span>) <span class="op">|</span><span class="op">|</span> <span class="self">self</span>.<span class="ident">visit_count</span> <span class="op">&gt;</span> <span class="number">0</span>)
-                <span class="kw-2">&amp;</span><span class="op">&amp;</span> (<span class="op">!</span><span class="self">self</span>.<span class="ident">has_behavior</span>(<span class="ident">SearchBehavior</span>::<span class="ident">TYPED</span>) <span class="op">|</span><span class="op">|</span> <span class="self">self</span>.<span class="ident">typed</span>)
-                <span class="kw-2">&amp;</span><span class="op">&amp;</span> (<span class="op">!</span><span class="self">self</span>.<span class="ident">has_behavior</span>(<span class="ident">SearchBehavior</span>::<span class="ident">BOOKMARK</span>) <span class="op">|</span><span class="op">|</span> <span class="self">self</span>.<span class="ident">bookmarked</span>)
-                <span class="kw-2">&amp;</span><span class="op">&amp;</span> (<span class="op">!</span><span class="self">self</span>.<span class="ident">has_behavior</span>(<span class="ident">SearchBehavior</span>::<span class="ident">TAG</span>) <span class="op">|</span><span class="op">|</span> <span class="op">!</span><span class="self">self</span>.<span class="ident">tags</span>.<span class="ident">is_empty</span>())
-                <span class="kw-2">&amp;</span><span class="op">&amp;</span> (<span class="op">!</span><span class="self">self</span>.<span class="ident">has_behavior</span>(<span class="ident">SearchBehavior</span>::<span class="ident">OPENPAGE</span>) <span class="op">|</span><span class="op">|</span> <span class="self">self</span>.<span class="ident">open_page_count</span> <span class="op">&gt;</span> <span class="number">0</span>)
+            (<span class="op">!</span><span class="self">self</span>.<span class="ident">has_behavior</span>(<span class="ident">SearchBehavior</span>::<span class="ident">HISTORY</span>) <span class="op">||</span> <span class="self">self</span>.<span class="ident">visit_count</span> <span class="op">&gt;</span> <span class="number">0</span>)
+                <span class="op">&amp;&amp;</span> (<span class="op">!</span><span class="self">self</span>.<span class="ident">has_behavior</span>(<span class="ident">SearchBehavior</span>::<span class="ident">TYPED</span>) <span class="op">||</span> <span class="self">self</span>.<span class="ident">typed</span>)
+                <span class="op">&amp;&amp;</span> (<span class="op">!</span><span class="self">self</span>.<span class="ident">has_behavior</span>(<span class="ident">SearchBehavior</span>::<span class="ident">BOOKMARK</span>) <span class="op">||</span> <span class="self">self</span>.<span class="ident">bookmarked</span>)
+                <span class="op">&amp;&amp;</span> (<span class="op">!</span><span class="self">self</span>.<span class="ident">has_behavior</span>(<span class="ident">SearchBehavior</span>::<span class="ident">TAG</span>) <span class="op">||</span> <span class="op">!</span><span class="self">self</span>.<span class="ident">tags</span>.<span class="ident">is_empty</span>())
+                <span class="op">&amp;&amp;</span> (<span class="op">!</span><span class="self">self</span>.<span class="ident">has_behavior</span>(<span class="ident">SearchBehavior</span>::<span class="ident">OPENPAGE</span>) <span class="op">||</span> <span class="self">self</span>.<span class="ident">open_page_count</span> <span class="op">&gt;</span> <span class="number">0</span>)
         } <span class="kw">else</span> {
-            (<span class="self">self</span>.<span class="ident">has_behavior</span>(<span class="ident">SearchBehavior</span>::<span class="ident">HISTORY</span>) <span class="kw-2">&amp;</span><span class="op">&amp;</span> <span class="self">self</span>.<span class="ident">visit_count</span> <span class="op">&gt;</span> <span class="number">0</span>)
-                <span class="op">|</span><span class="op">|</span> (<span class="self">self</span>.<span class="ident">has_behavior</span>(<span class="ident">SearchBehavior</span>::<span class="ident">TYPED</span>) <span class="kw-2">&amp;</span><span class="op">&amp;</span> <span class="self">self</span>.<span class="ident">typed</span>)
-                <span class="op">|</span><span class="op">|</span> (<span class="self">self</span>.<span class="ident">has_behavior</span>(<span class="ident">SearchBehavior</span>::<span class="ident">BOOKMARK</span>) <span class="kw-2">&amp;</span><span class="op">&amp;</span> <span class="self">self</span>.<span class="ident">bookmarked</span>)
-                <span class="op">|</span><span class="op">|</span> (<span class="self">self</span>.<span class="ident">has_behavior</span>(<span class="ident">SearchBehavior</span>::<span class="ident">TAG</span>) <span class="kw-2">&amp;</span><span class="op">&amp;</span> <span class="op">!</span><span class="self">self</span>.<span class="ident">tags</span>.<span class="ident">is_empty</span>())
-                <span class="op">|</span><span class="op">|</span> (<span class="self">self</span>.<span class="ident">has_behavior</span>(<span class="ident">SearchBehavior</span>::<span class="ident">OPENPAGE</span>) <span class="kw-2">&amp;</span><span class="op">&amp;</span> <span class="self">self</span>.<span class="ident">open_page_count</span> <span class="op">&gt;</span> <span class="number">0</span>)
+            (<span class="self">self</span>.<span class="ident">has_behavior</span>(<span class="ident">SearchBehavior</span>::<span class="ident">HISTORY</span>) <span class="op">&amp;&amp;</span> <span class="self">self</span>.<span class="ident">visit_count</span> <span class="op">&gt;</span> <span class="number">0</span>)
+                <span class="op">||</span> (<span class="self">self</span>.<span class="ident">has_behavior</span>(<span class="ident">SearchBehavior</span>::<span class="ident">TYPED</span>) <span class="op">&amp;&amp;</span> <span class="self">self</span>.<span class="ident">typed</span>)
+                <span class="op">||</span> (<span class="self">self</span>.<span class="ident">has_behavior</span>(<span class="ident">SearchBehavior</span>::<span class="ident">BOOKMARK</span>) <span class="op">&amp;&amp;</span> <span class="self">self</span>.<span class="ident">bookmarked</span>)
+                <span class="op">||</span> (<span class="self">self</span>.<span class="ident">has_behavior</span>(<span class="ident">SearchBehavior</span>::<span class="ident">TAG</span>) <span class="op">&amp;&amp;</span> <span class="op">!</span><span class="self">self</span>.<span class="ident">tags</span>.<span class="ident">is_empty</span>())
+                <span class="op">||</span> (<span class="self">self</span>.<span class="ident">has_behavior</span>(<span class="ident">SearchBehavior</span>::<span class="ident">OPENPAGE</span>) <span class="op">&amp;&amp;</span> <span class="self">self</span>.<span class="ident">open_page_count</span> <span class="op">&gt;</span> <span class="number">0</span>)
         };
         <span class="kw">if</span> <span class="op">!</span><span class="ident">matches</span> {
             <span class="kw">return</span> <span class="bool-val">false</span>;
@@ -939,16 +940,16 @@
                 <span class="self">self</span>.<span class="ident">has_behavior</span>(<span class="ident">SearchBehavior</span>::<span class="ident">TITLE</span>),
                 <span class="self">self</span>.<span class="ident">has_behavior</span>(<span class="ident">SearchBehavior</span>::<span class="ident">URL</span>),
             ) {
-                (<span class="bool-val">true</span>, <span class="bool-val">true</span>) <span class="op">=</span><span class="op">&gt;</span> {
-                    (<span class="ident">search_fn</span>(<span class="ident">token</span>, <span class="ident">trimmed_title</span>) <span class="op">|</span><span class="op">|</span> <span class="ident">search_fn</span>(<span class="ident">token</span>, <span class="self">self</span>.<span class="ident">tags</span>))
-                        <span class="kw-2">&amp;</span><span class="op">&amp;</span> <span class="ident">search_fn</span>(<span class="ident">token</span>, <span class="ident">trimmed_url</span>)
+                (<span class="bool-val">true</span>, <span class="bool-val">true</span>) <span class="op">=&gt;</span> {
+                    (<span class="ident">search_fn</span>(<span class="ident">token</span>, <span class="ident">trimmed_title</span>) <span class="op">||</span> <span class="ident">search_fn</span>(<span class="ident">token</span>, <span class="self">self</span>.<span class="ident">tags</span>))
+                        <span class="op">&amp;&amp;</span> <span class="ident">search_fn</span>(<span class="ident">token</span>, <span class="ident">trimmed_url</span>)
                 }
-                (<span class="bool-val">true</span>, <span class="bool-val">false</span>) <span class="op">=</span><span class="op">&gt;</span> <span class="ident">search_fn</span>(<span class="ident">token</span>, <span class="ident">trimmed_title</span>) <span class="op">|</span><span class="op">|</span> <span class="ident">search_fn</span>(<span class="ident">token</span>, <span class="self">self</span>.<span class="ident">tags</span>),
-                (<span class="bool-val">false</span>, <span class="bool-val">true</span>) <span class="op">=</span><span class="op">&gt;</span> <span class="ident">search_fn</span>(<span class="ident">token</span>, <span class="ident">trimmed_url</span>),
-                (<span class="bool-val">false</span>, <span class="bool-val">false</span>) <span class="op">=</span><span class="op">&gt;</span> {
+                (<span class="bool-val">true</span>, <span class="bool-val">false</span>) <span class="op">=&gt;</span> <span class="ident">search_fn</span>(<span class="ident">token</span>, <span class="ident">trimmed_title</span>) <span class="op">||</span> <span class="ident">search_fn</span>(<span class="ident">token</span>, <span class="self">self</span>.<span class="ident">tags</span>),
+                (<span class="bool-val">false</span>, <span class="bool-val">true</span>) <span class="op">=&gt;</span> <span class="ident">search_fn</span>(<span class="ident">token</span>, <span class="ident">trimmed_url</span>),
+                (<span class="bool-val">false</span>, <span class="bool-val">false</span>) <span class="op">=&gt;</span> {
                     <span class="ident">search_fn</span>(<span class="ident">token</span>, <span class="ident">trimmed_url</span>)
-                        <span class="op">|</span><span class="op">|</span> <span class="ident">search_fn</span>(<span class="ident">token</span>, <span class="ident">trimmed_title</span>)
-                        <span class="op">|</span><span class="op">|</span> <span class="ident">search_fn</span>(<span class="ident">token</span>, <span class="self">self</span>.<span class="ident">tags</span>)
+                        <span class="op">||</span> <span class="ident">search_fn</span>(<span class="ident">token</span>, <span class="ident">trimmed_title</span>)
+                        <span class="op">||</span> <span class="ident">search_fn</span>(<span class="ident">token</span>, <span class="self">self</span>.<span class="ident">tags</span>)
                 }
             };
             <span class="kw">if</span> <span class="op">!</span><span class="ident">matches</span> {
@@ -969,7 +970,7 @@
         <span class="kw">for</span> <span class="ident">c</span> <span class="kw">in</span> <span class="number">0u8</span>..<span class="op">=</span><span class="number">255u8</span> {
             <span class="macro">assert_eq</span><span class="macro">!</span>(
                 <span class="ident">is_ascii_lower_alpha</span>(<span class="ident">c</span>),
-                <span class="string">b&#39;a&#39;</span> <span class="op">&lt;</span><span class="op">=</span> <span class="ident">c</span> <span class="kw-2">&amp;</span><span class="op">&amp;</span> <span class="ident">c</span> <span class="op">&lt;</span><span class="op">=</span> <span class="string">b&#39;z&#39;</span>,
+                <span class="string">b&#39;a&#39;</span> <span class="op">&lt;=</span> <span class="ident">c</span> <span class="op">&amp;&amp;</span> <span class="ident">c</span> <span class="op">&lt;=</span> <span class="string">b&#39;z&#39;</span>,
                 <span class="string">&quot;is_lower_ascii_alpha is wrong for {}&quot;</span>,
                 <span class="ident">c</span>
             );
@@ -994,9 +995,9 @@
                 <span class="comment">// should serve the same purpose.</span>
                 <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">li</span> <span class="op">=</span> <span class="ident">ch</span>.<span class="ident">to_lowercase</span>();
                 <span class="kw">let</span> <span class="ident">lc</span> <span class="op">=</span> <span class="ident">li</span>.<span class="ident">next</span>().<span class="ident">unwrap</span>();
-                <span class="kw">if</span> <span class="ident">c</span> <span class="op">!</span><span class="op">=</span> <span class="number">304</span> <span class="kw-2">&amp;</span><span class="op">&amp;</span> <span class="ident">c</span> <span class="op">!</span><span class="op">=</span> <span class="number">8490</span> {
+                <span class="kw">if</span> <span class="ident">c</span> <span class="op">!=</span> <span class="number">304</span> <span class="op">&amp;&amp;</span> <span class="ident">c</span> <span class="op">!=</span> <span class="number">8490</span> {
                     <span class="macro">assert</span><span class="macro">!</span>(
-                        (<span class="ident">lc</span> <span class="kw">as</span> <span class="ident">u32</span>) <span class="op">&gt;</span><span class="op">=</span> <span class="number">128</span>,
+                        (<span class="ident">lc</span> <span class="kw">as</span> <span class="ident">u32</span>) <span class="op">&gt;=</span> <span class="number">128</span>,
                         <span class="string">&quot;Lower case of non-ascii &#39;{}&#39; ({}) was unexpectedly ascii&quot;</span>,
                         <span class="ident">ch</span>,
                         <span class="ident">c</span>
@@ -1026,7 +1027,7 @@
             <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">li</span> <span class="op">=</span> <span class="ident">ch</span>.<span class="ident">to_lowercase</span>();
             <span class="kw">let</span> <span class="ident">lc</span> <span class="op">=</span> <span class="ident">li</span>.<span class="ident">next</span>().<span class="ident">unwrap</span>();
             <span class="macro">assert</span><span class="macro">!</span>(
-                <span class="ident">li</span>.<span class="ident">next</span>().<span class="ident">is_none</span>() <span class="kw-2">&amp;</span><span class="op">&amp;</span> (<span class="ident">lc</span> <span class="kw">as</span> <span class="ident">u32</span>) <span class="op">&lt;</span> <span class="number">128</span>,
+                <span class="ident">li</span>.<span class="ident">next</span>().<span class="ident">is_none</span>() <span class="op">&amp;&amp;</span> (<span class="ident">lc</span> <span class="kw">as</span> <span class="ident">u32</span>) <span class="op">&lt;</span> <span class="number">128</span>,
                 <span class="string">&quot;Lower case of ascii &#39;{}&#39; ({}) wasn&#39;t ascii :(&quot;</span>,
                 <span class="ident">ch</span>,
                 <span class="ident">c</span>

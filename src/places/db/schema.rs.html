@@ -1,4 +1,5 @@
-<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source to the Rust file `components/places/src/db/schema.rs`."><meta name="keywords" content="rust, rustlang, rust-lang"><title>schema.rs.html -- source</title><link rel="stylesheet" type="text/css" href="../../../normalize.css"><link rel="stylesheet" type="text/css" href="../../../rustdoc.css" id="mainThemeStyle"><link rel="stylesheet" type="text/css" href="../../../dark.css"><link rel="stylesheet" type="text/css" href="../../../light.css" id="themeStyle"><script src="../../../storage.js"></script><noscript><link rel="stylesheet" href="../../../noscript.css"></noscript><link rel="shortcut icon" href="../../../favicon.ico"><style type="text/css">#crate-search{background-image:url("../../../down-arrow.svg");}</style></head><body class="rustdoc source"><!--[if lte IE 8]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="sidebar"><div class="sidebar-menu">&#9776;</div><a href='../../../places/index.html'><div class='logo-container'><img src='../../../rust-logo.png' alt='logo'></div></a></nav><div class="theme-picker"><button id="theme-picker" aria-label="Pick another theme!"><img src="../../../brush.svg" width="18" alt="Pick another theme!"></button><div id="theme-choices"></div></div><script src="../../../theme.js"></script><nav class="sub"><form class="search-form"><div class="search-container"><div><select id="crate-search"><option value="All crates">All crates</option></select><input class="search-input" name="search" disabled autocomplete="off" spellcheck="false" placeholder="Click or press ‘S’ to search, ‘?’ for more options…" type="search"></div><a id="settings-menu" href="../../../settings.html"><img src="../../../wheel.svg" width="18" alt="Change settings"></a></div></form></nav><section id="main" class="content"><pre class="line-numbers"><span id="1">  1</span>
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source to the Rust file `components/places/src/db/schema.rs`."><meta name="keywords" content="rust, rustlang, rust-lang"><title>schema.rs.html -- source</title><link rel="stylesheet" type="text/css" href="../../../normalize.css"><link rel="stylesheet" type="text/css" href="../../../rustdoc.css" id="mainThemeStyle"><link rel="stylesheet" type="text/css" href="../../../light.css"  id="themeStyle"><link rel="stylesheet" type="text/css" href="../../../dark.css" disabled ><link rel="stylesheet" type="text/css" href="../../../ayu.css" disabled ><script src="../../../storage.js"></script><noscript><link rel="stylesheet" href="../../../noscript.css"></noscript><link rel="shortcut icon" href="../../../favicon.ico"><style type="text/css">#crate-search{background-image:url("../../../down-arrow.svg");}</style></head><body class="rustdoc source"><!--[if lte IE 8]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="sidebar"><div class="sidebar-menu">&#9776;</div><a href='../../../places/index.html'><div class='logo-container rust-logo'><img src='../../../rust-logo.png' alt='logo'></div></a></nav><div class="theme-picker"><button id="theme-picker" aria-label="Pick another theme!"><img src="../../../brush.svg" width="18" alt="Pick another theme!"></button><div id="theme-choices"></div></div><script src="../../../theme.js"></script><nav class="sub"><form class="search-form"><div class="search-container"><div><select id="crate-search"><option value="All crates">All crates</option></select><input class="search-input" name="search" disabled autocomplete="off" spellcheck="false" placeholder="Click or press ‘S’ to search, ‘?’ for more options…" type="search"></div><span class="help-button">?</span>
+                <a id="settings-menu" href="../../../settings.html"><img src="../../../wheel.svg" width="18" alt="Change settings"></a></div></form></nav><section id="main" class="content"><pre class="line-numbers"><span id="1">  1</span>
 <span id="2">  2</span>
 <span id="3">  3</span>
 <span id="4">  4</span>
@@ -924,7 +925,7 @@
 <span class="kw">pub</span>(<span class="kw">crate</span>) <span class="kw">static</span> <span class="ident">MOZ_META_KEY_ORIGIN_FRECENCY_SUM_OF_SQUARES</span>: <span class="kw-2">&amp;</span><span class="ident">str</span> <span class="op">=</span>
     <span class="string">&quot;origin_frecency_sum_of_squares&quot;</span>;
 
-<span class="kw">fn</span> <span class="ident">update_origin_frecency_stats</span>(<span class="ident">op</span>: <span class="kw-2">&amp;</span><span class="ident">str</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">String</span> {
+<span class="kw">fn</span> <span class="ident">update_origin_frecency_stats</span>(<span class="ident">op</span>: <span class="kw-2">&amp;</span><span class="ident">str</span>) <span class="op">-&gt;</span> <span class="ident">String</span> {
     <span class="macro">format</span><span class="macro">!</span>(
         <span class="string">&quot;
         INSERT OR REPLACE INTO moz_meta(key, value)
@@ -952,15 +953,15 @@
     )
 }
 
-<span class="kw">fn</span> <span class="ident">get_current_schema_version</span>(<span class="ident">db</span>: <span class="kw-2">&amp;</span><span class="ident">PlacesDb</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">i64</span><span class="op">&gt;</span> {
+<span class="kw">fn</span> <span class="ident">get_current_schema_version</span>(<span class="ident">db</span>: <span class="kw-2">&amp;</span><span class="ident">PlacesDb</span>) <span class="op">-&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">i64</span><span class="op">&gt;</span> {
     <span class="prelude-val">Ok</span>(<span class="ident">db</span>.<span class="ident">query_one</span>::<span class="op">&lt;</span><span class="ident">i64</span><span class="op">&gt;</span>(<span class="string">&quot;PRAGMA user_version&quot;</span>)<span class="question-mark">?</span>)
 }
 
-<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">init</span>(<span class="ident">db</span>: <span class="kw-2">&amp;</span><span class="ident">PlacesDb</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span>()<span class="op">&gt;</span> {
+<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">init</span>(<span class="ident">db</span>: <span class="kw-2">&amp;</span><span class="ident">PlacesDb</span>) <span class="op">-&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span>()<span class="op">&gt;</span> {
     <span class="kw">let</span> <span class="ident">user_version</span> <span class="op">=</span> <span class="ident">get_current_schema_version</span>(<span class="ident">db</span>)<span class="question-mark">?</span>;
-    <span class="kw">if</span> <span class="ident">user_version</span> <span class="op">=</span><span class="op">=</span> <span class="number">0</span> {
+    <span class="kw">if</span> <span class="ident">user_version</span> <span class="op">==</span> <span class="number">0</span> {
         <span class="ident">create</span>(<span class="ident">db</span>)<span class="question-mark">?</span>;
-    } <span class="kw">else</span> <span class="kw">if</span> <span class="ident">user_version</span> <span class="op">!</span><span class="op">=</span> <span class="ident">VERSION</span> {
+    } <span class="kw">else</span> <span class="kw">if</span> <span class="ident">user_version</span> <span class="op">!=</span> <span class="ident">VERSION</span> {
         <span class="kw">if</span> <span class="ident">user_version</span> <span class="op">&lt;</span> <span class="ident">VERSION</span> {
             <span class="ident">upgrade</span>(<span class="ident">db</span>, <span class="ident">user_version</span>)<span class="question-mark">?</span>;
         } <span class="kw">else</span> {
@@ -979,11 +980,11 @@
     <span class="kw">match</span> <span class="ident">db</span>.<span class="ident">conn_type</span>() {
         <span class="comment">// Read-only connections don&#39;t need temp tables or triggers, as they</span>
         <span class="comment">// can&#39;t write anything.</span>
-        <span class="ident">ConnectionType</span>::<span class="ident">ReadOnly</span> <span class="op">=</span><span class="op">&gt;</span> {}
+        <span class="ident">ConnectionType</span>::<span class="ident">ReadOnly</span> <span class="op">=&gt;</span> {}
 
         <span class="comment">// The main read-write connection needs shared and main-specific</span>
         <span class="comment">// temp tables and triggers (for example, for writing tombstones).</span>
-        <span class="ident">ConnectionType</span>::<span class="ident">ReadWrite</span> <span class="op">=</span><span class="op">&gt;</span> {
+        <span class="ident">ConnectionType</span>::<span class="ident">ReadWrite</span> <span class="op">=&gt;</span> {
             <span class="ident">db</span>.<span class="ident">execute_batch</span>(<span class="ident">CREATE_SHARED_TEMP_TABLES_SQL</span>)<span class="question-mark">?</span>;
             <span class="ident">db</span>.<span class="ident">execute_batch</span>(<span class="kw-2">&amp;</span><span class="ident">CREATE_SHARED_TRIGGERS_SQL</span>)<span class="question-mark">?</span>;
             <span class="ident">db</span>.<span class="ident">execute_batch</span>(<span class="ident">CREATE_MAIN_TRIGGERS_SQL</span>)<span class="question-mark">?</span>;
@@ -992,7 +993,7 @@
         <span class="comment">// The Sync connection needs shared and its own temp tables and</span>
         <span class="comment">// triggers, for merging. It also bypasses some of the main</span>
         <span class="comment">// triggers, so that we don&#39;t write tombstones for synced deletions.</span>
-        <span class="ident">ConnectionType</span>::<span class="ident">Sync</span> <span class="op">=</span><span class="op">&gt;</span> {
+        <span class="ident">ConnectionType</span>::<span class="ident">Sync</span> <span class="op">=&gt;</span> {
             <span class="ident">db</span>.<span class="ident">execute_batch</span>(<span class="ident">CREATE_SHARED_TEMP_TABLES_SQL</span>)<span class="question-mark">?</span>;
             <span class="ident">db</span>.<span class="ident">execute_batch</span>(<span class="kw-2">&amp;</span><span class="ident">CREATE_SHARED_TRIGGERS_SQL</span>)<span class="question-mark">?</span>;
             <span class="ident">db</span>.<span class="ident">execute_batch</span>(<span class="ident">CREATE_SYNC_TEMP_TABLES_SQL</span>)<span class="question-mark">?</span>;
@@ -1015,17 +1016,17 @@
 <span class="doccomment">/// The callback parameter is if any extra logic is needed for the migration</span>
 <span class="doccomment">/// (for example, creating bookmark roots). In an ideal world, this would be an</span>
 <span class="doccomment">/// Option, but sadly, that can&#39;t typecheck.</span>
-<span class="kw">fn</span> <span class="ident">migration</span><span class="op">&lt;</span><span class="ident">F</span><span class="op">&gt;</span>(<span class="ident">db</span>: <span class="kw-2">&amp;</span><span class="ident">PlacesDb</span>, <span class="ident">from</span>: <span class="ident">i64</span>, <span class="ident">to</span>: <span class="ident">i64</span>, <span class="ident">stmts</span>: <span class="kw-2">&amp;</span>[<span class="kw-2">&amp;</span><span class="ident">str</span>], <span class="ident">extra_logic</span>: <span class="ident">F</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span>()<span class="op">&gt;</span>
+<span class="kw">fn</span> <span class="ident">migration</span><span class="op">&lt;</span><span class="ident">F</span><span class="op">&gt;</span>(<span class="ident">db</span>: <span class="kw-2">&amp;</span><span class="ident">PlacesDb</span>, <span class="ident">from</span>: <span class="ident">i64</span>, <span class="ident">to</span>: <span class="ident">i64</span>, <span class="ident">stmts</span>: <span class="kw-2">&amp;</span>[<span class="kw-2">&amp;</span><span class="ident">str</span>], <span class="ident">extra_logic</span>: <span class="ident">F</span>) <span class="op">-&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span>()<span class="op">&gt;</span>
 <span class="kw">where</span>
-    <span class="ident">F</span>: <span class="ident">FnOnce</span>() <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span>()<span class="op">&gt;</span>,
+    <span class="ident">F</span>: <span class="ident">FnOnce</span>() <span class="op">-&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span>()<span class="op">&gt;</span>,
 {
     <span class="macro">assert</span><span class="macro">!</span>(
-        <span class="ident">to</span> <span class="op">&lt;</span><span class="op">=</span> <span class="ident">VERSION</span>,
+        <span class="ident">to</span> <span class="op">&lt;=</span> <span class="ident">VERSION</span>,
         <span class="string">&quot;Bug: Added migration without updating VERSION&quot;</span>
     );
     <span class="comment">// In the future maybe we want to avoid calling this</span>
     <span class="kw">let</span> <span class="ident">cur_version</span> <span class="op">=</span> <span class="ident">get_current_schema_version</span>(<span class="ident">db</span>)<span class="question-mark">?</span>;
-    <span class="kw">if</span> <span class="ident">cur_version</span> <span class="op">=</span><span class="op">=</span> <span class="ident">from</span> {
+    <span class="kw">if</span> <span class="ident">cur_version</span> <span class="op">==</span> <span class="ident">from</span> {
         <span class="ident">log</span>::<span class="macro">debug</span><span class="macro">!</span>(<span class="string">&quot;Upgrading schema from {} to {}&quot;</span>, <span class="ident">cur_version</span>, <span class="ident">to</span>);
         <span class="kw">for</span> <span class="ident">stmt</span> <span class="kw">in</span> <span class="ident">stmts</span> {
             <span class="ident">db</span>.<span class="ident">execute_batch</span>(<span class="ident">stmt</span>)<span class="question-mark">?</span>;
@@ -1043,13 +1044,13 @@
     <span class="prelude-val">Ok</span>(())
 }
 
-<span class="kw">fn</span> <span class="ident">upgrade</span>(<span class="ident">db</span>: <span class="kw-2">&amp;</span><span class="ident">PlacesDb</span>, <span class="ident">from</span>: <span class="ident">i64</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span>()<span class="op">&gt;</span> {
+<span class="kw">fn</span> <span class="ident">upgrade</span>(<span class="ident">db</span>: <span class="kw-2">&amp;</span><span class="ident">PlacesDb</span>, <span class="ident">from</span>: <span class="ident">i64</span>) <span class="op">-&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span>()<span class="op">&gt;</span> {
     <span class="ident">log</span>::<span class="macro">debug</span><span class="macro">!</span>(<span class="string">&quot;Upgrading schema from {} to {}&quot;</span>, <span class="ident">from</span>, <span class="ident">VERSION</span>);
-    <span class="kw">if</span> <span class="ident">from</span> <span class="op">=</span><span class="op">=</span> <span class="ident">VERSION</span> {
+    <span class="kw">if</span> <span class="ident">from</span> <span class="op">==</span> <span class="ident">VERSION</span> {
         <span class="kw">return</span> <span class="prelude-val">Ok</span>(());
     }
 
-    <span class="ident">migration</span>(<span class="ident">db</span>, <span class="number">2</span>, <span class="number">3</span>, <span class="kw-2">&amp;</span>[<span class="ident">CREATE_SHARED_SCHEMA_SQL</span>], <span class="op">|</span><span class="op">|</span> <span class="prelude-val">Ok</span>(()))<span class="question-mark">?</span>;
+    <span class="ident">migration</span>(<span class="ident">db</span>, <span class="number">2</span>, <span class="number">3</span>, <span class="kw-2">&amp;</span>[<span class="ident">CREATE_SHARED_SCHEMA_SQL</span>], <span class="op">||</span> <span class="prelude-val">Ok</span>(()))<span class="question-mark">?</span>;
     <span class="ident">migration</span>(
         <span class="ident">db</span>,
         <span class="number">3</span>,
@@ -1059,11 +1060,11 @@
             <span class="string">&quot;DROP TABLE moz_bookmarks&quot;</span>,
             <span class="ident">CREATE_SHARED_SCHEMA_SQL</span>,
         ],
-        <span class="op">|</span><span class="op">|</span> <span class="ident">create_bookmark_roots</span>(<span class="kw-2">&amp;</span><span class="ident">db</span>.<span class="ident">conn</span>()),
+        <span class="op">||</span> <span class="ident">create_bookmark_roots</span>(<span class="kw-2">&amp;</span><span class="ident">db</span>.<span class="ident">conn</span>()),
     )<span class="question-mark">?</span>;
-    <span class="ident">migration</span>(<span class="ident">db</span>, <span class="number">4</span>, <span class="number">5</span>, <span class="kw-2">&amp;</span>[<span class="ident">CREATE_SHARED_SCHEMA_SQL</span>], <span class="op">|</span><span class="op">|</span> <span class="prelude-val">Ok</span>(()))<span class="question-mark">?</span>;
-    <span class="ident">migration</span>(<span class="ident">db</span>, <span class="number">5</span>, <span class="number">6</span>, <span class="kw-2">&amp;</span>[<span class="ident">CREATE_SHARED_SCHEMA_SQL</span>], <span class="op">|</span><span class="op">|</span> <span class="prelude-val">Ok</span>(()))<span class="question-mark">?</span>; <span class="comment">// new tags tables.</span>
-    <span class="ident">migration</span>(<span class="ident">db</span>, <span class="number">6</span>, <span class="number">7</span>, <span class="kw-2">&amp;</span>[<span class="ident">CREATE_SHARED_SCHEMA_SQL</span>], <span class="op">|</span><span class="op">|</span> <span class="prelude-val">Ok</span>(()))<span class="question-mark">?</span>; <span class="comment">// bookmark syncing.</span>
+    <span class="ident">migration</span>(<span class="ident">db</span>, <span class="number">4</span>, <span class="number">5</span>, <span class="kw-2">&amp;</span>[<span class="ident">CREATE_SHARED_SCHEMA_SQL</span>], <span class="op">||</span> <span class="prelude-val">Ok</span>(()))<span class="question-mark">?</span>;
+    <span class="ident">migration</span>(<span class="ident">db</span>, <span class="number">5</span>, <span class="number">6</span>, <span class="kw-2">&amp;</span>[<span class="ident">CREATE_SHARED_SCHEMA_SQL</span>], <span class="op">||</span> <span class="prelude-val">Ok</span>(()))<span class="question-mark">?</span>; <span class="comment">// new tags tables.</span>
+    <span class="ident">migration</span>(<span class="ident">db</span>, <span class="number">6</span>, <span class="number">7</span>, <span class="kw-2">&amp;</span>[<span class="ident">CREATE_SHARED_SCHEMA_SQL</span>], <span class="op">||</span> <span class="prelude-val">Ok</span>(()))<span class="question-mark">?</span>; <span class="comment">// bookmark syncing.</span>
     <span class="ident">migration</span>(
         <span class="ident">db</span>,
         <span class="number">7</span>,
@@ -1076,7 +1077,7 @@
             <span class="string">&quot;DROP TABLE moz_bookmarks_synced_structure&quot;</span>,
             <span class="ident">CREATE_SHARED_SCHEMA_SQL</span>,
         ],
-        <span class="op">|</span><span class="op">|</span> <span class="prelude-val">Ok</span>(()),
+        <span class="op">||</span> <span class="prelude-val">Ok</span>(()),
     )<span class="question-mark">?</span>;
     <span class="ident">migration</span>(
         <span class="ident">db</span>,
@@ -1092,7 +1093,7 @@
                 <span class="ident">SyncStatus</span>::<span class="ident">New</span> <span class="kw">as</span> <span class="ident">u8</span>
             ),
         ],
-        <span class="op">|</span><span class="op">|</span> <span class="prelude-val">Ok</span>(()),
+        <span class="op">||</span> <span class="prelude-val">Ok</span>(()),
     )<span class="question-mark">?</span>;
     <span class="ident">migration</span>(
         <span class="ident">db</span>,
@@ -1103,7 +1104,7 @@
             <span class="string">&quot;CREATE INDEX IF NOT EXISTS moz_bookmarks_synced_urls
              ON moz_bookmarks_synced(placeId)&quot;</span>,
         ],
-        <span class="op">|</span><span class="op">|</span> <span class="prelude-val">Ok</span>(()),
+        <span class="op">||</span> <span class="prelude-val">Ok</span>(()),
     )<span class="question-mark">?</span>;
     <span class="ident">migration</span>(
         <span class="ident">db</span>,
@@ -1129,7 +1130,7 @@
              WHERE placeId NOT NULL AND
                    keyword NOT NULL&quot;</span>,
         ],
-        <span class="op">|</span><span class="op">|</span> <span class="prelude-val">Ok</span>(()),
+        <span class="op">||</span> <span class="prelude-val">Ok</span>(()),
     )<span class="question-mark">?</span>;
     <span class="ident">migration</span>(
         <span class="ident">db</span>,
@@ -1140,7 +1141,7 @@
             <span class="string">&quot;CREATE INDEX IF NOT EXISTS visits_from_type_idx
              ON moz_historyvisits(from_visit, visit_type)&quot;</span>,
         ],
-        <span class="op">|</span><span class="op">|</span> <span class="prelude-val">Ok</span>(()),
+        <span class="op">||</span> <span class="prelude-val">Ok</span>(()),
     )<span class="question-mark">?</span>;
     <span class="ident">migration</span>(
         <span class="ident">db</span>,
@@ -1154,18 +1155,18 @@
              WHERE EXISTS (SELECT 1 FROM moz_bookmarks_synced
                                     WHERE guid = b.guid)&quot;</span>,
         ],
-        <span class="op">|</span><span class="op">|</span> <span class="prelude-val">Ok</span>(()),
+        <span class="op">||</span> <span class="prelude-val">Ok</span>(()),
     )<span class="question-mark">?</span>;
 
     <span class="comment">// Add more migrations here...</span>
 
-    <span class="kw">if</span> <span class="ident">get_current_schema_version</span>(<span class="ident">db</span>)<span class="question-mark">?</span> <span class="op">=</span><span class="op">=</span> <span class="ident">VERSION</span> {
+    <span class="kw">if</span> <span class="ident">get_current_schema_version</span>(<span class="ident">db</span>)<span class="question-mark">?</span> <span class="op">==</span> <span class="ident">VERSION</span> {
         <span class="kw">return</span> <span class="prelude-val">Ok</span>(());
     }
     <span class="prelude-val">Err</span>(<span class="ident">ErrorKind</span>::<span class="ident">DatabaseUpgradeError</span>.<span class="ident">into</span>())
 }
 
-<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">create</span>(<span class="ident">db</span>: <span class="kw-2">&amp;</span><span class="ident">PlacesDb</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span>()<span class="op">&gt;</span> {
+<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">create</span>(<span class="ident">db</span>: <span class="kw-2">&amp;</span><span class="ident">PlacesDb</span>) <span class="op">-&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span>()<span class="op">&gt;</span> {
     <span class="ident">log</span>::<span class="macro">debug</span><span class="macro">!</span>(<span class="string">&quot;Creating schema&quot;</span>);
     <span class="ident">db</span>.<span class="ident">execute_batch</span>(<span class="ident">CREATE_SHARED_SCHEMA_SQL</span>)<span class="question-mark">?</span>;
     <span class="ident">create_bookmark_roots</span>(<span class="kw-2">&amp;</span><span class="ident">db</span>.<span class="ident">conn</span>())<span class="question-mark">?</span>;
@@ -1191,15 +1192,15 @@
             .<span class="ident">expect</span>(<span class="string">&quot;should allow running twice&quot;</span>);
     }
 
-    <span class="kw">fn</span> <span class="ident">has_tombstone</span>(<span class="ident">conn</span>: <span class="kw-2">&amp;</span><span class="ident">PlacesDb</span>, <span class="ident">guid</span>: <span class="kw-2">&amp;</span><span class="ident">SyncGuid</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">bool</span> {
-        <span class="kw">let</span> <span class="ident">count</span>: <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">u32</span><span class="op">&gt;</span><span class="op">&gt;</span> <span class="op">=</span> <span class="ident">conn</span>.<span class="ident">try_query_row</span>(
+    <span class="kw">fn</span> <span class="ident">has_tombstone</span>(<span class="ident">conn</span>: <span class="kw-2">&amp;</span><span class="ident">PlacesDb</span>, <span class="ident">guid</span>: <span class="kw-2">&amp;</span><span class="ident">SyncGuid</span>) <span class="op">-&gt;</span> <span class="ident">bool</span> {
+        <span class="kw">let</span> <span class="ident">count</span>: <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">u32</span><span class="op">&gt;&gt;</span> <span class="op">=</span> <span class="ident">conn</span>.<span class="ident">try_query_row</span>(
             <span class="string">&quot;SELECT COUNT(*) from moz_places_tombstones
                      WHERE guid = :guid&quot;</span>,
             <span class="kw-2">&amp;</span>[(<span class="string">&quot;:guid&quot;</span>, <span class="ident">guid</span>)],
             <span class="op">|</span><span class="ident">row</span><span class="op">|</span> <span class="prelude-val">Ok</span>(<span class="ident">row</span>.<span class="ident">get</span>::<span class="op">&lt;</span><span class="kw">_</span>, <span class="ident">u32</span><span class="op">&gt;</span>(<span class="number">0</span>)<span class="question-mark">?</span>),
             <span class="bool-val">true</span>,
         );
-        <span class="ident">count</span>.<span class="ident">unwrap</span>().<span class="ident">unwrap</span>() <span class="op">=</span><span class="op">=</span> <span class="number">1</span>
+        <span class="ident">count</span>.<span class="ident">unwrap</span>().<span class="ident">unwrap</span>() <span class="op">==</span> <span class="number">1</span>
     }
 
     <span class="attribute">#[<span class="ident">test</span>]</span>
@@ -1315,14 +1316,14 @@
         <span class="macro">assert_eq</span><span class="macro">!</span>(<span class="ident">e</span>.<span class="ident">to_string</span>(), <span class="string">&quot;CHECK constraint failed: moz_bookmarks&quot;</span>);
     }
 
-    <span class="kw">fn</span> <span class="ident">select_simple_int</span>(<span class="ident">conn</span>: <span class="kw-2">&amp;</span><span class="ident">PlacesDb</span>, <span class="ident">stmt</span>: <span class="kw-2">&amp;</span><span class="ident">str</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">u32</span> {
-        <span class="kw">let</span> <span class="ident">count</span>: <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">u32</span><span class="op">&gt;</span><span class="op">&gt;</span> <span class="op">=</span>
+    <span class="kw">fn</span> <span class="ident">select_simple_int</span>(<span class="ident">conn</span>: <span class="kw-2">&amp;</span><span class="ident">PlacesDb</span>, <span class="ident">stmt</span>: <span class="kw-2">&amp;</span><span class="ident">str</span>) <span class="op">-&gt;</span> <span class="ident">u32</span> {
+        <span class="kw">let</span> <span class="ident">count</span>: <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">u32</span><span class="op">&gt;&gt;</span> <span class="op">=</span>
             <span class="ident">conn</span>.<span class="ident">try_query_row</span>(<span class="ident">stmt</span>, <span class="kw-2">&amp;</span>[], <span class="op">|</span><span class="ident">row</span><span class="op">|</span> <span class="prelude-val">Ok</span>(<span class="ident">row</span>.<span class="ident">get</span>::<span class="op">&lt;</span><span class="kw">_</span>, <span class="ident">u32</span><span class="op">&gt;</span>(<span class="number">0</span>)<span class="question-mark">?</span>), <span class="bool-val">false</span>);
         <span class="ident">count</span>.<span class="ident">unwrap</span>().<span class="ident">unwrap</span>()
     }
 
-    <span class="kw">fn</span> <span class="ident">get_foreign_count</span>(<span class="ident">conn</span>: <span class="kw-2">&amp;</span><span class="ident">PlacesDb</span>, <span class="ident">guid</span>: <span class="kw-2">&amp;</span><span class="ident">SyncGuid</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">u32</span> {
-        <span class="kw">let</span> <span class="ident">count</span>: <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">u32</span><span class="op">&gt;</span><span class="op">&gt;</span> <span class="op">=</span> <span class="ident">conn</span>.<span class="ident">try_query_row</span>(
+    <span class="kw">fn</span> <span class="ident">get_foreign_count</span>(<span class="ident">conn</span>: <span class="kw-2">&amp;</span><span class="ident">PlacesDb</span>, <span class="ident">guid</span>: <span class="kw-2">&amp;</span><span class="ident">SyncGuid</span>) <span class="op">-&gt;</span> <span class="ident">u32</span> {
+        <span class="kw">let</span> <span class="ident">count</span>: <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">u32</span><span class="op">&gt;&gt;</span> <span class="op">=</span> <span class="ident">conn</span>.<span class="ident">try_query_row</span>(
             <span class="string">&quot;SELECT foreign_count from moz_places
                      WHERE guid = :guid&quot;</span>,
             <span class="kw-2">&amp;</span>[(<span class="string">&quot;:guid&quot;</span>, <span class="ident">guid</span>)],
@@ -1640,7 +1641,7 @@
     }
 
     <span class="attribute">#[<span class="ident">test</span>]</span>
-    <span class="kw">fn</span> <span class="ident">test_downgrade_schema</span>() <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span>()<span class="op">&gt;</span> {
+    <span class="kw">fn</span> <span class="ident">test_downgrade_schema</span>() <span class="op">-&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span>()<span class="op">&gt;</span> {
         <span class="comment">// This test uses SQLite&#39;s URI filenames and shared cache features to</span>
         <span class="comment">// create a named in-memory database.</span>
         <span class="kw">let</span> <span class="ident">path</span> <span class="op">=</span> <span class="string">&quot;file:downgrade_schema?mode=memory&amp;cache=shared&quot;</span>;
@@ -1672,7 +1673,7 @@
     }
 
     <span class="attribute">#[<span class="ident">test</span>]</span>
-    <span class="kw">fn</span> <span class="ident">test_upgrade_schema_12_13</span>() <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span>()<span class="op">&gt;</span> {
+    <span class="kw">fn</span> <span class="ident">test_upgrade_schema_12_13</span>() <span class="op">-&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span>()<span class="op">&gt;</span> {
         <span class="comment">// As above, create a named in-memory database.</span>
         <span class="kw">let</span> <span class="ident">path</span> <span class="op">=</span> <span class="string">&quot;file:test_upgrade_schema_12_13?mode=memory&amp;cache=shared&quot;</span>;
 

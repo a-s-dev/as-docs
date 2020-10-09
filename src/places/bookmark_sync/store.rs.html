@@ -1,4 +1,5 @@
-<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source to the Rust file `components/places/src/bookmark_sync/store.rs`."><meta name="keywords" content="rust, rustlang, rust-lang"><title>store.rs.html -- source</title><link rel="stylesheet" type="text/css" href="../../../normalize.css"><link rel="stylesheet" type="text/css" href="../../../rustdoc.css" id="mainThemeStyle"><link rel="stylesheet" type="text/css" href="../../../dark.css"><link rel="stylesheet" type="text/css" href="../../../light.css" id="themeStyle"><script src="../../../storage.js"></script><noscript><link rel="stylesheet" href="../../../noscript.css"></noscript><link rel="shortcut icon" href="../../../favicon.ico"><style type="text/css">#crate-search{background-image:url("../../../down-arrow.svg");}</style></head><body class="rustdoc source"><!--[if lte IE 8]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="sidebar"><div class="sidebar-menu">&#9776;</div><a href='../../../places/index.html'><div class='logo-container'><img src='../../../rust-logo.png' alt='logo'></div></a></nav><div class="theme-picker"><button id="theme-picker" aria-label="Pick another theme!"><img src="../../../brush.svg" width="18" alt="Pick another theme!"></button><div id="theme-choices"></div></div><script src="../../../theme.js"></script><nav class="sub"><form class="search-form"><div class="search-container"><div><select id="crate-search"><option value="All crates">All crates</option></select><input class="search-input" name="search" disabled autocomplete="off" spellcheck="false" placeholder="Click or press ‘S’ to search, ‘?’ for more options…" type="search"></div><a id="settings-menu" href="../../../settings.html"><img src="../../../wheel.svg" width="18" alt="Change settings"></a></div></form></nav><section id="main" class="content"><pre class="line-numbers"><span id="1">   1</span>
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source to the Rust file `components/places/src/bookmark_sync/store.rs`."><meta name="keywords" content="rust, rustlang, rust-lang"><title>store.rs.html -- source</title><link rel="stylesheet" type="text/css" href="../../../normalize.css"><link rel="stylesheet" type="text/css" href="../../../rustdoc.css" id="mainThemeStyle"><link rel="stylesheet" type="text/css" href="../../../light.css"  id="themeStyle"><link rel="stylesheet" type="text/css" href="../../../dark.css" disabled ><link rel="stylesheet" type="text/css" href="../../../ayu.css" disabled ><script src="../../../storage.js"></script><noscript><link rel="stylesheet" href="../../../noscript.css"></noscript><link rel="shortcut icon" href="../../../favicon.ico"><style type="text/css">#crate-search{background-image:url("../../../down-arrow.svg");}</style></head><body class="rustdoc source"><!--[if lte IE 8]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="sidebar"><div class="sidebar-menu">&#9776;</div><a href='../../../places/index.html'><div class='logo-container rust-logo'><img src='../../../rust-logo.png' alt='logo'></div></a></nav><div class="theme-picker"><button id="theme-picker" aria-label="Pick another theme!"><img src="../../../brush.svg" width="18" alt="Pick another theme!"></button><div id="theme-choices"></div></div><script src="../../../theme.js"></script><nav class="sub"><form class="search-form"><div class="search-container"><div><select id="crate-search"><option value="All crates">All crates</option></select><input class="search-input" name="search" disabled autocomplete="off" spellcheck="false" placeholder="Click or press ‘S’ to search, ‘?’ for more options…" type="search"></div><span class="help-button">?</span>
+                <a id="settings-menu" href="../../../settings.html"><img src="../../../wheel.svg" width="18" alt="Change settings"></a></div></form></nav><section id="main" class="content"><pre class="line-numbers"><span id="1">   1</span>
 <span id="2">   2</span>
 <span id="3">   3</span>
 <span id="4">   4</span>
@@ -4378,7 +4379,7 @@
     <span class="ident">I</span>: <span class="ident">interrupt_support</span>::<span class="ident">Interruptee</span>,
 {
     <span class="attribute">#[<span class="ident">inline</span>]</span>
-    <span class="kw">fn</span> <span class="ident">aborted</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">bool</span> {
+    <span class="kw">fn</span> <span class="ident">aborted</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-&gt;</span> <span class="ident">bool</span> {
         <span class="self">self</span>.<span class="number">0</span>.<span class="ident">was_interrupted</span>()
     }
 }
@@ -4389,7 +4390,7 @@
 }
 
 <span class="kw">impl</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span><span class="op">&gt;</span> <span class="ident">BookmarksStore</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span><span class="op">&gt;</span> {
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">new</span>(<span class="ident">db</span>: <span class="kw-2">&amp;</span><span class="lifetime">&#39;a</span> <span class="ident">PlacesDb</span>, <span class="ident">interruptee</span>: <span class="kw-2">&amp;</span><span class="lifetime">&#39;a</span> <span class="ident">SqlInterruptScope</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="self">Self</span> {
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">new</span>(<span class="ident">db</span>: <span class="kw-2">&amp;</span><span class="lifetime">&#39;a</span> <span class="ident">PlacesDb</span>, <span class="ident">interruptee</span>: <span class="kw-2">&amp;</span><span class="lifetime">&#39;a</span> <span class="ident">SqlInterruptScope</span>) <span class="op">-&gt;</span> <span class="self">Self</span> {
         <span class="macro">assert_eq</span><span class="macro">!</span>(<span class="ident">db</span>.<span class="ident">conn_type</span>(), <span class="ident">ConnectionType</span>::<span class="ident">Sync</span>);
         <span class="self">Self</span> { <span class="ident">db</span>, <span class="ident">interruptee</span> }
     }
@@ -4398,7 +4399,7 @@
         <span class="kw-2">&amp;</span><span class="self">self</span>,
         <span class="ident">inbound</span>: <span class="ident">IncomingChangeset</span>,
         <span class="ident">incoming_telemetry</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">telemetry</span>::<span class="ident">EngineIncoming</span>,
-    ) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">ServerTimestamp</span><span class="op">&gt;</span> {
+    ) <span class="op">-&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">ServerTimestamp</span><span class="op">&gt;</span> {
         <span class="kw">let</span> <span class="ident">timestamp</span> <span class="op">=</span> <span class="ident">inbound</span>.<span class="ident">timestamp</span>;
         <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">tx</span> <span class="op">=</span> <span class="self">self</span>.<span class="ident">db</span>.<span class="ident">begin_transaction</span>()<span class="question-mark">?</span>;
 
@@ -4423,7 +4424,7 @@
         <span class="prelude-val">Ok</span>(<span class="ident">timestamp</span>)
     }
 
-    <span class="kw">fn</span> <span class="ident">has_changes</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">bool</span><span class="op">&gt;</span> {
+    <span class="kw">fn</span> <span class="ident">has_changes</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">bool</span><span class="op">&gt;</span> {
         <span class="comment">// In the first subquery, we check incoming items with needsMerge = true</span>
         <span class="comment">// except the tombstones who don&#39;t correspond to any local bookmark because</span>
         <span class="comment">// we don&#39;t store them yet, hence never &quot;merged&quot; (see bug 1343103).</span>
@@ -4453,7 +4454,7 @@
             .<span class="ident">try_query_row</span>(
                 <span class="kw-2">&amp;</span><span class="ident">sql</span>,
                 <span class="kw-2">&amp;</span>[],
-                <span class="op">|</span><span class="ident">row</span><span class="op">|</span> <span class="op">-</span><span class="op">&gt;</span> <span class="ident">rusqlite</span>::<span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="kw">_</span><span class="op">&gt;</span> { <span class="prelude-val">Ok</span>(<span class="ident">row</span>.<span class="ident">get</span>::<span class="op">&lt;</span><span class="kw">_</span>, <span class="ident">bool</span><span class="op">&gt;</span>(<span class="number">0</span>)<span class="question-mark">?</span>) },
+                <span class="op">|</span><span class="ident">row</span><span class="op">|</span> <span class="op">-&gt;</span> <span class="ident">rusqlite</span>::<span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="kw">_</span><span class="op">&gt;</span> { <span class="prelude-val">Ok</span>(<span class="ident">row</span>.<span class="ident">get</span>::<span class="op">&lt;</span><span class="kw">_</span>, <span class="ident">bool</span><span class="op">&gt;</span>(<span class="number">0</span>)<span class="question-mark">?</span>) },
                 <span class="bool-val">false</span>,
             )<span class="question-mark">?</span>
             .<span class="ident">unwrap_or</span>(<span class="bool-val">false</span>))
@@ -4469,13 +4470,13 @@
         <span class="kw-2">&amp;</span><span class="self">self</span>,
         <span class="ident">now</span>: <span class="ident">Timestamp</span>,
         <span class="ident">ops</span>: <span class="kw-2">&amp;</span><span class="ident">CompletionOps</span><span class="op">&lt;</span><span class="lifetime">&#39;t</span><span class="op">&gt;</span>,
-    ) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span>()<span class="op">&gt;</span> {
+    ) <span class="op">-&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span>()<span class="op">&gt;</span> {
         <span class="comment">// Build a table of new and updated items.</span>
         <span class="ident">log</span>::<span class="macro">debug</span><span class="macro">!</span>(<span class="string">&quot;Staging apply remote item ops&quot;</span>);
         <span class="ident">sql_support</span>::<span class="ident">each_sized_chunk</span>(
             <span class="kw-2">&amp;</span><span class="ident">ops</span>.<span class="ident">apply_remote_items</span>,
             <span class="ident">sql_support</span>::<span class="ident">default_max_variable_number</span>() <span class="op">/</span> <span class="number">3</span>,
-            <span class="op">|</span><span class="ident">chunk</span>, <span class="kw">_</span><span class="op">|</span> <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span>()<span class="op">&gt;</span> {
+            <span class="op">|</span><span class="ident">chunk</span>, <span class="kw">_</span><span class="op">|</span> <span class="op">-&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span>()<span class="op">&gt;</span> {
                 <span class="comment">// CTEs in `WITH` clauses aren&#39;t indexed, so this query needs a</span>
                 <span class="comment">// full table scan on `ops`. But that&#39;s okay; a separate temp</span>
                 <span class="comment">// table for ops would also need a full scan. Note that we need</span>
@@ -4544,7 +4545,7 @@
         <span class="ident">sql_support</span>::<span class="ident">each_sized_chunk</span>(
             <span class="kw-2">&amp;</span><span class="ident">ops</span>.<span class="ident">change_guids</span>,
             <span class="ident">sql_support</span>::<span class="ident">default_max_variable_number</span>() <span class="op">/</span> <span class="number">2</span>,
-            <span class="op">|</span><span class="ident">chunk</span>, <span class="kw">_</span><span class="op">|</span> <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span>()<span class="op">&gt;</span> {
+            <span class="op">|</span><span class="ident">chunk</span>, <span class="kw">_</span><span class="op">|</span> <span class="op">-&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span>()<span class="op">&gt;</span> {
                 <span class="kw">let</span> <span class="ident">sql</span> <span class="op">=</span> <span class="macro">format</span><span class="macro">!</span>(
                     <span class="string">&quot;INSERT INTO changeGuidOps(localGuid, mergedGuid,
                                                syncStatus, level, lastModified)
@@ -4590,7 +4591,7 @@
         <span class="ident">sql_support</span>::<span class="ident">each_sized_chunk</span>(
             <span class="kw-2">&amp;</span><span class="ident">ops</span>.<span class="ident">apply_new_local_structure</span>,
             <span class="ident">sql_support</span>::<span class="ident">default_max_variable_number</span>() <span class="op">/</span> <span class="number">2</span>,
-            <span class="op">|</span><span class="ident">chunk</span>, <span class="kw">_</span><span class="op">|</span> <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span>()<span class="op">&gt;</span> {
+            <span class="op">|</span><span class="ident">chunk</span>, <span class="kw">_</span><span class="op">|</span> <span class="op">-&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span>()<span class="op">&gt;</span> {
                 <span class="kw">let</span> <span class="ident">sql</span> <span class="op">=</span> <span class="macro">format</span><span class="macro">!</span>(
                     <span class="string">&quot;INSERT INTO applyNewLocalStructureOps(
                          mergedGuid, mergedParentGuid, position, level,
@@ -4623,7 +4624,7 @@
         <span class="ident">sql_support</span>::<span class="ident">each_chunk_mapped</span>(
             <span class="kw-2">&amp;</span><span class="ident">ops</span>.<span class="ident">delete_local_tombstones</span>,
             <span class="op">|</span><span class="ident">op</span><span class="op">|</span> <span class="ident">op</span>.<span class="ident">guid</span>().<span class="ident">as_str</span>(),
-            <span class="op">|</span><span class="ident">chunk</span>, <span class="kw">_</span><span class="op">|</span> <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span>()<span class="op">&gt;</span> {
+            <span class="op">|</span><span class="ident">chunk</span>, <span class="kw">_</span><span class="op">|</span> <span class="op">-&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span>()<span class="op">&gt;</span> {
                 <span class="self">self</span>.<span class="ident">interruptee</span>.<span class="ident">err_if_interrupted</span>()<span class="question-mark">?</span>;
                 <span class="self">self</span>.<span class="ident">db</span>.<span class="ident">execute</span>(
                     <span class="kw-2">&amp;</span><span class="macro">format</span><span class="macro">!</span>(
@@ -4641,7 +4642,7 @@
         <span class="ident">sql_support</span>::<span class="ident">each_chunk_mapped</span>(
             <span class="kw-2">&amp;</span><span class="ident">ops</span>.<span class="ident">insert_local_tombstones</span>,
             <span class="op">|</span><span class="ident">op</span><span class="op">|</span> <span class="ident">op</span>.<span class="ident">remote_node</span>().<span class="ident">guid</span>.<span class="ident">as_str</span>().<span class="ident">to_owned</span>(),
-            <span class="op">|</span><span class="ident">chunk</span>, <span class="kw">_</span><span class="op">|</span> <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span>()<span class="op">&gt;</span> {
+            <span class="op">|</span><span class="ident">chunk</span>, <span class="kw">_</span><span class="op">|</span> <span class="op">-&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span>()<span class="op">&gt;</span> {
                 <span class="self">self</span>.<span class="ident">interruptee</span>.<span class="ident">err_if_interrupted</span>()<span class="question-mark">?</span>;
                 <span class="self">self</span>.<span class="ident">db</span>.<span class="ident">execute</span>(
                     <span class="kw-2">&amp;</span><span class="macro">format</span><span class="macro">!</span>(
@@ -4663,7 +4664,7 @@
         <span class="ident">sql_support</span>::<span class="ident">each_chunk_mapped</span>(
             <span class="kw-2">&amp;</span><span class="ident">ops</span>.<span class="ident">delete_local_items</span>,
             <span class="op">|</span><span class="ident">op</span><span class="op">|</span> <span class="ident">op</span>.<span class="ident">local_node</span>().<span class="ident">guid</span>.<span class="ident">as_str</span>().<span class="ident">to_owned</span>(),
-            <span class="op">|</span><span class="ident">chunk</span>, <span class="kw">_</span><span class="op">|</span> <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span>()<span class="op">&gt;</span> {
+            <span class="op">|</span><span class="ident">chunk</span>, <span class="kw">_</span><span class="op">|</span> <span class="op">-&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span>()<span class="op">&gt;</span> {
                 <span class="self">self</span>.<span class="ident">interruptee</span>.<span class="ident">err_if_interrupted</span>()<span class="question-mark">?</span>;
                 <span class="self">self</span>.<span class="ident">db</span>.<span class="ident">execute</span>(
                     <span class="kw-2">&amp;</span><span class="macro">format</span><span class="macro">!</span>(
@@ -4687,7 +4688,7 @@
         <span class="ident">sql_support</span>::<span class="ident">each_chunk_mapped</span>(
             <span class="kw-2">&amp;</span><span class="ident">ops</span>.<span class="ident">delete_local_items</span>,
             <span class="op">|</span><span class="ident">op</span><span class="op">|</span> <span class="ident">op</span>.<span class="ident">local_node</span>().<span class="ident">guid</span>.<span class="ident">as_str</span>().<span class="ident">to_owned</span>(),
-            <span class="op">|</span><span class="ident">chunk</span>, <span class="kw">_</span><span class="op">|</span> <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span>()<span class="op">&gt;</span> {
+            <span class="op">|</span><span class="ident">chunk</span>, <span class="kw">_</span><span class="op">|</span> <span class="op">-&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span>()<span class="op">&gt;</span> {
                 <span class="self">self</span>.<span class="ident">interruptee</span>.<span class="ident">err_if_interrupted</span>()<span class="question-mark">?</span>;
                 <span class="self">self</span>.<span class="ident">db</span>.<span class="ident">execute</span>(
                     <span class="kw-2">&amp;</span><span class="macro">format</span><span class="macro">!</span>(
@@ -4718,7 +4719,7 @@
         <span class="ident">sql_support</span>::<span class="ident">each_chunk_mapped</span>(
             <span class="kw-2">&amp;</span><span class="ident">ops</span>.<span class="ident">set_local_merged</span>,
             <span class="op">|</span><span class="ident">op</span><span class="op">|</span> <span class="ident">op</span>.<span class="ident">merged_node</span>.<span class="ident">guid</span>.<span class="ident">as_str</span>(),
-            <span class="op">|</span><span class="ident">chunk</span>, <span class="kw">_</span><span class="op">|</span> <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span>()<span class="op">&gt;</span> {
+            <span class="op">|</span><span class="ident">chunk</span>, <span class="kw">_</span><span class="op">|</span> <span class="op">-&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span>()<span class="op">&gt;</span> {
                 <span class="self">self</span>.<span class="ident">interruptee</span>.<span class="ident">err_if_interrupted</span>()<span class="question-mark">?</span>;
                 <span class="self">self</span>.<span class="ident">db</span>.<span class="ident">execute</span>(
                     <span class="kw-2">&amp;</span><span class="macro">format</span><span class="macro">!</span>(
@@ -4737,7 +4738,7 @@
         <span class="ident">sql_support</span>::<span class="ident">each_chunk_mapped</span>(
             <span class="kw-2">&amp;</span><span class="ident">ops</span>.<span class="ident">set_local_unmerged</span>,
             <span class="op">|</span><span class="ident">op</span><span class="op">|</span> <span class="ident">op</span>.<span class="ident">merged_node</span>.<span class="ident">guid</span>.<span class="ident">as_str</span>(),
-            <span class="op">|</span><span class="ident">chunk</span>, <span class="kw">_</span><span class="op">|</span> <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span>()<span class="op">&gt;</span> {
+            <span class="op">|</span><span class="ident">chunk</span>, <span class="kw">_</span><span class="op">|</span> <span class="op">-&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span>()<span class="op">&gt;</span> {
                 <span class="self">self</span>.<span class="ident">interruptee</span>.<span class="ident">err_if_interrupted</span>()<span class="question-mark">?</span>;
                 <span class="self">self</span>.<span class="ident">db</span>.<span class="ident">execute</span>(
                     <span class="kw-2">&amp;</span><span class="macro">format</span><span class="macro">!</span>(
@@ -4756,7 +4757,7 @@
         <span class="ident">sql_support</span>::<span class="ident">each_chunk_mapped</span>(
             <span class="kw-2">&amp;</span><span class="ident">ops</span>.<span class="ident">set_remote_merged</span>,
             <span class="op">|</span><span class="ident">op</span><span class="op">|</span> <span class="ident">op</span>.<span class="ident">guid</span>().<span class="ident">as_str</span>(),
-            <span class="op">|</span><span class="ident">chunk</span>, <span class="kw">_</span><span class="op">|</span> <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span>()<span class="op">&gt;</span> {
+            <span class="op">|</span><span class="ident">chunk</span>, <span class="kw">_</span><span class="op">|</span> <span class="op">-&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span>()<span class="op">&gt;</span> {
                 <span class="self">self</span>.<span class="ident">interruptee</span>.<span class="ident">err_if_interrupted</span>()<span class="question-mark">?</span>;
                 <span class="self">self</span>.<span class="ident">db</span>.<span class="ident">execute</span>(
                     <span class="kw-2">&amp;</span><span class="macro">format</span><span class="macro">!</span>(
@@ -4774,7 +4775,7 @@
         <span class="prelude-val">Ok</span>(())
     }
 
-    <span class="kw">fn</span> <span class="ident">apply_remote_items</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">now</span>: <span class="ident">Timestamp</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span>()<span class="op">&gt;</span> {
+    <span class="kw">fn</span> <span class="ident">apply_remote_items</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">now</span>: <span class="ident">Timestamp</span>) <span class="op">-&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span>()<span class="op">&gt;</span> {
         <span class="comment">// Remove all keywords from old and new URLs, and remove new keywords</span>
         <span class="comment">// from all existing URLs. The `NOT NULL` conditions are important; they</span>
         <span class="comment">// ensure that SQLite uses our partial indexes on `itemsToApply`,</span>
@@ -4890,7 +4891,7 @@
         <span class="kw-2">&amp;</span><span class="self">self</span>,
         <span class="ident">upload_items</span>: <span class="kw-2">&amp;</span>[<span class="ident">UploadItem</span><span class="op">&lt;</span><span class="lifetime">&#39;_</span><span class="op">&gt;</span>],
         <span class="ident">upload_tombstones</span>: <span class="kw-2">&amp;</span>[<span class="ident">UploadTombstone</span><span class="op">&lt;</span><span class="lifetime">&#39;_</span><span class="op">&gt;</span>],
-    ) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span>()<span class="op">&gt;</span> {
+    ) <span class="op">-&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span>()<span class="op">&gt;</span> {
         <span class="ident">log</span>::<span class="macro">debug</span><span class="macro">!</span>(<span class="string">&quot;Cleaning up staged items left from last sync&quot;</span>);
         <span class="self">self</span>.<span class="ident">interruptee</span>.<span class="ident">err_if_interrupted</span>()<span class="question-mark">?</span>;
         <span class="self">self</span>.<span class="ident">db</span>.<span class="ident">execute_batch</span>(<span class="string">&quot;DELETE FROM itemsToUpload&quot;</span>)<span class="question-mark">?</span>;
@@ -4915,7 +4916,7 @@
         <span class="ident">sql_support</span>::<span class="ident">each_chunk_mapped</span>(
             <span class="ident">upload_items</span>,
             <span class="op">|</span><span class="ident">op</span><span class="op">|</span> <span class="ident">op</span>.<span class="ident">merged_node</span>.<span class="ident">guid</span>.<span class="ident">as_str</span>(),
-            <span class="op">|</span><span class="ident">chunk</span>, <span class="kw">_</span><span class="op">|</span> <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span>()<span class="op">&gt;</span> {
+            <span class="op">|</span><span class="ident">chunk</span>, <span class="kw">_</span><span class="op">|</span> <span class="op">-&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span>()<span class="op">&gt;</span> {
                 <span class="kw">let</span> <span class="ident">sql</span> <span class="op">=</span> <span class="macro">format</span><span class="macro">!</span>(
                     <span class="string">&quot;INSERT OR IGNORE INTO itemsToUpload(id, guid, syncChangeCounter,
                                                       parentGuid, parentTitle,
@@ -4960,7 +4961,7 @@
         <span class="ident">sql_support</span>::<span class="ident">each_chunk_mapped</span>(
             <span class="ident">upload_tombstones</span>,
             <span class="op">|</span><span class="ident">op</span><span class="op">|</span> <span class="ident">op</span>.<span class="ident">guid</span>().<span class="ident">as_str</span>(),
-            <span class="op">|</span><span class="ident">chunk</span>, <span class="kw">_</span><span class="op">|</span> <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span>()<span class="op">&gt;</span> {
+            <span class="op">|</span><span class="ident">chunk</span>, <span class="kw">_</span><span class="op">|</span> <span class="op">-&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span>()<span class="op">&gt;</span> {
                 <span class="self">self</span>.<span class="ident">interruptee</span>.<span class="ident">err_if_interrupted</span>()<span class="question-mark">?</span>;
                 <span class="self">self</span>.<span class="ident">db</span>.<span class="ident">execute</span>(
                     <span class="kw-2">&amp;</span><span class="macro">format</span><span class="macro">!</span>(
@@ -4983,11 +4984,11 @@
     }
 
     <span class="doccomment">/// Inflates Sync records for all staged outgoing items.</span>
-    <span class="kw">fn</span> <span class="ident">fetch_outgoing_records</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">timestamp</span>: <span class="ident">ServerTimestamp</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">OutgoingChangeset</span><span class="op">&gt;</span> {
+    <span class="kw">fn</span> <span class="ident">fetch_outgoing_records</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">timestamp</span>: <span class="ident">ServerTimestamp</span>) <span class="op">-&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">OutgoingChangeset</span><span class="op">&gt;</span> {
         <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">outgoing</span> <span class="op">=</span> <span class="ident">OutgoingChangeset</span>::<span class="ident">new</span>(<span class="self">self</span>.<span class="ident">collection_name</span>(), <span class="ident">timestamp</span>);
-        <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">child_record_ids_by_local_parent_id</span>: <span class="ident">HashMap</span><span class="op">&lt;</span><span class="ident">i64</span>, <span class="ident">Vec</span><span class="op">&lt;</span><span class="ident">BookmarkRecordId</span><span class="op">&gt;</span><span class="op">&gt;</span> <span class="op">=</span>
+        <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">child_record_ids_by_local_parent_id</span>: <span class="ident">HashMap</span><span class="op">&lt;</span><span class="ident">i64</span>, <span class="ident">Vec</span><span class="op">&lt;</span><span class="ident">BookmarkRecordId</span><span class="op">&gt;&gt;</span> <span class="op">=</span>
             <span class="ident">HashMap</span>::<span class="ident">new</span>();
-        <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">tags_by_local_id</span>: <span class="ident">HashMap</span><span class="op">&lt;</span><span class="ident">i64</span>, <span class="ident">Vec</span><span class="op">&lt;</span><span class="ident">String</span><span class="op">&gt;</span><span class="op">&gt;</span> <span class="op">=</span> <span class="ident">HashMap</span>::<span class="ident">new</span>();
+        <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">tags_by_local_id</span>: <span class="ident">HashMap</span><span class="op">&lt;</span><span class="ident">i64</span>, <span class="ident">Vec</span><span class="op">&lt;</span><span class="ident">String</span><span class="op">&gt;&gt;</span> <span class="op">=</span> <span class="ident">HashMap</span>::<span class="ident">new</span>();
 
         <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">stmt</span> <span class="op">=</span> <span class="self">self</span>.<span class="ident">db</span>.<span class="ident">prepare</span>(
             <span class="string">&quot;SELECT parentId, guid FROM structureToUpload
@@ -5035,7 +5036,7 @@
             <span class="kw">let</span> <span class="ident">parent_title</span> <span class="op">=</span> <span class="ident">row</span>.<span class="ident">get</span>::<span class="op">&lt;</span><span class="kw">_</span>, <span class="ident">String</span><span class="op">&gt;</span>(<span class="string">&quot;parentTitle&quot;</span>)<span class="question-mark">?</span>;
             <span class="kw">let</span> <span class="ident">date_added</span> <span class="op">=</span> <span class="ident">row</span>.<span class="ident">get</span>::<span class="op">&lt;</span><span class="kw">_</span>, <span class="ident">i64</span><span class="op">&gt;</span>(<span class="string">&quot;dateAdded&quot;</span>)<span class="question-mark">?</span>;
             <span class="kw">let</span> <span class="ident">record</span>: <span class="ident">BookmarkItemRecord</span> <span class="op">=</span> <span class="kw">match</span> <span class="ident">SyncedBookmarkKind</span>::<span class="ident">from_u8</span>(<span class="ident">row</span>.<span class="ident">get</span>(<span class="string">&quot;kind&quot;</span>)<span class="question-mark">?</span>)<span class="question-mark">?</span> {
-                <span class="ident">SyncedBookmarkKind</span>::<span class="ident">Bookmark</span> <span class="op">=</span><span class="op">&gt;</span> {
+                <span class="ident">SyncedBookmarkKind</span>::<span class="ident">Bookmark</span> <span class="op">=&gt;</span> {
                     <span class="kw">let</span> <span class="ident">local_id</span> <span class="op">=</span> <span class="ident">row</span>.<span class="ident">get</span>::<span class="op">&lt;</span><span class="kw">_</span>, <span class="ident">i64</span><span class="op">&gt;</span>(<span class="string">&quot;id&quot;</span>)<span class="question-mark">?</span>;
                     <span class="kw">let</span> <span class="ident">title</span> <span class="op">=</span> <span class="ident">row</span>.<span class="ident">get</span>::<span class="op">&lt;</span><span class="kw">_</span>, <span class="ident">String</span><span class="op">&gt;</span>(<span class="string">&quot;title&quot;</span>)<span class="question-mark">?</span>;
                     <span class="kw">let</span> <span class="ident">url</span> <span class="op">=</span> <span class="ident">row</span>.<span class="ident">get</span>::<span class="op">&lt;</span><span class="kw">_</span>, <span class="ident">String</span><span class="op">&gt;</span>(<span class="string">&quot;url&quot;</span>)<span class="question-mark">?</span>;
@@ -5047,12 +5048,12 @@
                         <span class="ident">has_dupe</span>: <span class="bool-val">true</span>,
                         <span class="ident">title</span>: <span class="prelude-val">Some</span>(<span class="ident">title</span>),
                         <span class="ident">url</span>: <span class="prelude-val">Some</span>(<span class="ident">url</span>),
-                        <span class="ident">keyword</span>: <span class="ident">row</span>.<span class="ident">get</span>::<span class="op">&lt;</span><span class="kw">_</span>, <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">String</span><span class="op">&gt;</span><span class="op">&gt;</span>(<span class="string">&quot;keyword&quot;</span>)<span class="question-mark">?</span>,
+                        <span class="ident">keyword</span>: <span class="ident">row</span>.<span class="ident">get</span>::<span class="op">&lt;</span><span class="kw">_</span>, <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">String</span><span class="op">&gt;&gt;</span>(<span class="string">&quot;keyword&quot;</span>)<span class="question-mark">?</span>,
                         <span class="ident">tags</span>: <span class="ident">tags_by_local_id</span>.<span class="ident">remove</span>(<span class="kw-2">&amp;</span><span class="ident">local_id</span>).<span class="ident">unwrap_or_default</span>(),
                     }
                     .<span class="ident">into</span>()
                 }
-                <span class="ident">SyncedBookmarkKind</span>::<span class="ident">Query</span> <span class="op">=</span><span class="op">&gt;</span> {
+                <span class="ident">SyncedBookmarkKind</span>::<span class="ident">Query</span> <span class="op">=&gt;</span> {
                     <span class="kw">let</span> <span class="ident">title</span> <span class="op">=</span> <span class="ident">row</span>.<span class="ident">get</span>::<span class="op">&lt;</span><span class="kw">_</span>, <span class="ident">String</span><span class="op">&gt;</span>(<span class="string">&quot;title&quot;</span>)<span class="question-mark">?</span>;
                     <span class="kw">let</span> <span class="ident">url</span> <span class="op">=</span> <span class="ident">row</span>.<span class="ident">get</span>::<span class="op">&lt;</span><span class="kw">_</span>, <span class="ident">String</span><span class="op">&gt;</span>(<span class="string">&quot;url&quot;</span>)<span class="question-mark">?</span>;
                     <span class="ident">QueryRecord</span> {
@@ -5067,7 +5068,7 @@
                     }
                     .<span class="ident">into</span>()
                 }
-                <span class="ident">SyncedBookmarkKind</span>::<span class="ident">Folder</span> <span class="op">=</span><span class="op">&gt;</span> {
+                <span class="ident">SyncedBookmarkKind</span>::<span class="ident">Folder</span> <span class="op">=&gt;</span> {
                     <span class="kw">let</span> <span class="ident">title</span> <span class="op">=</span> <span class="ident">row</span>.<span class="ident">get</span>::<span class="op">&lt;</span><span class="kw">_</span>, <span class="ident">String</span><span class="op">&gt;</span>(<span class="string">&quot;title&quot;</span>)<span class="question-mark">?</span>;
                     <span class="kw">let</span> <span class="ident">local_id</span> <span class="op">=</span> <span class="ident">row</span>.<span class="ident">get</span>::<span class="op">&lt;</span><span class="kw">_</span>, <span class="ident">i64</span><span class="op">&gt;</span>(<span class="string">&quot;id&quot;</span>)<span class="question-mark">?</span>;
                     <span class="kw">let</span> <span class="ident">children</span> <span class="op">=</span> <span class="ident">child_record_ids_by_local_parent_id</span>
@@ -5084,8 +5085,8 @@
                     }
                     .<span class="ident">into</span>()
                 }
-                <span class="ident">SyncedBookmarkKind</span>::<span class="ident">Livemark</span> <span class="op">=</span><span class="op">&gt;</span> <span class="kw">continue</span>,
-                <span class="ident">SyncedBookmarkKind</span>::<span class="ident">Separator</span> <span class="op">=</span><span class="op">&gt;</span> {
+                <span class="ident">SyncedBookmarkKind</span>::<span class="ident">Livemark</span> <span class="op">=&gt;</span> <span class="kw">continue</span>,
+                <span class="ident">SyncedBookmarkKind</span>::<span class="ident">Separator</span> <span class="op">=&gt;</span> {
                     <span class="kw">let</span> <span class="ident">position</span> <span class="op">=</span> <span class="ident">row</span>.<span class="ident">get</span>::<span class="op">&lt;</span><span class="kw">_</span>, <span class="ident">i64</span><span class="op">&gt;</span>(<span class="string">&quot;position&quot;</span>)<span class="question-mark">?</span>;
                     <span class="ident">SeparatorRecord</span> {
                         <span class="ident">record_id</span>: <span class="ident">guid</span>.<span class="ident">into</span>(),
@@ -5111,7 +5112,7 @@
         <span class="kw-2">&amp;</span><span class="self">self</span>,
         <span class="ident">uploaded_at</span>: <span class="ident">ServerTimestamp</span>,
         <span class="ident">records_synced</span>: <span class="ident">Vec</span><span class="op">&lt;</span><span class="ident">SyncGuid</span><span class="op">&gt;</span>,
-    ) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span>()<span class="op">&gt;</span> {
+    ) <span class="op">-&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span>()<span class="op">&gt;</span> {
         <span class="comment">// Flag all successfully synced records as uploaded. This `UPDATE` fires</span>
         <span class="comment">// the `pushUploadedChanges` trigger, which updates local change</span>
         <span class="comment">// counters and writes the items back to the synced bookmarks table.</span>
@@ -5120,8 +5121,8 @@
         <span class="kw">let</span> <span class="ident">guids</span> <span class="op">=</span> <span class="ident">records_synced</span>
             .<span class="ident">into_iter</span>()
             .<span class="ident">map</span>(<span class="op">|</span><span class="ident">id</span><span class="op">|</span> <span class="ident">BookmarkRecordId</span>::<span class="ident">from_payload_id</span>(<span class="ident">id</span>).<span class="ident">into</span>())
-            .<span class="ident">collect</span>::<span class="op">&lt;</span><span class="ident">Vec</span><span class="op">&lt;</span><span class="ident">SyncGuid</span><span class="op">&gt;</span><span class="op">&gt;</span>();
-        <span class="ident">sql_support</span>::<span class="ident">each_chunk</span>(<span class="kw-2">&amp;</span><span class="ident">guids</span>, <span class="op">|</span><span class="ident">chunk</span>, <span class="kw">_</span><span class="op">|</span> <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span>()<span class="op">&gt;</span> {
+            .<span class="ident">collect</span>::<span class="op">&lt;</span><span class="ident">Vec</span><span class="op">&lt;</span><span class="ident">SyncGuid</span><span class="op">&gt;&gt;</span>();
+        <span class="ident">sql_support</span>::<span class="ident">each_chunk</span>(<span class="kw-2">&amp;</span><span class="ident">guids</span>, <span class="op">|</span><span class="ident">chunk</span>, <span class="kw">_</span><span class="op">|</span> <span class="op">-&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span>()<span class="op">&gt;</span> {
             <span class="self">self</span>.<span class="ident">db</span>.<span class="ident">execute</span>(
                 <span class="kw-2">&amp;</span><span class="macro">format</span><span class="macro">!</span>(
                     <span class="string">&quot;UPDATE itemsToUpload SET
@@ -5152,7 +5153,7 @@
         <span class="prelude-val">Ok</span>(())
     }
 
-    <span class="kw">pub</span>(<span class="kw">crate</span>) <span class="kw">fn</span> <span class="ident">update_frecencies</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span>()<span class="op">&gt;</span> {
+    <span class="kw">pub</span>(<span class="kw">crate</span>) <span class="kw">fn</span> <span class="ident">update_frecencies</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span>()<span class="op">&gt;</span> {
         <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">tx</span> <span class="op">=</span> <span class="self">self</span>.<span class="ident">db</span>.<span class="ident">begin_transaction</span>()<span class="question-mark">?</span>;
 
         <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">frecencies</span> <span class="op">=</span> <span class="ident">Vec</span>::<span class="ident">with_capacity</span>(<span class="ident">MAX_FRECENCIES_TO_RECALCULATE_PER_CHUNK</span>);
@@ -5228,7 +5229,7 @@
 
 <span class="kw">impl</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span><span class="op">&gt;</span> <span class="ident">Store</span> <span class="kw">for</span> <span class="ident">BookmarksStore</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span><span class="op">&gt;</span> {
     <span class="attribute">#[<span class="ident">inline</span>]</span>
-    <span class="kw">fn</span> <span class="ident">collection_name</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">std</span>::<span class="ident">borrow</span>::<span class="ident">Cow</span><span class="op">&lt;</span><span class="lifetime">&#39;static</span>, <span class="ident">str</span><span class="op">&gt;</span> {
+    <span class="kw">fn</span> <span class="ident">collection_name</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-&gt;</span> <span class="ident">std</span>::<span class="ident">borrow</span>::<span class="ident">Cow</span><span class="op">&lt;</span><span class="lifetime">&#39;static</span>, <span class="ident">str</span><span class="op">&gt;</span> {
         <span class="string">&quot;bookmarks&quot;</span>.<span class="ident">into</span>()
     }
 
@@ -5236,7 +5237,7 @@
         <span class="kw-2">&amp;</span><span class="self">self</span>,
         <span class="ident">inbound</span>: <span class="ident">Vec</span><span class="op">&lt;</span><span class="ident">IncomingChangeset</span><span class="op">&gt;</span>,
         <span class="ident">telem</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">telemetry</span>::<span class="ident">Engine</span>,
-    ) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">anyhow</span>::<span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">OutgoingChangeset</span><span class="op">&gt;</span> {
+    ) <span class="op">-&gt;</span> <span class="ident">anyhow</span>::<span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">OutgoingChangeset</span><span class="op">&gt;</span> {
         <span class="macro">assert_eq</span><span class="macro">!</span>(<span class="ident">inbound</span>.<span class="ident">len</span>(), <span class="number">1</span>, <span class="string">&quot;bookmarks only requests one item&quot;</span>);
         <span class="kw">let</span> <span class="ident">inbound</span> <span class="op">=</span> <span class="ident">inbound</span>.<span class="ident">into_iter</span>().<span class="ident">next</span>().<span class="ident">unwrap</span>();
         <span class="comment">// Stage all incoming items.</span>
@@ -5262,7 +5263,7 @@
         <span class="kw-2">&amp;</span><span class="self">self</span>,
         <span class="ident">new_timestamp</span>: <span class="ident">ServerTimestamp</span>,
         <span class="ident">records_synced</span>: <span class="ident">Vec</span><span class="op">&lt;</span><span class="ident">SyncGuid</span><span class="op">&gt;</span>,
-    ) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">anyhow</span>::<span class="prelude-ty">Result</span><span class="op">&lt;</span>()<span class="op">&gt;</span> {
+    ) <span class="op">-&gt;</span> <span class="ident">anyhow</span>::<span class="prelude-ty">Result</span><span class="op">&lt;</span>()<span class="op">&gt;</span> {
         <span class="self">self</span>.<span class="ident">push_synced_items</span>(<span class="ident">new_timestamp</span>, <span class="ident">records_synced</span>)<span class="question-mark">?</span>;
         <span class="self">self</span>.<span class="ident">update_frecencies</span>()<span class="question-mark">?</span>;
         <span class="self">self</span>.<span class="ident">db</span>.<span class="ident">pragma_update</span>(<span class="prelude-val">None</span>, <span class="string">&quot;wal_checkpoint&quot;</span>, <span class="kw-2">&amp;</span><span class="string">&quot;PASSIVE&quot;</span>)<span class="question-mark">?</span>;
@@ -5272,10 +5273,10 @@
     <span class="kw">fn</span> <span class="ident">get_collection_requests</span>(
         <span class="kw-2">&amp;</span><span class="self">self</span>,
         <span class="ident">server_timestamp</span>: <span class="ident">ServerTimestamp</span>,
-    ) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">anyhow</span>::<span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">Vec</span><span class="op">&lt;</span><span class="ident">CollectionRequest</span><span class="op">&gt;</span><span class="op">&gt;</span> {
+    ) <span class="op">-&gt;</span> <span class="ident">anyhow</span>::<span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">Vec</span><span class="op">&lt;</span><span class="ident">CollectionRequest</span><span class="op">&gt;&gt;</span> {
         <span class="kw">let</span> <span class="ident">since</span> <span class="op">=</span>
             <span class="ident">ServerTimestamp</span>(<span class="ident">get_meta</span>::<span class="op">&lt;</span><span class="ident">i64</span><span class="op">&gt;</span>(<span class="self">self</span>.<span class="ident">db</span>, <span class="ident">LAST_SYNC_META_KEY</span>)<span class="question-mark">?</span>.<span class="ident">unwrap_or_default</span>());
-        <span class="prelude-val">Ok</span>(<span class="kw">if</span> <span class="ident">since</span> <span class="op">=</span><span class="op">=</span> <span class="ident">server_timestamp</span> {
+        <span class="prelude-val">Ok</span>(<span class="kw">if</span> <span class="ident">since</span> <span class="op">==</span> <span class="ident">server_timestamp</span> {
             <span class="macro">vec</span><span class="macro">!</span>[]
         } <span class="kw">else</span> {
             <span class="macro">vec</span><span class="macro">!</span>[<span class="ident">CollectionRequest</span>::<span class="ident">new</span>(<span class="self">self</span>.<span class="ident">collection_name</span>())
@@ -5284,7 +5285,7 @@
         })
     }
 
-    <span class="kw">fn</span> <span class="ident">get_sync_assoc</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">anyhow</span>::<span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">StoreSyncAssociation</span><span class="op">&gt;</span> {
+    <span class="kw">fn</span> <span class="ident">get_sync_assoc</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-&gt;</span> <span class="ident">anyhow</span>::<span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">StoreSyncAssociation</span><span class="op">&gt;</span> {
         <span class="kw">let</span> <span class="ident">global</span> <span class="op">=</span> <span class="ident">get_meta</span>(<span class="self">self</span>.<span class="ident">db</span>, <span class="ident">GLOBAL_SYNCID_META_KEY</span>)<span class="question-mark">?</span>;
         <span class="kw">let</span> <span class="ident">coll</span> <span class="op">=</span> <span class="ident">get_meta</span>(<span class="self">self</span>.<span class="ident">db</span>, <span class="ident">COLLECTION_SYNCID_META_KEY</span>)<span class="question-mark">?</span>;
         <span class="prelude-val">Ok</span>(<span class="kw">if</span> <span class="kw">let</span> (<span class="prelude-val">Some</span>(<span class="ident">global</span>), <span class="prelude-val">Some</span>(<span class="ident">coll</span>)) <span class="op">=</span> (<span class="ident">global</span>, <span class="ident">coll</span>) {
@@ -5294,7 +5295,7 @@
         })
     }
 
-    <span class="kw">fn</span> <span class="ident">reset</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">assoc</span>: <span class="kw-2">&amp;</span><span class="ident">StoreSyncAssociation</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">anyhow</span>::<span class="prelude-ty">Result</span><span class="op">&lt;</span>()<span class="op">&gt;</span> {
+    <span class="kw">fn</span> <span class="ident">reset</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">assoc</span>: <span class="kw-2">&amp;</span><span class="ident">StoreSyncAssociation</span>) <span class="op">-&gt;</span> <span class="ident">anyhow</span>::<span class="prelude-ty">Result</span><span class="op">&lt;</span>()<span class="op">&gt;</span> {
         <span class="ident">reset</span>(<span class="kw-2">&amp;</span><span class="self">self</span>.<span class="ident">db</span>, <span class="ident">assoc</span>)<span class="question-mark">?</span>;
         <span class="prelude-val">Ok</span>(())
     }
@@ -5305,7 +5306,7 @@
     <span class="doccomment">///</span>
     <span class="doccomment">/// Conceptually, the next sync will merge an empty local tree, and a full</span>
     <span class="doccomment">/// remote tree.</span>
-    <span class="kw">fn</span> <span class="ident">wipe</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">anyhow</span>::<span class="prelude-ty">Result</span><span class="op">&lt;</span>()<span class="op">&gt;</span> {
+    <span class="kw">fn</span> <span class="ident">wipe</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-&gt;</span> <span class="ident">anyhow</span>::<span class="prelude-ty">Result</span><span class="op">&lt;</span>()<span class="op">&gt;</span> {
         <span class="kw">let</span> <span class="ident">tx</span> <span class="op">=</span> <span class="self">self</span>.<span class="ident">db</span>.<span class="ident">begin_transaction</span>()<span class="question-mark">?</span>;
         <span class="kw">let</span> <span class="ident">sql</span> <span class="op">=</span> <span class="macro">format</span><span class="macro">!</span>(
             <span class="string">&quot;INSERT INTO moz_bookmarks_deleted(guid, dateRemoved)
@@ -5342,7 +5343,7 @@
 }
 
 <span class="kw">impl</span> <span class="ident">dogear</span>::<span class="ident">Driver</span> <span class="kw">for</span> <span class="ident">Driver</span> {
-    <span class="kw">fn</span> <span class="ident">generate_new_guid</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">_invalid_guid</span>: <span class="kw-2">&amp;</span><span class="ident">dogear</span>::<span class="ident">Guid</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">dogear</span>::<span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">dogear</span>::<span class="ident">Guid</span><span class="op">&gt;</span> {
+    <span class="kw">fn</span> <span class="ident">generate_new_guid</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">_invalid_guid</span>: <span class="kw-2">&amp;</span><span class="ident">dogear</span>::<span class="ident">Guid</span>) <span class="op">-&gt;</span> <span class="ident">dogear</span>::<span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">dogear</span>::<span class="ident">Guid</span><span class="op">&gt;</span> {
         <span class="prelude-val">Ok</span>(<span class="ident">SyncGuid</span>::<span class="ident">random</span>().<span class="ident">as_str</span>().<span class="ident">into</span>())
     }
 
@@ -5385,7 +5386,7 @@
 }
 
 <span class="kw">impl</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span><span class="op">&gt;</span> <span class="ident">Merger</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span><span class="op">&gt;</span> {
-    <span class="kw">pub</span>(<span class="kw">crate</span>) <span class="kw">fn</span> <span class="ident">new</span>(<span class="ident">store</span>: <span class="kw-2">&amp;</span><span class="lifetime">&#39;a</span> <span class="ident">BookmarksStore</span><span class="op">&lt;</span><span class="lifetime">&#39;_</span><span class="op">&gt;</span>, <span class="ident">remote_time</span>: <span class="ident">ServerTimestamp</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="self">Self</span> {
+    <span class="kw">pub</span>(<span class="kw">crate</span>) <span class="kw">fn</span> <span class="ident">new</span>(<span class="ident">store</span>: <span class="kw-2">&amp;</span><span class="lifetime">&#39;a</span> <span class="ident">BookmarksStore</span><span class="op">&lt;</span><span class="lifetime">&#39;_</span><span class="op">&gt;</span>, <span class="ident">remote_time</span>: <span class="ident">ServerTimestamp</span>) <span class="op">-&gt;</span> <span class="self">Self</span> {
         <span class="self">Self</span> {
             <span class="ident">store</span>,
             <span class="ident">remote_time</span>,
@@ -5400,7 +5401,7 @@
         <span class="ident">store</span>: <span class="kw-2">&amp;</span><span class="lifetime">&#39;a</span> <span class="ident">BookmarksStore</span><span class="op">&lt;</span><span class="lifetime">&#39;_</span><span class="op">&gt;</span>,
         <span class="ident">remote_time</span>: <span class="ident">ServerTimestamp</span>,
         <span class="ident">telem</span>: <span class="kw-2">&amp;</span><span class="lifetime">&#39;a</span> <span class="kw-2">mut</span> <span class="ident">telemetry</span>::<span class="ident">Engine</span>,
-    ) <span class="op">-</span><span class="op">&gt;</span> <span class="self">Self</span> {
+    ) <span class="op">-&gt;</span> <span class="self">Self</span> {
         <span class="self">Self</span> {
             <span class="ident">store</span>,
             <span class="ident">remote_time</span>,
@@ -5416,7 +5417,7 @@
         <span class="ident">store</span>: <span class="kw-2">&amp;</span><span class="lifetime">&#39;a</span> <span class="ident">BookmarksStore</span><span class="op">&lt;</span><span class="lifetime">&#39;_</span><span class="op">&gt;</span>,
         <span class="ident">remote_time</span>: <span class="ident">ServerTimestamp</span>,
         <span class="ident">local_time</span>: <span class="ident">Timestamp</span>,
-    ) <span class="op">-</span><span class="op">&gt;</span> <span class="self">Self</span> {
+    ) <span class="op">-&gt;</span> <span class="self">Self</span> {
         <span class="self">Self</span> {
             <span class="ident">store</span>,
             <span class="ident">remote_time</span>,
@@ -5435,7 +5436,7 @@
         <span class="self">self</span>.<span class="ident">external_transaction</span> <span class="op">=</span> <span class="ident">v</span>;
     }
 
-    <span class="kw">pub</span>(<span class="kw">crate</span>) <span class="kw">fn</span> <span class="ident">merge</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span>()<span class="op">&gt;</span> {
+    <span class="kw">pub</span>(<span class="kw">crate</span>) <span class="kw">fn</span> <span class="ident">merge</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>) <span class="op">-&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span>()<span class="op">&gt;</span> {
         <span class="kw">use</span> <span class="ident">dogear</span>::<span class="ident">Store</span>;
         <span class="kw">if</span> <span class="op">!</span><span class="self">self</span>.<span class="ident">store</span>.<span class="ident">has_changes</span>()<span class="question-mark">?</span> {
             <span class="kw">return</span> <span class="prelude-val">Ok</span>(());
@@ -5454,7 +5455,7 @@
     }
 
     <span class="doccomment">/// Prepares synced bookmarks for merging.</span>
-    <span class="kw">fn</span> <span class="ident">prepare</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span>()<span class="op">&gt;</span> {
+    <span class="kw">fn</span> <span class="ident">prepare</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span>()<span class="op">&gt;</span> {
         <span class="comment">// Sync and Fennec associate keywords with bookmarks, and don&#39;t sync</span>
         <span class="comment">// POST data; Rust Places associates them with URLs, and also doesn&#39;t</span>
         <span class="comment">// support POST data; Desktop associates keywords with (URL, POST data)</span>
@@ -5559,16 +5560,16 @@
     }
 
     <span class="doccomment">/// Creates a local tree item from a row in the `localItems` CTE.</span>
-    <span class="kw">fn</span> <span class="ident">local_row_to_item</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">row</span>: <span class="kw-2">&amp;</span><span class="ident">Row</span><span class="op">&lt;</span><span class="lifetime">&#39;_</span><span class="op">&gt;</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span>(<span class="ident">Item</span>, <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">Content</span><span class="op">&gt;</span>)<span class="op">&gt;</span> {
+    <span class="kw">fn</span> <span class="ident">local_row_to_item</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">row</span>: <span class="kw-2">&amp;</span><span class="ident">Row</span><span class="op">&lt;</span><span class="lifetime">&#39;_</span><span class="op">&gt;</span>) <span class="op">-&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span>(<span class="ident">Item</span>, <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">Content</span><span class="op">&gt;</span>)<span class="op">&gt;</span> {
         <span class="kw">let</span> <span class="ident">guid</span> <span class="op">=</span> <span class="ident">row</span>.<span class="ident">get</span>::<span class="op">&lt;</span><span class="kw">_</span>, <span class="ident">SyncGuid</span><span class="op">&gt;</span>(<span class="string">&quot;guid&quot;</span>)<span class="question-mark">?</span>;
-        <span class="kw">let</span> <span class="ident">url_href</span> <span class="op">=</span> <span class="ident">row</span>.<span class="ident">get</span>::<span class="op">&lt;</span><span class="kw">_</span>, <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">String</span><span class="op">&gt;</span><span class="op">&gt;</span>(<span class="string">&quot;url&quot;</span>)<span class="question-mark">?</span>;
+        <span class="kw">let</span> <span class="ident">url_href</span> <span class="op">=</span> <span class="ident">row</span>.<span class="ident">get</span>::<span class="op">&lt;</span><span class="kw">_</span>, <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">String</span><span class="op">&gt;&gt;</span>(<span class="string">&quot;url&quot;</span>)<span class="question-mark">?</span>;
         <span class="kw">let</span> <span class="ident">kind</span> <span class="op">=</span> <span class="kw">match</span> <span class="ident">row</span>.<span class="ident">get</span>::<span class="op">&lt;</span><span class="kw">_</span>, <span class="ident">BookmarkType</span><span class="op">&gt;</span>(<span class="string">&quot;type&quot;</span>)<span class="question-mark">?</span> {
-            <span class="ident">BookmarkType</span>::<span class="ident">Bookmark</span> <span class="op">=</span><span class="op">&gt;</span> <span class="kw">match</span> <span class="ident">url_href</span>.<span class="ident">as_ref</span>() {
-                <span class="prelude-val">Some</span>(<span class="ident">u</span>) <span class="kw">if</span> <span class="ident">u</span>.<span class="ident">starts_with</span>(<span class="string">&quot;place:&quot;</span>) <span class="op">=</span><span class="op">&gt;</span> <span class="ident">SyncedBookmarkKind</span>::<span class="ident">Query</span>,
-                <span class="kw">_</span> <span class="op">=</span><span class="op">&gt;</span> <span class="ident">SyncedBookmarkKind</span>::<span class="ident">Bookmark</span>,
+            <span class="ident">BookmarkType</span>::<span class="ident">Bookmark</span> <span class="op">=&gt;</span> <span class="kw">match</span> <span class="ident">url_href</span>.<span class="ident">as_ref</span>() {
+                <span class="prelude-val">Some</span>(<span class="ident">u</span>) <span class="kw">if</span> <span class="ident">u</span>.<span class="ident">starts_with</span>(<span class="string">&quot;place:&quot;</span>) <span class="op">=&gt;</span> <span class="ident">SyncedBookmarkKind</span>::<span class="ident">Query</span>,
+                <span class="kw">_</span> <span class="op">=&gt;</span> <span class="ident">SyncedBookmarkKind</span>::<span class="ident">Bookmark</span>,
             },
-            <span class="ident">BookmarkType</span>::<span class="ident">Folder</span> <span class="op">=</span><span class="op">&gt;</span> <span class="ident">SyncedBookmarkKind</span>::<span class="ident">Folder</span>,
-            <span class="ident">BookmarkType</span>::<span class="ident">Separator</span> <span class="op">=</span><span class="op">&gt;</span> <span class="ident">SyncedBookmarkKind</span>::<span class="ident">Separator</span>,
+            <span class="ident">BookmarkType</span>::<span class="ident">Folder</span> <span class="op">=&gt;</span> <span class="ident">SyncedBookmarkKind</span>::<span class="ident">Folder</span>,
+            <span class="ident">BookmarkType</span>::<span class="ident">Separator</span> <span class="op">=&gt;</span> <span class="ident">SyncedBookmarkKind</span>::<span class="ident">Separator</span>,
         };
         <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">item</span> <span class="op">=</span> <span class="ident">Item</span>::<span class="ident">new</span>(<span class="ident">guid</span>.<span class="ident">as_str</span>().<span class="ident">into</span>(), <span class="ident">kind</span>.<span class="ident">into</span>());
         <span class="comment">// Note that this doesn&#39;t account for local clock skew.</span>
@@ -5579,21 +5580,21 @@
         <span class="ident">item</span>.<span class="ident">age</span> <span class="op">=</span> <span class="ident">age</span>.<span class="ident">as_secs</span>() <span class="kw">as</span> <span class="ident">i64</span> <span class="op">*</span> <span class="number">1000</span> <span class="op">+</span> <span class="ident">i64</span>::<span class="ident">from</span>(<span class="ident">age</span>.<span class="ident">subsec_millis</span>());
         <span class="ident">item</span>.<span class="ident">needs_merge</span> <span class="op">=</span> <span class="ident">row</span>.<span class="ident">get</span>::<span class="op">&lt;</span><span class="kw">_</span>, <span class="ident">u32</span><span class="op">&gt;</span>(<span class="string">&quot;syncChangeCounter&quot;</span>)<span class="question-mark">?</span> <span class="op">&gt;</span> <span class="number">0</span>;
 
-        <span class="kw">let</span> <span class="ident">content</span> <span class="op">=</span> <span class="kw">if</span> <span class="ident">item</span>.<span class="ident">guid</span> <span class="op">=</span><span class="op">=</span> <span class="ident">dogear</span>::<span class="ident">ROOT_GUID</span> {
+        <span class="kw">let</span> <span class="ident">content</span> <span class="op">=</span> <span class="kw">if</span> <span class="ident">item</span>.<span class="ident">guid</span> <span class="op">==</span> <span class="ident">dogear</span>::<span class="ident">ROOT_GUID</span> {
             <span class="prelude-val">None</span>
         } <span class="kw">else</span> {
             <span class="kw">match</span> <span class="ident">row</span>.<span class="ident">get</span>::<span class="op">&lt;</span><span class="kw">_</span>, <span class="ident">SyncStatus</span><span class="op">&gt;</span>(<span class="string">&quot;syncStatus&quot;</span>)<span class="question-mark">?</span> {
-                <span class="ident">SyncStatus</span>::<span class="ident">Normal</span> <span class="op">=</span><span class="op">&gt;</span> <span class="prelude-val">None</span>,
-                <span class="kw">_</span> <span class="op">=</span><span class="op">&gt;</span> <span class="kw">match</span> <span class="ident">kind</span> {
-                    <span class="ident">SyncedBookmarkKind</span>::<span class="ident">Bookmark</span> <span class="op">|</span> <span class="ident">SyncedBookmarkKind</span>::<span class="ident">Query</span> <span class="op">=</span><span class="op">&gt;</span> {
+                <span class="ident">SyncStatus</span>::<span class="ident">Normal</span> <span class="op">=&gt;</span> <span class="prelude-val">None</span>,
+                <span class="kw">_</span> <span class="op">=&gt;</span> <span class="kw">match</span> <span class="ident">kind</span> {
+                    <span class="ident">SyncedBookmarkKind</span>::<span class="ident">Bookmark</span> <span class="op">|</span> <span class="ident">SyncedBookmarkKind</span>::<span class="ident">Query</span> <span class="op">=&gt;</span> {
                         <span class="kw">let</span> <span class="ident">title</span> <span class="op">=</span> <span class="ident">row</span>.<span class="ident">get</span>::<span class="op">&lt;</span><span class="kw">_</span>, <span class="ident">String</span><span class="op">&gt;</span>(<span class="string">&quot;title&quot;</span>)<span class="question-mark">?</span>;
                         <span class="ident">url_href</span>.<span class="ident">map</span>(<span class="op">|</span><span class="ident">url_href</span><span class="op">|</span> <span class="ident">Content</span>::<span class="ident">Bookmark</span> { <span class="ident">title</span>, <span class="ident">url_href</span> })
                     }
-                    <span class="ident">SyncedBookmarkKind</span>::<span class="ident">Folder</span> <span class="op">|</span> <span class="ident">SyncedBookmarkKind</span>::<span class="ident">Livemark</span> <span class="op">=</span><span class="op">&gt;</span> {
+                    <span class="ident">SyncedBookmarkKind</span>::<span class="ident">Folder</span> <span class="op">|</span> <span class="ident">SyncedBookmarkKind</span>::<span class="ident">Livemark</span> <span class="op">=&gt;</span> {
                         <span class="kw">let</span> <span class="ident">title</span> <span class="op">=</span> <span class="ident">row</span>.<span class="ident">get</span>::<span class="op">&lt;</span><span class="kw">_</span>, <span class="ident">String</span><span class="op">&gt;</span>(<span class="string">&quot;title&quot;</span>)<span class="question-mark">?</span>;
                         <span class="prelude-val">Some</span>(<span class="ident">Content</span>::<span class="ident">Folder</span> { <span class="ident">title</span> })
                     }
-                    <span class="ident">SyncedBookmarkKind</span>::<span class="ident">Separator</span> <span class="op">=</span><span class="op">&gt;</span> <span class="prelude-val">Some</span>(<span class="ident">Content</span>::<span class="ident">Separator</span>),
+                    <span class="ident">SyncedBookmarkKind</span>::<span class="ident">Separator</span> <span class="op">=&gt;</span> <span class="prelude-val">Some</span>(<span class="ident">Content</span>::<span class="ident">Separator</span>),
                 },
             }
         };
@@ -5602,7 +5603,7 @@
     }
 
     <span class="doccomment">/// Creates a remote tree item from a row in `moz_bookmarks_synced`.</span>
-    <span class="kw">fn</span> <span class="ident">remote_row_to_item</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">row</span>: <span class="kw-2">&amp;</span><span class="ident">Row</span><span class="op">&lt;</span><span class="lifetime">&#39;_</span><span class="op">&gt;</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span>(<span class="ident">Item</span>, <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">Content</span><span class="op">&gt;</span>)<span class="op">&gt;</span> {
+    <span class="kw">fn</span> <span class="ident">remote_row_to_item</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">row</span>: <span class="kw-2">&amp;</span><span class="ident">Row</span><span class="op">&lt;</span><span class="lifetime">&#39;_</span><span class="op">&gt;</span>) <span class="op">-&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span>(<span class="ident">Item</span>, <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">Content</span><span class="op">&gt;</span>)<span class="op">&gt;</span> {
         <span class="kw">let</span> <span class="ident">guid</span> <span class="op">=</span> <span class="ident">row</span>.<span class="ident">get</span>::<span class="op">&lt;</span><span class="kw">_</span>, <span class="ident">SyncGuid</span><span class="op">&gt;</span>(<span class="string">&quot;guid&quot;</span>)<span class="question-mark">?</span>;
         <span class="kw">let</span> <span class="ident">kind</span> <span class="op">=</span> <span class="ident">SyncedBookmarkKind</span>::<span class="ident">from_u8</span>(<span class="ident">row</span>.<span class="ident">get</span>(<span class="string">&quot;kind&quot;</span>)<span class="question-mark">?</span>)<span class="question-mark">?</span>;
         <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">item</span> <span class="op">=</span> <span class="ident">Item</span>::<span class="ident">new</span>(<span class="ident">guid</span>.<span class="ident">as_str</span>().<span class="ident">into</span>(), <span class="ident">kind</span>.<span class="ident">into</span>());
@@ -5617,20 +5618,20 @@
         <span class="ident">item</span>.<span class="ident">needs_merge</span> <span class="op">=</span> <span class="ident">row</span>.<span class="ident">get</span>(<span class="string">&quot;needsMerge&quot;</span>)<span class="question-mark">?</span>;
         <span class="ident">item</span>.<span class="ident">validity</span> <span class="op">=</span> <span class="ident">SyncedBookmarkValidity</span>::<span class="ident">from_u8</span>(<span class="ident">row</span>.<span class="ident">get</span>(<span class="string">&quot;validity&quot;</span>)<span class="question-mark">?</span>)<span class="question-mark">?</span>.<span class="ident">into</span>();
 
-        <span class="kw">let</span> <span class="ident">content</span> <span class="op">=</span> <span class="kw">if</span> <span class="ident">item</span>.<span class="ident">guid</span> <span class="op">=</span><span class="op">=</span> <span class="ident">dogear</span>::<span class="ident">ROOT_GUID</span> <span class="op">|</span><span class="op">|</span> <span class="op">!</span><span class="ident">item</span>.<span class="ident">needs_merge</span> {
+        <span class="kw">let</span> <span class="ident">content</span> <span class="op">=</span> <span class="kw">if</span> <span class="ident">item</span>.<span class="ident">guid</span> <span class="op">==</span> <span class="ident">dogear</span>::<span class="ident">ROOT_GUID</span> <span class="op">||</span> <span class="op">!</span><span class="ident">item</span>.<span class="ident">needs_merge</span> {
             <span class="prelude-val">None</span>
         } <span class="kw">else</span> {
             <span class="kw">match</span> <span class="ident">kind</span> {
-                <span class="ident">SyncedBookmarkKind</span>::<span class="ident">Bookmark</span> <span class="op">|</span> <span class="ident">SyncedBookmarkKind</span>::<span class="ident">Query</span> <span class="op">=</span><span class="op">&gt;</span> {
+                <span class="ident">SyncedBookmarkKind</span>::<span class="ident">Bookmark</span> <span class="op">|</span> <span class="ident">SyncedBookmarkKind</span>::<span class="ident">Query</span> <span class="op">=&gt;</span> {
                     <span class="kw">let</span> <span class="ident">title</span> <span class="op">=</span> <span class="ident">row</span>.<span class="ident">get</span>::<span class="op">&lt;</span><span class="kw">_</span>, <span class="ident">String</span><span class="op">&gt;</span>(<span class="string">&quot;title&quot;</span>)<span class="question-mark">?</span>;
-                    <span class="kw">let</span> <span class="ident">url_href</span> <span class="op">=</span> <span class="ident">row</span>.<span class="ident">get</span>::<span class="op">&lt;</span><span class="kw">_</span>, <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">String</span><span class="op">&gt;</span><span class="op">&gt;</span>(<span class="string">&quot;url&quot;</span>)<span class="question-mark">?</span>;
+                    <span class="kw">let</span> <span class="ident">url_href</span> <span class="op">=</span> <span class="ident">row</span>.<span class="ident">get</span>::<span class="op">&lt;</span><span class="kw">_</span>, <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">String</span><span class="op">&gt;&gt;</span>(<span class="string">&quot;url&quot;</span>)<span class="question-mark">?</span>;
                     <span class="ident">url_href</span>.<span class="ident">map</span>(<span class="op">|</span><span class="ident">url_href</span><span class="op">|</span> <span class="ident">Content</span>::<span class="ident">Bookmark</span> { <span class="ident">title</span>, <span class="ident">url_href</span> })
                 }
-                <span class="ident">SyncedBookmarkKind</span>::<span class="ident">Folder</span> <span class="op">|</span> <span class="ident">SyncedBookmarkKind</span>::<span class="ident">Livemark</span> <span class="op">=</span><span class="op">&gt;</span> {
+                <span class="ident">SyncedBookmarkKind</span>::<span class="ident">Folder</span> <span class="op">|</span> <span class="ident">SyncedBookmarkKind</span>::<span class="ident">Livemark</span> <span class="op">=&gt;</span> {
                     <span class="kw">let</span> <span class="ident">title</span> <span class="op">=</span> <span class="ident">row</span>.<span class="ident">get</span>::<span class="op">&lt;</span><span class="kw">_</span>, <span class="ident">String</span><span class="op">&gt;</span>(<span class="string">&quot;title&quot;</span>)<span class="question-mark">?</span>;
                     <span class="prelude-val">Some</span>(<span class="ident">Content</span>::<span class="ident">Folder</span> { <span class="ident">title</span> })
                 }
-                <span class="ident">SyncedBookmarkKind</span>::<span class="ident">Separator</span> <span class="op">=</span><span class="op">&gt;</span> <span class="prelude-val">Some</span>(<span class="ident">Content</span>::<span class="ident">Separator</span>),
+                <span class="ident">SyncedBookmarkKind</span>::<span class="ident">Separator</span> <span class="op">=&gt;</span> <span class="prelude-val">Some</span>(<span class="ident">Content</span>::<span class="ident">Separator</span>),
             }
         };
 
@@ -5644,7 +5645,7 @@
 
     <span class="doccomment">/// Builds a fully rooted, consistent tree from all local items and</span>
     <span class="doccomment">/// tombstones.</span>
-    <span class="kw">fn</span> <span class="ident">fetch_local_tree</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">Tree</span><span class="op">&gt;</span> {
+    <span class="kw">fn</span> <span class="ident">fetch_local_tree</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">Tree</span><span class="op">&gt;</span> {
         <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">stmt</span> <span class="op">=</span> <span class="self">self</span>.<span class="ident">store</span>.<span class="ident">db</span>.<span class="ident">prepare</span>(<span class="kw-2">&amp;</span><span class="macro">format</span><span class="macro">!</span>(
             <span class="string">&quot;SELECT guid, type, syncChangeCounter, syncStatus,
                     lastModified AS localModified,
@@ -5655,11 +5656,11 @@
         ))<span class="question-mark">?</span>;
         <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">results</span> <span class="op">=</span> <span class="ident">stmt</span>.<span class="ident">query</span>(<span class="ident">NO_PARAMS</span>)<span class="question-mark">?</span>;
         <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">builder</span> <span class="op">=</span> <span class="kw">match</span> <span class="ident">results</span>.<span class="ident">next</span>()<span class="question-mark">?</span> {
-            <span class="prelude-val">Some</span>(<span class="ident">row</span>) <span class="op">=</span><span class="op">&gt;</span> {
+            <span class="prelude-val">Some</span>(<span class="ident">row</span>) <span class="op">=&gt;</span> {
                 <span class="kw">let</span> (<span class="ident">item</span>, <span class="kw">_</span>) <span class="op">=</span> <span class="self">self</span>.<span class="ident">local_row_to_item</span>(<span class="kw-2">&amp;</span><span class="ident">row</span>)<span class="question-mark">?</span>;
                 <span class="ident">Tree</span>::<span class="ident">with_root</span>(<span class="ident">item</span>)
             }
-            <span class="prelude-val">None</span> <span class="op">=</span><span class="op">&gt;</span> <span class="kw">return</span> <span class="prelude-val">Err</span>(<span class="ident">ErrorKind</span>::<span class="ident">Corruption</span>(<span class="ident">Corruption</span>::<span class="ident">InvalidLocalRoots</span>).<span class="ident">into</span>()),
+            <span class="prelude-val">None</span> <span class="op">=&gt;</span> <span class="kw">return</span> <span class="prelude-val">Err</span>(<span class="ident">ErrorKind</span>::<span class="ident">Corruption</span>(<span class="ident">Corruption</span>::<span class="ident">InvalidLocalRoots</span>).<span class="ident">into</span>()),
         };
 
         <span class="comment">// Add items and contents to the builder, keeping track of their</span>
@@ -5668,7 +5669,7 @@
         <span class="comment">// children before their parents. This approach also lets us scan</span>
         <span class="comment">// `moz_bookmarks` once, using the index on `(b.parent, b.position)`</span>
         <span class="comment">// to avoid a temp B-tree for the `ORDER BY`.</span>
-        <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">child_guids_by_parent_guid</span>: <span class="ident">HashMap</span><span class="op">&lt;</span><span class="ident">SyncGuid</span>, <span class="ident">Vec</span><span class="op">&lt;</span><span class="ident">dogear</span>::<span class="ident">Guid</span><span class="op">&gt;</span><span class="op">&gt;</span> <span class="op">=</span> <span class="ident">HashMap</span>::<span class="ident">new</span>();
+        <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">child_guids_by_parent_guid</span>: <span class="ident">HashMap</span><span class="op">&lt;</span><span class="ident">SyncGuid</span>, <span class="ident">Vec</span><span class="op">&lt;</span><span class="ident">dogear</span>::<span class="ident">Guid</span><span class="op">&gt;&gt;</span> <span class="op">=</span> <span class="ident">HashMap</span>::<span class="ident">new</span>();
         <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">stmt</span> <span class="op">=</span> <span class="self">self</span>.<span class="ident">store</span>.<span class="ident">db</span>.<span class="ident">prepare</span>(<span class="kw-2">&amp;</span><span class="macro">format</span><span class="macro">!</span>(
             <span class="string">&quot;SELECT b.guid, p.guid AS parentGuid, b.type, b.syncChangeCounter,
                     b.syncStatus, b.lastModified AS localModified,
@@ -5728,7 +5729,7 @@
     }
 
     <span class="doccomment">/// Builds a fully rooted tree from all synced items and tombstones.</span>
-    <span class="kw">fn</span> <span class="ident">fetch_remote_tree</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">Tree</span><span class="op">&gt;</span> {
+    <span class="kw">fn</span> <span class="ident">fetch_remote_tree</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">Tree</span><span class="op">&gt;</span> {
         <span class="comment">// Unlike the local tree, items and structure are stored separately, so</span>
         <span class="comment">// we use three separate statements to fetch the root, its descendants,</span>
         <span class="comment">// and their structure.</span>
@@ -5745,13 +5746,13 @@
             .<span class="ident">try_query_row</span>(
                 <span class="kw-2">&amp;</span><span class="ident">sql</span>,
                 <span class="kw-2">&amp;</span>[],
-                <span class="op">|</span><span class="ident">row</span><span class="op">|</span> <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="kw">_</span><span class="op">&gt;</span> {
+                <span class="op">|</span><span class="ident">row</span><span class="op">|</span> <span class="op">-&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="kw">_</span><span class="op">&gt;</span> {
                     <span class="kw">let</span> (<span class="ident">root</span>, <span class="kw">_</span>) <span class="op">=</span> <span class="self">self</span>.<span class="ident">remote_row_to_item</span>(<span class="ident">row</span>)<span class="question-mark">?</span>;
                     <span class="prelude-val">Ok</span>(<span class="ident">Tree</span>::<span class="ident">with_root</span>(<span class="ident">root</span>))
                 },
                 <span class="bool-val">false</span>,
             )<span class="question-mark">?</span>
-            .<span class="ident">ok_or_else</span>(<span class="op">|</span><span class="op">|</span> <span class="ident">ErrorKind</span>::<span class="ident">Corruption</span>(<span class="ident">Corruption</span>::<span class="ident">InvalidSyncedRoots</span>))<span class="question-mark">?</span>;
+            .<span class="ident">ok_or_else</span>(<span class="op">||</span> <span class="ident">ErrorKind</span>::<span class="ident">Corruption</span>(<span class="ident">Corruption</span>::<span class="ident">InvalidSyncedRoots</span>))<span class="question-mark">?</span>;
         <span class="ident">builder</span>.<span class="ident">reparent_orphans_to</span>(<span class="kw-2">&amp;</span><span class="ident">dogear</span>::<span class="ident">UNFILED_GUID</span>);
 
         <span class="kw">let</span> <span class="ident">sql</span> <span class="op">=</span> <span class="macro">format</span><span class="macro">!</span>(
@@ -5785,7 +5786,7 @@
                 <span class="kw">if</span> <span class="kw">let</span> <span class="prelude-val">Some</span>(<span class="ident">content</span>) <span class="op">=</span> <span class="ident">content</span> {
                     <span class="ident">p</span>.<span class="ident">content</span>(<span class="ident">content</span>);
                 }
-                <span class="kw">if</span> <span class="kw">let</span> <span class="prelude-val">Some</span>(<span class="ident">parent_guid</span>) <span class="op">=</span> <span class="ident">row</span>.<span class="ident">get</span>::<span class="op">&lt;</span><span class="kw">_</span>, <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">SyncGuid</span><span class="op">&gt;</span><span class="op">&gt;</span>(<span class="string">&quot;parentGuid&quot;</span>)<span class="question-mark">?</span> {
+                <span class="kw">if</span> <span class="kw">let</span> <span class="prelude-val">Some</span>(<span class="ident">parent_guid</span>) <span class="op">=</span> <span class="ident">row</span>.<span class="ident">get</span>::<span class="op">&lt;</span><span class="kw">_</span>, <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">SyncGuid</span><span class="op">&gt;&gt;</span>(<span class="string">&quot;parentGuid&quot;</span>)<span class="question-mark">?</span> {
                     <span class="ident">p</span>.<span class="ident">by_parent_guid</span>(<span class="ident">parent_guid</span>.<span class="ident">as_str</span>().<span class="ident">into</span>())<span class="question-mark">?</span>;
                 }
             }
@@ -5812,7 +5813,7 @@
         <span class="prelude-val">Ok</span>(<span class="ident">tree</span>)
     }
 
-    <span class="kw">fn</span> <span class="ident">apply</span><span class="op">&lt;</span><span class="lifetime">&#39;t</span><span class="op">&gt;</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>, <span class="ident">root</span>: <span class="ident">MergedRoot</span><span class="op">&lt;</span><span class="lifetime">&#39;t</span><span class="op">&gt;</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span>()<span class="op">&gt;</span> {
+    <span class="kw">fn</span> <span class="ident">apply</span><span class="op">&lt;</span><span class="lifetime">&#39;t</span><span class="op">&gt;</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>, <span class="ident">root</span>: <span class="ident">MergedRoot</span><span class="op">&lt;</span><span class="lifetime">&#39;t</span><span class="op">&gt;</span>) <span class="op">-&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span>()<span class="op">&gt;</span> {
         <span class="kw">let</span> <span class="ident">ops</span> <span class="op">=</span> <span class="ident">root</span>.<span class="ident">completion_ops_with_signal</span>(<span class="kw-2">&amp;</span><span class="ident">MergeInterruptee</span>(<span class="self">self</span>.<span class="ident">store</span>.<span class="ident">interruptee</span>))<span class="question-mark">?</span>;
 
         <span class="kw">if</span> <span class="ident">ops</span>.<span class="ident">is_empty</span>() {
@@ -5861,10 +5862,10 @@
 <span class="kw">where</span>
     <span class="ident">T</span>: <span class="ident">fmt</span>::<span class="ident">Display</span>,
 {
-    <span class="kw">fn</span> <span class="ident">fmt</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">f</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">fmt</span>::<span class="ident">Formatter</span><span class="op">&lt;</span><span class="lifetime">&#39;_</span><span class="op">&gt;</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">fmt</span>::<span class="prelude-ty">Result</span> {
+    <span class="kw">fn</span> <span class="ident">fmt</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">f</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">fmt</span>::<span class="ident">Formatter</span><span class="op">&lt;</span><span class="lifetime">&#39;_</span><span class="op">&gt;</span>) <span class="op">-&gt;</span> <span class="ident">fmt</span>::<span class="prelude-ty">Result</span> {
         <span class="kw">match</span> <span class="kw-2">&amp;</span><span class="self">self</span>.<span class="number">0</span> {
-            <span class="prelude-val">Some</span>(<span class="ident">v</span>) <span class="op">=</span><span class="op">&gt;</span> <span class="ident">v</span>.<span class="ident">fmt</span>(<span class="ident">f</span>),
-            <span class="prelude-val">None</span> <span class="op">=</span><span class="op">&gt;</span> <span class="macro">write</span><span class="macro">!</span>(<span class="ident">f</span>, <span class="string">&quot;NULL&quot;</span>),
+            <span class="prelude-val">Some</span>(<span class="ident">v</span>) <span class="op">=&gt;</span> <span class="ident">v</span>.<span class="ident">fmt</span>(<span class="ident">f</span>),
+            <span class="prelude-val">None</span> <span class="op">=&gt;</span> <span class="macro">write</span><span class="macro">!</span>(<span class="ident">f</span>, <span class="string">&quot;NULL&quot;</span>),
         }
     }
 }
@@ -5875,7 +5876,7 @@
 <span class="kw">struct</span> <span class="ident">ItemTypeFragment</span>(<span class="kw-2">&amp;</span><span class="lifetime">&#39;static</span> <span class="ident">str</span>);
 
 <span class="kw">impl</span> <span class="ident">fmt</span>::<span class="ident">Display</span> <span class="kw">for</span> <span class="ident">ItemTypeFragment</span> {
-    <span class="kw">fn</span> <span class="ident">fmt</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">f</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">fmt</span>::<span class="ident">Formatter</span><span class="op">&lt;</span><span class="lifetime">&#39;_</span><span class="op">&gt;</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">fmt</span>::<span class="prelude-ty">Result</span> {
+    <span class="kw">fn</span> <span class="ident">fmt</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">f</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">fmt</span>::<span class="ident">Formatter</span><span class="op">&lt;</span><span class="lifetime">&#39;_</span><span class="op">&gt;</span>) <span class="op">-&gt;</span> <span class="ident">fmt</span>::<span class="prelude-ty">Result</span> {
         <span class="macro">write</span><span class="macro">!</span>(
             <span class="ident">f</span>,
             <span class="string">&quot;(CASE WHEN {col} IN ({bookmark_kind}, {query_kind})
@@ -5903,7 +5904,7 @@
 <span class="kw">struct</span> <span class="ident">UploadItemsFragment</span>(<span class="kw-2">&amp;</span><span class="lifetime">&#39;static</span> <span class="ident">str</span>);
 
 <span class="kw">impl</span> <span class="ident">fmt</span>::<span class="ident">Display</span> <span class="kw">for</span> <span class="ident">UploadItemsFragment</span> {
-    <span class="kw">fn</span> <span class="ident">fmt</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">f</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">fmt</span>::<span class="ident">Formatter</span><span class="op">&lt;</span><span class="lifetime">&#39;_</span><span class="op">&gt;</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">fmt</span>::<span class="prelude-ty">Result</span> {
+    <span class="kw">fn</span> <span class="ident">fmt</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">f</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">fmt</span>::<span class="ident">Formatter</span><span class="op">&lt;</span><span class="lifetime">&#39;_</span><span class="op">&gt;</span>) <span class="op">-&gt;</span> <span class="ident">fmt</span>::<span class="prelude-ty">Result</span> {
         <span class="macro">write</span><span class="macro">!</span>(
             <span class="ident">f</span>,
             <span class="string">&quot;SELECT {alias}.id, {alias}.guid, {alias}.syncChangeCounter,
@@ -5927,7 +5928,7 @@
 <span class="kw">struct</span> <span class="ident">LocalItemsFragment</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span><span class="op">&gt;</span>(<span class="kw-2">&amp;</span><span class="lifetime">&#39;a</span> <span class="ident">str</span>);
 
 <span class="kw">impl</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span><span class="op">&gt;</span> <span class="ident">fmt</span>::<span class="ident">Display</span> <span class="kw">for</span> <span class="ident">LocalItemsFragment</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span><span class="op">&gt;</span> {
-    <span class="kw">fn</span> <span class="ident">fmt</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">f</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">fmt</span>::<span class="ident">Formatter</span><span class="op">&lt;</span><span class="lifetime">&#39;_</span><span class="op">&gt;</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">fmt</span>::<span class="prelude-ty">Result</span> {
+    <span class="kw">fn</span> <span class="ident">fmt</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">f</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">fmt</span>::<span class="ident">Formatter</span><span class="op">&lt;</span><span class="lifetime">&#39;_</span><span class="op">&gt;</span>) <span class="op">-&gt;</span> <span class="ident">fmt</span>::<span class="prelude-ty">Result</span> {
         <span class="macro">write</span><span class="macro">!</span>(
             <span class="ident">f</span>,
             <span class="string">&quot;{name}(id, guid, parentId, parentGuid, position, type, title, parentTitle,
@@ -5951,7 +5952,7 @@
     <span class="ident">table_name</span>: <span class="kw-2">&amp;</span><span class="lifetime">&#39;static</span> <span class="ident">str</span>,
     <span class="ident">type_column_name</span>: <span class="kw-2">&amp;</span><span class="lifetime">&#39;static</span> <span class="ident">str</span>,
     <span class="ident">url_or_place_id_fragment</span>: <span class="ident">UrlOrPlaceIdFragment</span>,
-) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">ItemKindFragment</span> {
+) <span class="op">-&gt;</span> <span class="ident">ItemKindFragment</span> {
     <span class="ident">ItemKindFragment</span> {
         <span class="ident">table_name</span>,
         <span class="ident">type_column_name</span>,
@@ -5972,7 +5973,7 @@
 }
 
 <span class="kw">impl</span> <span class="ident">fmt</span>::<span class="ident">Display</span> <span class="kw">for</span> <span class="ident">ItemKindFragment</span> {
-    <span class="kw">fn</span> <span class="ident">fmt</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">f</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">fmt</span>::<span class="ident">Formatter</span><span class="op">&lt;</span><span class="lifetime">&#39;_</span><span class="op">&gt;</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">fmt</span>::<span class="prelude-ty">Result</span> {
+    <span class="kw">fn</span> <span class="ident">fmt</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">f</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">fmt</span>::<span class="ident">Formatter</span><span class="op">&lt;</span><span class="lifetime">&#39;_</span><span class="op">&gt;</span>) <span class="op">-&gt;</span> <span class="ident">fmt</span>::<span class="prelude-ty">Result</span> {
         <span class="macro">write</span><span class="macro">!</span>(
             <span class="ident">f</span>,
             <span class="string">&quot;(CASE {table_name}.{type_column_name}
@@ -6013,10 +6014,10 @@
 }
 
 <span class="kw">impl</span> <span class="ident">fmt</span>::<span class="ident">Display</span> <span class="kw">for</span> <span class="ident">UrlOrPlaceIdFragment</span> {
-    <span class="kw">fn</span> <span class="ident">fmt</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">f</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">fmt</span>::<span class="ident">Formatter</span><span class="op">&lt;</span><span class="lifetime">&#39;_</span><span class="op">&gt;</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">fmt</span>::<span class="prelude-ty">Result</span> {
+    <span class="kw">fn</span> <span class="ident">fmt</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">f</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">fmt</span>::<span class="ident">Formatter</span><span class="op">&lt;</span><span class="lifetime">&#39;_</span><span class="op">&gt;</span>) <span class="op">-&gt;</span> <span class="ident">fmt</span>::<span class="prelude-ty">Result</span> {
         <span class="kw">match</span> <span class="self">self</span> {
-            <span class="ident">UrlOrPlaceIdFragment</span>::<span class="ident">Url</span>(<span class="ident">s</span>) <span class="op">=</span><span class="op">&gt;</span> <span class="macro">write</span><span class="macro">!</span>(<span class="ident">f</span>, <span class="string">&quot;{}&quot;</span>, <span class="ident">s</span>),
-            <span class="ident">UrlOrPlaceIdFragment</span>::<span class="ident">PlaceId</span>(<span class="ident">s</span>) <span class="op">=</span><span class="op">&gt;</span> {
+            <span class="ident">UrlOrPlaceIdFragment</span>::<span class="ident">Url</span>(<span class="ident">s</span>) <span class="op">=&gt;</span> <span class="macro">write</span><span class="macro">!</span>(<span class="ident">f</span>, <span class="string">&quot;{}&quot;</span>, <span class="ident">s</span>),
+            <span class="ident">UrlOrPlaceIdFragment</span>::<span class="ident">PlaceId</span>(<span class="ident">s</span>) <span class="op">=&gt;</span> {
                 <span class="macro">write</span><span class="macro">!</span>(<span class="ident">f</span>, <span class="string">&quot;(SELECT h.url FROM moz_places h WHERE h.id = {})&quot;</span>, <span class="ident">s</span>)
             }
         }
@@ -6028,10 +6029,10 @@
 <span class="kw">struct</span> <span class="ident">RootsFragment</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span><span class="op">&gt;</span>(<span class="kw-2">&amp;</span><span class="lifetime">&#39;a</span> [<span class="ident">BookmarkRootGuid</span>]);
 
 <span class="kw">impl</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span><span class="op">&gt;</span> <span class="ident">fmt</span>::<span class="ident">Display</span> <span class="kw">for</span> <span class="ident">RootsFragment</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span><span class="op">&gt;</span> {
-    <span class="kw">fn</span> <span class="ident">fmt</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">f</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">fmt</span>::<span class="ident">Formatter</span><span class="op">&lt;</span><span class="lifetime">&#39;_</span><span class="op">&gt;</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">fmt</span>::<span class="prelude-ty">Result</span> {
+    <span class="kw">fn</span> <span class="ident">fmt</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">f</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">fmt</span>::<span class="ident">Formatter</span><span class="op">&lt;</span><span class="lifetime">&#39;_</span><span class="op">&gt;</span>) <span class="op">-&gt;</span> <span class="ident">fmt</span>::<span class="prelude-ty">Result</span> {
         <span class="ident">f</span>.<span class="ident">write_str</span>(<span class="string">&quot;(&quot;</span>)<span class="question-mark">?</span>;
         <span class="kw">for</span> (<span class="ident">i</span>, <span class="ident">guid</span>) <span class="kw">in</span> <span class="self">self</span>.<span class="number">0</span>.<span class="ident">iter</span>().<span class="ident">enumerate</span>() {
-            <span class="kw">if</span> <span class="ident">i</span> <span class="op">!</span><span class="op">=</span> <span class="number">0</span> {
+            <span class="kw">if</span> <span class="ident">i</span> <span class="op">!=</span> <span class="number">0</span> {
                 <span class="ident">f</span>.<span class="ident">write_str</span>(<span class="string">&quot;,&quot;</span>)<span class="question-mark">?</span>;
             }
             <span class="macro">write</span><span class="macro">!</span>(<span class="ident">f</span>, <span class="string">&quot;&#39;{}&#39;&quot;</span>, <span class="ident">guid</span>.<span class="ident">as_str</span>())<span class="question-mark">?</span>;
@@ -6077,21 +6078,21 @@
         <span class="kw">fn</span> <span class="ident">new</span>(
             <span class="ident">guid</span>: <span class="kw">impl</span> <span class="ident">Into</span><span class="op">&lt;</span><span class="ident">SyncGuid</span><span class="op">&gt;</span>,
             <span class="ident">expected</span>: <span class="kw-2">&amp;</span><span class="lifetime">&#39;a</span> <span class="ident">SyncedBookmarkItem</span>,
-        ) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">ExpectedSyncedItem</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span><span class="op">&gt;</span> {
+        ) <span class="op">-&gt;</span> <span class="ident">ExpectedSyncedItem</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span><span class="op">&gt;</span> {
             <span class="ident">ExpectedSyncedItem</span>(<span class="ident">guid</span>.<span class="ident">into</span>(), <span class="ident">Cow</span>::<span class="ident">Borrowed</span>(<span class="ident">expected</span>))
         }
 
         <span class="kw">fn</span> <span class="ident">with_properties</span>(
             <span class="ident">guid</span>: <span class="kw">impl</span> <span class="ident">Into</span><span class="op">&lt;</span><span class="ident">SyncGuid</span><span class="op">&gt;</span>,
             <span class="ident">expected</span>: <span class="kw-2">&amp;</span><span class="lifetime">&#39;a</span> <span class="ident">SyncedBookmarkItem</span>,
-            <span class="ident">f</span>: <span class="kw">impl</span> <span class="ident">FnOnce</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">SyncedBookmarkItem</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">SyncedBookmarkItem</span> <span class="op">+</span> <span class="lifetime">&#39;static</span>,
-        ) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">ExpectedSyncedItem</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span><span class="op">&gt;</span> {
+            <span class="ident">f</span>: <span class="kw">impl</span> <span class="ident">FnOnce</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">SyncedBookmarkItem</span>) <span class="op">-&gt;</span> <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">SyncedBookmarkItem</span> <span class="op">+</span> <span class="lifetime">&#39;static</span>,
+        ) <span class="op">-&gt;</span> <span class="ident">ExpectedSyncedItem</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span><span class="op">&gt;</span> {
             <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">expected</span> <span class="op">=</span> <span class="ident">expected</span>.<span class="ident">clone</span>();
             <span class="ident">f</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">expected</span>);
             <span class="ident">ExpectedSyncedItem</span>(<span class="ident">guid</span>.<span class="ident">into</span>(), <span class="ident">Cow</span>::<span class="ident">Owned</span>(<span class="ident">expected</span>))
         }
 
-        <span class="kw">fn</span> <span class="ident">check</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">conn</span>: <span class="kw-2">&amp;</span><span class="ident">PlacesDb</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span>()<span class="op">&gt;</span> {
+        <span class="kw">fn</span> <span class="ident">check</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">conn</span>: <span class="kw-2">&amp;</span><span class="ident">PlacesDb</span>) <span class="op">-&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span>()<span class="op">&gt;</span> {
             <span class="kw">let</span> <span class="ident">actual</span> <span class="op">=</span>
                 <span class="ident">SyncedBookmarkItem</span>::<span class="ident">get</span>(<span class="ident">conn</span>, <span class="kw-2">&amp;</span><span class="self">self</span>.<span class="number">0</span>)<span class="question-mark">?</span>.<span class="ident">expect</span>(<span class="string">&quot;Expected synced item should exist&quot;</span>);
             <span class="macro">assert_eq</span><span class="macro">!</span>(<span class="kw-2">&amp;</span><span class="ident">actual</span>, <span class="kw-2">&amp;</span><span class="kw-2">*</span><span class="self">self</span>.<span class="number">1</span>);
@@ -6106,7 +6107,7 @@
         <span class="ident">conn</span>: <span class="kw-2">&amp;</span><span class="ident">PlacesDb</span>,
         <span class="ident">remote_time</span>: <span class="ident">ServerTimestamp</span>,
         <span class="ident">records_json</span>: <span class="ident">Value</span>,
-    ) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">Vec</span><span class="op">&lt;</span><span class="ident">Guid</span><span class="op">&gt;</span> {
+    ) <span class="op">-&gt;</span> <span class="ident">Vec</span><span class="op">&lt;</span><span class="ident">Guid</span><span class="op">&gt;</span> {
         <span class="comment">// suck records into the store.</span>
         <span class="kw">let</span> <span class="ident">interrupt_scope</span> <span class="op">=</span> <span class="ident">conn</span>.<span class="ident">begin_interrupt_scope</span>();
         <span class="kw">let</span> <span class="ident">store</span> <span class="op">=</span> <span class="ident">BookmarksStore</span>::<span class="ident">new</span>(<span class="kw-2">&amp;</span><span class="ident">conn</span>, <span class="kw-2">&amp;</span><span class="ident">interrupt_scope</span>);
@@ -6114,7 +6115,7 @@
         <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">incoming</span> <span class="op">=</span> <span class="ident">IncomingChangeset</span>::<span class="ident">new</span>(<span class="ident">store</span>.<span class="ident">collection_name</span>(), <span class="ident">remote_time</span>);
 
         <span class="kw">match</span> <span class="ident">records_json</span> {
-            <span class="ident">Value</span>::<span class="ident">Array</span>(<span class="ident">records</span>) <span class="op">=</span><span class="op">&gt;</span> {
+            <span class="ident">Value</span>::<span class="ident">Array</span>(<span class="ident">records</span>) <span class="op">=&gt;</span> {
                 <span class="kw">for</span> <span class="ident">record</span> <span class="kw">in</span> <span class="ident">records</span> {
                     <span class="kw">let</span> <span class="ident">timestamp</span> <span class="op">=</span> <span class="ident">record</span>
                         .<span class="ident">as_object</span>()
@@ -6128,7 +6129,7 @@
                     <span class="ident">incoming</span>.<span class="ident">changes</span>.<span class="ident">push</span>((<span class="ident">payload</span>, <span class="ident">timestamp</span>));
                 }
             }
-            <span class="ident">Value</span>::<span class="ident">Object</span>(<span class="kw-2">ref</span> <span class="ident">r</span>) <span class="op">=</span><span class="op">&gt;</span> {
+            <span class="ident">Value</span>::<span class="ident">Object</span>(<span class="kw-2">ref</span> <span class="ident">r</span>) <span class="op">=&gt;</span> {
                 <span class="kw">let</span> <span class="ident">timestamp</span> <span class="op">=</span> <span class="ident">r</span>
                     .<span class="ident">get</span>(<span class="string">&quot;modified&quot;</span>)
                     .<span class="ident">map</span>(<span class="op">|</span><span class="ident">v</span><span class="op">|</span> {
@@ -6139,7 +6140,7 @@
                 <span class="kw">let</span> <span class="ident">payload</span> <span class="op">=</span> <span class="ident">Payload</span>::<span class="ident">from_json</span>(<span class="ident">records_json</span>).<span class="ident">unwrap</span>();
                 <span class="ident">incoming</span>.<span class="ident">changes</span>.<span class="ident">push</span>((<span class="ident">payload</span>, <span class="ident">timestamp</span>));
             }
-            <span class="kw">_</span> <span class="op">=</span><span class="op">&gt;</span> <span class="macro">panic</span><span class="macro">!</span>(<span class="string">&quot;unexpected json value&quot;</span>),
+            <span class="kw">_</span> <span class="op">=&gt;</span> <span class="macro">panic</span><span class="macro">!</span>(<span class="string">&quot;unexpected json value&quot;</span>),
         }
 
         <span class="ident">store</span>
@@ -6150,7 +6151,7 @@
             .<span class="ident">prepare</span>(<span class="string">&quot;SELECT guid FROM itemsToUpload&quot;</span>)
             .<span class="ident">expect</span>(<span class="string">&quot;Should prepare statement to fetch uploaded GUIDs&quot;</span>);
         <span class="kw">let</span> <span class="ident">uploaded_guids</span>: <span class="ident">Vec</span><span class="op">&lt;</span><span class="ident">Guid</span><span class="op">&gt;</span> <span class="op">=</span> <span class="ident">stmt</span>
-            .<span class="ident">query_and_then</span>(<span class="ident">NO_PARAMS</span>, <span class="op">|</span><span class="ident">row</span><span class="op">|</span> <span class="op">-</span><span class="op">&gt;</span> <span class="ident">rusqlite</span>::<span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="kw">_</span><span class="op">&gt;</span> {
+            .<span class="ident">query_and_then</span>(<span class="ident">NO_PARAMS</span>, <span class="op">|</span><span class="ident">row</span><span class="op">|</span> <span class="op">-&gt;</span> <span class="ident">rusqlite</span>::<span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="kw">_</span><span class="op">&gt;</span> {
                 <span class="prelude-val">Ok</span>(<span class="ident">row</span>.<span class="ident">get</span>::<span class="op">&lt;</span><span class="kw">_</span>, <span class="ident">Guid</span><span class="op">&gt;</span>(<span class="number">0</span>)<span class="question-mark">?</span>)
             })
             .<span class="ident">expect</span>(<span class="string">&quot;Should fetch uploaded GUIDs&quot;</span>)
@@ -6177,7 +6178,7 @@
     }
 
     <span class="attribute">#[<span class="ident">test</span>]</span>
-    <span class="kw">fn</span> <span class="ident">test_fetch_remote_tree</span>() <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span>()<span class="op">&gt;</span> {
+    <span class="kw">fn</span> <span class="ident">test_fetch_remote_tree</span>() <span class="op">-&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span>()<span class="op">&gt;</span> {
         <span class="kw">let</span> <span class="kw">_</span> <span class="op">=</span> <span class="ident">env_logger</span>::<span class="ident">try_init</span>();
         <span class="kw">let</span> <span class="ident">records</span> <span class="op">=</span> <span class="macro">vec</span><span class="macro">!</span>[
             <span class="macro">json</span><span class="macro">!</span>({
@@ -6264,7 +6265,7 @@
     }
 
     <span class="attribute">#[<span class="ident">test</span>]</span>
-    <span class="kw">fn</span> <span class="ident">test_fetch_local_tree</span>() <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span>()<span class="op">&gt;</span> {
+    <span class="kw">fn</span> <span class="ident">test_fetch_local_tree</span>() <span class="op">-&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span>()<span class="op">&gt;</span> {
         <span class="kw">let</span> <span class="ident">now</span> <span class="op">=</span> <span class="ident">SystemTime</span>::<span class="ident">now</span>();
         <span class="kw">let</span> <span class="ident">previously_ts</span>: <span class="ident">Timestamp</span> <span class="op">=</span> (<span class="ident">now</span> <span class="op">-</span> <span class="ident">Duration</span>::<span class="ident">new</span>(<span class="number">10</span>, <span class="number">0</span>)).<span class="ident">into</span>();
         <span class="kw">let</span> <span class="ident">api</span> <span class="op">=</span> <span class="ident">new_mem_api</span>();
@@ -6331,7 +6332,7 @@
         <span class="comment">// hard to know the exact age of the root, but we know the max.</span>
         <span class="kw">let</span> <span class="ident">max_dur</span> <span class="op">=</span> <span class="ident">SystemTime</span>::<span class="ident">now</span>().<span class="ident">duration_since</span>(<span class="ident">now</span>).<span class="ident">unwrap</span>();
         <span class="kw">let</span> <span class="ident">max_age</span> <span class="op">=</span> <span class="ident">max_dur</span>.<span class="ident">as_secs</span>() <span class="kw">as</span> <span class="ident">i64</span> <span class="op">*</span> <span class="number">1000</span> <span class="op">+</span> <span class="ident">i64</span>::<span class="ident">from</span>(<span class="ident">max_dur</span>.<span class="ident">subsec_millis</span>());
-        <span class="macro">assert</span><span class="macro">!</span>(<span class="ident">node</span>.<span class="ident">age</span> <span class="op">&lt;</span><span class="op">=</span> <span class="ident">max_age</span>);
+        <span class="macro">assert</span><span class="macro">!</span>(<span class="ident">node</span>.<span class="ident">age</span> <span class="op">&lt;=</span> <span class="ident">max_age</span>);
 
         <span class="comment">// We should have changes.</span>
         <span class="macro">assert_eq</span><span class="macro">!</span>(<span class="ident">store</span>.<span class="ident">has_changes</span>().<span class="ident">unwrap</span>(), <span class="bool-val">true</span>);
@@ -6453,7 +6454,7 @@
     }
 
     <span class="attribute">#[<span class="ident">test</span>]</span>
-    <span class="kw">fn</span> <span class="ident">test_apply_complex_bookmark_tags</span>() <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span>()<span class="op">&gt;</span> {
+    <span class="kw">fn</span> <span class="ident">test_apply_complex_bookmark_tags</span>() <span class="op">-&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span>()<span class="op">&gt;</span> {
         <span class="kw">let</span> <span class="ident">api</span> <span class="op">=</span> <span class="ident">new_mem_api</span>();
         <span class="kw">let</span> <span class="ident">writer</span> <span class="op">=</span> <span class="ident">api</span>.<span class="ident">open_connection</span>(<span class="ident">ConnectionType</span>::<span class="ident">ReadWrite</span>)<span class="question-mark">?</span>;
 
@@ -6752,7 +6753,7 @@
                 .<span class="ident">changes</span>
                 .<span class="ident">iter</span>()
                 .<span class="ident">map</span>(<span class="op">|</span><span class="ident">p</span><span class="op">|</span> <span class="ident">p</span>.<span class="ident">id</span>.<span class="ident">as_str</span>())
-                .<span class="ident">collect</span>::<span class="op">&lt;</span><span class="ident">Vec</span><span class="op">&lt;</span><span class="kw">_</span><span class="op">&gt;</span><span class="op">&gt;</span>(),
+                .<span class="ident">collect</span>::<span class="op">&lt;</span><span class="ident">Vec</span><span class="op">&lt;</span><span class="kw">_</span><span class="op">&gt;&gt;</span>(),
             <span class="ident">expected_outgoing_ids</span>,
             <span class="string">&quot;Should upload new bookmarks and fix up tags&quot;</span>,
         );
@@ -6853,7 +6854,7 @@
     }
 
     <span class="attribute">#[<span class="ident">test</span>]</span>
-    <span class="kw">fn</span> <span class="ident">test_apply_bookmark_tags</span>() <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span>()<span class="op">&gt;</span> {
+    <span class="kw">fn</span> <span class="ident">test_apply_bookmark_tags</span>() <span class="op">-&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span>()<span class="op">&gt;</span> {
         <span class="kw">let</span> <span class="ident">api</span> <span class="op">=</span> <span class="ident">new_mem_api</span>();
         <span class="kw">let</span> <span class="ident">writer</span> <span class="op">=</span> <span class="ident">api</span>.<span class="ident">open_connection</span>(<span class="ident">ConnectionType</span>::<span class="ident">ReadWrite</span>)<span class="question-mark">?</span>;
 
@@ -6961,7 +6962,7 @@
     }
 
     <span class="attribute">#[<span class="ident">test</span>]</span>
-    <span class="kw">fn</span> <span class="ident">test_apply_bookmark_keyword</span>() <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span>()<span class="op">&gt;</span> {
+    <span class="kw">fn</span> <span class="ident">test_apply_bookmark_keyword</span>() <span class="op">-&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span>()<span class="op">&gt;</span> {
         <span class="kw">let</span> <span class="ident">api</span> <span class="op">=</span> <span class="ident">new_mem_api</span>();
 
         <span class="kw">let</span> <span class="ident">records</span> <span class="op">=</span> <span class="macro">json</span><span class="macro">!</span>([{
@@ -7029,7 +7030,7 @@
         <span class="kw">let</span> <span class="ident">record_for_a</span> <span class="op">=</span> <span class="ident">outgoing</span>
             .<span class="ident">changes</span>
             .<span class="ident">iter</span>()
-            .<span class="ident">find</span>(<span class="op">|</span><span class="ident">payload</span><span class="op">|</span> <span class="ident">payload</span>.<span class="ident">id</span> <span class="op">=</span><span class="op">=</span> <span class="string">&quot;bookmarkAAAA&quot;</span>)
+            .<span class="ident">find</span>(<span class="op">|</span><span class="ident">payload</span><span class="op">|</span> <span class="ident">payload</span>.<span class="ident">id</span> <span class="op">==</span> <span class="string">&quot;bookmarkAAAA&quot;</span>)
             .<span class="ident">expect</span>(<span class="string">&quot;Should reupload A&quot;</span>);
         <span class="macro">assert_eq</span><span class="macro">!</span>(<span class="ident">record_for_a</span>.<span class="ident">data</span>[<span class="string">&quot;bmkUri&quot;</span>], <span class="string">&quot;http://example.com/a?b=c&amp;d=%s&quot;</span>);
         <span class="macro">assert_eq</span><span class="macro">!</span>(<span class="ident">record_for_a</span>.<span class="ident">data</span>[<span class="string">&quot;keyword&quot;</span>], <span class="string">&quot;ex&quot;</span>);
@@ -7075,7 +7076,7 @@
     }
 
     <span class="attribute">#[<span class="ident">test</span>]</span>
-    <span class="kw">fn</span> <span class="ident">test_apply</span>() <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span>()<span class="op">&gt;</span> {
+    <span class="kw">fn</span> <span class="ident">test_apply</span>() <span class="op">-&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span>()<span class="op">&gt;</span> {
         <span class="kw">let</span> <span class="ident">api</span> <span class="op">=</span> <span class="ident">new_mem_api</span>();
         <span class="kw">let</span> <span class="ident">writer</span> <span class="op">=</span> <span class="ident">api</span>.<span class="ident">open_connection</span>(<span class="ident">ConnectionType</span>::<span class="ident">ReadWrite</span>)<span class="question-mark">?</span>;
         <span class="kw">let</span> <span class="ident">syncer</span> <span class="op">=</span> <span class="ident">api</span>.<span class="ident">open_sync_connection</span>()<span class="question-mark">?</span>;
@@ -7149,13 +7150,13 @@
                 .<span class="ident">changes</span>
                 .<span class="ident">iter</span>()
                 .<span class="ident">map</span>(<span class="op">|</span><span class="ident">p</span><span class="op">|</span> <span class="ident">p</span>.<span class="ident">id</span>.<span class="ident">as_str</span>())
-                .<span class="ident">collect</span>::<span class="op">&lt;</span><span class="ident">Vec</span><span class="op">&lt;</span><span class="kw">_</span><span class="op">&gt;</span><span class="op">&gt;</span>(),
+                .<span class="ident">collect</span>::<span class="op">&lt;</span><span class="ident">Vec</span><span class="op">&lt;</span><span class="kw">_</span><span class="op">&gt;&gt;</span>(),
             <span class="macro">vec</span><span class="macro">!</span>[<span class="string">&quot;bookmarkAAAA&quot;</span>, <span class="string">&quot;bookmarkBBBB&quot;</span>, <span class="string">&quot;unfiled&quot;</span>,]
         );
         <span class="kw">let</span> <span class="ident">record_for_a</span> <span class="op">=</span> <span class="ident">outgoing</span>
             .<span class="ident">changes</span>
             .<span class="ident">iter</span>()
-            .<span class="ident">find</span>(<span class="op">|</span><span class="ident">p</span><span class="op">|</span> <span class="ident">p</span>.<span class="ident">id</span> <span class="op">=</span><span class="op">=</span> <span class="string">&quot;bookmarkAAAA&quot;</span>)
+            .<span class="ident">find</span>(<span class="op">|</span><span class="ident">p</span><span class="op">|</span> <span class="ident">p</span>.<span class="ident">id</span> <span class="op">==</span> <span class="string">&quot;bookmarkAAAA&quot;</span>)
             .<span class="ident">expect</span>(<span class="string">&quot;Should upload A&quot;</span>);
         <span class="macro">assert_eq</span><span class="macro">!</span>(
             <span class="ident">record_for_a</span>.<span class="ident">data</span>[<span class="string">&quot;tags&quot;</span>]
@@ -7252,7 +7253,7 @@
     }
 
     <span class="attribute">#[<span class="ident">test</span>]</span>
-    <span class="kw">fn</span> <span class="ident">test_apply_invalid_url</span>() <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span>()<span class="op">&gt;</span> {
+    <span class="kw">fn</span> <span class="ident">test_apply_invalid_url</span>() <span class="op">-&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span>()<span class="op">&gt;</span> {
         <span class="kw">let</span> <span class="ident">api</span> <span class="op">=</span> <span class="ident">new_mem_api</span>();
         <span class="kw">let</span> <span class="ident">syncer</span> <span class="op">=</span> <span class="ident">api</span>.<span class="ident">open_sync_connection</span>()<span class="question-mark">?</span>;
 
@@ -7299,21 +7300,21 @@
                 .<span class="ident">changes</span>
                 .<span class="ident">iter</span>()
                 .<span class="ident">map</span>(<span class="op">|</span><span class="ident">p</span><span class="op">|</span> <span class="ident">p</span>.<span class="ident">id</span>.<span class="ident">as_str</span>())
-                .<span class="ident">collect</span>::<span class="op">&lt;</span><span class="ident">Vec</span><span class="op">&lt;</span><span class="kw">_</span><span class="op">&gt;</span><span class="op">&gt;</span>(),
+                .<span class="ident">collect</span>::<span class="op">&lt;</span><span class="ident">Vec</span><span class="op">&lt;</span><span class="kw">_</span><span class="op">&gt;&gt;</span>(),
             <span class="macro">vec</span><span class="macro">!</span>[<span class="string">&quot;bookmarkXXXX&quot;</span>, <span class="string">&quot;menu&quot;</span>,]
         );
 
         <span class="kw">let</span> <span class="ident">record_for_invalid</span> <span class="op">=</span> <span class="ident">outgoing</span>
             .<span class="ident">changes</span>
             .<span class="ident">iter</span>()
-            .<span class="ident">find</span>(<span class="op">|</span><span class="ident">p</span><span class="op">|</span> <span class="ident">p</span>.<span class="ident">id</span> <span class="op">=</span><span class="op">=</span> <span class="string">&quot;bookmarkXXXX&quot;</span>)
+            .<span class="ident">find</span>(<span class="op">|</span><span class="ident">p</span><span class="op">|</span> <span class="ident">p</span>.<span class="ident">id</span> <span class="op">==</span> <span class="string">&quot;bookmarkXXXX&quot;</span>)
             .<span class="ident">expect</span>(<span class="string">&quot;Should re-upload the invalid record&quot;</span>);
         <span class="macro">assert</span><span class="macro">!</span>(<span class="ident">record_for_invalid</span>.<span class="ident">deleted</span>, <span class="string">&quot;should be a tombstone&quot;</span>);
 
         <span class="kw">let</span> <span class="ident">record_for_menu</span> <span class="op">=</span> <span class="ident">outgoing</span>
             .<span class="ident">changes</span>
             .<span class="ident">iter</span>()
-            .<span class="ident">find</span>(<span class="op">|</span><span class="ident">p</span><span class="op">|</span> <span class="ident">p</span>.<span class="ident">id</span> <span class="op">=</span><span class="op">=</span> <span class="string">&quot;menu&quot;</span>)
+            .<span class="ident">find</span>(<span class="op">|</span><span class="ident">p</span><span class="op">|</span> <span class="ident">p</span>.<span class="ident">id</span> <span class="op">==</span> <span class="string">&quot;menu&quot;</span>)
             .<span class="ident">expect</span>(<span class="string">&quot;Should upload menu&quot;</span>);
         <span class="macro">assert_eq</span><span class="macro">!</span>(
             <span class="ident">record_for_menu</span>.<span class="ident">data</span>.<span class="ident">get</span>(<span class="string">&quot;children&quot;</span>),
@@ -7324,7 +7325,7 @@
     }
 
     <span class="attribute">#[<span class="ident">test</span>]</span>
-    <span class="kw">fn</span> <span class="ident">test_apply_tombstones</span>() <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span>()<span class="op">&gt;</span> {
+    <span class="kw">fn</span> <span class="ident">test_apply_tombstones</span>() <span class="op">-&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span>()<span class="op">&gt;</span> {
         <span class="kw">let</span> <span class="kw">_</span> <span class="op">=</span> <span class="ident">env_logger</span>::<span class="ident">try_init</span>();
 
         <span class="kw">let</span> <span class="ident">local_modified</span> <span class="op">=</span> <span class="ident">Timestamp</span>::<span class="ident">now</span>();
@@ -7374,7 +7375,7 @@
             .<span class="ident">changes</span>
             .<span class="ident">iter</span>()
             .<span class="ident">map</span>(<span class="op">|</span><span class="ident">p</span><span class="op">|</span> <span class="ident">p</span>.<span class="ident">id</span>.<span class="ident">clone</span>())
-            .<span class="ident">collect</span>::<span class="op">&lt;</span><span class="ident">Vec</span><span class="op">&lt;</span><span class="kw">_</span><span class="op">&gt;</span><span class="op">&gt;</span>();
+            .<span class="ident">collect</span>::<span class="op">&lt;</span><span class="ident">Vec</span><span class="op">&lt;</span><span class="kw">_</span><span class="op">&gt;&gt;</span>();
         <span class="comment">// 4 roots + 4 items</span>
         <span class="macro">assert_eq</span><span class="macro">!</span>(<span class="ident">outgoing_ids</span>.<span class="ident">len</span>(), <span class="number">8</span>, <span class="string">&quot;{:?}&quot;</span>, <span class="ident">outgoing_ids</span>);
 
@@ -7417,7 +7418,7 @@
             .<span class="ident">changes</span>
             .<span class="ident">iter</span>()
             .<span class="ident">map</span>(<span class="op">|</span><span class="ident">p</span><span class="op">|</span> <span class="ident">p</span>.<span class="ident">id</span>.<span class="ident">clone</span>())
-            .<span class="ident">collect</span>::<span class="op">&lt;</span><span class="ident">Vec</span><span class="op">&lt;</span><span class="kw">_</span><span class="op">&gt;</span><span class="op">&gt;</span>();
+            .<span class="ident">collect</span>::<span class="op">&lt;</span><span class="ident">Vec</span><span class="op">&lt;</span><span class="kw">_</span><span class="op">&gt;&gt;</span>();
         <span class="macro">assert_eq</span><span class="macro">!</span>(<span class="ident">outgoing_ids</span>.<span class="ident">len</span>(), <span class="number">0</span>, <span class="string">&quot;{:?}&quot;</span>, <span class="ident">outgoing_ids</span>);
 
         <span class="ident">store</span>
@@ -7434,7 +7435,7 @@
     }
 
     <span class="attribute">#[<span class="ident">test</span>]</span>
-    <span class="kw">fn</span> <span class="ident">test_keywords</span>() <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span>()<span class="op">&gt;</span> {
+    <span class="kw">fn</span> <span class="ident">test_keywords</span>() <span class="op">-&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span>()<span class="op">&gt;</span> {
         <span class="kw">use</span> <span class="kw">crate</span>::<span class="ident">storage</span>::<span class="ident">bookmarks</span>::<span class="ident">bookmarks_get_url_for_keyword</span>;
 
         <span class="kw">let</span> <span class="ident">api</span> <span class="op">=</span> <span class="ident">new_mem_api</span>();
@@ -7479,7 +7480,7 @@
             .<span class="ident">changes</span>
             .<span class="ident">iter</span>()
             .<span class="ident">map</span>(<span class="op">|</span><span class="ident">p</span><span class="op">|</span> <span class="ident">p</span>.<span class="ident">id</span>.<span class="ident">clone</span>())
-            .<span class="ident">collect</span>::<span class="op">&lt;</span><span class="ident">Vec</span><span class="op">&lt;</span><span class="kw">_</span><span class="op">&gt;</span><span class="op">&gt;</span>();
+            .<span class="ident">collect</span>::<span class="op">&lt;</span><span class="ident">Vec</span><span class="op">&lt;</span><span class="kw">_</span><span class="op">&gt;&gt;</span>();
         <span class="ident">outgoing_ids</span>.<span class="ident">sort</span>();
         <span class="macro">assert_eq</span><span class="macro">!</span>(<span class="ident">outgoing_ids</span>, <span class="kw-2">&amp;</span>[<span class="string">&quot;menu&quot;</span>, <span class="string">&quot;mobile&quot;</span>, <span class="string">&quot;toolbar&quot;</span>, <span class="string">&quot;unfiled&quot;</span>],);
 
@@ -7529,7 +7530,7 @@
              WHERE url_hash = hash(:url) AND
                    url = :url&quot;</span>,
                 <span class="kw-2">&amp;</span>[(<span class="string">&quot;:url&quot;</span>, <span class="kw-2">&amp;</span><span class="string">&quot;http://example.com/a/%s&quot;</span>)],
-                <span class="op">|</span><span class="ident">row</span><span class="op">|</span> <span class="op">-</span><span class="op">&gt;</span> <span class="ident">rusqlite</span>::<span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="kw">_</span><span class="op">&gt;</span> { <span class="prelude-val">Ok</span>(<span class="ident">row</span>.<span class="ident">get</span>::<span class="op">&lt;</span><span class="kw">_</span>, <span class="ident">i64</span><span class="op">&gt;</span>(<span class="number">0</span>)<span class="question-mark">?</span>) },
+                <span class="op">|</span><span class="ident">row</span><span class="op">|</span> <span class="op">-&gt;</span> <span class="ident">rusqlite</span>::<span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="kw">_</span><span class="op">&gt;</span> { <span class="prelude-val">Ok</span>(<span class="ident">row</span>.<span class="ident">get</span>::<span class="op">&lt;</span><span class="kw">_</span>, <span class="ident">i64</span><span class="op">&gt;</span>(<span class="number">0</span>)<span class="question-mark">?</span>) },
                 <span class="bool-val">false</span>,
             )<span class="question-mark">?</span>
             .<span class="ident">expect</span>(<span class="string">&quot;Should fetch foreign count for URL A&quot;</span>);
@@ -7545,15 +7546,15 @@
             )
             .<span class="ident">expect_err</span>(<span class="string">&quot;Should fail to delete URL A with keyword&quot;</span>);
         <span class="kw">match</span> <span class="ident">err</span> {
-            <span class="ident">RusqlError</span>::<span class="ident">SqliteFailure</span>(<span class="ident">e</span>, <span class="kw">_</span>) <span class="op">=</span><span class="op">&gt;</span> <span class="macro">assert_eq</span><span class="macro">!</span>(<span class="ident">e</span>.<span class="ident">code</span>, <span class="ident">ErrorCode</span>::<span class="ident">ConstraintViolation</span>),
-            <span class="kw">_</span> <span class="op">=</span><span class="op">&gt;</span> <span class="macro">panic</span><span class="macro">!</span>(<span class="string">&quot;Wanted constraint violation error; got {:?}&quot;</span>, <span class="ident">err</span>),
+            <span class="ident">RusqlError</span>::<span class="ident">SqliteFailure</span>(<span class="ident">e</span>, <span class="kw">_</span>) <span class="op">=&gt;</span> <span class="macro">assert_eq</span><span class="macro">!</span>(<span class="ident">e</span>.<span class="ident">code</span>, <span class="ident">ErrorCode</span>::<span class="ident">ConstraintViolation</span>),
+            <span class="kw">_</span> <span class="op">=&gt;</span> <span class="macro">panic</span><span class="macro">!</span>(<span class="string">&quot;Wanted constraint violation error; got {:?}&quot;</span>, <span class="ident">err</span>),
         }
 
         <span class="prelude-val">Ok</span>(())
     }
 
     <span class="attribute">#[<span class="ident">test</span>]</span>
-    <span class="kw">fn</span> <span class="ident">test_apply_complex_bookmark_keywords</span>() <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span>()<span class="op">&gt;</span> {
+    <span class="kw">fn</span> <span class="ident">test_apply_complex_bookmark_keywords</span>() <span class="op">-&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span>()<span class="op">&gt;</span> {
         <span class="kw">use</span> <span class="kw">crate</span>::<span class="ident">storage</span>::<span class="ident">bookmarks</span>::<span class="ident">bookmarks_get_url_for_keyword</span>;
 
         <span class="comment">// We don&#39;t provide an API for setting keywords locally, but we&#39;ll</span>
@@ -7716,24 +7717,24 @@
             <span class="ident">bookmarks_get_url_for_keyword</span>(<span class="kw-2">&amp;</span><span class="ident">writer</span>, <span class="string">&quot;two&quot;</span>)<span class="question-mark">?</span>,
             <span class="ident">bookmarks_get_url_for_keyword</span>(<span class="kw-2">&amp;</span><span class="ident">writer</span>, <span class="string">&quot;three&quot;</span>)<span class="question-mark">?</span>,
         ) {
-            (<span class="prelude-val">Some</span>(<span class="ident">url</span>), <span class="prelude-val">None</span>) <span class="op">=</span><span class="op">&gt;</span> {
+            (<span class="prelude-val">Some</span>(<span class="ident">url</span>), <span class="prelude-val">None</span>) <span class="op">=&gt;</span> {
                 <span class="macro">assert_eq</span><span class="macro">!</span>(<span class="ident">url</span>.<span class="ident">as_str</span>(), <span class="string">&quot;http://example.com/b&quot;</span>);
                 <span class="string">&quot;two&quot;</span>
             }
-            (<span class="prelude-val">None</span>, <span class="prelude-val">Some</span>(<span class="ident">url</span>)) <span class="op">=</span><span class="op">&gt;</span> {
+            (<span class="prelude-val">None</span>, <span class="prelude-val">Some</span>(<span class="ident">url</span>)) <span class="op">=&gt;</span> {
                 <span class="macro">assert_eq</span><span class="macro">!</span>(<span class="ident">url</span>.<span class="ident">as_str</span>(), <span class="string">&quot;http://example.com/b&quot;</span>);
                 <span class="string">&quot;three&quot;</span>
             }
-            (<span class="prelude-val">Some</span>(<span class="kw">_</span>), <span class="prelude-val">Some</span>(<span class="kw">_</span>)) <span class="op">=</span><span class="op">&gt;</span> <span class="macro">panic</span><span class="macro">!</span>(<span class="string">&quot;Should pick `two` or `three`, not both&quot;</span>),
-            (<span class="prelude-val">None</span>, <span class="prelude-val">None</span>) <span class="op">=</span><span class="op">&gt;</span> <span class="macro">panic</span><span class="macro">!</span>(<span class="string">&quot;Should have URL for either `two` or `three`&quot;</span>),
+            (<span class="prelude-val">Some</span>(<span class="kw">_</span>), <span class="prelude-val">Some</span>(<span class="kw">_</span>)) <span class="op">=&gt;</span> <span class="macro">panic</span><span class="macro">!</span>(<span class="string">&quot;Should pick `two` or `three`, not both&quot;</span>),
+            (<span class="prelude-val">None</span>, <span class="prelude-val">None</span>) <span class="op">=&gt;</span> <span class="macro">panic</span><span class="macro">!</span>(<span class="string">&quot;Should have URL for either `two` or `three`&quot;</span>),
         };
 
         <span class="kw">let</span> <span class="ident">keyword_for_c</span> <span class="op">=</span> <span class="kw">match</span> <span class="ident">bookmarks_get_url_for_keyword</span>(<span class="kw-2">&amp;</span><span class="ident">writer</span>, <span class="string">&quot;four&quot;</span>)<span class="question-mark">?</span> {
-            <span class="prelude-val">Some</span>(<span class="ident">url</span>) <span class="op">=</span><span class="op">&gt;</span> {
+            <span class="prelude-val">Some</span>(<span class="ident">url</span>) <span class="op">=&gt;</span> {
                 <span class="macro">assert_eq</span><span class="macro">!</span>(<span class="ident">url</span>.<span class="ident">as_str</span>(), <span class="string">&quot;http://example.com/c&quot;</span>);
                 <span class="prelude-val">Some</span>(<span class="string">&quot;four&quot;</span>)
             }
-            <span class="prelude-val">None</span> <span class="op">=</span><span class="op">&gt;</span> <span class="prelude-val">None</span>,
+            <span class="prelude-val">None</span> <span class="op">=&gt;</span> <span class="prelude-val">None</span>,
         };
 
         <span class="kw">let</span> <span class="ident">url_for_five</span> <span class="op">=</span> <span class="ident">bookmarks_get_url_for_keyword</span>(<span class="kw-2">&amp;</span><span class="ident">writer</span>, <span class="string">&quot;five&quot;</span>)<span class="question-mark">?</span>
@@ -7758,7 +7759,7 @@
                     <span class="ident">p</span>.<span class="ident">id</span>.<span class="ident">as_str</span>(),
                     <span class="ident">p</span>.<span class="ident">data</span>.<span class="ident">get</span>(<span class="string">&quot;keyword&quot;</span>).<span class="ident">and_then</span>(<span class="op">|</span><span class="ident">v</span><span class="op">|</span> <span class="ident">v</span>.<span class="ident">as_str</span>())
                 ))
-                .<span class="ident">collect</span>::<span class="op">&lt;</span><span class="ident">Vec</span><span class="op">&lt;</span><span class="kw">_</span><span class="op">&gt;</span><span class="op">&gt;</span>(),
+                .<span class="ident">collect</span>::<span class="op">&lt;</span><span class="ident">Vec</span><span class="op">&lt;</span><span class="kw">_</span><span class="op">&gt;&gt;</span>(),
             <span class="ident">expected_outgoing_keywords</span>,
             <span class="string">&quot;Should upload new bookmarks and fix up keywords&quot;</span>,
         );
@@ -7813,7 +7814,7 @@
     }
 
     <span class="attribute">#[<span class="ident">test</span>]</span>
-    <span class="kw">fn</span> <span class="ident">test_wipe</span>() <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span>()<span class="op">&gt;</span> {
+    <span class="kw">fn</span> <span class="ident">test_wipe</span>() <span class="op">-&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span>()<span class="op">&gt;</span> {
         <span class="kw">let</span> <span class="ident">api</span> <span class="op">=</span> <span class="ident">new_mem_api</span>();
         <span class="kw">let</span> <span class="ident">writer</span> <span class="op">=</span> <span class="ident">api</span>.<span class="ident">open_connection</span>(<span class="ident">ConnectionType</span>::<span class="ident">ReadWrite</span>)<span class="question-mark">?</span>;
         <span class="kw">let</span> <span class="ident">syncer</span> <span class="op">=</span> <span class="ident">api</span>.<span class="ident">open_sync_connection</span>()<span class="question-mark">?</span>;
@@ -7909,7 +7910,7 @@
             .<span class="ident">changes</span>
             .<span class="ident">iter</span>()
             .<span class="ident">map</span>(<span class="op">|</span><span class="ident">p</span><span class="op">|</span> <span class="ident">p</span>.<span class="ident">id</span>.<span class="ident">clone</span>())
-            .<span class="ident">collect</span>::<span class="op">&lt;</span><span class="ident">Vec</span><span class="op">&lt;</span><span class="kw">_</span><span class="op">&gt;</span><span class="op">&gt;</span>();
+            .<span class="ident">collect</span>::<span class="op">&lt;</span><span class="ident">Vec</span><span class="op">&lt;</span><span class="kw">_</span><span class="op">&gt;&gt;</span>();
         <span class="ident">outgoing_ids</span>.<span class="ident">sort</span>();
         <span class="macro">assert_eq</span><span class="macro">!</span>(<span class="ident">outgoing_ids</span>, <span class="kw-2">&amp;</span>[<span class="string">&quot;menu&quot;</span>, <span class="string">&quot;mobile&quot;</span>, <span class="string">&quot;toolbar&quot;</span>, <span class="string">&quot;unfiled&quot;</span>],);
 
@@ -7972,7 +7973,7 @@
         <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">outgoing_record_ids</span> <span class="op">=</span> <span class="ident">outgoing_records</span>
             .<span class="ident">into_iter</span>()
             .<span class="ident">map</span>(<span class="op">|</span><span class="ident">p</span><span class="op">|</span> <span class="ident">p</span>.<span class="ident">id</span>.<span class="ident">as_str</span>())
-            .<span class="ident">collect</span>::<span class="op">&lt;</span><span class="ident">Vec</span><span class="op">&lt;</span><span class="kw">_</span><span class="op">&gt;</span><span class="op">&gt;</span>();
+            .<span class="ident">collect</span>::<span class="op">&lt;</span><span class="ident">Vec</span><span class="op">&lt;</span><span class="kw">_</span><span class="op">&gt;&gt;</span>();
         <span class="ident">outgoing_record_ids</span>.<span class="ident">sort</span>();
         <span class="macro">assert_eq</span><span class="macro">!</span>(
             <span class="ident">outgoing_record_ids</span>,
@@ -7981,7 +7982,7 @@
         <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">outgoing_tombstone_ids</span> <span class="op">=</span> <span class="ident">outgoing_tombstones</span>
             .<span class="ident">into_iter</span>()
             .<span class="ident">map</span>(<span class="op">|</span><span class="ident">p</span><span class="op">|</span> <span class="ident">p</span>.<span class="ident">id</span>.<span class="ident">clone</span>())
-            .<span class="ident">collect</span>::<span class="op">&lt;</span><span class="ident">Vec</span><span class="op">&lt;</span><span class="kw">_</span><span class="op">&gt;</span><span class="op">&gt;</span>();
+            .<span class="ident">collect</span>::<span class="op">&lt;</span><span class="ident">Vec</span><span class="op">&lt;</span><span class="kw">_</span><span class="op">&gt;&gt;</span>();
         <span class="ident">outgoing_tombstone_ids</span>.<span class="ident">sort</span>();
         <span class="macro">assert_eq</span><span class="macro">!</span>(
             <span class="ident">outgoing_tombstone_ids</span>,
@@ -8032,7 +8033,7 @@
     }
 
     <span class="attribute">#[<span class="ident">test</span>]</span>
-    <span class="kw">fn</span> <span class="ident">test_reset</span>() <span class="op">-</span><span class="op">&gt;</span> <span class="ident">anyhow</span>::<span class="prelude-ty">Result</span><span class="op">&lt;</span>()<span class="op">&gt;</span> {
+    <span class="kw">fn</span> <span class="ident">test_reset</span>() <span class="op">-&gt;</span> <span class="ident">anyhow</span>::<span class="prelude-ty">Result</span><span class="op">&lt;</span>()<span class="op">&gt;</span> {
         <span class="kw">let</span> <span class="ident">api</span> <span class="op">=</span> <span class="ident">new_mem_api</span>();
         <span class="kw">let</span> <span class="ident">writer</span> <span class="op">=</span> <span class="ident">api</span>.<span class="ident">open_connection</span>(<span class="ident">ConnectionType</span>::<span class="ident">ReadWrite</span>)<span class="question-mark">?</span>;
 
@@ -8097,11 +8098,11 @@
 
             <span class="ident">store</span>.<span class="ident">reset</span>(<span class="kw-2">&amp;</span><span class="ident">StoreSyncAssociation</span>::<span class="ident">Disconnected</span>)<span class="question-mark">?</span>;
             <span class="macro">assert_eq</span><span class="macro">!</span>(
-                <span class="ident">get_meta</span>::<span class="op">&lt;</span><span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">String</span><span class="op">&gt;</span><span class="op">&gt;</span>(<span class="kw-2">&amp;</span><span class="ident">syncer</span>, <span class="ident">GLOBAL_SYNCID_META_KEY</span>)<span class="question-mark">?</span>,
+                <span class="ident">get_meta</span>::<span class="op">&lt;</span><span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">String</span><span class="op">&gt;&gt;</span>(<span class="kw-2">&amp;</span><span class="ident">syncer</span>, <span class="ident">GLOBAL_SYNCID_META_KEY</span>)<span class="question-mark">?</span>,
                 <span class="prelude-val">None</span>
             );
             <span class="macro">assert_eq</span><span class="macro">!</span>(
-                <span class="ident">get_meta</span>::<span class="op">&lt;</span><span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">String</span><span class="op">&gt;</span><span class="op">&gt;</span>(<span class="kw-2">&amp;</span><span class="ident">syncer</span>, <span class="ident">COLLECTION_SYNCID_META_KEY</span>)<span class="question-mark">?</span>,
+                <span class="ident">get_meta</span>::<span class="op">&lt;</span><span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">String</span><span class="op">&gt;&gt;</span>(<span class="kw-2">&amp;</span><span class="ident">syncer</span>, <span class="ident">COLLECTION_SYNCID_META_KEY</span>)<span class="question-mark">?</span>,
                 <span class="prelude-val">None</span>
             );
             <span class="macro">assert_eq</span><span class="macro">!</span>(<span class="ident">get_meta</span>::<span class="op">&lt;</span><span class="ident">i64</span><span class="op">&gt;</span>(<span class="kw-2">&amp;</span><span class="ident">syncer</span>, <span class="ident">LAST_SYNC_META_KEY</span>)<span class="question-mark">?</span>, <span class="prelude-val">Some</span>(<span class="number">0</span>));
@@ -8111,7 +8112,7 @@
     }
 
     <span class="attribute">#[<span class="ident">test</span>]</span>
-    <span class="kw">fn</span> <span class="ident">test_dedupe_local_newer</span>() <span class="op">-</span><span class="op">&gt;</span> <span class="ident">anyhow</span>::<span class="prelude-ty">Result</span><span class="op">&lt;</span>()<span class="op">&gt;</span> {
+    <span class="kw">fn</span> <span class="ident">test_dedupe_local_newer</span>() <span class="op">-&gt;</span> <span class="ident">anyhow</span>::<span class="prelude-ty">Result</span><span class="op">&lt;</span>()<span class="op">&gt;</span> {
         <span class="kw">let</span> <span class="kw">_</span> <span class="op">=</span> <span class="ident">env_logger</span>::<span class="ident">try_init</span>();
 
         <span class="kw">let</span> <span class="ident">api</span> <span class="op">=</span> <span class="ident">new_mem_api</span>();
@@ -8230,7 +8231,7 @@
     }
 
     <span class="attribute">#[<span class="ident">test</span>]</span>
-    <span class="kw">fn</span> <span class="ident">test_deduping_remote_newer</span>() <span class="op">-</span><span class="op">&gt;</span> <span class="ident">anyhow</span>::<span class="prelude-ty">Result</span><span class="op">&lt;</span>()<span class="op">&gt;</span> {
+    <span class="kw">fn</span> <span class="ident">test_deduping_remote_newer</span>() <span class="op">-&gt;</span> <span class="ident">anyhow</span>::<span class="prelude-ty">Result</span><span class="op">&lt;</span>()<span class="op">&gt;</span> {
         <span class="kw">let</span> <span class="kw">_</span> <span class="op">=</span> <span class="ident">env_logger</span>::<span class="ident">try_init</span>();
 
         <span class="kw">let</span> <span class="ident">api</span> <span class="op">=</span> <span class="ident">new_mem_api</span>();
@@ -8467,7 +8468,7 @@
     }
 
     <span class="attribute">#[<span class="ident">test</span>]</span>
-    <span class="kw">fn</span> <span class="ident">test_reconcile_sync_metadata</span>() <span class="op">-</span><span class="op">&gt;</span> <span class="ident">anyhow</span>::<span class="prelude-ty">Result</span><span class="op">&lt;</span>()<span class="op">&gt;</span> {
+    <span class="kw">fn</span> <span class="ident">test_reconcile_sync_metadata</span>() <span class="op">-&gt;</span> <span class="ident">anyhow</span>::<span class="prelude-ty">Result</span><span class="op">&lt;</span>()<span class="op">&gt;</span> {
         <span class="kw">let</span> <span class="kw">_</span> <span class="op">=</span> <span class="ident">env_logger</span>::<span class="ident">try_init</span>();
 
         <span class="kw">let</span> <span class="ident">api</span> <span class="op">=</span> <span class="ident">new_mem_api</span>();

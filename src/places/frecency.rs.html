@@ -1,4 +1,5 @@
-<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source to the Rust file `components/places/src/frecency.rs`."><meta name="keywords" content="rust, rustlang, rust-lang"><title>frecency.rs.html -- source</title><link rel="stylesheet" type="text/css" href="../../normalize.css"><link rel="stylesheet" type="text/css" href="../../rustdoc.css" id="mainThemeStyle"><link rel="stylesheet" type="text/css" href="../../dark.css"><link rel="stylesheet" type="text/css" href="../../light.css" id="themeStyle"><script src="../../storage.js"></script><noscript><link rel="stylesheet" href="../../noscript.css"></noscript><link rel="shortcut icon" href="../../favicon.ico"><style type="text/css">#crate-search{background-image:url("../../down-arrow.svg");}</style></head><body class="rustdoc source"><!--[if lte IE 8]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="sidebar"><div class="sidebar-menu">&#9776;</div><a href='../../places/index.html'><div class='logo-container'><img src='../../rust-logo.png' alt='logo'></div></a></nav><div class="theme-picker"><button id="theme-picker" aria-label="Pick another theme!"><img src="../../brush.svg" width="18" alt="Pick another theme!"></button><div id="theme-choices"></div></div><script src="../../theme.js"></script><nav class="sub"><form class="search-form"><div class="search-container"><div><select id="crate-search"><option value="All crates">All crates</option></select><input class="search-input" name="search" disabled autocomplete="off" spellcheck="false" placeholder="Click or press ‘S’ to search, ‘?’ for more options…" type="search"></div><a id="settings-menu" href="../../settings.html"><img src="../../wheel.svg" width="18" alt="Change settings"></a></div></form></nav><section id="main" class="content"><pre class="line-numbers"><span id="1">  1</span>
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source to the Rust file `components/places/src/frecency.rs`."><meta name="keywords" content="rust, rustlang, rust-lang"><title>frecency.rs.html -- source</title><link rel="stylesheet" type="text/css" href="../../normalize.css"><link rel="stylesheet" type="text/css" href="../../rustdoc.css" id="mainThemeStyle"><link rel="stylesheet" type="text/css" href="../../light.css"  id="themeStyle"><link rel="stylesheet" type="text/css" href="../../dark.css" disabled ><link rel="stylesheet" type="text/css" href="../../ayu.css" disabled ><script src="../../storage.js"></script><noscript><link rel="stylesheet" href="../../noscript.css"></noscript><link rel="shortcut icon" href="../../favicon.ico"><style type="text/css">#crate-search{background-image:url("../../down-arrow.svg");}</style></head><body class="rustdoc source"><!--[if lte IE 8]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="sidebar"><div class="sidebar-menu">&#9776;</div><a href='../../places/index.html'><div class='logo-container rust-logo'><img src='../../rust-logo.png' alt='logo'></div></a></nav><div class="theme-picker"><button id="theme-picker" aria-label="Pick another theme!"><img src="../../brush.svg" width="18" alt="Pick another theme!"></button><div id="theme-choices"></div></div><script src="../../theme.js"></script><nav class="sub"><form class="search-form"><div class="search-container"><div><select id="crate-search"><option value="All crates">All crates</option></select><input class="search-input" name="search" disabled autocomplete="off" spellcheck="false" placeholder="Click or press ‘S’ to search, ‘?’ for more options…" type="search"></div><span class="help-button">?</span>
+                <a id="settings-menu" href="../../settings.html"><img src="../../wheel.svg" width="18" alt="Change settings"></a></div></form></nav><section id="main" class="content"><pre class="line-numbers"><span id="1">  1</span>
 <span id="2">  2</span>
 <span id="3">  3</span>
 <span id="4">  4</span>
@@ -403,7 +404,7 @@
 
 <span class="kw">impl</span> <span class="ident">Default</span> <span class="kw">for</span> <span class="ident">FrecencySettings</span> {
     <span class="attribute">#[<span class="ident">inline</span>]</span>
-    <span class="kw">fn</span> <span class="ident">default</span>() <span class="op">-</span><span class="op">&gt;</span> <span class="self">Self</span> {
+    <span class="kw">fn</span> <span class="ident">default</span>() <span class="op">-&gt;</span> <span class="self">Self</span> {
         <span class="ident">DEFAULT_FRECENCY_SETTINGS</span>
     }
 }
@@ -415,35 +416,35 @@
         <span class="ident">visit_type</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">VisitTransition</span><span class="op">&gt;</span>,
         <span class="ident">visited</span>: <span class="ident">bool</span>,
         <span class="ident">redirect</span>: <span class="ident">bool</span>,
-    ) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">i32</span> {
+    ) <span class="op">-&gt;</span> <span class="ident">i32</span> {
         <span class="kw">if</span> <span class="ident">redirect</span> {
             <span class="kw">return</span> <span class="self">self</span>.<span class="ident">redirect_source_visit_bonus</span>;
         }
         <span class="kw">match</span> (<span class="ident">visit_type</span>, <span class="ident">visited</span>) {
-            (<span class="prelude-val">Some</span>(<span class="ident">VisitTransition</span>::<span class="ident">Link</span>), <span class="kw">_</span>) <span class="op">=</span><span class="op">&gt;</span> <span class="self">self</span>.<span class="ident">link_visit_bonus</span>,
-            (<span class="prelude-val">Some</span>(<span class="ident">VisitTransition</span>::<span class="ident">Embed</span>), <span class="kw">_</span>) <span class="op">=</span><span class="op">&gt;</span> <span class="self">self</span>.<span class="ident">embed_visit_bonus</span>,
-            (<span class="prelude-val">Some</span>(<span class="ident">VisitTransition</span>::<span class="ident">FramedLink</span>), <span class="kw">_</span>) <span class="op">=</span><span class="op">&gt;</span> <span class="self">self</span>.<span class="ident">framed_link_visit_bonus</span>,
-            (<span class="prelude-val">Some</span>(<span class="ident">VisitTransition</span>::<span class="ident">RedirectPermanent</span>), <span class="kw">_</span>) <span class="op">=</span><span class="op">&gt;</span> <span class="self">self</span>.<span class="ident">temporary_redirect_visit_bonus</span>,
-            (<span class="prelude-val">Some</span>(<span class="ident">VisitTransition</span>::<span class="ident">RedirectTemporary</span>), <span class="kw">_</span>) <span class="op">=</span><span class="op">&gt;</span> <span class="self">self</span>.<span class="ident">permanent_redirect_visit_bonus</span>,
-            (<span class="prelude-val">Some</span>(<span class="ident">VisitTransition</span>::<span class="ident">Download</span>), <span class="kw">_</span>) <span class="op">=</span><span class="op">&gt;</span> <span class="self">self</span>.<span class="ident">download_visit_bonus</span>,
-            (<span class="prelude-val">Some</span>(<span class="ident">VisitTransition</span>::<span class="ident">Reload</span>), <span class="kw">_</span>) <span class="op">=</span><span class="op">&gt;</span> <span class="self">self</span>.<span class="ident">reload_visit_bonus</span>,
-            (<span class="prelude-val">Some</span>(<span class="ident">VisitTransition</span>::<span class="ident">Typed</span>), <span class="bool-val">true</span>) <span class="op">=</span><span class="op">&gt;</span> <span class="self">self</span>.<span class="ident">typed_visit_bonus</span>,
-            (<span class="prelude-val">Some</span>(<span class="ident">VisitTransition</span>::<span class="ident">Typed</span>), <span class="bool-val">false</span>) <span class="op">=</span><span class="op">&gt;</span> <span class="self">self</span>.<span class="ident">unvisited_typed_bonus</span>,
-            (<span class="prelude-val">Some</span>(<span class="ident">VisitTransition</span>::<span class="ident">Bookmark</span>), <span class="bool-val">true</span>) <span class="op">=</span><span class="op">&gt;</span> <span class="self">self</span>.<span class="ident">bookmark_visit_bonus</span>,
-            (<span class="prelude-val">Some</span>(<span class="ident">VisitTransition</span>::<span class="ident">Bookmark</span>), <span class="bool-val">false</span>) <span class="op">=</span><span class="op">&gt;</span> <span class="self">self</span>.<span class="ident">unvisited_bookmark_bonus</span>,
+            (<span class="prelude-val">Some</span>(<span class="ident">VisitTransition</span>::<span class="ident">Link</span>), <span class="kw">_</span>) <span class="op">=&gt;</span> <span class="self">self</span>.<span class="ident">link_visit_bonus</span>,
+            (<span class="prelude-val">Some</span>(<span class="ident">VisitTransition</span>::<span class="ident">Embed</span>), <span class="kw">_</span>) <span class="op">=&gt;</span> <span class="self">self</span>.<span class="ident">embed_visit_bonus</span>,
+            (<span class="prelude-val">Some</span>(<span class="ident">VisitTransition</span>::<span class="ident">FramedLink</span>), <span class="kw">_</span>) <span class="op">=&gt;</span> <span class="self">self</span>.<span class="ident">framed_link_visit_bonus</span>,
+            (<span class="prelude-val">Some</span>(<span class="ident">VisitTransition</span>::<span class="ident">RedirectPermanent</span>), <span class="kw">_</span>) <span class="op">=&gt;</span> <span class="self">self</span>.<span class="ident">temporary_redirect_visit_bonus</span>,
+            (<span class="prelude-val">Some</span>(<span class="ident">VisitTransition</span>::<span class="ident">RedirectTemporary</span>), <span class="kw">_</span>) <span class="op">=&gt;</span> <span class="self">self</span>.<span class="ident">permanent_redirect_visit_bonus</span>,
+            (<span class="prelude-val">Some</span>(<span class="ident">VisitTransition</span>::<span class="ident">Download</span>), <span class="kw">_</span>) <span class="op">=&gt;</span> <span class="self">self</span>.<span class="ident">download_visit_bonus</span>,
+            (<span class="prelude-val">Some</span>(<span class="ident">VisitTransition</span>::<span class="ident">Reload</span>), <span class="kw">_</span>) <span class="op">=&gt;</span> <span class="self">self</span>.<span class="ident">reload_visit_bonus</span>,
+            (<span class="prelude-val">Some</span>(<span class="ident">VisitTransition</span>::<span class="ident">Typed</span>), <span class="bool-val">true</span>) <span class="op">=&gt;</span> <span class="self">self</span>.<span class="ident">typed_visit_bonus</span>,
+            (<span class="prelude-val">Some</span>(<span class="ident">VisitTransition</span>::<span class="ident">Typed</span>), <span class="bool-val">false</span>) <span class="op">=&gt;</span> <span class="self">self</span>.<span class="ident">unvisited_typed_bonus</span>,
+            (<span class="prelude-val">Some</span>(<span class="ident">VisitTransition</span>::<span class="ident">Bookmark</span>), <span class="bool-val">true</span>) <span class="op">=&gt;</span> <span class="self">self</span>.<span class="ident">bookmark_visit_bonus</span>,
+            (<span class="prelude-val">Some</span>(<span class="ident">VisitTransition</span>::<span class="ident">Bookmark</span>), <span class="bool-val">false</span>) <span class="op">=&gt;</span> <span class="self">self</span>.<span class="ident">unvisited_bookmark_bonus</span>,
             <span class="comment">// 0 == undefined (see bug 375777 in bugzilla for details)</span>
-            (<span class="prelude-val">None</span>, <span class="kw">_</span>) <span class="op">=</span><span class="op">&gt;</span> <span class="self">self</span>.<span class="ident">default_visit_bonus</span>,
+            (<span class="prelude-val">None</span>, <span class="kw">_</span>) <span class="op">=&gt;</span> <span class="self">self</span>.<span class="ident">default_visit_bonus</span>,
         }
     }
 
-    <span class="kw">fn</span> <span class="ident">get_frecency_aged_weight</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">age_in_days</span>: <span class="ident">i32</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">i32</span> {
-        <span class="kw">if</span> <span class="ident">age_in_days</span> <span class="op">&lt;</span><span class="op">=</span> <span class="self">self</span>.<span class="ident">first_bucket_cutoff_days</span> {
+    <span class="kw">fn</span> <span class="ident">get_frecency_aged_weight</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">age_in_days</span>: <span class="ident">i32</span>) <span class="op">-&gt;</span> <span class="ident">i32</span> {
+        <span class="kw">if</span> <span class="ident">age_in_days</span> <span class="op">&lt;=</span> <span class="self">self</span>.<span class="ident">first_bucket_cutoff_days</span> {
             <span class="self">self</span>.<span class="ident">first_bucket_weight</span>
-        } <span class="kw">else</span> <span class="kw">if</span> <span class="ident">age_in_days</span> <span class="op">&lt;</span><span class="op">=</span> <span class="self">self</span>.<span class="ident">second_bucket_cutoff_days</span> {
+        } <span class="kw">else</span> <span class="kw">if</span> <span class="ident">age_in_days</span> <span class="op">&lt;=</span> <span class="self">self</span>.<span class="ident">second_bucket_cutoff_days</span> {
             <span class="self">self</span>.<span class="ident">second_bucket_weight</span>
-        } <span class="kw">else</span> <span class="kw">if</span> <span class="ident">age_in_days</span> <span class="op">&lt;</span><span class="op">=</span> <span class="self">self</span>.<span class="ident">third_bucket_cutoff_days</span> {
+        } <span class="kw">else</span> <span class="kw">if</span> <span class="ident">age_in_days</span> <span class="op">&lt;=</span> <span class="self">self</span>.<span class="ident">third_bucket_cutoff_days</span> {
             <span class="self">self</span>.<span class="ident">third_bucket_weight</span>
-        } <span class="kw">else</span> <span class="kw">if</span> <span class="ident">age_in_days</span> <span class="op">&lt;</span><span class="op">=</span> <span class="self">self</span>.<span class="ident">fourth_bucket_cutoff_days</span> {
+        } <span class="kw">else</span> <span class="kw">if</span> <span class="ident">age_in_days</span> <span class="op">&lt;=</span> <span class="self">self</span>.<span class="ident">fourth_bucket_cutoff_days</span> {
             <span class="self">self</span>.<span class="ident">fourth_bucket_weight</span>
         } <span class="kw">else</span> {
             <span class="self">self</span>.<span class="ident">default_bucket_weight</span>
@@ -469,7 +470,7 @@
         <span class="ident">settings</span>: <span class="kw-2">&amp;</span><span class="lifetime">&#39;s</span> <span class="ident">FrecencySettings</span>,
         <span class="ident">page_id</span>: <span class="ident">i64</span>,
         <span class="ident">most_recent_redirect_bonus</span>: <span class="ident">RedirectBonus</span>,
-    ) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="self">Self</span><span class="op">&gt;</span> {
+    ) <span class="op">-&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="self">Self</span><span class="op">&gt;</span> {
         <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">stmt</span> <span class="op">=</span> <span class="ident">conn</span>.<span class="ident">prepare_cached</span>(
             <span class="string">&quot;
             SELECT
@@ -484,7 +485,7 @@
         <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">rows</span> <span class="op">=</span> <span class="ident">stmt</span>.<span class="ident">query_named</span>(<span class="kw-2">&amp;</span>[(<span class="string">&quot;:page_id&quot;</span>, <span class="kw-2">&amp;</span><span class="ident">page_id</span>)])<span class="question-mark">?</span>;
         <span class="kw">let</span> <span class="ident">row</span> <span class="op">=</span> <span class="ident">rows</span>
             .<span class="ident">next</span>()<span class="question-mark">?</span>
-            .<span class="ident">ok_or_else</span>(<span class="op">|</span><span class="op">|</span> <span class="ident">rusqlite</span>::<span class="ident">Error</span>::<span class="ident">QueryReturnedNoRows</span>)<span class="question-mark">?</span>;
+            .<span class="ident">ok_or_else</span>(<span class="op">||</span> <span class="ident">rusqlite</span>::<span class="ident">Error</span>::<span class="ident">QueryReturnedNoRows</span>)<span class="question-mark">?</span>;
         <span class="kw">let</span> <span class="ident">typed</span>: <span class="ident">i32</span> <span class="op">=</span> <span class="ident">row</span>.<span class="ident">get</span>(<span class="string">&quot;typed&quot;</span>)<span class="question-mark">?</span>;
         <span class="kw">let</span> <span class="ident">visit_count</span>: <span class="ident">i32</span> <span class="op">=</span> <span class="ident">row</span>.<span class="ident">get</span>(<span class="string">&quot;visit_count&quot;</span>)<span class="question-mark">?</span>;
         <span class="kw">let</span> <span class="ident">foreign_count</span>: <span class="ident">i32</span> <span class="op">=</span> <span class="ident">row</span>.<span class="ident">get</span>(<span class="string">&quot;foreign_count&quot;</span>)<span class="question-mark">?</span>;
@@ -502,11 +503,11 @@
         })
     }
 
-    <span class="kw">fn</span> <span class="ident">has_bookmark</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">bool</span> {
+    <span class="kw">fn</span> <span class="ident">has_bookmark</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-&gt;</span> <span class="ident">bool</span> {
         <span class="self">self</span>.<span class="ident">foreign_count</span> <span class="op">&gt;</span> <span class="number">0</span>
     }
 
-    <span class="kw">fn</span> <span class="ident">score_recent_visits</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span>(<span class="ident">usize</span>, <span class="ident">f32</span>)<span class="op">&gt;</span> {
+    <span class="kw">fn</span> <span class="ident">score_recent_visits</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span>(<span class="ident">usize</span>, <span class="ident">f32</span>)<span class="op">&gt;</span> {
         <span class="comment">// Get a sample of the last visits to the page, to calculate its weight.</span>
         <span class="comment">// In case the visit is a redirect target, calculate the frecency</span>
         <span class="comment">// as if the original page was visited.</span>
@@ -537,9 +538,9 @@
 
         <span class="kw">let</span> <span class="ident">row_iter</span> <span class="op">=</span> <span class="ident">stmt</span>.<span class="ident">query_and_then_named</span>(
             <span class="kw-2">&amp;</span>[(<span class="string">&quot;:page_id&quot;</span>, <span class="kw-2">&amp;</span><span class="self">self</span>.<span class="ident">page_id</span>)],
-            <span class="op">|</span><span class="ident">row</span><span class="op">|</span> <span class="op">-</span><span class="op">&gt;</span> <span class="ident">rusqlite</span>::<span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="kw">_</span><span class="op">&gt;</span> {
-                <span class="kw">let</span> <span class="ident">visit_type</span> <span class="op">=</span> <span class="ident">row</span>.<span class="ident">get</span>::<span class="op">&lt;</span><span class="kw">_</span>, <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">u8</span><span class="op">&gt;</span><span class="op">&gt;</span>(<span class="string">&quot;visit_type&quot;</span>)<span class="question-mark">?</span>.<span class="ident">unwrap_or</span>(<span class="number">0</span>);
-                <span class="kw">let</span> <span class="ident">target_visit_type</span> <span class="op">=</span> <span class="ident">row</span>.<span class="ident">get</span>::<span class="op">&lt;</span><span class="kw">_</span>, <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">u8</span><span class="op">&gt;</span><span class="op">&gt;</span>(<span class="string">&quot;target_visit_type&quot;</span>)<span class="question-mark">?</span>.<span class="ident">unwrap_or</span>(<span class="number">0</span>);
+            <span class="op">|</span><span class="ident">row</span><span class="op">|</span> <span class="op">-&gt;</span> <span class="ident">rusqlite</span>::<span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="kw">_</span><span class="op">&gt;</span> {
+                <span class="kw">let</span> <span class="ident">visit_type</span> <span class="op">=</span> <span class="ident">row</span>.<span class="ident">get</span>::<span class="op">&lt;</span><span class="kw">_</span>, <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">u8</span><span class="op">&gt;&gt;</span>(<span class="string">&quot;visit_type&quot;</span>)<span class="question-mark">?</span>.<span class="ident">unwrap_or</span>(<span class="number">0</span>);
+                <span class="kw">let</span> <span class="ident">target_visit_type</span> <span class="op">=</span> <span class="ident">row</span>.<span class="ident">get</span>::<span class="op">&lt;</span><span class="kw">_</span>, <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">u8</span><span class="op">&gt;&gt;</span>(<span class="string">&quot;target_visit_type&quot;</span>)<span class="question-mark">?</span>.<span class="ident">unwrap_or</span>(<span class="number">0</span>);
                 <span class="kw">let</span> <span class="ident">visit_date</span>: <span class="ident">Timestamp</span> <span class="op">=</span> <span class="ident">row</span>.<span class="ident">get</span>(<span class="string">&quot;visit_date&quot;</span>)<span class="question-mark">?</span>;
                 <span class="kw">let</span> <span class="ident">age_in_days</span> <span class="op">=</span>
                     (<span class="ident">now</span>.<span class="ident">as_millis</span>() <span class="kw">as</span> <span class="ident">f64</span> <span class="op">-</span> <span class="ident">visit_date</span>.<span class="ident">as_millis</span>() <span class="kw">as</span> <span class="ident">f64</span>) <span class="op">/</span> <span class="number">86_400_000.0</span>;
@@ -560,14 +561,14 @@
             <span class="comment">// use the redirect bonus. We can&#39;t fetch this information from the</span>
             <span class="comment">// database, because we only store redirect targets.</span>
             <span class="comment">// For older visits we extract the value from the database.</span>
-            <span class="kw">let</span> <span class="ident">use_redirect_bonus</span> <span class="op">=</span> <span class="kw">if</span> <span class="self">self</span>.<span class="ident">most_recent_redirect_bonus</span> <span class="op">=</span><span class="op">=</span> <span class="ident">RedirectBonus</span>::<span class="ident">Unknown</span>
-                <span class="op">|</span><span class="op">|</span> <span class="ident">num_sampled_visits</span> <span class="op">&gt;</span> <span class="number">0</span>
+            <span class="kw">let</span> <span class="ident">use_redirect_bonus</span> <span class="op">=</span> <span class="kw">if</span> <span class="self">self</span>.<span class="ident">most_recent_redirect_bonus</span> <span class="op">==</span> <span class="ident">RedirectBonus</span>::<span class="ident">Unknown</span>
+                <span class="op">||</span> <span class="ident">num_sampled_visits</span> <span class="op">&gt;</span> <span class="number">0</span>
             {
-                <span class="ident">target_visit_type</span> <span class="op">=</span><span class="op">=</span> <span class="prelude-val">Some</span>(<span class="ident">VisitTransition</span>::<span class="ident">RedirectPermanent</span>)
-                    <span class="op">|</span><span class="op">|</span> (<span class="ident">target_visit_type</span> <span class="op">=</span><span class="op">=</span> <span class="prelude-val">Some</span>(<span class="ident">VisitTransition</span>::<span class="ident">RedirectTemporary</span>)
-                        <span class="kw-2">&amp;</span><span class="op">&amp;</span> <span class="ident">visit_type</span> <span class="op">!</span><span class="op">=</span> <span class="prelude-val">Some</span>(<span class="ident">VisitTransition</span>::<span class="ident">Typed</span>))
+                <span class="ident">target_visit_type</span> <span class="op">==</span> <span class="prelude-val">Some</span>(<span class="ident">VisitTransition</span>::<span class="ident">RedirectPermanent</span>)
+                    <span class="op">||</span> (<span class="ident">target_visit_type</span> <span class="op">==</span> <span class="prelude-val">Some</span>(<span class="ident">VisitTransition</span>::<span class="ident">RedirectTemporary</span>)
+                        <span class="op">&amp;&amp;</span> <span class="ident">visit_type</span> <span class="op">!=</span> <span class="prelude-val">Some</span>(<span class="ident">VisitTransition</span>::<span class="ident">Typed</span>))
             } <span class="kw">else</span> {
-                <span class="self">self</span>.<span class="ident">most_recent_redirect_bonus</span> <span class="op">=</span><span class="op">=</span> <span class="ident">RedirectBonus</span>::<span class="ident">Redirect</span>
+                <span class="self">self</span>.<span class="ident">most_recent_redirect_bonus</span> <span class="op">==</span> <span class="ident">RedirectBonus</span>::<span class="ident">Redirect</span>
             };
 
             <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">bonus</span> <span class="op">=</span>
@@ -575,24 +576,24 @@
                     .<span class="ident">get_transition_bonus</span>(<span class="ident">visit_type</span>, <span class="bool-val">true</span>, <span class="ident">use_redirect_bonus</span>);
 
             <span class="kw">if</span> <span class="self">self</span>.<span class="ident">has_bookmark</span>() {
-                <span class="ident">bonus</span> <span class="op">+</span><span class="op">=</span> <span class="self">self</span>.<span class="ident">settings</span>.<span class="ident">get_transition_bonus</span>(
+                <span class="ident">bonus</span> <span class="op">+=</span> <span class="self">self</span>.<span class="ident">settings</span>.<span class="ident">get_transition_bonus</span>(
                     <span class="prelude-val">Some</span>(<span class="ident">VisitTransition</span>::<span class="ident">Bookmark</span>),
                     <span class="bool-val">true</span>,
                     <span class="bool-val">false</span>,
                 );
             }
-            <span class="kw">if</span> <span class="ident">bonus</span> <span class="op">!</span><span class="op">=</span> <span class="number">0</span> {
+            <span class="kw">if</span> <span class="ident">bonus</span> <span class="op">!=</span> <span class="number">0</span> {
                 <span class="kw">let</span> <span class="ident">weight</span> <span class="op">=</span> <span class="self">self</span>.<span class="ident">settings</span>.<span class="ident">get_frecency_aged_weight</span>(<span class="ident">age_in_days</span>) <span class="kw">as</span> <span class="ident">f32</span>;
-                <span class="ident">points_for_sampled_visits</span> <span class="op">+</span><span class="op">=</span> <span class="ident">weight</span> <span class="op">*</span> (<span class="ident">bonus</span> <span class="kw">as</span> <span class="ident">f32</span> <span class="op">/</span> <span class="number">100.0</span>)
+                <span class="ident">points_for_sampled_visits</span> <span class="op">+=</span> <span class="ident">weight</span> <span class="op">*</span> (<span class="ident">bonus</span> <span class="kw">as</span> <span class="ident">f32</span> <span class="op">/</span> <span class="number">100.0</span>)
             }
-            <span class="ident">num_sampled_visits</span> <span class="op">+</span><span class="op">=</span> <span class="number">1</span>;
+            <span class="ident">num_sampled_visits</span> <span class="op">+=</span> <span class="number">1</span>;
         }
 
         <span class="prelude-val">Ok</span>((<span class="ident">num_sampled_visits</span>, <span class="ident">points_for_sampled_visits</span>))
     }
 
-    <span class="kw">fn</span> <span class="ident">get_frecency_for_sample</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">num_sampled</span>: <span class="ident">usize</span>, <span class="ident">score</span>: <span class="ident">f32</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">i32</span> {
-        <span class="kw">if</span> <span class="ident">score</span> <span class="op">=</span><span class="op">=</span> <span class="number">0.0f32</span> {
+    <span class="kw">fn</span> <span class="ident">get_frecency_for_sample</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">num_sampled</span>: <span class="ident">usize</span>, <span class="ident">score</span>: <span class="ident">f32</span>) <span class="op">-&gt;</span> <span class="ident">i32</span> {
+        <span class="kw">if</span> <span class="ident">score</span> <span class="op">==</span> <span class="number">0.0f32</span> {
             <span class="comment">// We were unable to calculate points, maybe cause all the visits in the</span>
             <span class="comment">// sample had a zero bonus. Though, we know the page has some past valid</span>
             <span class="comment">// visit, or visit_count would be zero. Thus we set the frecency to</span>
@@ -606,14 +607,14 @@
         }
     }
 
-    <span class="kw">fn</span> <span class="ident">compute_unvisited_bookmark_frecency</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">i32</span> {
+    <span class="kw">fn</span> <span class="ident">compute_unvisited_bookmark_frecency</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-&gt;</span> <span class="ident">i32</span> {
         <span class="comment">// Make it so something bookmarked and typed will have a higher frecency</span>
         <span class="comment">// than something just typed or just bookmarked.</span>
         <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">bonus</span> <span class="op">=</span>
             <span class="self">self</span>.<span class="ident">settings</span>
                 .<span class="ident">get_transition_bonus</span>(<span class="prelude-val">Some</span>(<span class="ident">VisitTransition</span>::<span class="ident">Bookmark</span>), <span class="bool-val">false</span>, <span class="bool-val">false</span>);
-        <span class="kw">if</span> <span class="self">self</span>.<span class="ident">typed</span> <span class="op">!</span><span class="op">=</span> <span class="number">0</span> {
-            <span class="ident">bonus</span> <span class="op">+</span><span class="op">=</span> <span class="self">self</span>
+        <span class="kw">if</span> <span class="self">self</span>.<span class="ident">typed</span> <span class="op">!=</span> <span class="number">0</span> {
+            <span class="ident">bonus</span> <span class="op">+=</span> <span class="self">self</span>
                 .<span class="ident">settings</span>
                 .<span class="ident">get_transition_bonus</span>(<span class="prelude-val">Some</span>(<span class="ident">VisitTransition</span>::<span class="ident">Typed</span>), <span class="bool-val">false</span>, <span class="bool-val">false</span>);
         }
@@ -632,13 +633,13 @@
     <span class="ident">settings</span>: <span class="kw-2">&amp;</span><span class="ident">FrecencySettings</span>,
     <span class="ident">page_id</span>: <span class="ident">i64</span>,
     <span class="ident">is_redirect</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">bool</span><span class="op">&gt;</span>,
-) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">i32</span><span class="op">&gt;</span> {
+) <span class="op">-&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">i32</span><span class="op">&gt;</span> {
     <span class="macro">assert</span><span class="macro">!</span>(<span class="ident">page_id</span> <span class="op">&gt;</span> <span class="number">0</span>, <span class="string">&quot;calculate_frecency given invalid page_id&quot;</span>);
 
     <span class="kw">let</span> <span class="ident">most_recent_redirect_bonus</span> <span class="op">=</span> <span class="kw">match</span> <span class="ident">is_redirect</span> {
-        <span class="prelude-val">None</span> <span class="op">=</span><span class="op">&gt;</span> <span class="ident">RedirectBonus</span>::<span class="ident">Unknown</span>,
-        <span class="prelude-val">Some</span>(<span class="bool-val">true</span>) <span class="op">=</span><span class="op">&gt;</span> <span class="ident">RedirectBonus</span>::<span class="ident">Redirect</span>,
-        <span class="prelude-val">Some</span>(<span class="bool-val">false</span>) <span class="op">=</span><span class="op">&gt;</span> <span class="ident">RedirectBonus</span>::<span class="ident">Normal</span>,
+        <span class="prelude-val">None</span> <span class="op">=&gt;</span> <span class="ident">RedirectBonus</span>::<span class="ident">Unknown</span>,
+        <span class="prelude-val">Some</span>(<span class="bool-val">true</span>) <span class="op">=&gt;</span> <span class="ident">RedirectBonus</span>::<span class="ident">Redirect</span>,
+        <span class="prelude-val">Some</span>(<span class="bool-val">false</span>) <span class="op">=&gt;</span> <span class="ident">RedirectBonus</span>::<span class="ident">Normal</span>,
     };
 
     <span class="kw">let</span> <span class="ident">fc</span> <span class="op">=</span> <span class="ident">FrecencyComputation</span>::<span class="ident">new</span>(<span class="ident">db</span>, <span class="ident">settings</span>, <span class="ident">page_id</span>, <span class="ident">most_recent_redirect_bonus</span>)<span class="question-mark">?</span>;
@@ -652,7 +653,7 @@
     <span class="prelude-val">Ok</span>(<span class="kw">if</span> <span class="ident">num_sampled_visits</span> <span class="op">&gt;</span> <span class="number">0</span> {
         <span class="comment">// If we sampled some visits for this page, use the calculated weight.</span>
         <span class="ident">fc</span>.<span class="ident">get_frecency_for_sample</span>(<span class="ident">num_sampled_visits</span>, <span class="ident">sample_score</span>)
-    } <span class="kw">else</span> <span class="kw">if</span> <span class="op">!</span><span class="ident">fc</span>.<span class="ident">has_bookmark</span>() <span class="op">|</span><span class="op">|</span> <span class="ident">fc</span>.<span class="ident">is_query</span> {
+    } <span class="kw">else</span> <span class="kw">if</span> <span class="op">!</span><span class="ident">fc</span>.<span class="ident">has_bookmark</span>() <span class="op">||</span> <span class="ident">fc</span>.<span class="ident">is_query</span> {
         <span class="comment">// Otherwise, this page has no visits, it may be bookmarked.</span>
         <span class="number">0</span>
     } <span class="kw">else</span> {

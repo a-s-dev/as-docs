@@ -1,4 +1,5 @@
-<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source to the Rust file `components/places/src/ffi.rs`."><meta name="keywords" content="rust, rustlang, rust-lang"><title>ffi.rs.html -- source</title><link rel="stylesheet" type="text/css" href="../../normalize.css"><link rel="stylesheet" type="text/css" href="../../rustdoc.css" id="mainThemeStyle"><link rel="stylesheet" type="text/css" href="../../dark.css"><link rel="stylesheet" type="text/css" href="../../light.css" id="themeStyle"><script src="../../storage.js"></script><noscript><link rel="stylesheet" href="../../noscript.css"></noscript><link rel="shortcut icon" href="../../favicon.ico"><style type="text/css">#crate-search{background-image:url("../../down-arrow.svg");}</style></head><body class="rustdoc source"><!--[if lte IE 8]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="sidebar"><div class="sidebar-menu">&#9776;</div><a href='../../places/index.html'><div class='logo-container'><img src='../../rust-logo.png' alt='logo'></div></a></nav><div class="theme-picker"><button id="theme-picker" aria-label="Pick another theme!"><img src="../../brush.svg" width="18" alt="Pick another theme!"></button><div id="theme-choices"></div></div><script src="../../theme.js"></script><nav class="sub"><form class="search-form"><div class="search-container"><div><select id="crate-search"><option value="All crates">All crates</option></select><input class="search-input" name="search" disabled autocomplete="off" spellcheck="false" placeholder="Click or press ‘S’ to search, ‘?’ for more options…" type="search"></div><a id="settings-menu" href="../../settings.html"><img src="../../wheel.svg" width="18" alt="Change settings"></a></div></form></nav><section id="main" class="content"><pre class="line-numbers"><span id="1">  1</span>
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source to the Rust file `components/places/src/ffi.rs`."><meta name="keywords" content="rust, rustlang, rust-lang"><title>ffi.rs.html -- source</title><link rel="stylesheet" type="text/css" href="../../normalize.css"><link rel="stylesheet" type="text/css" href="../../rustdoc.css" id="mainThemeStyle"><link rel="stylesheet" type="text/css" href="../../light.css"  id="themeStyle"><link rel="stylesheet" type="text/css" href="../../dark.css" disabled ><link rel="stylesheet" type="text/css" href="../../ayu.css" disabled ><script src="../../storage.js"></script><noscript><link rel="stylesheet" href="../../noscript.css"></noscript><link rel="shortcut icon" href="../../favicon.ico"><style type="text/css">#crate-search{background-image:url("../../down-arrow.svg");}</style></head><body class="rustdoc source"><!--[if lte IE 8]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="sidebar"><div class="sidebar-menu">&#9776;</div><a href='../../places/index.html'><div class='logo-container rust-logo'><img src='../../rust-logo.png' alt='logo'></div></a></nav><div class="theme-picker"><button id="theme-picker" aria-label="Pick another theme!"><img src="../../brush.svg" width="18" alt="Pick another theme!"></button><div id="theme-choices"></div></div><script src="../../theme.js"></script><nav class="sub"><form class="search-form"><div class="search-container"><div><select id="crate-search"><option value="All crates">All crates</option></select><input class="search-input" name="search" disabled autocomplete="off" spellcheck="false" placeholder="Click or press ‘S’ to search, ‘?’ for more options…" type="search"></div><span class="help-button">?</span>
+                <a id="settings-menu" href="../../settings.html"><img src="../../wheel.svg" width="18" alt="Change settings"></a></div></form></nav><section id="main" class="content"><pre class="line-numbers"><span id="1">  1</span>
 <span id="2">  2</span>
 <span id="3">  3</span>
 <span id="4">  4</span>
@@ -205,57 +206,57 @@
     <span class="kw">pub</span> <span class="kw">const</span> <span class="ident">INVALID_PLACE_INFO_CANNOT_UPDATE_ROOT</span>: <span class="ident">i32</span> <span class="op">=</span> <span class="number">64</span> <span class="op">+</span> <span class="number">4</span>;
 }
 
-<span class="kw">fn</span> <span class="ident">get_code</span>(<span class="ident">err</span>: <span class="kw-2">&amp;</span><span class="ident">Error</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">ErrorCode</span> {
+<span class="kw">fn</span> <span class="ident">get_code</span>(<span class="ident">err</span>: <span class="kw-2">&amp;</span><span class="ident">Error</span>) <span class="op">-&gt;</span> <span class="ident">ErrorCode</span> {
     <span class="kw">match</span> <span class="ident">err</span>.<span class="ident">kind</span>() {
-        <span class="ident">ErrorKind</span>::<span class="ident">InvalidPlaceInfo</span>(<span class="ident">info</span>) <span class="op">=</span><span class="op">&gt;</span> {
+        <span class="ident">ErrorKind</span>::<span class="ident">InvalidPlaceInfo</span>(<span class="ident">info</span>) <span class="op">=&gt;</span> {
             <span class="ident">log</span>::<span class="macro">error</span><span class="macro">!</span>(<span class="string">&quot;Invalid place info: {}&quot;</span>, <span class="ident">info</span>);
             <span class="kw">let</span> <span class="ident">code</span> <span class="op">=</span> <span class="kw">match</span> <span class="kw-2">&amp;</span><span class="ident">info</span> {
-                <span class="ident">InvalidPlaceInfo</span>::<span class="ident">InvalidParent</span>(..) <span class="op">=</span><span class="op">&gt;</span> {
+                <span class="ident">InvalidPlaceInfo</span>::<span class="ident">InvalidParent</span>(..) <span class="op">=&gt;</span> {
                     <span class="ident">error_codes</span>::<span class="ident">INVALID_PLACE_INFO_INVALID_PARENT</span>
                 }
-                <span class="ident">InvalidPlaceInfo</span>::<span class="ident">NoSuchGuid</span>(..) <span class="op">=</span><span class="op">&gt;</span> <span class="ident">error_codes</span>::<span class="ident">INVALID_PLACE_INFO_NO_ITEM</span>,
-                <span class="ident">InvalidPlaceInfo</span>::<span class="ident">UrlTooLong</span> <span class="op">=</span><span class="op">&gt;</span> <span class="ident">error_codes</span>::<span class="ident">INVALID_PLACE_INFO_INVALID_PARENT</span>,
-                <span class="ident">InvalidPlaceInfo</span>::<span class="ident">IllegalChange</span>(..) <span class="op">=</span><span class="op">&gt;</span> {
+                <span class="ident">InvalidPlaceInfo</span>::<span class="ident">NoSuchGuid</span>(..) <span class="op">=&gt;</span> <span class="ident">error_codes</span>::<span class="ident">INVALID_PLACE_INFO_NO_ITEM</span>,
+                <span class="ident">InvalidPlaceInfo</span>::<span class="ident">UrlTooLong</span> <span class="op">=&gt;</span> <span class="ident">error_codes</span>::<span class="ident">INVALID_PLACE_INFO_INVALID_PARENT</span>,
+                <span class="ident">InvalidPlaceInfo</span>::<span class="ident">IllegalChange</span>(..) <span class="op">=&gt;</span> {
                     <span class="ident">error_codes</span>::<span class="ident">INVALID_PLACE_INFO_ILLEGAL_CHANGE</span>
                 }
-                <span class="ident">InvalidPlaceInfo</span>::<span class="ident">CannotUpdateRoot</span>(..) <span class="op">=</span><span class="op">&gt;</span> {
+                <span class="ident">InvalidPlaceInfo</span>::<span class="ident">CannotUpdateRoot</span>(..) <span class="op">=&gt;</span> {
                     <span class="ident">error_codes</span>::<span class="ident">INVALID_PLACE_INFO_CANNOT_UPDATE_ROOT</span>
                 }
-                <span class="kw">_</span> <span class="op">=</span><span class="op">&gt;</span> <span class="ident">error_codes</span>::<span class="ident">UNEXPECTED</span>,
+                <span class="kw">_</span> <span class="op">=&gt;</span> <span class="ident">error_codes</span>::<span class="ident">UNEXPECTED</span>,
             };
             <span class="ident">ErrorCode</span>::<span class="ident">new</span>(<span class="ident">code</span>)
         }
-        <span class="ident">ErrorKind</span>::<span class="ident">UrlParseError</span>(<span class="ident">e</span>) <span class="op">=</span><span class="op">&gt;</span> {
+        <span class="ident">ErrorKind</span>::<span class="ident">UrlParseError</span>(<span class="ident">e</span>) <span class="op">=&gt;</span> {
             <span class="ident">log</span>::<span class="macro">error</span><span class="macro">!</span>(<span class="string">&quot;URL parse error: {}&quot;</span>, <span class="ident">e</span>);
             <span class="ident">ErrorCode</span>::<span class="ident">new</span>(<span class="ident">error_codes</span>::<span class="ident">URL_PARSE_ERROR</span>)
         }
         <span class="comment">// Can&#39;t pattern match on `err` without adding a dep on the sqlite3-sys crate,</span>
         <span class="comment">// so we just use a `if` guard.</span>
         <span class="ident">ErrorKind</span>::<span class="ident">SqlError</span>(<span class="ident">rusqlite</span>::<span class="ident">Error</span>::<span class="ident">SqliteFailure</span>(<span class="ident">err</span>, <span class="ident">msg</span>))
-            <span class="kw">if</span> <span class="ident">err</span>.<span class="ident">code</span> <span class="op">=</span><span class="op">=</span> <span class="ident">rusqlite</span>::<span class="ident">ErrorCode</span>::<span class="ident">DatabaseBusy</span> <span class="op">=</span><span class="op">&gt;</span>
+            <span class="kw">if</span> <span class="ident">err</span>.<span class="ident">code</span> <span class="op">==</span> <span class="ident">rusqlite</span>::<span class="ident">ErrorCode</span>::<span class="ident">DatabaseBusy</span> <span class="op">=&gt;</span>
         {
             <span class="ident">log</span>::<span class="macro">error</span><span class="macro">!</span>(<span class="string">&quot;Database busy: {:?} {:?}&quot;</span>, <span class="ident">err</span>, <span class="ident">msg</span>);
             <span class="ident">ErrorCode</span>::<span class="ident">new</span>(<span class="ident">error_codes</span>::<span class="ident">DATABASE_BUSY</span>)
         }
         <span class="ident">ErrorKind</span>::<span class="ident">SqlError</span>(<span class="ident">rusqlite</span>::<span class="ident">Error</span>::<span class="ident">SqliteFailure</span>(<span class="ident">err</span>, <span class="kw">_</span>))
-            <span class="kw">if</span> <span class="ident">err</span>.<span class="ident">code</span> <span class="op">=</span><span class="op">=</span> <span class="ident">rusqlite</span>::<span class="ident">ErrorCode</span>::<span class="ident">OperationInterrupted</span> <span class="op">=</span><span class="op">&gt;</span>
+            <span class="kw">if</span> <span class="ident">err</span>.<span class="ident">code</span> <span class="op">==</span> <span class="ident">rusqlite</span>::<span class="ident">ErrorCode</span>::<span class="ident">OperationInterrupted</span> <span class="op">=&gt;</span>
         {
             <span class="ident">log</span>::<span class="macro">info</span><span class="macro">!</span>(<span class="string">&quot;Operation interrupted&quot;</span>);
             <span class="ident">ErrorCode</span>::<span class="ident">new</span>(<span class="ident">error_codes</span>::<span class="ident">DATABASE_INTERRUPTED</span>)
         }
-        <span class="ident">ErrorKind</span>::<span class="ident">InterruptedError</span>(<span class="kw">_</span>) <span class="op">=</span><span class="op">&gt;</span> {
+        <span class="ident">ErrorKind</span>::<span class="ident">InterruptedError</span>(<span class="kw">_</span>) <span class="op">=&gt;</span> {
             <span class="comment">// Can&#39;t unify with the above ... :(</span>
             <span class="ident">log</span>::<span class="macro">info</span><span class="macro">!</span>(<span class="string">&quot;Operation interrupted&quot;</span>);
             <span class="ident">ErrorCode</span>::<span class="ident">new</span>(<span class="ident">error_codes</span>::<span class="ident">DATABASE_INTERRUPTED</span>)
         }
-        <span class="ident">ErrorKind</span>::<span class="ident">Corruption</span>(<span class="ident">e</span>) <span class="op">=</span><span class="op">&gt;</span> {
+        <span class="ident">ErrorKind</span>::<span class="ident">Corruption</span>(<span class="ident">e</span>) <span class="op">=&gt;</span> {
             <span class="ident">log</span>::<span class="macro">info</span><span class="macro">!</span>(<span class="string">&quot;The store is corrupt: {}&quot;</span>, <span class="ident">e</span>);
             <span class="ident">ErrorCode</span>::<span class="ident">new</span>(<span class="ident">error_codes</span>::<span class="ident">DATABASE_CORRUPT</span>)
         }
-        <span class="ident">ErrorKind</span>::<span class="ident">SyncAdapterError</span>(<span class="ident">e</span>) <span class="op">=</span><span class="op">&gt;</span> {
+        <span class="ident">ErrorKind</span>::<span class="ident">SyncAdapterError</span>(<span class="ident">e</span>) <span class="op">=&gt;</span> {
             <span class="kw">use</span> <span class="ident">sync15</span>::<span class="ident">ErrorKind</span>;
             <span class="kw">match</span> <span class="ident">e</span>.<span class="ident">kind</span>() {
-                <span class="ident">ErrorKind</span>::<span class="ident">StoreError</span>(<span class="ident">store_error</span>) <span class="op">=</span><span class="op">&gt;</span> {
+                <span class="ident">ErrorKind</span>::<span class="ident">StoreError</span>(<span class="ident">store_error</span>) <span class="op">=&gt;</span> {
                     <span class="comment">// If it&#39;s a type-erased version of one of our errors, try</span>
                     <span class="comment">// and resolve it.</span>
                     <span class="kw">if</span> <span class="kw">let</span> <span class="prelude-val">Some</span>(<span class="ident">places_err</span>) <span class="op">=</span> <span class="ident">store_error</span>.<span class="ident">downcast_ref</span>::<span class="op">&lt;</span><span class="ident">Error</span><span class="op">&gt;</span>() {
@@ -266,7 +267,7 @@
                         <span class="ident">ErrorCode</span>::<span class="ident">new</span>(<span class="ident">error_codes</span>::<span class="ident">UNEXPECTED</span>)
                     }
                 }
-                <span class="kw">_</span> <span class="op">=</span><span class="op">&gt;</span> {
+                <span class="kw">_</span> <span class="op">=&gt;</span> {
                     <span class="comment">// TODO: expose network errors...</span>
                     <span class="ident">log</span>::<span class="macro">error</span><span class="macro">!</span>(<span class="string">&quot;Unexpected sync error: {:?}&quot;</span>, <span class="ident">err</span>);
                     <span class="ident">ErrorCode</span>::<span class="ident">new</span>(<span class="ident">error_codes</span>::<span class="ident">UNEXPECTED</span>)
@@ -274,7 +275,7 @@
             }
         }
 
-        <span class="ident">err</span> <span class="op">=</span><span class="op">&gt;</span> {
+        <span class="ident">err</span> <span class="op">=&gt;</span> {
             <span class="ident">log</span>::<span class="macro">error</span><span class="macro">!</span>(<span class="string">&quot;Unexpected error: {:?}&quot;</span>, <span class="ident">err</span>);
             <span class="ident">ErrorCode</span>::<span class="ident">new</span>(<span class="ident">error_codes</span>::<span class="ident">UNEXPECTED</span>)
         }
@@ -282,7 +283,7 @@
 }
 
 <span class="kw">impl</span> <span class="ident">From</span><span class="op">&lt;</span><span class="ident">Error</span><span class="op">&gt;</span> <span class="kw">for</span> <span class="ident">ExternError</span> {
-    <span class="kw">fn</span> <span class="ident">from</span>(<span class="ident">e</span>: <span class="ident">Error</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">ExternError</span> {
+    <span class="kw">fn</span> <span class="ident">from</span>(<span class="ident">e</span>: <span class="ident">Error</span>) <span class="op">-&gt;</span> <span class="ident">ExternError</span> {
         <span class="ident">ExternError</span>::<span class="ident">new_error</span>(<span class="ident">get_code</span>(<span class="kw-2">&amp;</span><span class="ident">e</span>), <span class="ident">e</span>.<span class="ident">to_string</span>())
     }
 }

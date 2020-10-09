@@ -1,4 +1,5 @@
-<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source to the Rust file `components/places/src/storage/bookmarks.rs`."><meta name="keywords" content="rust, rustlang, rust-lang"><title>bookmarks.rs.html -- source</title><link rel="stylesheet" type="text/css" href="../../../normalize.css"><link rel="stylesheet" type="text/css" href="../../../rustdoc.css" id="mainThemeStyle"><link rel="stylesheet" type="text/css" href="../../../dark.css"><link rel="stylesheet" type="text/css" href="../../../light.css" id="themeStyle"><script src="../../../storage.js"></script><noscript><link rel="stylesheet" href="../../../noscript.css"></noscript><link rel="shortcut icon" href="../../../favicon.ico"><style type="text/css">#crate-search{background-image:url("../../../down-arrow.svg");}</style></head><body class="rustdoc source"><!--[if lte IE 8]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="sidebar"><div class="sidebar-menu">&#9776;</div><a href='../../../places/index.html'><div class='logo-container'><img src='../../../rust-logo.png' alt='logo'></div></a></nav><div class="theme-picker"><button id="theme-picker" aria-label="Pick another theme!"><img src="../../../brush.svg" width="18" alt="Pick another theme!"></button><div id="theme-choices"></div></div><script src="../../../theme.js"></script><nav class="sub"><form class="search-form"><div class="search-container"><div><select id="crate-search"><option value="All crates">All crates</option></select><input class="search-input" name="search" disabled autocomplete="off" spellcheck="false" placeholder="Click or press ‘S’ to search, ‘?’ for more options…" type="search"></div><a id="settings-menu" href="../../../settings.html"><img src="../../../wheel.svg" width="18" alt="Change settings"></a></div></form></nav><section id="main" class="content"><pre class="line-numbers"><span id="1">   1</span>
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source to the Rust file `components/places/src/storage/bookmarks.rs`."><meta name="keywords" content="rust, rustlang, rust-lang"><title>bookmarks.rs.html -- source</title><link rel="stylesheet" type="text/css" href="../../../normalize.css"><link rel="stylesheet" type="text/css" href="../../../rustdoc.css" id="mainThemeStyle"><link rel="stylesheet" type="text/css" href="../../../light.css"  id="themeStyle"><link rel="stylesheet" type="text/css" href="../../../dark.css" disabled ><link rel="stylesheet" type="text/css" href="../../../ayu.css" disabled ><script src="../../../storage.js"></script><noscript><link rel="stylesheet" href="../../../noscript.css"></noscript><link rel="shortcut icon" href="../../../favicon.ico"><style type="text/css">#crate-search{background-image:url("../../../down-arrow.svg");}</style></head><body class="rustdoc source"><!--[if lte IE 8]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="sidebar"><div class="sidebar-menu">&#9776;</div><a href='../../../places/index.html'><div class='logo-container rust-logo'><img src='../../../rust-logo.png' alt='logo'></div></a></nav><div class="theme-picker"><button id="theme-picker" aria-label="Pick another theme!"><img src="../../../brush.svg" width="18" alt="Pick another theme!"></button><div id="theme-choices"></div></div><script src="../../../theme.js"></script><nav class="sub"><form class="search-form"><div class="search-container"><div><select id="crate-search"><option value="All crates">All crates</option></select><input class="search-input" name="search" disabled autocomplete="off" spellcheck="false" placeholder="Click or press ‘S’ to search, ‘?’ for more options…" type="search"></div><span class="help-button">?</span>
+                <a id="settings-menu" href="../../../settings.html"><img src="../../../wheel.svg" width="18" alt="Change settings"></a></div></form></nav><section id="main" class="content"><pre class="line-numbers"><span id="1">   1</span>
 <span id="2">   2</span>
 <span id="3">   3</span>
 <span id="4">   4</span>
@@ -2660,7 +2661,7 @@
     <span class="ident">guid</span>: <span class="kw-2">&amp;</span><span class="ident">SyncGuid</span>,
     <span class="ident">position</span>: <span class="ident">u32</span>,
     <span class="ident">when</span>: <span class="ident">Timestamp</span>,
-) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span>()<span class="op">&gt;</span> {
+) <span class="op">-&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span>()<span class="op">&gt;</span> {
     <span class="kw">let</span> <span class="ident">sql</span> <span class="op">=</span> <span class="macro">format</span><span class="macro">!</span>(
         <span class="string">&quot;
         INSERT INTO moz_bookmarks
@@ -2686,7 +2687,7 @@
     <span class="prelude-val">Ok</span>(())
 }
 
-<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">create_bookmark_roots</span>(<span class="ident">db</span>: <span class="kw-2">&amp;</span><span class="ident">Connection</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span>()<span class="op">&gt;</span> {
+<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">create_bookmark_roots</span>(<span class="ident">db</span>: <span class="kw-2">&amp;</span><span class="ident">Connection</span>) <span class="op">-&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span>()<span class="op">&gt;</span> {
     <span class="kw">let</span> <span class="ident">now</span> <span class="op">=</span> <span class="ident">Timestamp</span>::<span class="ident">now</span>();
     <span class="ident">create_root</span>(<span class="ident">db</span>, <span class="string">&quot;root&quot;</span>, <span class="kw-2">&amp;</span><span class="ident">BookmarkRootGuid</span>::<span class="ident">Root</span>.<span class="ident">into</span>(), <span class="number">0</span>, <span class="ident">now</span>)<span class="question-mark">?</span>;
     <span class="ident">create_root</span>(<span class="ident">db</span>, <span class="string">&quot;menu&quot;</span>, <span class="kw-2">&amp;</span><span class="ident">BookmarkRootGuid</span>::<span class="ident">Menu</span>.<span class="ident">into</span>(), <span class="number">0</span>, <span class="ident">now</span>)<span class="question-mark">?</span>;
@@ -2716,9 +2717,9 @@
     <span class="ident">db</span>: <span class="kw-2">&amp;</span><span class="ident">PlacesDb</span>,
     <span class="ident">pos</span>: <span class="ident">BookmarkPosition</span>,
     <span class="ident">parent</span>: <span class="kw-2">&amp;</span><span class="ident">RawBookmark</span>,
-) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">u32</span><span class="op">&gt;</span> {
+) <span class="op">-&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">u32</span><span class="op">&gt;</span> {
     <span class="prelude-val">Ok</span>(<span class="kw">match</span> <span class="ident">pos</span> {
-        <span class="ident">BookmarkPosition</span>::<span class="ident">Specific</span>(<span class="ident">specified</span>) <span class="op">=</span><span class="op">&gt;</span> {
+        <span class="ident">BookmarkPosition</span>::<span class="ident">Specific</span>(<span class="ident">specified</span>) <span class="op">=&gt;</span> {
             <span class="kw">let</span> <span class="ident">actual</span> <span class="op">=</span> <span class="ident">min</span>(<span class="ident">specified</span>, <span class="ident">parent</span>.<span class="ident">child_count</span>);
             <span class="comment">// must reorder existing children.</span>
             <span class="ident">db</span>.<span class="ident">execute_named_cached</span>(
@@ -2729,13 +2730,13 @@
             )<span class="question-mark">?</span>;
             <span class="ident">actual</span>
         }
-        <span class="ident">BookmarkPosition</span>::<span class="ident">Append</span> <span class="op">=</span><span class="op">&gt;</span> <span class="ident">parent</span>.<span class="ident">child_count</span>,
+        <span class="ident">BookmarkPosition</span>::<span class="ident">Append</span> <span class="op">=&gt;</span> <span class="ident">parent</span>.<span class="ident">child_count</span>,
     })
 }
 
 <span class="doccomment">/// Updates the position of existing items so that the deletion of a child</span>
 <span class="doccomment">/// from the position specified leaves all siblings with the correct position.</span>
-<span class="kw">fn</span> <span class="ident">update_pos_for_deletion</span>(<span class="ident">db</span>: <span class="kw-2">&amp;</span><span class="ident">PlacesDb</span>, <span class="ident">pos</span>: <span class="ident">u32</span>, <span class="ident">parent_id</span>: <span class="ident">RowId</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span>()<span class="op">&gt;</span> {
+<span class="kw">fn</span> <span class="ident">update_pos_for_deletion</span>(<span class="ident">db</span>: <span class="kw-2">&amp;</span><span class="ident">PlacesDb</span>, <span class="ident">pos</span>: <span class="ident">u32</span>, <span class="ident">parent_id</span>: <span class="ident">RowId</span>) <span class="op">-&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span>()<span class="op">&gt;</span> {
     <span class="ident">db</span>.<span class="ident">execute_named_cached</span>(
         <span class="string">&quot;UPDATE moz_bookmarks SET position = position - 1
          WHERE parent = :parent
@@ -2753,13 +2754,13 @@
     <span class="ident">pos</span>: <span class="ident">BookmarkPosition</span>,
     <span class="ident">bm</span>: <span class="kw-2">&amp;</span><span class="ident">RawBookmark</span>,
     <span class="ident">parent</span>: <span class="kw-2">&amp;</span><span class="ident">RawBookmark</span>,
-) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">u32</span><span class="op">&gt;</span> {
+) <span class="op">-&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">u32</span><span class="op">&gt;</span> {
     <span class="macro">assert_eq</span><span class="macro">!</span>(<span class="ident">bm</span>.<span class="ident">parent_id</span>.<span class="ident">unwrap</span>(), <span class="ident">parent</span>.<span class="ident">row_id</span>);
     <span class="comment">// Note the additional -1&#39;s below are to account for the item already being</span>
     <span class="comment">// in the folder.</span>
     <span class="kw">let</span> <span class="ident">new_index</span> <span class="op">=</span> <span class="kw">match</span> <span class="ident">pos</span> {
-        <span class="ident">BookmarkPosition</span>::<span class="ident">Specific</span>(<span class="ident">specified</span>) <span class="op">=</span><span class="op">&gt;</span> <span class="ident">min</span>(<span class="ident">specified</span>, <span class="ident">parent</span>.<span class="ident">child_count</span> <span class="op">-</span> <span class="number">1</span>),
-        <span class="ident">BookmarkPosition</span>::<span class="ident">Append</span> <span class="op">=</span><span class="op">&gt;</span> <span class="ident">parent</span>.<span class="ident">child_count</span> <span class="op">-</span> <span class="number">1</span>,
+        <span class="ident">BookmarkPosition</span>::<span class="ident">Specific</span>(<span class="ident">specified</span>) <span class="op">=&gt;</span> <span class="ident">min</span>(<span class="ident">specified</span>, <span class="ident">parent</span>.<span class="ident">child_count</span> <span class="op">-</span> <span class="number">1</span>),
+        <span class="ident">BookmarkPosition</span>::<span class="ident">Append</span> <span class="op">=&gt;</span> <span class="ident">parent</span>.<span class="ident">child_count</span> <span class="op">-</span> <span class="number">1</span>,
     };
     <span class="ident">db</span>.<span class="ident">execute_named_cached</span>(
         <span class="string">&quot;UPDATE moz_bookmarks
@@ -2793,7 +2794,7 @@
 }
 
 <span class="kw">impl</span> <span class="ident">From</span><span class="op">&lt;</span><span class="ident">InsertableBookmark</span><span class="op">&gt;</span> <span class="kw">for</span> <span class="ident">InsertableItem</span> {
-    <span class="kw">fn</span> <span class="ident">from</span>(<span class="ident">bmk</span>: <span class="ident">InsertableBookmark</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="self">Self</span> {
+    <span class="kw">fn</span> <span class="ident">from</span>(<span class="ident">bmk</span>: <span class="ident">InsertableBookmark</span>) <span class="op">-&gt;</span> <span class="self">Self</span> {
         <span class="ident">InsertableItem</span>::<span class="ident">Bookmark</span>(<span class="ident">bmk</span>)
     }
 }
@@ -2808,7 +2809,7 @@
 }
 
 <span class="kw">impl</span> <span class="ident">From</span><span class="op">&lt;</span><span class="ident">InsertableSeparator</span><span class="op">&gt;</span> <span class="kw">for</span> <span class="ident">InsertableItem</span> {
-    <span class="kw">fn</span> <span class="ident">from</span>(<span class="ident">sep</span>: <span class="ident">InsertableSeparator</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="self">Self</span> {
+    <span class="kw">fn</span> <span class="ident">from</span>(<span class="ident">sep</span>: <span class="ident">InsertableSeparator</span>) <span class="op">-&gt;</span> <span class="self">Self</span> {
         <span class="ident">InsertableItem</span>::<span class="ident">Separator</span>(<span class="ident">sep</span>)
     }
 }
@@ -2824,7 +2825,7 @@
 }
 
 <span class="kw">impl</span> <span class="ident">From</span><span class="op">&lt;</span><span class="ident">InsertableFolder</span><span class="op">&gt;</span> <span class="kw">for</span> <span class="ident">InsertableItem</span> {
-    <span class="kw">fn</span> <span class="ident">from</span>(<span class="ident">folder</span>: <span class="ident">InsertableFolder</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="self">Self</span> {
+    <span class="kw">fn</span> <span class="ident">from</span>(<span class="ident">folder</span>: <span class="ident">InsertableFolder</span>) <span class="op">-&gt;</span> <span class="self">Self</span> {
         <span class="ident">InsertableItem</span>::<span class="ident">Folder</span>(<span class="ident">folder</span>)
     }
 }
@@ -2840,23 +2841,23 @@
 <span class="comment">// We allow all &quot;common&quot; fields from the sub-types to be getters on the</span>
 <span class="comment">// InsertableItem type.</span>
 <span class="macro">macro_rules</span><span class="macro">!</span> <span class="ident">impl_common_bookmark_getter</span> {
-    (<span class="macro-nonterminal">$</span><span class="macro-nonterminal">getter_name</span>:<span class="ident">ident</span>, <span class="macro-nonterminal">$</span><span class="macro-nonterminal">T</span>:<span class="ident">ty</span>) <span class="op">=</span><span class="op">&gt;</span> {
-        <span class="kw">fn</span> <span class="macro-nonterminal">$</span><span class="macro-nonterminal">getter_name</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="kw-2">&amp;</span><span class="macro-nonterminal">$</span><span class="macro-nonterminal">T</span> {
+    (<span class="macro-nonterminal">$</span><span class="macro-nonterminal">getter_name</span>:<span class="ident">ident</span>, <span class="macro-nonterminal">$</span><span class="macro-nonterminal">T</span>:<span class="ident">ty</span>) <span class="op">=&gt;</span> {
+        <span class="kw">fn</span> <span class="macro-nonterminal">$</span><span class="macro-nonterminal">getter_name</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-&gt;</span> <span class="kw-2">&amp;</span><span class="macro-nonterminal">$</span><span class="macro-nonterminal">T</span> {
             <span class="kw">match</span> <span class="self">self</span> {
-                <span class="ident">InsertableItem</span>::<span class="ident">Bookmark</span>(<span class="ident">b</span>) <span class="op">=</span><span class="op">&gt;</span> <span class="kw-2">&amp;</span><span class="ident">b</span>.<span class="macro-nonterminal">$</span><span class="macro-nonterminal">getter_name</span>,
-                <span class="ident">InsertableItem</span>::<span class="ident">Separator</span>(<span class="ident">s</span>) <span class="op">=</span><span class="op">&gt;</span> <span class="kw-2">&amp;</span><span class="ident">s</span>.<span class="macro-nonterminal">$</span><span class="macro-nonterminal">getter_name</span>,
-                <span class="ident">InsertableItem</span>::<span class="ident">Folder</span>(<span class="ident">f</span>) <span class="op">=</span><span class="op">&gt;</span> <span class="kw-2">&amp;</span><span class="ident">f</span>.<span class="macro-nonterminal">$</span><span class="macro-nonterminal">getter_name</span>,
+                <span class="ident">InsertableItem</span>::<span class="ident">Bookmark</span>(<span class="ident">b</span>) <span class="op">=&gt;</span> <span class="kw-2">&amp;</span><span class="ident">b</span>.<span class="macro-nonterminal">$</span><span class="macro-nonterminal">getter_name</span>,
+                <span class="ident">InsertableItem</span>::<span class="ident">Separator</span>(<span class="ident">s</span>) <span class="op">=&gt;</span> <span class="kw-2">&amp;</span><span class="ident">s</span>.<span class="macro-nonterminal">$</span><span class="macro-nonterminal">getter_name</span>,
+                <span class="ident">InsertableItem</span>::<span class="ident">Folder</span>(<span class="ident">f</span>) <span class="op">=&gt;</span> <span class="kw-2">&amp;</span><span class="ident">f</span>.<span class="macro-nonterminal">$</span><span class="macro-nonterminal">getter_name</span>,
             }
         }
     };
 }
 
 <span class="kw">impl</span> <span class="ident">InsertableItem</span> {
-    <span class="kw">fn</span> <span class="ident">bookmark_type</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">BookmarkType</span> {
+    <span class="kw">fn</span> <span class="ident">bookmark_type</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-&gt;</span> <span class="ident">BookmarkType</span> {
         <span class="kw">match</span> <span class="self">self</span> {
-            <span class="ident">InsertableItem</span>::<span class="ident">Bookmark</span>(<span class="kw">_</span>) <span class="op">=</span><span class="op">&gt;</span> <span class="ident">BookmarkType</span>::<span class="ident">Bookmark</span>,
-            <span class="ident">InsertableItem</span>::<span class="ident">Separator</span>(<span class="kw">_</span>) <span class="op">=</span><span class="op">&gt;</span> <span class="ident">BookmarkType</span>::<span class="ident">Separator</span>,
-            <span class="ident">InsertableItem</span>::<span class="ident">Folder</span>(<span class="kw">_</span>) <span class="op">=</span><span class="op">&gt;</span> <span class="ident">BookmarkType</span>::<span class="ident">Folder</span>,
+            <span class="ident">InsertableItem</span>::<span class="ident">Bookmark</span>(<span class="kw">_</span>) <span class="op">=&gt;</span> <span class="ident">BookmarkType</span>::<span class="ident">Bookmark</span>,
+            <span class="ident">InsertableItem</span>::<span class="ident">Separator</span>(<span class="kw">_</span>) <span class="op">=&gt;</span> <span class="ident">BookmarkType</span>::<span class="ident">Separator</span>,
+            <span class="ident">InsertableItem</span>::<span class="ident">Folder</span>(<span class="kw">_</span>) <span class="op">=&gt;</span> <span class="ident">BookmarkType</span>::<span class="ident">Folder</span>,
         }
     }
     <span class="macro">impl_common_bookmark_getter</span><span class="macro">!</span>(<span class="ident">parent_guid</span>, <span class="ident">SyncGuid</span>);
@@ -2866,32 +2867,32 @@
     <span class="macro">impl_common_bookmark_getter</span><span class="macro">!</span>(<span class="ident">guid</span>, <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">SyncGuid</span><span class="op">&gt;</span>);
 }
 
-<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">insert_bookmark</span>(<span class="ident">db</span>: <span class="kw-2">&amp;</span><span class="ident">PlacesDb</span>, <span class="ident">bm</span>: <span class="kw-2">&amp;</span><span class="ident">InsertableItem</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">SyncGuid</span><span class="op">&gt;</span> {
+<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">insert_bookmark</span>(<span class="ident">db</span>: <span class="kw-2">&amp;</span><span class="ident">PlacesDb</span>, <span class="ident">bm</span>: <span class="kw-2">&amp;</span><span class="ident">InsertableItem</span>) <span class="op">-&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">SyncGuid</span><span class="op">&gt;</span> {
     <span class="kw">let</span> <span class="ident">tx</span> <span class="op">=</span> <span class="ident">db</span>.<span class="ident">begin_transaction</span>()<span class="question-mark">?</span>;
     <span class="kw">let</span> <span class="ident">result</span> <span class="op">=</span> <span class="ident">insert_bookmark_in_tx</span>(<span class="ident">db</span>, <span class="ident">bm</span>);
     <span class="kw">super</span>::<span class="ident">delete_pending_temp_tables</span>(<span class="ident">db</span>)<span class="question-mark">?</span>;
     <span class="kw">match</span> <span class="ident">result</span> {
-        <span class="prelude-val">Ok</span>(<span class="kw">_</span>) <span class="op">=</span><span class="op">&gt;</span> <span class="ident">tx</span>.<span class="ident">commit</span>()<span class="question-mark">?</span>,
-        <span class="prelude-val">Err</span>(<span class="kw">_</span>) <span class="op">=</span><span class="op">&gt;</span> <span class="ident">tx</span>.<span class="ident">rollback</span>()<span class="question-mark">?</span>,
+        <span class="prelude-val">Ok</span>(<span class="kw">_</span>) <span class="op">=&gt;</span> <span class="ident">tx</span>.<span class="ident">commit</span>()<span class="question-mark">?</span>,
+        <span class="prelude-val">Err</span>(<span class="kw">_</span>) <span class="op">=&gt;</span> <span class="ident">tx</span>.<span class="ident">rollback</span>()<span class="question-mark">?</span>,
     }
     <span class="ident">result</span>
 }
 
-<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">maybe_truncate_title</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span><span class="op">&gt;</span>(<span class="ident">t</span>: <span class="kw-2">&amp;</span><span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="kw-2">&amp;</span><span class="lifetime">&#39;a</span> <span class="ident">str</span><span class="op">&gt;</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="kw-2">&amp;</span><span class="lifetime">&#39;a</span> <span class="ident">str</span><span class="op">&gt;</span> {
+<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">maybe_truncate_title</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span><span class="op">&gt;</span>(<span class="ident">t</span>: <span class="kw-2">&amp;</span><span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="kw-2">&amp;</span><span class="lifetime">&#39;a</span> <span class="ident">str</span><span class="op">&gt;</span>) <span class="op">-&gt;</span> <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="kw-2">&amp;</span><span class="lifetime">&#39;a</span> <span class="ident">str</span><span class="op">&gt;</span> {
     <span class="kw">use</span> <span class="kw">super</span>::<span class="ident">TITLE_LENGTH_MAX</span>;
     <span class="kw">use</span> <span class="kw">crate</span>::<span class="ident">util</span>::<span class="ident">slice_up_to</span>;
     <span class="ident">t</span>.<span class="ident">map</span>(<span class="op">|</span><span class="ident">title</span><span class="op">|</span> <span class="ident">slice_up_to</span>(<span class="ident">title</span>, <span class="ident">TITLE_LENGTH_MAX</span>))
 }
 
-<span class="kw">fn</span> <span class="ident">insert_bookmark_in_tx</span>(<span class="ident">db</span>: <span class="kw-2">&amp;</span><span class="ident">PlacesDb</span>, <span class="ident">bm</span>: <span class="kw-2">&amp;</span><span class="ident">InsertableItem</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">SyncGuid</span><span class="op">&gt;</span> {
+<span class="kw">fn</span> <span class="ident">insert_bookmark_in_tx</span>(<span class="ident">db</span>: <span class="kw-2">&amp;</span><span class="ident">PlacesDb</span>, <span class="ident">bm</span>: <span class="kw-2">&amp;</span><span class="ident">InsertableItem</span>) <span class="op">-&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">SyncGuid</span><span class="op">&gt;</span> {
     <span class="comment">// find the row ID of the parent.</span>
-    <span class="kw">if</span> <span class="ident">bm</span>.<span class="ident">parent_guid</span>() <span class="op">=</span><span class="op">=</span> <span class="ident">BookmarkRootGuid</span>::<span class="ident">Root</span> {
+    <span class="kw">if</span> <span class="ident">bm</span>.<span class="ident">parent_guid</span>() <span class="op">==</span> <span class="ident">BookmarkRootGuid</span>::<span class="ident">Root</span> {
         <span class="kw">return</span> <span class="prelude-val">Err</span>(<span class="ident">InvalidPlaceInfo</span>::<span class="ident">CannotUpdateRoot</span>(<span class="ident">BookmarkRootGuid</span>::<span class="ident">Root</span>).<span class="ident">into</span>());
     }
     <span class="kw">let</span> <span class="ident">parent_guid</span> <span class="op">=</span> <span class="ident">bm</span>.<span class="ident">parent_guid</span>();
     <span class="kw">let</span> <span class="ident">parent</span> <span class="op">=</span> <span class="ident">get_raw_bookmark</span>(<span class="ident">db</span>, <span class="ident">parent_guid</span>)<span class="question-mark">?</span>
-        .<span class="ident">ok_or_else</span>(<span class="op">|</span><span class="op">|</span> <span class="ident">InvalidPlaceInfo</span>::<span class="ident">NoSuchGuid</span>(<span class="ident">parent_guid</span>.<span class="ident">to_string</span>()))<span class="question-mark">?</span>;
-    <span class="kw">if</span> <span class="ident">parent</span>.<span class="ident">bookmark_type</span> <span class="op">!</span><span class="op">=</span> <span class="ident">BookmarkType</span>::<span class="ident">Folder</span> {
+        .<span class="ident">ok_or_else</span>(<span class="op">||</span> <span class="ident">InvalidPlaceInfo</span>::<span class="ident">NoSuchGuid</span>(<span class="ident">parent_guid</span>.<span class="ident">to_string</span>()))<span class="question-mark">?</span>;
+    <span class="kw">if</span> <span class="ident">parent</span>.<span class="ident">bookmark_type</span> <span class="op">!=</span> <span class="ident">BookmarkType</span>::<span class="ident">Folder</span> {
         <span class="kw">return</span> <span class="prelude-val">Err</span>(<span class="ident">InvalidPlaceInfo</span>::<span class="ident">InvalidParent</span>(<span class="ident">parent_guid</span>.<span class="ident">to_string</span>()).<span class="ident">into</span>());
     }
     <span class="comment">// Do the &quot;position&quot; dance.</span>
@@ -2901,14 +2902,14 @@
     <span class="comment">// markh isn&#39;t clear how we could perform the insert) - it probably doesn&#39;t</span>
     <span class="comment">// matter in practice though...</span>
     <span class="kw">let</span> <span class="ident">fk</span> <span class="op">=</span> <span class="kw">match</span> <span class="ident">bm</span> {
-        <span class="ident">InsertableItem</span>::<span class="ident">Bookmark</span>(<span class="kw-2">ref</span> <span class="ident">bm</span>) <span class="op">=</span><span class="op">&gt;</span> {
+        <span class="ident">InsertableItem</span>::<span class="ident">Bookmark</span>(<span class="kw-2">ref</span> <span class="ident">bm</span>) <span class="op">=&gt;</span> {
             <span class="kw">let</span> <span class="ident">page_info</span> <span class="op">=</span> <span class="kw">match</span> <span class="ident">fetch_page_info</span>(<span class="ident">db</span>, <span class="kw-2">&amp;</span><span class="ident">bm</span>.<span class="ident">url</span>)<span class="question-mark">?</span> {
-                <span class="prelude-val">Some</span>(<span class="ident">info</span>) <span class="op">=</span><span class="op">&gt;</span> <span class="ident">info</span>.<span class="ident">page</span>,
-                <span class="prelude-val">None</span> <span class="op">=</span><span class="op">&gt;</span> <span class="ident">new_page_info</span>(<span class="ident">db</span>, <span class="kw-2">&amp;</span><span class="ident">bm</span>.<span class="ident">url</span>, <span class="prelude-val">None</span>)<span class="question-mark">?</span>,
+                <span class="prelude-val">Some</span>(<span class="ident">info</span>) <span class="op">=&gt;</span> <span class="ident">info</span>.<span class="ident">page</span>,
+                <span class="prelude-val">None</span> <span class="op">=&gt;</span> <span class="ident">new_page_info</span>(<span class="ident">db</span>, <span class="kw-2">&amp;</span><span class="ident">bm</span>.<span class="ident">url</span>, <span class="prelude-val">None</span>)<span class="question-mark">?</span>,
             };
             <span class="prelude-val">Some</span>(<span class="ident">page_info</span>.<span class="ident">row_id</span>)
         }
-        <span class="kw">_</span> <span class="op">=</span><span class="op">&gt;</span> <span class="prelude-val">None</span>,
+        <span class="kw">_</span> <span class="op">=&gt;</span> <span class="prelude-val">None</span>,
     };
     <span class="kw">let</span> <span class="ident">sql</span> <span class="op">=</span> <span class="string">&quot;INSERT INTO moz_bookmarks
               (fk, type, parent, position, title, dateAdded, lastModified,
@@ -2926,7 +2927,7 @@
 
     <span class="kw">let</span> <span class="ident">bookmark_type</span> <span class="op">=</span> <span class="ident">bm</span>.<span class="ident">bookmark_type</span>();
     <span class="kw">match</span> <span class="ident">bm</span> {
-        <span class="ident">InsertableItem</span>::<span class="ident">Bookmark</span>(<span class="kw-2">ref</span> <span class="ident">b</span>) <span class="op">=</span><span class="op">&gt;</span> {
+        <span class="ident">InsertableItem</span>::<span class="ident">Bookmark</span>(<span class="kw-2">ref</span> <span class="ident">b</span>) <span class="op">=&gt;</span> {
             <span class="kw">let</span> <span class="ident">title</span> <span class="op">=</span> <span class="ident">maybe_truncate_title</span>(<span class="kw-2">&amp;</span><span class="ident">b</span>.<span class="ident">title</span>.<span class="ident">as_deref</span>());
             <span class="ident">db</span>.<span class="ident">execute_named_cached</span>(
                 <span class="ident">sql</span>,
@@ -2944,7 +2945,7 @@
                 ],
             )<span class="question-mark">?</span>;
         }
-        <span class="ident">InsertableItem</span>::<span class="ident">Separator</span>(<span class="kw-2">ref</span> <span class="ident">_s</span>) <span class="op">=</span><span class="op">&gt;</span> {
+        <span class="ident">InsertableItem</span>::<span class="ident">Separator</span>(<span class="kw-2">ref</span> <span class="ident">_s</span>) <span class="op">=&gt;</span> {
             <span class="ident">db</span>.<span class="ident">execute_named_cached</span>(
                 <span class="ident">sql</span>,
                 <span class="kw-2">&amp;</span>[
@@ -2959,7 +2960,7 @@
                 ],
             )<span class="question-mark">?</span>;
         }
-        <span class="ident">InsertableItem</span>::<span class="ident">Folder</span>(<span class="kw-2">ref</span> <span class="ident">f</span>) <span class="op">=</span><span class="op">&gt;</span> {
+        <span class="ident">InsertableItem</span>::<span class="ident">Folder</span>(<span class="kw-2">ref</span> <span class="ident">f</span>) <span class="op">=&gt;</span> {
             <span class="kw">let</span> <span class="ident">title</span> <span class="op">=</span> <span class="ident">maybe_truncate_title</span>(<span class="kw-2">&amp;</span><span class="ident">f</span>.<span class="ident">title</span>.<span class="ident">as_deref</span>());
             <span class="ident">db</span>.<span class="ident">execute_named_cached</span>(
                 <span class="ident">sql</span>,
@@ -2989,24 +2990,24 @@
 
 <span class="doccomment">/// Delete the specified bookmark. Returns true if a bookmark with the guid</span>
 <span class="doccomment">/// existed and was deleted, false otherwise.</span>
-<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">delete_bookmark</span>(<span class="ident">db</span>: <span class="kw-2">&amp;</span><span class="ident">PlacesDb</span>, <span class="ident">guid</span>: <span class="kw-2">&amp;</span><span class="ident">SyncGuid</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">bool</span><span class="op">&gt;</span> {
+<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">delete_bookmark</span>(<span class="ident">db</span>: <span class="kw-2">&amp;</span><span class="ident">PlacesDb</span>, <span class="ident">guid</span>: <span class="kw-2">&amp;</span><span class="ident">SyncGuid</span>) <span class="op">-&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">bool</span><span class="op">&gt;</span> {
     <span class="kw">let</span> <span class="ident">tx</span> <span class="op">=</span> <span class="ident">db</span>.<span class="ident">begin_transaction</span>()<span class="question-mark">?</span>;
     <span class="kw">let</span> <span class="ident">result</span> <span class="op">=</span> <span class="ident">delete_bookmark_in_tx</span>(<span class="ident">db</span>, <span class="ident">guid</span>);
     <span class="kw">match</span> <span class="ident">result</span> {
-        <span class="prelude-val">Ok</span>(<span class="kw">_</span>) <span class="op">=</span><span class="op">&gt;</span> <span class="ident">tx</span>.<span class="ident">commit</span>()<span class="question-mark">?</span>,
-        <span class="prelude-val">Err</span>(<span class="kw">_</span>) <span class="op">=</span><span class="op">&gt;</span> <span class="ident">tx</span>.<span class="ident">rollback</span>()<span class="question-mark">?</span>,
+        <span class="prelude-val">Ok</span>(<span class="kw">_</span>) <span class="op">=&gt;</span> <span class="ident">tx</span>.<span class="ident">commit</span>()<span class="question-mark">?</span>,
+        <span class="prelude-val">Err</span>(<span class="kw">_</span>) <span class="op">=&gt;</span> <span class="ident">tx</span>.<span class="ident">rollback</span>()<span class="question-mark">?</span>,
     }
     <span class="ident">result</span>
 }
 
-<span class="kw">fn</span> <span class="ident">delete_bookmark_in_tx</span>(<span class="ident">db</span>: <span class="kw-2">&amp;</span><span class="ident">PlacesDb</span>, <span class="ident">guid</span>: <span class="kw-2">&amp;</span><span class="ident">SyncGuid</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">bool</span><span class="op">&gt;</span> {
+<span class="kw">fn</span> <span class="ident">delete_bookmark_in_tx</span>(<span class="ident">db</span>: <span class="kw-2">&amp;</span><span class="ident">PlacesDb</span>, <span class="ident">guid</span>: <span class="kw-2">&amp;</span><span class="ident">SyncGuid</span>) <span class="op">-&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">bool</span><span class="op">&gt;</span> {
     <span class="comment">// Can&#39;t delete a root.</span>
     <span class="kw">if</span> <span class="kw">let</span> <span class="prelude-val">Some</span>(<span class="ident">root</span>) <span class="op">=</span> <span class="ident">BookmarkRootGuid</span>::<span class="ident">well_known</span>(<span class="kw-2">&amp;</span><span class="ident">guid</span>.<span class="ident">as_str</span>()) {
         <span class="kw">return</span> <span class="prelude-val">Err</span>(<span class="ident">InvalidPlaceInfo</span>::<span class="ident">CannotUpdateRoot</span>(<span class="ident">root</span>).<span class="ident">into</span>());
     }
     <span class="kw">let</span> <span class="ident">record</span> <span class="op">=</span> <span class="kw">match</span> <span class="ident">get_raw_bookmark</span>(<span class="ident">db</span>, <span class="ident">guid</span>)<span class="question-mark">?</span> {
-        <span class="prelude-val">Some</span>(<span class="ident">r</span>) <span class="op">=</span><span class="op">&gt;</span> <span class="ident">r</span>,
-        <span class="prelude-val">None</span> <span class="op">=</span><span class="op">&gt;</span> {
+        <span class="prelude-val">Some</span>(<span class="ident">r</span>) <span class="op">=&gt;</span> <span class="ident">r</span>,
+        <span class="prelude-val">None</span> <span class="op">=&gt;</span> {
             <span class="ident">log</span>::<span class="macro">debug</span><span class="macro">!</span>(<span class="string">&quot;Can&#39;t delete bookmark &#39;{:?}&#39; as it doesn&#39;t exist&quot;</span>, <span class="ident">guid</span>);
             <span class="kw">return</span> <span class="prelude-val">Ok</span>(<span class="bool-val">false</span>);
         }
@@ -3016,7 +3017,7 @@
     <span class="comment">// performing the deletion, and the user wants it gone...</span>
     <span class="kw">let</span> <span class="ident">record_parent_id</span> <span class="op">=</span> <span class="ident">record</span>
         .<span class="ident">parent_id</span>
-        .<span class="ident">ok_or_else</span>(<span class="op">|</span><span class="op">|</span> <span class="ident">Corruption</span>::<span class="ident">NonRootWithoutParent</span>(<span class="ident">guid</span>.<span class="ident">to_string</span>()))<span class="question-mark">?</span>;
+        .<span class="ident">ok_or_else</span>(<span class="op">||</span> <span class="ident">Corruption</span>::<span class="ident">NonRootWithoutParent</span>(<span class="ident">guid</span>.<span class="ident">to_string</span>()))<span class="question-mark">?</span>;
     <span class="comment">// must reorder existing children.</span>
     <span class="ident">update_pos_for_deletion</span>(<span class="ident">db</span>, <span class="ident">record</span>.<span class="ident">position</span>, <span class="ident">record_parent_id</span>)<span class="question-mark">?</span>;
     <span class="comment">// and delete - children are recursively deleted.</span>
@@ -3040,7 +3041,7 @@
 }
 
 <span class="kw">impl</span> <span class="ident">Default</span> <span class="kw">for</span> <span class="ident">UpdateTreeLocation</span> {
-    <span class="kw">fn</span> <span class="ident">default</span>() <span class="op">-</span><span class="op">&gt;</span> <span class="self">Self</span> {
+    <span class="kw">fn</span> <span class="ident">default</span>() <span class="op">-&gt;</span> <span class="self">Self</span> {
         <span class="ident">UpdateTreeLocation</span>::<span class="prelude-val">None</span>
     }
 }
@@ -3057,7 +3058,7 @@
 }
 
 <span class="kw">impl</span> <span class="ident">From</span><span class="op">&lt;</span><span class="ident">UpdatableBookmark</span><span class="op">&gt;</span> <span class="kw">for</span> <span class="ident">UpdatableItem</span> {
-    <span class="kw">fn</span> <span class="ident">from</span>(<span class="ident">bmk</span>: <span class="ident">UpdatableBookmark</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="self">Self</span> {
+    <span class="kw">fn</span> <span class="ident">from</span>(<span class="ident">bmk</span>: <span class="ident">UpdatableBookmark</span>) <span class="op">-&gt;</span> <span class="self">Self</span> {
         <span class="ident">UpdatableItem</span>::<span class="ident">Bookmark</span>(<span class="ident">bmk</span>)
     }
 }
@@ -3068,7 +3069,7 @@
 }
 
 <span class="kw">impl</span> <span class="ident">From</span><span class="op">&lt;</span><span class="ident">UpdatableSeparator</span><span class="op">&gt;</span> <span class="kw">for</span> <span class="ident">UpdatableItem</span> {
-    <span class="kw">fn</span> <span class="ident">from</span>(<span class="ident">sep</span>: <span class="ident">UpdatableSeparator</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="self">Self</span> {
+    <span class="kw">fn</span> <span class="ident">from</span>(<span class="ident">sep</span>: <span class="ident">UpdatableSeparator</span>) <span class="op">-&gt;</span> <span class="self">Self</span> {
         <span class="ident">UpdatableItem</span>::<span class="ident">Separator</span>(<span class="ident">sep</span>)
     }
 }
@@ -3080,7 +3081,7 @@
 }
 
 <span class="kw">impl</span> <span class="ident">From</span><span class="op">&lt;</span><span class="ident">UpdatableFolder</span><span class="op">&gt;</span> <span class="kw">for</span> <span class="ident">UpdatableItem</span> {
-    <span class="kw">fn</span> <span class="ident">from</span>(<span class="ident">folder</span>: <span class="ident">UpdatableFolder</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="self">Self</span> {
+    <span class="kw">fn</span> <span class="ident">from</span>(<span class="ident">folder</span>: <span class="ident">UpdatableFolder</span>) <span class="op">-&gt;</span> <span class="self">Self</span> {
         <span class="ident">UpdatableItem</span>::<span class="ident">Folder</span>(<span class="ident">folder</span>)
     }
 }
@@ -3094,26 +3095,26 @@
 }
 
 <span class="kw">impl</span> <span class="ident">UpdatableItem</span> {
-    <span class="kw">fn</span> <span class="ident">bookmark_type</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">BookmarkType</span> {
+    <span class="kw">fn</span> <span class="ident">bookmark_type</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-&gt;</span> <span class="ident">BookmarkType</span> {
         <span class="kw">match</span> <span class="self">self</span> {
-            <span class="ident">UpdatableItem</span>::<span class="ident">Bookmark</span>(<span class="kw">_</span>) <span class="op">=</span><span class="op">&gt;</span> <span class="ident">BookmarkType</span>::<span class="ident">Bookmark</span>,
-            <span class="ident">UpdatableItem</span>::<span class="ident">Separator</span>(<span class="kw">_</span>) <span class="op">=</span><span class="op">&gt;</span> <span class="ident">BookmarkType</span>::<span class="ident">Separator</span>,
-            <span class="ident">UpdatableItem</span>::<span class="ident">Folder</span>(<span class="kw">_</span>) <span class="op">=</span><span class="op">&gt;</span> <span class="ident">BookmarkType</span>::<span class="ident">Folder</span>,
+            <span class="ident">UpdatableItem</span>::<span class="ident">Bookmark</span>(<span class="kw">_</span>) <span class="op">=&gt;</span> <span class="ident">BookmarkType</span>::<span class="ident">Bookmark</span>,
+            <span class="ident">UpdatableItem</span>::<span class="ident">Separator</span>(<span class="kw">_</span>) <span class="op">=&gt;</span> <span class="ident">BookmarkType</span>::<span class="ident">Separator</span>,
+            <span class="ident">UpdatableItem</span>::<span class="ident">Folder</span>(<span class="kw">_</span>) <span class="op">=&gt;</span> <span class="ident">BookmarkType</span>::<span class="ident">Folder</span>,
         }
     }
 
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">location</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="kw-2">&amp;</span><span class="ident">UpdateTreeLocation</span> {
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">location</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-&gt;</span> <span class="kw-2">&amp;</span><span class="ident">UpdateTreeLocation</span> {
         <span class="kw">match</span> <span class="self">self</span> {
-            <span class="ident">UpdatableItem</span>::<span class="ident">Bookmark</span>(<span class="ident">b</span>) <span class="op">=</span><span class="op">&gt;</span> <span class="kw-2">&amp;</span><span class="ident">b</span>.<span class="ident">location</span>,
-            <span class="ident">UpdatableItem</span>::<span class="ident">Separator</span>(<span class="ident">s</span>) <span class="op">=</span><span class="op">&gt;</span> <span class="kw-2">&amp;</span><span class="ident">s</span>.<span class="ident">location</span>,
-            <span class="ident">UpdatableItem</span>::<span class="ident">Folder</span>(<span class="ident">f</span>) <span class="op">=</span><span class="op">&gt;</span> <span class="kw-2">&amp;</span><span class="ident">f</span>.<span class="ident">location</span>,
+            <span class="ident">UpdatableItem</span>::<span class="ident">Bookmark</span>(<span class="ident">b</span>) <span class="op">=&gt;</span> <span class="kw-2">&amp;</span><span class="ident">b</span>.<span class="ident">location</span>,
+            <span class="ident">UpdatableItem</span>::<span class="ident">Separator</span>(<span class="ident">s</span>) <span class="op">=&gt;</span> <span class="kw-2">&amp;</span><span class="ident">s</span>.<span class="ident">location</span>,
+            <span class="ident">UpdatableItem</span>::<span class="ident">Folder</span>(<span class="ident">f</span>) <span class="op">=&gt;</span> <span class="kw-2">&amp;</span><span class="ident">f</span>.<span class="ident">location</span>,
         }
     }
 }
-<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">update_bookmark</span>(<span class="ident">db</span>: <span class="kw-2">&amp;</span><span class="ident">PlacesDb</span>, <span class="ident">guid</span>: <span class="kw-2">&amp;</span><span class="ident">SyncGuid</span>, <span class="ident">item</span>: <span class="kw-2">&amp;</span><span class="ident">UpdatableItem</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span>()<span class="op">&gt;</span> {
+<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">update_bookmark</span>(<span class="ident">db</span>: <span class="kw-2">&amp;</span><span class="ident">PlacesDb</span>, <span class="ident">guid</span>: <span class="kw-2">&amp;</span><span class="ident">SyncGuid</span>, <span class="ident">item</span>: <span class="kw-2">&amp;</span><span class="ident">UpdatableItem</span>) <span class="op">-&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span>()<span class="op">&gt;</span> {
     <span class="kw">let</span> <span class="ident">tx</span> <span class="op">=</span> <span class="ident">db</span>.<span class="ident">begin_transaction</span>()<span class="question-mark">?</span>;
     <span class="kw">let</span> <span class="ident">existing</span> <span class="op">=</span> <span class="ident">get_raw_bookmark</span>(<span class="ident">db</span>, <span class="ident">guid</span>)<span class="question-mark">?</span>
-        .<span class="ident">ok_or_else</span>(<span class="op">|</span><span class="op">|</span> <span class="ident">InvalidPlaceInfo</span>::<span class="ident">NoSuchGuid</span>(<span class="ident">guid</span>.<span class="ident">to_string</span>()))<span class="question-mark">?</span>;
+        .<span class="ident">ok_or_else</span>(<span class="op">||</span> <span class="ident">InvalidPlaceInfo</span>::<span class="ident">NoSuchGuid</span>(<span class="ident">guid</span>.<span class="ident">to_string</span>()))<span class="question-mark">?</span>;
     <span class="kw">let</span> <span class="ident">result</span> <span class="op">=</span> <span class="ident">update_bookmark_in_tx</span>(<span class="ident">db</span>, <span class="ident">guid</span>, <span class="ident">item</span>, <span class="ident">existing</span>);
     <span class="kw">super</span>::<span class="ident">delete_pending_temp_tables</span>(<span class="ident">db</span>)<span class="question-mark">?</span>;
     <span class="comment">// Note: `tx` automatically rolls back on drop if we don&#39;t commit</span>
@@ -3126,7 +3127,7 @@
     <span class="ident">guid</span>: <span class="kw-2">&amp;</span><span class="ident">SyncGuid</span>,
     <span class="ident">item</span>: <span class="kw-2">&amp;</span><span class="ident">UpdatableItem</span>,
     <span class="ident">raw</span>: <span class="ident">RawBookmark</span>,
-) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span>()<span class="op">&gt;</span> {
+) <span class="op">-&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span>()<span class="op">&gt;</span> {
     <span class="comment">// if guid is root</span>
     <span class="kw">if</span> <span class="ident">BookmarkRootGuid</span>::<span class="ident">well_known</span>(<span class="kw-2">&amp;</span><span class="ident">guid</span>.<span class="ident">as_str</span>()).<span class="ident">is_some</span>() {
         <span class="kw">return</span> <span class="prelude-val">Err</span>(<span class="ident">InvalidPlaceInfo</span>::<span class="ident">CannotUpdateRoot</span>(<span class="ident">BookmarkRootGuid</span>::<span class="ident">Root</span>).<span class="ident">into</span>());
@@ -3134,13 +3135,13 @@
     <span class="kw">let</span> <span class="ident">existing_parent_guid</span> <span class="op">=</span> <span class="ident">raw</span>
         .<span class="ident">parent_guid</span>
         .<span class="ident">as_ref</span>()
-        .<span class="ident">ok_or_else</span>(<span class="op">|</span><span class="op">|</span> <span class="ident">Corruption</span>::<span class="ident">NonRootWithoutParent</span>(<span class="ident">guid</span>.<span class="ident">to_string</span>()))<span class="question-mark">?</span>;
+        .<span class="ident">ok_or_else</span>(<span class="op">||</span> <span class="ident">Corruption</span>::<span class="ident">NonRootWithoutParent</span>(<span class="ident">guid</span>.<span class="ident">to_string</span>()))<span class="question-mark">?</span>;
 
     <span class="kw">let</span> <span class="ident">existing_parent_id</span> <span class="op">=</span> <span class="ident">raw</span>
         .<span class="ident">parent_id</span>
-        .<span class="ident">ok_or_else</span>(<span class="op">|</span><span class="op">|</span> <span class="ident">Corruption</span>::<span class="ident">NoParent</span>(<span class="ident">guid</span>.<span class="ident">to_string</span>(), <span class="ident">existing_parent_guid</span>.<span class="ident">to_string</span>()))<span class="question-mark">?</span>;
+        .<span class="ident">ok_or_else</span>(<span class="op">||</span> <span class="ident">Corruption</span>::<span class="ident">NoParent</span>(<span class="ident">guid</span>.<span class="ident">to_string</span>(), <span class="ident">existing_parent_guid</span>.<span class="ident">to_string</span>()))<span class="question-mark">?</span>;
 
-    <span class="kw">if</span> <span class="ident">raw</span>.<span class="ident">bookmark_type</span> <span class="op">!</span><span class="op">=</span> <span class="ident">item</span>.<span class="ident">bookmark_type</span>() {
+    <span class="kw">if</span> <span class="ident">raw</span>.<span class="ident">bookmark_type</span> <span class="op">!=</span> <span class="ident">item</span>.<span class="ident">bookmark_type</span>() {
         <span class="kw">return</span> <span class="prelude-val">Err</span>(<span class="ident">InvalidPlaceInfo</span>::<span class="ident">MismatchedBookmarkType</span>(
             <span class="ident">raw</span>.<span class="ident">bookmark_type</span> <span class="kw">as</span> <span class="ident">u8</span>,
             <span class="ident">item</span>.<span class="ident">bookmark_type</span>() <span class="kw">as</span> <span class="ident">u8</span>,
@@ -3155,34 +3156,34 @@
     <span class="kw">let</span> <span class="ident">parent_id</span>;
     <span class="kw">let</span> <span class="ident">position</span>;
     <span class="kw">match</span> <span class="ident">item</span>.<span class="ident">location</span>() {
-        <span class="ident">UpdateTreeLocation</span>::<span class="prelude-val">None</span> <span class="op">=</span><span class="op">&gt;</span> {
+        <span class="ident">UpdateTreeLocation</span>::<span class="prelude-val">None</span> <span class="op">=&gt;</span> {
             <span class="ident">parent_id</span> <span class="op">=</span> <span class="ident">existing_parent_id</span>;
             <span class="ident">position</span> <span class="op">=</span> <span class="ident">raw</span>.<span class="ident">position</span>;
             <span class="ident">update_old_parent_status</span> <span class="op">=</span> <span class="bool-val">false</span>;
             <span class="ident">update_new_parent_status</span> <span class="op">=</span> <span class="bool-val">false</span>;
         }
-        <span class="ident">UpdateTreeLocation</span>::<span class="ident">Position</span>(<span class="ident">pos</span>) <span class="op">=</span><span class="op">&gt;</span> {
+        <span class="ident">UpdateTreeLocation</span>::<span class="ident">Position</span>(<span class="ident">pos</span>) <span class="op">=&gt;</span> {
             <span class="ident">parent_id</span> <span class="op">=</span> <span class="ident">existing_parent_id</span>;
             <span class="ident">update_old_parent_status</span> <span class="op">=</span> <span class="bool-val">true</span>;
             <span class="ident">update_new_parent_status</span> <span class="op">=</span> <span class="bool-val">false</span>;
-            <span class="kw">let</span> <span class="ident">parent</span> <span class="op">=</span> <span class="ident">get_raw_bookmark</span>(<span class="ident">db</span>, <span class="ident">existing_parent_guid</span>)<span class="question-mark">?</span>.<span class="ident">ok_or_else</span>(<span class="op">|</span><span class="op">|</span> {
+            <span class="kw">let</span> <span class="ident">parent</span> <span class="op">=</span> <span class="ident">get_raw_bookmark</span>(<span class="ident">db</span>, <span class="ident">existing_parent_guid</span>)<span class="question-mark">?</span>.<span class="ident">ok_or_else</span>(<span class="op">||</span> {
                 <span class="ident">Corruption</span>::<span class="ident">NoParent</span>(<span class="ident">guid</span>.<span class="ident">to_string</span>(), <span class="ident">existing_parent_guid</span>.<span class="ident">to_string</span>())
             })<span class="question-mark">?</span>;
             <span class="ident">position</span> <span class="op">=</span> <span class="ident">update_pos_for_move</span>(<span class="ident">db</span>, <span class="kw-2">*</span><span class="ident">pos</span>, <span class="kw-2">&amp;</span><span class="ident">raw</span>, <span class="kw-2">&amp;</span><span class="ident">parent</span>)<span class="question-mark">?</span>;
         }
-        <span class="ident">UpdateTreeLocation</span>::<span class="ident">Parent</span>(<span class="ident">new_parent_guid</span>, <span class="ident">pos</span>) <span class="op">=</span><span class="op">&gt;</span> {
-            <span class="kw">if</span> <span class="ident">new_parent_guid</span> <span class="op">=</span><span class="op">=</span> <span class="ident">BookmarkRootGuid</span>::<span class="ident">Root</span> {
+        <span class="ident">UpdateTreeLocation</span>::<span class="ident">Parent</span>(<span class="ident">new_parent_guid</span>, <span class="ident">pos</span>) <span class="op">=&gt;</span> {
+            <span class="kw">if</span> <span class="ident">new_parent_guid</span> <span class="op">==</span> <span class="ident">BookmarkRootGuid</span>::<span class="ident">Root</span> {
                 <span class="kw">return</span> <span class="prelude-val">Err</span>(<span class="ident">InvalidPlaceInfo</span>::<span class="ident">CannotUpdateRoot</span>(<span class="ident">BookmarkRootGuid</span>::<span class="ident">Root</span>).<span class="ident">into</span>());
             }
             <span class="kw">let</span> <span class="ident">new_parent</span> <span class="op">=</span> <span class="ident">get_raw_bookmark</span>(<span class="ident">db</span>, <span class="kw-2">&amp;</span><span class="ident">new_parent_guid</span>)<span class="question-mark">?</span>
-                .<span class="ident">ok_or_else</span>(<span class="op">|</span><span class="op">|</span> <span class="ident">InvalidPlaceInfo</span>::<span class="ident">NoSuchGuid</span>(<span class="ident">new_parent_guid</span>.<span class="ident">to_string</span>()))<span class="question-mark">?</span>;
-            <span class="kw">if</span> <span class="ident">new_parent</span>.<span class="ident">bookmark_type</span> <span class="op">!</span><span class="op">=</span> <span class="ident">BookmarkType</span>::<span class="ident">Folder</span> {
+                .<span class="ident">ok_or_else</span>(<span class="op">||</span> <span class="ident">InvalidPlaceInfo</span>::<span class="ident">NoSuchGuid</span>(<span class="ident">new_parent_guid</span>.<span class="ident">to_string</span>()))<span class="question-mark">?</span>;
+            <span class="kw">if</span> <span class="ident">new_parent</span>.<span class="ident">bookmark_type</span> <span class="op">!=</span> <span class="ident">BookmarkType</span>::<span class="ident">Folder</span> {
                 <span class="kw">return</span> <span class="prelude-val">Err</span>(<span class="ident">InvalidPlaceInfo</span>::<span class="ident">InvalidParent</span>(<span class="ident">new_parent_guid</span>.<span class="ident">to_string</span>()).<span class="ident">into</span>());
             }
             <span class="ident">parent_id</span> <span class="op">=</span> <span class="ident">new_parent</span>.<span class="ident">row_id</span>;
             <span class="ident">update_old_parent_status</span> <span class="op">=</span> <span class="bool-val">true</span>;
             <span class="ident">update_new_parent_status</span> <span class="op">=</span> <span class="bool-val">true</span>;
-            <span class="kw">let</span> <span class="ident">existing_parent</span> <span class="op">=</span> <span class="ident">get_raw_bookmark</span>(<span class="ident">db</span>, <span class="ident">existing_parent_guid</span>)<span class="question-mark">?</span>.<span class="ident">ok_or_else</span>(<span class="op">|</span><span class="op">|</span> {
+            <span class="kw">let</span> <span class="ident">existing_parent</span> <span class="op">=</span> <span class="ident">get_raw_bookmark</span>(<span class="ident">db</span>, <span class="ident">existing_parent_guid</span>)<span class="question-mark">?</span>.<span class="ident">ok_or_else</span>(<span class="op">||</span> {
                 <span class="ident">Corruption</span>::<span class="ident">NoParent</span>(<span class="ident">guid</span>.<span class="ident">to_string</span>(), <span class="ident">existing_parent_guid</span>.<span class="ident">to_string</span>())
             })<span class="question-mark">?</span>;
             <span class="ident">update_pos_for_deletion</span>(<span class="ident">db</span>, <span class="ident">raw</span>.<span class="ident">position</span>, <span class="ident">existing_parent</span>.<span class="ident">row_id</span>)<span class="question-mark">?</span>;
@@ -3190,17 +3191,17 @@
         }
     };
     <span class="kw">let</span> <span class="ident">place_id</span> <span class="op">=</span> <span class="kw">match</span> <span class="ident">item</span> {
-        <span class="ident">UpdatableItem</span>::<span class="ident">Bookmark</span>(<span class="ident">b</span>) <span class="op">=</span><span class="op">&gt;</span> <span class="kw">match</span> <span class="kw-2">&amp;</span><span class="ident">b</span>.<span class="ident">url</span> {
-            <span class="prelude-val">None</span> <span class="op">=</span><span class="op">&gt;</span> <span class="ident">raw</span>.<span class="ident">place_id</span>,
-            <span class="prelude-val">Some</span>(<span class="ident">url</span>) <span class="op">=</span><span class="op">&gt;</span> {
+        <span class="ident">UpdatableItem</span>::<span class="ident">Bookmark</span>(<span class="ident">b</span>) <span class="op">=&gt;</span> <span class="kw">match</span> <span class="kw-2">&amp;</span><span class="ident">b</span>.<span class="ident">url</span> {
+            <span class="prelude-val">None</span> <span class="op">=&gt;</span> <span class="ident">raw</span>.<span class="ident">place_id</span>,
+            <span class="prelude-val">Some</span>(<span class="ident">url</span>) <span class="op">=&gt;</span> {
                 <span class="kw">let</span> <span class="ident">page_info</span> <span class="op">=</span> <span class="kw">match</span> <span class="ident">fetch_page_info</span>(<span class="ident">db</span>, <span class="kw-2">&amp;</span><span class="ident">url</span>)<span class="question-mark">?</span> {
-                    <span class="prelude-val">Some</span>(<span class="ident">info</span>) <span class="op">=</span><span class="op">&gt;</span> <span class="ident">info</span>.<span class="ident">page</span>,
-                    <span class="prelude-val">None</span> <span class="op">=</span><span class="op">&gt;</span> <span class="ident">new_page_info</span>(<span class="ident">db</span>, <span class="kw-2">&amp;</span><span class="ident">url</span>, <span class="prelude-val">None</span>)<span class="question-mark">?</span>,
+                    <span class="prelude-val">Some</span>(<span class="ident">info</span>) <span class="op">=&gt;</span> <span class="ident">info</span>.<span class="ident">page</span>,
+                    <span class="prelude-val">None</span> <span class="op">=&gt;</span> <span class="ident">new_page_info</span>(<span class="ident">db</span>, <span class="kw-2">&amp;</span><span class="ident">url</span>, <span class="prelude-val">None</span>)<span class="question-mark">?</span>,
                 };
                 <span class="prelude-val">Some</span>(<span class="ident">page_info</span>.<span class="ident">row_id</span>)
             }
         },
-        <span class="kw">_</span> <span class="op">=</span><span class="op">&gt;</span> {
+        <span class="kw">_</span> <span class="op">=&gt;</span> {
             <span class="comment">// Updating a non-bookmark item, so the existing item must not</span>
             <span class="comment">// have a place_id</span>
             <span class="macro">assert_eq</span><span class="macro">!</span>(<span class="ident">raw</span>.<span class="ident">place_id</span>, <span class="prelude-val">None</span>);
@@ -3211,17 +3212,17 @@
     <span class="comment">// via, say `title = NULLIF(IFNULL(:title, title), &#39;&#39;)`, this code needs</span>
     <span class="comment">// to know if it changed so the sync counter can be managed correctly.</span>
     <span class="kw">let</span> <span class="ident">update_title</span> <span class="op">=</span> <span class="kw">match</span> <span class="ident">item</span> {
-        <span class="ident">UpdatableItem</span>::<span class="ident">Bookmark</span>(<span class="ident">b</span>) <span class="op">=</span><span class="op">&gt;</span> <span class="kw-2">&amp;</span><span class="ident">b</span>.<span class="ident">title</span>,
-        <span class="ident">UpdatableItem</span>::<span class="ident">Folder</span>(<span class="ident">f</span>) <span class="op">=</span><span class="op">&gt;</span> <span class="kw-2">&amp;</span><span class="ident">f</span>.<span class="ident">title</span>,
-        <span class="ident">UpdatableItem</span>::<span class="ident">Separator</span>(<span class="kw">_</span>) <span class="op">=</span><span class="op">&gt;</span> <span class="kw-2">&amp;</span><span class="prelude-val">None</span>,
+        <span class="ident">UpdatableItem</span>::<span class="ident">Bookmark</span>(<span class="ident">b</span>) <span class="op">=&gt;</span> <span class="kw-2">&amp;</span><span class="ident">b</span>.<span class="ident">title</span>,
+        <span class="ident">UpdatableItem</span>::<span class="ident">Folder</span>(<span class="ident">f</span>) <span class="op">=&gt;</span> <span class="kw-2">&amp;</span><span class="ident">f</span>.<span class="ident">title</span>,
+        <span class="ident">UpdatableItem</span>::<span class="ident">Separator</span>(<span class="kw">_</span>) <span class="op">=&gt;</span> <span class="kw-2">&amp;</span><span class="prelude-val">None</span>,
     };
 
     <span class="kw">let</span> <span class="ident">title</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">String</span><span class="op">&gt;</span> <span class="op">=</span> <span class="kw">match</span> <span class="ident">update_title</span> {
-        <span class="prelude-val">None</span> <span class="op">=</span><span class="op">&gt;</span> <span class="ident">raw</span>.<span class="ident">title</span>.<span class="ident">clone</span>(),
+        <span class="prelude-val">None</span> <span class="op">=&gt;</span> <span class="ident">raw</span>.<span class="ident">title</span>.<span class="ident">clone</span>(),
         <span class="comment">// We don&#39;t differentiate between null and the empty string for title,</span>
         <span class="comment">// just like desktop doesn&#39;t post bug 1360872, hence an empty string</span>
         <span class="comment">// means &quot;set to null&quot;.</span>
-        <span class="prelude-val">Some</span>(<span class="ident">val</span>) <span class="op">=</span><span class="op">&gt;</span> {
+        <span class="prelude-val">Some</span>(<span class="ident">val</span>) <span class="op">=&gt;</span> {
             <span class="kw">if</span> <span class="ident">val</span>.<span class="ident">is_empty</span>() {
                 <span class="prelude-val">None</span>
             } <span class="kw">else</span> {
@@ -3230,7 +3231,7 @@
         }
     };
 
-    <span class="kw">let</span> <span class="ident">change_incr</span> <span class="op">=</span> <span class="ident">title</span> <span class="op">!</span><span class="op">=</span> <span class="ident">raw</span>.<span class="ident">title</span> <span class="op">|</span><span class="op">|</span> <span class="ident">place_id</span> <span class="op">!</span><span class="op">=</span> <span class="ident">raw</span>.<span class="ident">place_id</span>;
+    <span class="kw">let</span> <span class="ident">change_incr</span> <span class="op">=</span> <span class="ident">title</span> <span class="op">!=</span> <span class="ident">raw</span>.<span class="ident">title</span> <span class="op">||</span> <span class="ident">place_id</span> <span class="op">!=</span> <span class="ident">raw</span>.<span class="ident">place_id</span>;
 
     <span class="kw">let</span> <span class="ident">now</span> <span class="op">=</span> <span class="ident">Timestamp</span>::<span class="ident">now</span>();
 
@@ -3275,7 +3276,7 @@
     <span class="prelude-val">Ok</span>(())
 }
 
-<span class="kw">fn</span> <span class="ident">set_ancestors_last_modified</span>(<span class="ident">db</span>: <span class="kw-2">&amp;</span><span class="ident">PlacesDb</span>, <span class="ident">parent_id</span>: <span class="ident">RowId</span>, <span class="ident">time</span>: <span class="ident">Timestamp</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span>()<span class="op">&gt;</span> {
+<span class="kw">fn</span> <span class="ident">set_ancestors_last_modified</span>(<span class="ident">db</span>: <span class="kw-2">&amp;</span><span class="ident">PlacesDb</span>, <span class="ident">parent_id</span>: <span class="ident">RowId</span>, <span class="ident">time</span>: <span class="ident">Timestamp</span>) <span class="op">-&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span>()<span class="op">&gt;</span> {
     <span class="kw">let</span> <span class="ident">sql</span> <span class="op">=</span> <span class="string">&quot;
         WITH RECURSIVE
         ancestors(aid) AS (
@@ -3308,12 +3309,12 @@
 <span class="comment">// missing fields and be able to compare against a tree with all fields (such</span>
 <span class="comment">// as one exported from the DB)</span>
 <span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">test</span>)]</span>
-<span class="kw">fn</span> <span class="ident">cmp_options</span><span class="op">&lt;</span><span class="ident">T</span>: <span class="ident">PartialEq</span><span class="op">&gt;</span>(<span class="ident">s</span>: <span class="kw-2">&amp;</span><span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">T</span><span class="op">&gt;</span>, <span class="ident">o</span>: <span class="kw-2">&amp;</span><span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">T</span><span class="op">&gt;</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">bool</span> {
+<span class="kw">fn</span> <span class="ident">cmp_options</span><span class="op">&lt;</span><span class="ident">T</span>: <span class="ident">PartialEq</span><span class="op">&gt;</span>(<span class="ident">s</span>: <span class="kw-2">&amp;</span><span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">T</span><span class="op">&gt;</span>, <span class="ident">o</span>: <span class="kw-2">&amp;</span><span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">T</span><span class="op">&gt;</span>) <span class="op">-&gt;</span> <span class="ident">bool</span> {
     <span class="kw">match</span> (<span class="ident">s</span>, <span class="ident">o</span>) {
-        (<span class="prelude-val">None</span>, <span class="prelude-val">None</span>) <span class="op">=</span><span class="op">&gt;</span> <span class="bool-val">true</span>,
-        (<span class="prelude-val">None</span>, <span class="prelude-val">Some</span>(<span class="kw">_</span>)) <span class="op">=</span><span class="op">&gt;</span> <span class="bool-val">true</span>,
-        (<span class="prelude-val">Some</span>(<span class="kw">_</span>), <span class="prelude-val">None</span>) <span class="op">=</span><span class="op">&gt;</span> <span class="bool-val">true</span>,
-        (<span class="ident">s</span>, <span class="ident">o</span>) <span class="op">=</span><span class="op">&gt;</span> <span class="ident">s</span> <span class="op">=</span><span class="op">=</span> <span class="ident">o</span>,
+        (<span class="prelude-val">None</span>, <span class="prelude-val">None</span>) <span class="op">=&gt;</span> <span class="bool-val">true</span>,
+        (<span class="prelude-val">None</span>, <span class="prelude-val">Some</span>(<span class="kw">_</span>)) <span class="op">=&gt;</span> <span class="bool-val">true</span>,
+        (<span class="prelude-val">Some</span>(<span class="kw">_</span>), <span class="prelude-val">None</span>) <span class="op">=&gt;</span> <span class="bool-val">true</span>,
+        (<span class="ident">s</span>, <span class="ident">o</span>) <span class="op">=&gt;</span> <span class="ident">s</span> <span class="op">==</span> <span class="ident">o</span>,
     }
 }
 
@@ -3327,19 +3328,19 @@
 }
 
 <span class="kw">impl</span> <span class="ident">From</span><span class="op">&lt;</span><span class="ident">BookmarkNode</span><span class="op">&gt;</span> <span class="kw">for</span> <span class="ident">BookmarkTreeNode</span> {
-    <span class="kw">fn</span> <span class="ident">from</span>(<span class="ident">node</span>: <span class="ident">BookmarkNode</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="self">Self</span> {
+    <span class="kw">fn</span> <span class="ident">from</span>(<span class="ident">node</span>: <span class="ident">BookmarkNode</span>) <span class="op">-&gt;</span> <span class="self">Self</span> {
         <span class="ident">BookmarkTreeNode</span>::<span class="ident">Bookmark</span>(<span class="ident">node</span>)
     }
 }
 
 <span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">test</span>)]</span>
 <span class="kw">impl</span> <span class="ident">PartialEq</span> <span class="kw">for</span> <span class="ident">BookmarkNode</span> {
-    <span class="kw">fn</span> <span class="ident">eq</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">other</span>: <span class="kw-2">&amp;</span><span class="ident">BookmarkNode</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">bool</span> {
+    <span class="kw">fn</span> <span class="ident">eq</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">other</span>: <span class="kw-2">&amp;</span><span class="ident">BookmarkNode</span>) <span class="op">-&gt;</span> <span class="ident">bool</span> {
         <span class="ident">cmp_options</span>(<span class="kw-2">&amp;</span><span class="self">self</span>.<span class="ident">guid</span>, <span class="kw-2">&amp;</span><span class="ident">other</span>.<span class="ident">guid</span>)
-            <span class="kw-2">&amp;</span><span class="op">&amp;</span> <span class="ident">cmp_options</span>(<span class="kw-2">&amp;</span><span class="self">self</span>.<span class="ident">date_added</span>, <span class="kw-2">&amp;</span><span class="ident">other</span>.<span class="ident">date_added</span>)
-            <span class="kw-2">&amp;</span><span class="op">&amp;</span> <span class="ident">cmp_options</span>(<span class="kw-2">&amp;</span><span class="self">self</span>.<span class="ident">last_modified</span>, <span class="kw-2">&amp;</span><span class="ident">other</span>.<span class="ident">last_modified</span>)
-            <span class="kw-2">&amp;</span><span class="op">&amp;</span> <span class="ident">cmp_options</span>(<span class="kw-2">&amp;</span><span class="self">self</span>.<span class="ident">title</span>, <span class="kw-2">&amp;</span><span class="ident">other</span>.<span class="ident">title</span>)
-            <span class="kw-2">&amp;</span><span class="op">&amp;</span> <span class="self">self</span>.<span class="ident">url</span> <span class="op">=</span><span class="op">=</span> <span class="ident">other</span>.<span class="ident">url</span>
+            <span class="op">&amp;&amp;</span> <span class="ident">cmp_options</span>(<span class="kw-2">&amp;</span><span class="self">self</span>.<span class="ident">date_added</span>, <span class="kw-2">&amp;</span><span class="ident">other</span>.<span class="ident">date_added</span>)
+            <span class="op">&amp;&amp;</span> <span class="ident">cmp_options</span>(<span class="kw-2">&amp;</span><span class="self">self</span>.<span class="ident">last_modified</span>, <span class="kw-2">&amp;</span><span class="ident">other</span>.<span class="ident">last_modified</span>)
+            <span class="op">&amp;&amp;</span> <span class="ident">cmp_options</span>(<span class="kw-2">&amp;</span><span class="self">self</span>.<span class="ident">title</span>, <span class="kw-2">&amp;</span><span class="ident">other</span>.<span class="ident">title</span>)
+            <span class="op">&amp;&amp;</span> <span class="self">self</span>.<span class="ident">url</span> <span class="op">==</span> <span class="ident">other</span>.<span class="ident">url</span>
     }
 }
 
@@ -3351,17 +3352,17 @@
 }
 
 <span class="kw">impl</span> <span class="ident">From</span><span class="op">&lt;</span><span class="ident">SeparatorNode</span><span class="op">&gt;</span> <span class="kw">for</span> <span class="ident">BookmarkTreeNode</span> {
-    <span class="kw">fn</span> <span class="ident">from</span>(<span class="ident">node</span>: <span class="ident">SeparatorNode</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="self">Self</span> {
+    <span class="kw">fn</span> <span class="ident">from</span>(<span class="ident">node</span>: <span class="ident">SeparatorNode</span>) <span class="op">-&gt;</span> <span class="self">Self</span> {
         <span class="ident">BookmarkTreeNode</span>::<span class="ident">Separator</span>(<span class="ident">node</span>)
     }
 }
 
 <span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">test</span>)]</span>
 <span class="kw">impl</span> <span class="ident">PartialEq</span> <span class="kw">for</span> <span class="ident">SeparatorNode</span> {
-    <span class="kw">fn</span> <span class="ident">eq</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">other</span>: <span class="kw-2">&amp;</span><span class="ident">SeparatorNode</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">bool</span> {
+    <span class="kw">fn</span> <span class="ident">eq</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">other</span>: <span class="kw-2">&amp;</span><span class="ident">SeparatorNode</span>) <span class="op">-&gt;</span> <span class="ident">bool</span> {
         <span class="ident">cmp_options</span>(<span class="kw-2">&amp;</span><span class="self">self</span>.<span class="ident">guid</span>, <span class="kw-2">&amp;</span><span class="ident">other</span>.<span class="ident">guid</span>)
-            <span class="kw-2">&amp;</span><span class="op">&amp;</span> <span class="ident">cmp_options</span>(<span class="kw-2">&amp;</span><span class="self">self</span>.<span class="ident">date_added</span>, <span class="kw-2">&amp;</span><span class="ident">other</span>.<span class="ident">date_added</span>)
-            <span class="kw-2">&amp;</span><span class="op">&amp;</span> <span class="ident">cmp_options</span>(<span class="kw-2">&amp;</span><span class="self">self</span>.<span class="ident">last_modified</span>, <span class="kw-2">&amp;</span><span class="ident">other</span>.<span class="ident">last_modified</span>)
+            <span class="op">&amp;&amp;</span> <span class="ident">cmp_options</span>(<span class="kw-2">&amp;</span><span class="self">self</span>.<span class="ident">date_added</span>, <span class="kw-2">&amp;</span><span class="ident">other</span>.<span class="ident">date_added</span>)
+            <span class="op">&amp;&amp;</span> <span class="ident">cmp_options</span>(<span class="kw-2">&amp;</span><span class="self">self</span>.<span class="ident">last_modified</span>, <span class="kw-2">&amp;</span><span class="ident">other</span>.<span class="ident">last_modified</span>)
     }
 }
 
@@ -3375,19 +3376,19 @@
 }
 
 <span class="kw">impl</span> <span class="ident">From</span><span class="op">&lt;</span><span class="ident">FolderNode</span><span class="op">&gt;</span> <span class="kw">for</span> <span class="ident">BookmarkTreeNode</span> {
-    <span class="kw">fn</span> <span class="ident">from</span>(<span class="ident">node</span>: <span class="ident">FolderNode</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="self">Self</span> {
+    <span class="kw">fn</span> <span class="ident">from</span>(<span class="ident">node</span>: <span class="ident">FolderNode</span>) <span class="op">-&gt;</span> <span class="self">Self</span> {
         <span class="ident">BookmarkTreeNode</span>::<span class="ident">Folder</span>(<span class="ident">node</span>)
     }
 }
 
 <span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">test</span>)]</span>
 <span class="kw">impl</span> <span class="ident">PartialEq</span> <span class="kw">for</span> <span class="ident">FolderNode</span> {
-    <span class="kw">fn</span> <span class="ident">eq</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">other</span>: <span class="kw-2">&amp;</span><span class="ident">FolderNode</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">bool</span> {
+    <span class="kw">fn</span> <span class="ident">eq</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">other</span>: <span class="kw-2">&amp;</span><span class="ident">FolderNode</span>) <span class="op">-&gt;</span> <span class="ident">bool</span> {
         <span class="ident">cmp_options</span>(<span class="kw-2">&amp;</span><span class="self">self</span>.<span class="ident">guid</span>, <span class="kw-2">&amp;</span><span class="ident">other</span>.<span class="ident">guid</span>)
-            <span class="kw-2">&amp;</span><span class="op">&amp;</span> <span class="ident">cmp_options</span>(<span class="kw-2">&amp;</span><span class="self">self</span>.<span class="ident">date_added</span>, <span class="kw-2">&amp;</span><span class="ident">other</span>.<span class="ident">date_added</span>)
-            <span class="kw-2">&amp;</span><span class="op">&amp;</span> <span class="ident">cmp_options</span>(<span class="kw-2">&amp;</span><span class="self">self</span>.<span class="ident">last_modified</span>, <span class="kw-2">&amp;</span><span class="ident">other</span>.<span class="ident">last_modified</span>)
-            <span class="kw-2">&amp;</span><span class="op">&amp;</span> <span class="ident">cmp_options</span>(<span class="kw-2">&amp;</span><span class="self">self</span>.<span class="ident">title</span>, <span class="kw-2">&amp;</span><span class="ident">other</span>.<span class="ident">title</span>)
-            <span class="kw-2">&amp;</span><span class="op">&amp;</span> <span class="self">self</span>.<span class="ident">children</span> <span class="op">=</span><span class="op">=</span> <span class="ident">other</span>.<span class="ident">children</span>
+            <span class="op">&amp;&amp;</span> <span class="ident">cmp_options</span>(<span class="kw-2">&amp;</span><span class="self">self</span>.<span class="ident">date_added</span>, <span class="kw-2">&amp;</span><span class="ident">other</span>.<span class="ident">date_added</span>)
+            <span class="op">&amp;&amp;</span> <span class="ident">cmp_options</span>(<span class="kw-2">&amp;</span><span class="self">self</span>.<span class="ident">last_modified</span>, <span class="kw-2">&amp;</span><span class="ident">other</span>.<span class="ident">last_modified</span>)
+            <span class="op">&amp;&amp;</span> <span class="ident">cmp_options</span>(<span class="kw-2">&amp;</span><span class="self">self</span>.<span class="ident">title</span>, <span class="kw-2">&amp;</span><span class="ident">other</span>.<span class="ident">title</span>)
+            <span class="op">&amp;&amp;</span> <span class="self">self</span>.<span class="ident">children</span> <span class="op">==</span> <span class="ident">other</span>.<span class="ident">children</span>
     }
 }
 
@@ -3400,29 +3401,29 @@
 }
 
 <span class="kw">impl</span> <span class="ident">BookmarkTreeNode</span> {
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">node_type</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">BookmarkType</span> {
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">node_type</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-&gt;</span> <span class="ident">BookmarkType</span> {
         <span class="kw">match</span> <span class="self">self</span> {
-            <span class="ident">BookmarkTreeNode</span>::<span class="ident">Bookmark</span>(<span class="kw">_</span>) <span class="op">=</span><span class="op">&gt;</span> <span class="ident">BookmarkType</span>::<span class="ident">Bookmark</span>,
-            <span class="ident">BookmarkTreeNode</span>::<span class="ident">Folder</span>(<span class="kw">_</span>) <span class="op">=</span><span class="op">&gt;</span> <span class="ident">BookmarkType</span>::<span class="ident">Folder</span>,
-            <span class="ident">BookmarkTreeNode</span>::<span class="ident">Separator</span>(<span class="kw">_</span>) <span class="op">=</span><span class="op">&gt;</span> <span class="ident">BookmarkType</span>::<span class="ident">Separator</span>,
+            <span class="ident">BookmarkTreeNode</span>::<span class="ident">Bookmark</span>(<span class="kw">_</span>) <span class="op">=&gt;</span> <span class="ident">BookmarkType</span>::<span class="ident">Bookmark</span>,
+            <span class="ident">BookmarkTreeNode</span>::<span class="ident">Folder</span>(<span class="kw">_</span>) <span class="op">=&gt;</span> <span class="ident">BookmarkType</span>::<span class="ident">Folder</span>,
+            <span class="ident">BookmarkTreeNode</span>::<span class="ident">Separator</span>(<span class="kw">_</span>) <span class="op">=&gt;</span> <span class="ident">BookmarkType</span>::<span class="ident">Separator</span>,
         }
     }
 
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">guid</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="kw-2">&amp;</span><span class="ident">SyncGuid</span> {
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">guid</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-&gt;</span> <span class="kw-2">&amp;</span><span class="ident">SyncGuid</span> {
         <span class="kw">let</span> <span class="ident">guid</span> <span class="op">=</span> <span class="kw">match</span> <span class="self">self</span> {
-            <span class="ident">BookmarkTreeNode</span>::<span class="ident">Bookmark</span>(<span class="ident">b</span>) <span class="op">=</span><span class="op">&gt;</span> <span class="ident">b</span>.<span class="ident">guid</span>.<span class="ident">as_ref</span>(),
-            <span class="ident">BookmarkTreeNode</span>::<span class="ident">Folder</span>(<span class="ident">f</span>) <span class="op">=</span><span class="op">&gt;</span> <span class="ident">f</span>.<span class="ident">guid</span>.<span class="ident">as_ref</span>(),
-            <span class="ident">BookmarkTreeNode</span>::<span class="ident">Separator</span>(<span class="ident">s</span>) <span class="op">=</span><span class="op">&gt;</span> <span class="ident">s</span>.<span class="ident">guid</span>.<span class="ident">as_ref</span>(),
+            <span class="ident">BookmarkTreeNode</span>::<span class="ident">Bookmark</span>(<span class="ident">b</span>) <span class="op">=&gt;</span> <span class="ident">b</span>.<span class="ident">guid</span>.<span class="ident">as_ref</span>(),
+            <span class="ident">BookmarkTreeNode</span>::<span class="ident">Folder</span>(<span class="ident">f</span>) <span class="op">=&gt;</span> <span class="ident">f</span>.<span class="ident">guid</span>.<span class="ident">as_ref</span>(),
+            <span class="ident">BookmarkTreeNode</span>::<span class="ident">Separator</span>(<span class="ident">s</span>) <span class="op">=&gt;</span> <span class="ident">s</span>.<span class="ident">guid</span>.<span class="ident">as_ref</span>(),
         };
         <span class="comment">// Can this happen? Why is this an Option?</span>
         <span class="ident">guid</span>.<span class="ident">expect</span>(<span class="string">&quot;Missing guid?&quot;</span>)
     }
 
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">created_modified</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-</span><span class="op">&gt;</span> (<span class="ident">Timestamp</span>, <span class="ident">Timestamp</span>) {
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">created_modified</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-&gt;</span> (<span class="ident">Timestamp</span>, <span class="ident">Timestamp</span>) {
         <span class="kw">let</span> (<span class="ident">created</span>, <span class="ident">modified</span>) <span class="op">=</span> <span class="kw">match</span> <span class="self">self</span> {
-            <span class="ident">BookmarkTreeNode</span>::<span class="ident">Bookmark</span>(<span class="ident">b</span>) <span class="op">=</span><span class="op">&gt;</span> (<span class="ident">b</span>.<span class="ident">date_added</span>, <span class="ident">b</span>.<span class="ident">last_modified</span>),
-            <span class="ident">BookmarkTreeNode</span>::<span class="ident">Folder</span>(<span class="ident">f</span>) <span class="op">=</span><span class="op">&gt;</span> (<span class="ident">f</span>.<span class="ident">date_added</span>, <span class="ident">f</span>.<span class="ident">last_modified</span>),
-            <span class="ident">BookmarkTreeNode</span>::<span class="ident">Separator</span>(<span class="ident">s</span>) <span class="op">=</span><span class="op">&gt;</span> (<span class="ident">s</span>.<span class="ident">date_added</span>, <span class="ident">s</span>.<span class="ident">last_modified</span>),
+            <span class="ident">BookmarkTreeNode</span>::<span class="ident">Bookmark</span>(<span class="ident">b</span>) <span class="op">=&gt;</span> (<span class="ident">b</span>.<span class="ident">date_added</span>, <span class="ident">b</span>.<span class="ident">last_modified</span>),
+            <span class="ident">BookmarkTreeNode</span>::<span class="ident">Folder</span>(<span class="ident">f</span>) <span class="op">=&gt;</span> (<span class="ident">f</span>.<span class="ident">date_added</span>, <span class="ident">f</span>.<span class="ident">last_modified</span>),
+            <span class="ident">BookmarkTreeNode</span>::<span class="ident">Separator</span>(<span class="ident">s</span>) <span class="op">=&gt;</span> (<span class="ident">s</span>.<span class="ident">date_added</span>, <span class="ident">s</span>.<span class="ident">last_modified</span>),
         };
         (
             <span class="ident">created</span>.<span class="ident">unwrap_or_else</span>(<span class="ident">Timestamp</span>::<span class="ident">now</span>),
@@ -3434,13 +3435,13 @@
 <span class="comment">// Serde makes it tricky to serialize what we need here - a &#39;type&#39; from the</span>
 <span class="comment">// enum and then a flattened variant struct. So we gotta do it manually.</span>
 <span class="kw">impl</span> <span class="ident">Serialize</span> <span class="kw">for</span> <span class="ident">BookmarkTreeNode</span> {
-    <span class="kw">fn</span> <span class="ident">serialize</span><span class="op">&lt;</span><span class="ident">S</span><span class="op">&gt;</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">serializer</span>: <span class="ident">S</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">std</span>::<span class="ident">result</span>::<span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">S</span>::<span class="prelude-val">Ok</span>, <span class="ident">S</span>::<span class="ident">Error</span><span class="op">&gt;</span>
+    <span class="kw">fn</span> <span class="ident">serialize</span><span class="op">&lt;</span><span class="ident">S</span><span class="op">&gt;</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">serializer</span>: <span class="ident">S</span>) <span class="op">-&gt;</span> <span class="ident">std</span>::<span class="ident">result</span>::<span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">S</span>::<span class="prelude-val">Ok</span>, <span class="ident">S</span>::<span class="ident">Error</span><span class="op">&gt;</span>
     <span class="kw">where</span>
         <span class="ident">S</span>: <span class="ident">Serializer</span>,
     {
         <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">state</span> <span class="op">=</span> <span class="ident">serializer</span>.<span class="ident">serialize_struct</span>(<span class="string">&quot;BookmarkTreeNode&quot;</span>, <span class="number">2</span>)<span class="question-mark">?</span>;
         <span class="kw">match</span> <span class="self">self</span> {
-            <span class="ident">BookmarkTreeNode</span>::<span class="ident">Bookmark</span>(<span class="ident">b</span>) <span class="op">=</span><span class="op">&gt;</span> {
+            <span class="ident">BookmarkTreeNode</span>::<span class="ident">Bookmark</span>(<span class="ident">b</span>) <span class="op">=&gt;</span> {
                 <span class="ident">state</span>.<span class="ident">serialize_field</span>(<span class="string">&quot;type&quot;</span>, <span class="kw-2">&amp;</span><span class="ident">BookmarkType</span>::<span class="ident">Bookmark</span>)<span class="question-mark">?</span>;
                 <span class="ident">state</span>.<span class="ident">serialize_field</span>(<span class="string">&quot;guid&quot;</span>, <span class="kw-2">&amp;</span><span class="ident">b</span>.<span class="ident">guid</span>)<span class="question-mark">?</span>;
                 <span class="ident">state</span>.<span class="ident">serialize_field</span>(<span class="string">&quot;date_added&quot;</span>, <span class="kw-2">&amp;</span><span class="ident">b</span>.<span class="ident">date_added</span>)<span class="question-mark">?</span>;
@@ -3448,13 +3449,13 @@
                 <span class="ident">state</span>.<span class="ident">serialize_field</span>(<span class="string">&quot;title&quot;</span>, <span class="kw-2">&amp;</span><span class="ident">b</span>.<span class="ident">title</span>)<span class="question-mark">?</span>;
                 <span class="ident">state</span>.<span class="ident">serialize_field</span>(<span class="string">&quot;url&quot;</span>, <span class="kw-2">&amp;</span><span class="ident">b</span>.<span class="ident">url</span>.<span class="ident">to_string</span>())<span class="question-mark">?</span>;
             }
-            <span class="ident">BookmarkTreeNode</span>::<span class="ident">Separator</span>(<span class="ident">s</span>) <span class="op">=</span><span class="op">&gt;</span> {
+            <span class="ident">BookmarkTreeNode</span>::<span class="ident">Separator</span>(<span class="ident">s</span>) <span class="op">=&gt;</span> {
                 <span class="ident">state</span>.<span class="ident">serialize_field</span>(<span class="string">&quot;type&quot;</span>, <span class="kw-2">&amp;</span><span class="ident">BookmarkType</span>::<span class="ident">Separator</span>)<span class="question-mark">?</span>;
                 <span class="ident">state</span>.<span class="ident">serialize_field</span>(<span class="string">&quot;guid&quot;</span>, <span class="kw-2">&amp;</span><span class="ident">s</span>.<span class="ident">guid</span>)<span class="question-mark">?</span>;
                 <span class="ident">state</span>.<span class="ident">serialize_field</span>(<span class="string">&quot;date_added&quot;</span>, <span class="kw-2">&amp;</span><span class="ident">s</span>.<span class="ident">date_added</span>)<span class="question-mark">?</span>;
                 <span class="ident">state</span>.<span class="ident">serialize_field</span>(<span class="string">&quot;last_modified&quot;</span>, <span class="kw-2">&amp;</span><span class="ident">s</span>.<span class="ident">last_modified</span>)<span class="question-mark">?</span>;
             }
-            <span class="ident">BookmarkTreeNode</span>::<span class="ident">Folder</span>(<span class="ident">f</span>) <span class="op">=</span><span class="op">&gt;</span> {
+            <span class="ident">BookmarkTreeNode</span>::<span class="ident">Folder</span>(<span class="ident">f</span>) <span class="op">=&gt;</span> {
                 <span class="ident">state</span>.<span class="ident">serialize_field</span>(<span class="string">&quot;type&quot;</span>, <span class="kw-2">&amp;</span><span class="ident">BookmarkType</span>::<span class="ident">Folder</span>)<span class="question-mark">?</span>;
                 <span class="ident">state</span>.<span class="ident">serialize_field</span>(<span class="string">&quot;guid&quot;</span>, <span class="kw-2">&amp;</span><span class="ident">f</span>.<span class="ident">guid</span>)<span class="question-mark">?</span>;
                 <span class="ident">state</span>.<span class="ident">serialize_field</span>(<span class="string">&quot;date_added&quot;</span>, <span class="kw-2">&amp;</span><span class="ident">f</span>.<span class="ident">date_added</span>)<span class="question-mark">?</span>;
@@ -3468,7 +3469,7 @@
 }
 
 <span class="kw">impl</span><span class="op">&lt;</span><span class="lifetime">&#39;de</span><span class="op">&gt;</span> <span class="ident">Deserialize</span><span class="op">&lt;</span><span class="lifetime">&#39;de</span><span class="op">&gt;</span> <span class="kw">for</span> <span class="ident">BookmarkTreeNode</span> {
-    <span class="kw">fn</span> <span class="ident">deserialize</span><span class="op">&lt;</span><span class="ident">D</span><span class="op">&gt;</span>(<span class="ident">deserializer</span>: <span class="ident">D</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">std</span>::<span class="ident">result</span>::<span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="self">Self</span>, <span class="ident">D</span>::<span class="ident">Error</span><span class="op">&gt;</span>
+    <span class="kw">fn</span> <span class="ident">deserialize</span><span class="op">&lt;</span><span class="ident">D</span><span class="op">&gt;</span>(<span class="ident">deserializer</span>: <span class="ident">D</span>) <span class="op">-&gt;</span> <span class="ident">std</span>::<span class="ident">result</span>::<span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="self">Self</span>, <span class="ident">D</span>::<span class="ident">Error</span><span class="op">&gt;</span>
     <span class="kw">where</span>
         <span class="ident">D</span>: <span class="ident">Deserializer</span><span class="op">&lt;</span><span class="lifetime">&#39;de</span><span class="op">&gt;</span>,
     {
@@ -3488,7 +3489,7 @@
         <span class="kw">let</span> <span class="ident">m</span> <span class="op">=</span> <span class="ident">Mapping</span>::<span class="ident">deserialize</span>(<span class="ident">deserializer</span>)<span class="question-mark">?</span>;
 
         <span class="kw">let</span> <span class="ident">url</span> <span class="op">=</span> <span class="ident">m</span>.<span class="ident">url</span>.<span class="ident">as_ref</span>().<span class="ident">and_then</span>(<span class="op">|</span><span class="ident">u</span><span class="op">|</span> <span class="kw">match</span> <span class="ident">Url</span>::<span class="ident">parse</span>(<span class="ident">u</span>) {
-            <span class="prelude-val">Err</span>(<span class="ident">e</span>) <span class="op">=</span><span class="op">&gt;</span> {
+            <span class="prelude-val">Err</span>(<span class="ident">e</span>) <span class="op">=&gt;</span> {
                 <span class="ident">log</span>::<span class="macro">warn</span><span class="macro">!</span>(
                     <span class="string">&quot;ignoring invalid url for {}: {:?}&quot;</span>,
                     <span class="ident">m</span>.<span class="ident">guid</span>.<span class="ident">as_ref</span>().<span class="ident">map</span>(<span class="ident">AsRef</span>::<span class="ident">as_ref</span>).<span class="ident">unwrap_or</span>(<span class="string">&quot;&lt;no guid&gt;&quot;</span>),
@@ -3496,12 +3497,12 @@
                 );
                 <span class="prelude-val">None</span>
             }
-            <span class="prelude-val">Ok</span>(<span class="ident">parsed</span>) <span class="op">=</span><span class="op">&gt;</span> <span class="prelude-val">Some</span>(<span class="ident">parsed</span>),
+            <span class="prelude-val">Ok</span>(<span class="ident">parsed</span>) <span class="op">=&gt;</span> <span class="prelude-val">Some</span>(<span class="ident">parsed</span>),
         });
 
-        <span class="kw">let</span> <span class="ident">bookmark_type</span> <span class="op">=</span> <span class="ident">BookmarkType</span>::<span class="ident">from_u8_with_valid_url</span>(<span class="ident">m</span>.<span class="ident">bookmark_type</span>, <span class="op">|</span><span class="op">|</span> <span class="ident">url</span>.<span class="ident">is_some</span>());
+        <span class="kw">let</span> <span class="ident">bookmark_type</span> <span class="op">=</span> <span class="ident">BookmarkType</span>::<span class="ident">from_u8_with_valid_url</span>(<span class="ident">m</span>.<span class="ident">bookmark_type</span>, <span class="op">||</span> <span class="ident">url</span>.<span class="ident">is_some</span>());
         <span class="prelude-val">Ok</span>(<span class="kw">match</span> <span class="ident">bookmark_type</span> {
-            <span class="ident">BookmarkType</span>::<span class="ident">Bookmark</span> <span class="op">=</span><span class="op">&gt;</span> <span class="ident">BookmarkNode</span> {
+            <span class="ident">BookmarkType</span>::<span class="ident">Bookmark</span> <span class="op">=&gt;</span> <span class="ident">BookmarkNode</span> {
                 <span class="ident">guid</span>: <span class="ident">m</span>.<span class="ident">guid</span>,
                 <span class="ident">date_added</span>: <span class="ident">m</span>.<span class="ident">date_added</span>,
                 <span class="ident">last_modified</span>: <span class="ident">m</span>.<span class="ident">last_modified</span>,
@@ -3509,13 +3510,13 @@
                 <span class="ident">url</span>: <span class="ident">url</span>.<span class="ident">unwrap</span>(),
             }
             .<span class="ident">into</span>(),
-            <span class="ident">BookmarkType</span>::<span class="ident">Separator</span> <span class="op">=</span><span class="op">&gt;</span> <span class="ident">SeparatorNode</span> {
+            <span class="ident">BookmarkType</span>::<span class="ident">Separator</span> <span class="op">=&gt;</span> <span class="ident">SeparatorNode</span> {
                 <span class="ident">guid</span>: <span class="ident">m</span>.<span class="ident">guid</span>,
                 <span class="ident">date_added</span>: <span class="ident">m</span>.<span class="ident">date_added</span>,
                 <span class="ident">last_modified</span>: <span class="ident">m</span>.<span class="ident">last_modified</span>,
             }
             .<span class="ident">into</span>(),
-            <span class="ident">BookmarkType</span>::<span class="ident">Folder</span> <span class="op">=</span><span class="op">&gt;</span> <span class="ident">FolderNode</span> {
+            <span class="ident">BookmarkType</span>::<span class="ident">Folder</span> <span class="op">=&gt;</span> <span class="ident">FolderNode</span> {
                 <span class="ident">guid</span>: <span class="ident">m</span>.<span class="ident">guid</span>,
                 <span class="ident">date_added</span>: <span class="ident">m</span>.<span class="ident">date_added</span>,
                 <span class="ident">last_modified</span>: <span class="ident">m</span>.<span class="ident">last_modified</span>,
@@ -3528,7 +3529,7 @@
 }
 
 <span class="doccomment">/// Get the URL of the bookmark matching a keyword</span>
-<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">bookmarks_get_url_for_keyword</span>(<span class="ident">db</span>: <span class="kw-2">&amp;</span><span class="ident">PlacesDb</span>, <span class="ident">keyword</span>: <span class="kw-2">&amp;</span><span class="ident">str</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">Url</span><span class="op">&gt;</span><span class="op">&gt;</span> {
+<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">bookmarks_get_url_for_keyword</span>(<span class="ident">db</span>: <span class="kw-2">&amp;</span><span class="ident">PlacesDb</span>, <span class="ident">keyword</span>: <span class="kw-2">&amp;</span><span class="ident">str</span>) <span class="op">-&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">Url</span><span class="op">&gt;&gt;</span> {
     <span class="kw">let</span> <span class="ident">bookmark_url</span> <span class="op">=</span> <span class="ident">db</span>.<span class="ident">try_query_row</span>(
         <span class="string">&quot;SELECT h.url FROM moz_keywords k
          JOIN moz_places h ON h.id = k.place_id
@@ -3539,15 +3540,15 @@
     )<span class="question-mark">?</span>;
 
     <span class="kw">match</span> <span class="ident">bookmark_url</span> {
-        <span class="prelude-val">Some</span>(<span class="ident">b</span>) <span class="op">=</span><span class="op">&gt;</span> <span class="kw">match</span> <span class="ident">Url</span>::<span class="ident">parse</span>(<span class="kw-2">&amp;</span><span class="ident">b</span>) {
-            <span class="prelude-val">Ok</span>(<span class="ident">u</span>) <span class="op">=</span><span class="op">&gt;</span> <span class="prelude-val">Ok</span>(<span class="prelude-val">Some</span>(<span class="ident">u</span>)),
-            <span class="prelude-val">Err</span>(<span class="ident">e</span>) <span class="op">=</span><span class="op">&gt;</span> {
+        <span class="prelude-val">Some</span>(<span class="ident">b</span>) <span class="op">=&gt;</span> <span class="kw">match</span> <span class="ident">Url</span>::<span class="ident">parse</span>(<span class="kw-2">&amp;</span><span class="ident">b</span>) {
+            <span class="prelude-val">Ok</span>(<span class="ident">u</span>) <span class="op">=&gt;</span> <span class="prelude-val">Ok</span>(<span class="prelude-val">Some</span>(<span class="ident">u</span>)),
+            <span class="prelude-val">Err</span>(<span class="ident">e</span>) <span class="op">=&gt;</span> {
                 <span class="comment">// We don&#39;t have the guid to log and the keyword is PII...</span>
                 <span class="ident">log</span>::<span class="macro">warn</span><span class="macro">!</span>(<span class="string">&quot;ignoring invalid url: {:?}&quot;</span>, <span class="ident">e</span>);
                 <span class="prelude-val">Ok</span>(<span class="prelude-val">None</span>)
             }
         },
-        <span class="prelude-val">None</span> <span class="op">=</span><span class="op">&gt;</span> <span class="prelude-val">Ok</span>(<span class="prelude-val">None</span>),
+        <span class="prelude-val">None</span> <span class="op">=&gt;</span> <span class="prelude-val">Ok</span>(<span class="prelude-val">None</span>),
     }
 }
 
@@ -3556,7 +3557,7 @@
     <span class="kw">use</span> <span class="kw">super</span>::<span class="kw-2">*</span>;
 
     <span class="attribute">#[<span class="ident">test</span>]</span>
-    <span class="kw">fn</span> <span class="ident">test_tree_serialize</span>() <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span>()<span class="op">&gt;</span> {
+    <span class="kw">fn</span> <span class="ident">test_tree_serialize</span>() <span class="op">-&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span>()<span class="op">&gt;</span> {
         <span class="kw">let</span> <span class="ident">guid</span> <span class="op">=</span> <span class="ident">SyncGuid</span>::<span class="ident">random</span>();
         <span class="kw">let</span> <span class="ident">tree</span> <span class="op">=</span> <span class="ident">BookmarkTreeNode</span>::<span class="ident">Folder</span>(<span class="ident">FolderNode</span> {
             <span class="ident">guid</span>: <span class="prelude-val">Some</span>(<span class="ident">guid</span>.<span class="ident">clone</span>()),
@@ -3594,7 +3595,7 @@
     }
 
     <span class="attribute">#[<span class="ident">test</span>]</span>
-    <span class="kw">fn</span> <span class="ident">test_tree_invalid</span>() <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span>()<span class="op">&gt;</span> {
+    <span class="kw">fn</span> <span class="ident">test_tree_invalid</span>() <span class="op">-&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span>()<span class="op">&gt;</span> {
         <span class="kw">let</span> <span class="ident">jtree</span> <span class="op">=</span> <span class="macro">json</span><span class="macro">!</span>({
             <span class="string">&quot;type&quot;</span>: <span class="number">2</span>,
             <span class="string">&quot;children&quot;</span> : [
@@ -3619,32 +3620,32 @@
         });
         <span class="kw">let</span> <span class="ident">deser_tree</span>: <span class="ident">BookmarkTreeNode</span> <span class="op">=</span> <span class="ident">serde_json</span>::<span class="ident">from_value</span>(<span class="ident">jtree</span>).<span class="ident">expect</span>(<span class="string">&quot;should deser&quot;</span>);
         <span class="kw">let</span> <span class="ident">folder</span> <span class="op">=</span> <span class="kw">match</span> <span class="ident">deser_tree</span> {
-            <span class="ident">BookmarkTreeNode</span>::<span class="ident">Folder</span>(<span class="ident">f</span>) <span class="op">=</span><span class="op">&gt;</span> <span class="ident">f</span>,
-            <span class="kw">_</span> <span class="op">=</span><span class="op">&gt;</span> <span class="macro">panic</span><span class="macro">!</span>(<span class="string">&quot;must be a folder&quot;</span>),
+            <span class="ident">BookmarkTreeNode</span>::<span class="ident">Folder</span>(<span class="ident">f</span>) <span class="op">=&gt;</span> <span class="ident">f</span>,
+            <span class="kw">_</span> <span class="op">=&gt;</span> <span class="macro">panic</span><span class="macro">!</span>(<span class="string">&quot;must be a folder&quot;</span>),
         };
 
         <span class="kw">let</span> <span class="ident">children</span> <span class="op">=</span> <span class="ident">folder</span>.<span class="ident">children</span>;
         <span class="macro">assert_eq</span><span class="macro">!</span>(<span class="ident">children</span>.<span class="ident">len</span>(), <span class="number">4</span>);
 
         <span class="macro">assert</span><span class="macro">!</span>(<span class="kw">match</span> <span class="kw-2">&amp;</span><span class="ident">children</span>[<span class="number">0</span>] {
-            <span class="ident">BookmarkTreeNode</span>::<span class="ident">Folder</span>(<span class="ident">f</span>) <span class="op">=</span><span class="op">&gt;</span> <span class="ident">f</span>.<span class="ident">title</span> <span class="op">=</span><span class="op">=</span> <span class="prelude-val">Some</span>(<span class="string">&quot;bookmark with invalid URL&quot;</span>.<span class="ident">to_string</span>()),
-            <span class="kw">_</span> <span class="op">=</span><span class="op">&gt;</span> <span class="bool-val">false</span>,
+            <span class="ident">BookmarkTreeNode</span>::<span class="ident">Folder</span>(<span class="ident">f</span>) <span class="op">=&gt;</span> <span class="ident">f</span>.<span class="ident">title</span> <span class="op">==</span> <span class="prelude-val">Some</span>(<span class="string">&quot;bookmark with invalid URL&quot;</span>.<span class="ident">to_string</span>()),
+            <span class="kw">_</span> <span class="op">=&gt;</span> <span class="bool-val">false</span>,
         });
         <span class="macro">assert</span><span class="macro">!</span>(<span class="kw">match</span> <span class="kw-2">&amp;</span><span class="ident">children</span>[<span class="number">1</span>] {
-            <span class="ident">BookmarkTreeNode</span>::<span class="ident">Folder</span>(<span class="ident">f</span>) <span class="op">=</span><span class="op">&gt;</span> <span class="ident">f</span>.<span class="ident">title</span> <span class="op">=</span><span class="op">=</span> <span class="prelude-val">Some</span>(<span class="string">&quot;bookmark with missing URL&quot;</span>.<span class="ident">to_string</span>()),
-            <span class="kw">_</span> <span class="op">=</span><span class="op">&gt;</span> <span class="bool-val">false</span>,
+            <span class="ident">BookmarkTreeNode</span>::<span class="ident">Folder</span>(<span class="ident">f</span>) <span class="op">=&gt;</span> <span class="ident">f</span>.<span class="ident">title</span> <span class="op">==</span> <span class="prelude-val">Some</span>(<span class="string">&quot;bookmark with missing URL&quot;</span>.<span class="ident">to_string</span>()),
+            <span class="kw">_</span> <span class="op">=&gt;</span> <span class="bool-val">false</span>,
         });
         <span class="macro">assert</span><span class="macro">!</span>(<span class="kw">match</span> <span class="kw-2">&amp;</span><span class="ident">children</span>[<span class="number">2</span>] {
-            <span class="ident">BookmarkTreeNode</span>::<span class="ident">Folder</span>(<span class="ident">f</span>) <span class="op">=</span><span class="op">&gt;</span> {
-                <span class="ident">f</span>.<span class="ident">title</span> <span class="op">=</span><span class="op">=</span> <span class="prelude-val">Some</span>(<span class="string">&quot;bookmark with missing type, no URL&quot;</span>.<span class="ident">to_string</span>())
+            <span class="ident">BookmarkTreeNode</span>::<span class="ident">Folder</span>(<span class="ident">f</span>) <span class="op">=&gt;</span> {
+                <span class="ident">f</span>.<span class="ident">title</span> <span class="op">==</span> <span class="prelude-val">Some</span>(<span class="string">&quot;bookmark with missing type, no URL&quot;</span>.<span class="ident">to_string</span>())
             }
-            <span class="kw">_</span> <span class="op">=</span><span class="op">&gt;</span> <span class="bool-val">false</span>,
+            <span class="kw">_</span> <span class="op">=&gt;</span> <span class="bool-val">false</span>,
         });
         <span class="macro">assert</span><span class="macro">!</span>(<span class="kw">match</span> <span class="kw-2">&amp;</span><span class="ident">children</span>[<span class="number">3</span>] {
-            <span class="ident">BookmarkTreeNode</span>::<span class="ident">Bookmark</span>(<span class="ident">b</span>) <span class="op">=</span><span class="op">&gt;</span> {
-                <span class="ident">b</span>.<span class="ident">title</span> <span class="op">=</span><span class="op">=</span> <span class="prelude-val">Some</span>(<span class="string">&quot;bookmark with missing type, valid URL&quot;</span>.<span class="ident">to_string</span>())
+            <span class="ident">BookmarkTreeNode</span>::<span class="ident">Bookmark</span>(<span class="ident">b</span>) <span class="op">=&gt;</span> {
+                <span class="ident">b</span>.<span class="ident">title</span> <span class="op">==</span> <span class="prelude-val">Some</span>(<span class="string">&quot;bookmark with missing type, valid URL&quot;</span>.<span class="ident">to_string</span>())
             }
-            <span class="kw">_</span> <span class="op">=</span><span class="op">&gt;</span> <span class="bool-val">false</span>,
+            <span class="kw">_</span> <span class="op">=&gt;</span> <span class="bool-val">false</span>,
         });
 
         <span class="prelude-val">Ok</span>(())
@@ -3659,7 +3660,7 @@
     <span class="ident">insert_infos</span>.<span class="ident">reserve</span>(<span class="ident">tree</span>.<span class="ident">children</span>.<span class="ident">len</span>());
     <span class="kw">for</span> <span class="ident">child</span> <span class="kw">in</span> <span class="kw-2">&amp;</span><span class="ident">tree</span>.<span class="ident">children</span> {
         <span class="kw">match</span> <span class="ident">child</span> {
-            <span class="ident">BookmarkTreeNode</span>::<span class="ident">Bookmark</span>(<span class="ident">b</span>) <span class="op">=</span><span class="op">&gt;</span> <span class="ident">insert_infos</span>.<span class="ident">push</span>(
+            <span class="ident">BookmarkTreeNode</span>::<span class="ident">Bookmark</span>(<span class="ident">b</span>) <span class="op">=&gt;</span> <span class="ident">insert_infos</span>.<span class="ident">push</span>(
                 <span class="ident">InsertableBookmark</span> {
                     <span class="ident">parent_guid</span>: <span class="ident">parent</span>.<span class="ident">clone</span>(),
                     <span class="ident">position</span>: <span class="ident">BookmarkPosition</span>::<span class="ident">Append</span>,
@@ -3671,7 +3672,7 @@
                 }
                 .<span class="ident">into</span>(),
             ),
-            <span class="ident">BookmarkTreeNode</span>::<span class="ident">Separator</span>(<span class="ident">s</span>) <span class="op">=</span><span class="op">&gt;</span> <span class="ident">insert_infos</span>.<span class="ident">push</span>(
+            <span class="ident">BookmarkTreeNode</span>::<span class="ident">Separator</span>(<span class="ident">s</span>) <span class="op">=&gt;</span> <span class="ident">insert_infos</span>.<span class="ident">push</span>(
                 <span class="ident">InsertableSeparator</span> {
                     <span class="ident">parent_guid</span>: <span class="ident">parent</span>.<span class="ident">clone</span>(),
                     <span class="ident">position</span>: <span class="ident">BookmarkPosition</span>::<span class="ident">Append</span>,
@@ -3681,7 +3682,7 @@
                 }
                 .<span class="ident">into</span>(),
             ),
-            <span class="ident">BookmarkTreeNode</span>::<span class="ident">Folder</span>(<span class="ident">f</span>) <span class="op">=</span><span class="op">&gt;</span> {
+            <span class="ident">BookmarkTreeNode</span>::<span class="ident">Folder</span>(<span class="ident">f</span>) <span class="op">=&gt;</span> {
                 <span class="kw">let</span> <span class="ident">my_guid</span> <span class="op">=</span> <span class="ident">f</span>.<span class="ident">guid</span>.<span class="ident">clone</span>().<span class="ident">unwrap_or_else</span>(<span class="ident">SyncGuid</span>::<span class="ident">random</span>);
                 <span class="comment">// must add the folder before we recurse into children.</span>
                 <span class="ident">insert_infos</span>.<span class="ident">push</span>(
@@ -3702,7 +3703,7 @@
 }
 
 <span class="doccomment">/// Erases all bookmarks and resets all Sync metadata.</span>
-<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">delete_everything</span>(<span class="ident">db</span>: <span class="kw-2">&amp;</span><span class="ident">PlacesDb</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span>()<span class="op">&gt;</span> {
+<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">delete_everything</span>(<span class="ident">db</span>: <span class="kw-2">&amp;</span><span class="ident">PlacesDb</span>) <span class="op">-&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span>()<span class="op">&gt;</span> {
     <span class="kw">let</span> <span class="ident">tx</span> <span class="op">=</span> <span class="ident">db</span>.<span class="ident">begin_transaction</span>()<span class="question-mark">?</span>;
     <span class="ident">db</span>.<span class="ident">execute_batch</span>(<span class="kw-2">&amp;</span><span class="macro">format</span><span class="macro">!</span>(
         <span class="string">&quot;DELETE FROM moz_bookmarks
@@ -3718,10 +3719,10 @@
     <span class="prelude-val">Ok</span>(())
 }
 
-<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">insert_tree</span>(<span class="ident">db</span>: <span class="kw-2">&amp;</span><span class="ident">PlacesDb</span>, <span class="ident">tree</span>: <span class="kw-2">&amp;</span><span class="ident">FolderNode</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span>()<span class="op">&gt;</span> {
+<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">insert_tree</span>(<span class="ident">db</span>: <span class="kw-2">&amp;</span><span class="ident">PlacesDb</span>, <span class="ident">tree</span>: <span class="kw-2">&amp;</span><span class="ident">FolderNode</span>) <span class="op">-&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span>()<span class="op">&gt;</span> {
     <span class="kw">let</span> <span class="ident">parent_guid</span> <span class="op">=</span> <span class="kw">match</span> <span class="kw-2">&amp;</span><span class="ident">tree</span>.<span class="ident">guid</span> {
-        <span class="prelude-val">Some</span>(<span class="ident">guid</span>) <span class="op">=</span><span class="op">&gt;</span> <span class="ident">guid</span>,
-        <span class="prelude-val">None</span> <span class="op">=</span><span class="op">&gt;</span> <span class="kw">return</span> <span class="prelude-val">Err</span>(<span class="ident">InvalidPlaceInfo</span>::<span class="ident">InvalidParent</span>(<span class="string">&quot;&lt;no guid&gt;&quot;</span>.<span class="ident">into</span>()).<span class="ident">into</span>()),
+        <span class="prelude-val">Some</span>(<span class="ident">guid</span>) <span class="op">=&gt;</span> <span class="ident">guid</span>,
+        <span class="prelude-val">None</span> <span class="op">=&gt;</span> <span class="kw">return</span> <span class="prelude-val">Err</span>(<span class="ident">InvalidPlaceInfo</span>::<span class="ident">InvalidParent</span>(<span class="string">&quot;&lt;no guid&gt;&quot;</span>.<span class="ident">into</span>()).<span class="ident">into</span>()),
     };
 
     <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">insert_infos</span>: <span class="ident">Vec</span><span class="op">&lt;</span><span class="ident">InsertableItem</span><span class="op">&gt;</span> <span class="op">=</span> <span class="ident">Vec</span>::<span class="ident">new</span>();
@@ -3755,21 +3756,21 @@
 }
 
 <span class="kw">impl</span> <span class="ident">FetchedTreeRow</span> {
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">from_row</span>(<span class="ident">row</span>: <span class="kw-2">&amp;</span><span class="ident">Row</span><span class="op">&lt;</span><span class="lifetime">&#39;_</span><span class="op">&gt;</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="self">Self</span><span class="op">&gt;</span> {
-        <span class="kw">let</span> <span class="ident">url</span> <span class="op">=</span> <span class="ident">row</span>.<span class="ident">get</span>::<span class="op">&lt;</span><span class="kw">_</span>, <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">String</span><span class="op">&gt;</span><span class="op">&gt;</span>(<span class="string">&quot;url&quot;</span>)<span class="question-mark">?</span>;
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">from_row</span>(<span class="ident">row</span>: <span class="kw-2">&amp;</span><span class="ident">Row</span><span class="op">&lt;</span><span class="lifetime">&#39;_</span><span class="op">&gt;</span>) <span class="op">-&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="self">Self</span><span class="op">&gt;</span> {
+        <span class="kw">let</span> <span class="ident">url</span> <span class="op">=</span> <span class="ident">row</span>.<span class="ident">get</span>::<span class="op">&lt;</span><span class="kw">_</span>, <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">String</span><span class="op">&gt;&gt;</span>(<span class="string">&quot;url&quot;</span>)<span class="question-mark">?</span>;
         <span class="prelude-val">Ok</span>(<span class="self">Self</span> {
             <span class="ident">level</span>: <span class="ident">row</span>.<span class="ident">get</span>(<span class="string">&quot;level&quot;</span>)<span class="question-mark">?</span>,
             <span class="ident">id</span>: <span class="ident">row</span>.<span class="ident">get</span>::<span class="op">&lt;</span><span class="kw">_</span>, <span class="ident">RowId</span><span class="op">&gt;</span>(<span class="string">&quot;id&quot;</span>)<span class="question-mark">?</span>,
             <span class="ident">guid</span>: <span class="ident">row</span>.<span class="ident">get</span>::<span class="op">&lt;</span><span class="kw">_</span>, <span class="ident">String</span><span class="op">&gt;</span>(<span class="string">&quot;guid&quot;</span>)<span class="question-mark">?</span>.<span class="ident">into</span>(),
-            <span class="ident">parent</span>: <span class="ident">row</span>.<span class="ident">get</span>::<span class="op">&lt;</span><span class="kw">_</span>, <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">RowId</span><span class="op">&gt;</span><span class="op">&gt;</span>(<span class="string">&quot;parent&quot;</span>)<span class="question-mark">?</span>,
+            <span class="ident">parent</span>: <span class="ident">row</span>.<span class="ident">get</span>::<span class="op">&lt;</span><span class="kw">_</span>, <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">RowId</span><span class="op">&gt;&gt;</span>(<span class="string">&quot;parent&quot;</span>)<span class="question-mark">?</span>,
             <span class="ident">parent_guid</span>: <span class="ident">row</span>
-                .<span class="ident">get</span>::<span class="op">&lt;</span><span class="kw">_</span>, <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">String</span><span class="op">&gt;</span><span class="op">&gt;</span>(<span class="string">&quot;parentGuid&quot;</span>)<span class="question-mark">?</span>
+                .<span class="ident">get</span>::<span class="op">&lt;</span><span class="kw">_</span>, <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">String</span><span class="op">&gt;&gt;</span>(<span class="string">&quot;parentGuid&quot;</span>)<span class="question-mark">?</span>
                 .<span class="ident">map</span>(<span class="ident">SyncGuid</span>::<span class="ident">from</span>),
-            <span class="ident">node_type</span>: <span class="ident">BookmarkType</span>::<span class="ident">from_u8_with_valid_url</span>(<span class="ident">row</span>.<span class="ident">get</span>::<span class="op">&lt;</span><span class="kw">_</span>, <span class="ident">u8</span><span class="op">&gt;</span>(<span class="string">&quot;type&quot;</span>)<span class="question-mark">?</span>, <span class="op">|</span><span class="op">|</span> {
+            <span class="ident">node_type</span>: <span class="ident">BookmarkType</span>::<span class="ident">from_u8_with_valid_url</span>(<span class="ident">row</span>.<span class="ident">get</span>::<span class="op">&lt;</span><span class="kw">_</span>, <span class="ident">u8</span><span class="op">&gt;</span>(<span class="string">&quot;type&quot;</span>)<span class="question-mark">?</span>, <span class="op">||</span> {
                 <span class="ident">url</span>.<span class="ident">is_some</span>()
             }),
             <span class="ident">position</span>: <span class="ident">row</span>.<span class="ident">get</span>(<span class="string">&quot;position&quot;</span>)<span class="question-mark">?</span>,
-            <span class="ident">title</span>: <span class="ident">row</span>.<span class="ident">get</span>::<span class="op">&lt;</span><span class="kw">_</span>, <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">String</span><span class="op">&gt;</span><span class="op">&gt;</span>(<span class="string">&quot;title&quot;</span>)<span class="question-mark">?</span>,
+            <span class="ident">title</span>: <span class="ident">row</span>.<span class="ident">get</span>::<span class="op">&lt;</span><span class="kw">_</span>, <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">String</span><span class="op">&gt;&gt;</span>(<span class="string">&quot;title&quot;</span>)<span class="question-mark">?</span>,
             <span class="ident">date_added</span>: <span class="ident">row</span>.<span class="ident">get</span>(<span class="string">&quot;dateAdded&quot;</span>)<span class="question-mark">?</span>,
             <span class="ident">last_modified</span>: <span class="ident">row</span>.<span class="ident">get</span>(<span class="string">&quot;lastModified&quot;</span>)<span class="question-mark">?</span>,
             <span class="ident">url</span>,
@@ -3779,7 +3780,7 @@
 
 <span class="kw">fn</span> <span class="ident">inflate</span>(
     <span class="ident">parent</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">BookmarkTreeNode</span>,
-    <span class="ident">pseudo_tree</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">HashMap</span><span class="op">&lt;</span><span class="ident">SyncGuid</span>, <span class="ident">Vec</span><span class="op">&lt;</span><span class="ident">BookmarkTreeNode</span><span class="op">&gt;</span><span class="op">&gt;</span>,
+    <span class="ident">pseudo_tree</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">HashMap</span><span class="op">&lt;</span><span class="ident">SyncGuid</span>, <span class="ident">Vec</span><span class="op">&lt;</span><span class="ident">BookmarkTreeNode</span><span class="op">&gt;&gt;</span>,
 ) {
     <span class="kw">if</span> <span class="kw">let</span> <span class="ident">BookmarkTreeNode</span>::<span class="ident">Folder</span>(<span class="ident">parent</span>) <span class="op">=</span> <span class="ident">parent</span> {
         <span class="kw">if</span> <span class="kw">let</span> <span class="prelude-val">Some</span>(<span class="ident">children</span>) <span class="op">=</span> <span class="ident">parent</span>
@@ -3802,7 +3803,7 @@
     <span class="ident">db</span>: <span class="kw-2">&amp;</span><span class="ident">PlacesDb</span>,
     <span class="ident">item_guid</span>: <span class="kw-2">&amp;</span><span class="ident">SyncGuid</span>,
     <span class="ident">target_depth</span>: <span class="kw-2">&amp;</span><span class="ident">FetchDepth</span>,
-) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="prelude-ty">Option</span><span class="op">&lt;</span>(<span class="ident">BookmarkTreeNode</span>, <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">SyncGuid</span><span class="op">&gt;</span>, <span class="ident">u32</span>)<span class="op">&gt;</span><span class="op">&gt;</span> {
+) <span class="op">-&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="prelude-ty">Option</span><span class="op">&lt;</span>(<span class="ident">BookmarkTreeNode</span>, <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">SyncGuid</span><span class="op">&gt;</span>, <span class="ident">u32</span>)<span class="op">&gt;&gt;</span> {
     <span class="comment">// XXX - this needs additional work for tags - unlike desktop, there&#39;s no</span>
     <span class="comment">// &quot;tags&quot; folder, but instead a couple of tables to join on.</span>
     <span class="kw">let</span> <span class="ident">sql</span> <span class="op">=</span> <span class="string">r#&quot;
@@ -3855,12 +3856,12 @@
 
     <span class="comment">// The first row in the result set is always the root of our tree.</span>
     <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">root</span> <span class="op">=</span> <span class="kw">match</span> <span class="ident">results</span>.<span class="ident">next</span>() {
-        <span class="prelude-val">Some</span>(<span class="ident">result</span>) <span class="op">=</span><span class="op">&gt;</span> {
+        <span class="prelude-val">Some</span>(<span class="ident">result</span>) <span class="op">=&gt;</span> {
             <span class="kw">let</span> <span class="ident">row</span> <span class="op">=</span> <span class="ident">result</span><span class="question-mark">?</span>;
             <span class="ident">parent_guid</span> <span class="op">=</span> <span class="ident">row</span>.<span class="ident">parent_guid</span>.<span class="ident">clone</span>();
             <span class="ident">position</span> <span class="op">=</span> <span class="ident">row</span>.<span class="ident">position</span>;
             <span class="kw">match</span> <span class="ident">row</span>.<span class="ident">node_type</span> {
-                <span class="ident">BookmarkType</span>::<span class="ident">Folder</span> <span class="op">=</span><span class="op">&gt;</span> <span class="ident">FolderNode</span> {
+                <span class="ident">BookmarkType</span>::<span class="ident">Folder</span> <span class="op">=&gt;</span> <span class="ident">FolderNode</span> {
                     <span class="ident">guid</span>: <span class="prelude-val">Some</span>(<span class="ident">row</span>.<span class="ident">guid</span>.<span class="ident">clone</span>()),
                     <span class="ident">date_added</span>: <span class="prelude-val">Some</span>(<span class="ident">row</span>.<span class="ident">date_added</span>),
                     <span class="ident">last_modified</span>: <span class="prelude-val">Some</span>(<span class="ident">row</span>.<span class="ident">last_modified</span>),
@@ -3868,14 +3869,14 @@
                     <span class="ident">children</span>: <span class="ident">Vec</span>::<span class="ident">new</span>(),
                 }
                 .<span class="ident">into</span>(),
-                <span class="ident">BookmarkType</span>::<span class="ident">Bookmark</span> <span class="op">=</span><span class="op">&gt;</span> {
+                <span class="ident">BookmarkType</span>::<span class="ident">Bookmark</span> <span class="op">=&gt;</span> {
                     <span class="comment">// pretend invalid or missing URLs don&#39;t exist.</span>
                     <span class="kw">match</span> <span class="ident">row</span>.<span class="ident">url</span> {
-                        <span class="prelude-val">Some</span>(<span class="ident">str_val</span>) <span class="op">=</span><span class="op">&gt;</span> <span class="kw">match</span> <span class="ident">Url</span>::<span class="ident">parse</span>(<span class="ident">str_val</span>.<span class="ident">as_str</span>()) {
+                        <span class="prelude-val">Some</span>(<span class="ident">str_val</span>) <span class="op">=&gt;</span> <span class="kw">match</span> <span class="ident">Url</span>::<span class="ident">parse</span>(<span class="ident">str_val</span>.<span class="ident">as_str</span>()) {
                             <span class="comment">// an invalid URL presumably means a logic error</span>
                             <span class="comment">// somewhere far away from here...</span>
-                            <span class="prelude-val">Err</span>(<span class="kw">_</span>) <span class="op">=</span><span class="op">&gt;</span> <span class="kw">return</span> <span class="prelude-val">Ok</span>(<span class="prelude-val">None</span>),
-                            <span class="prelude-val">Ok</span>(<span class="ident">url</span>) <span class="op">=</span><span class="op">&gt;</span> <span class="ident">BookmarkNode</span> {
+                            <span class="prelude-val">Err</span>(<span class="kw">_</span>) <span class="op">=&gt;</span> <span class="kw">return</span> <span class="prelude-val">Ok</span>(<span class="prelude-val">None</span>),
+                            <span class="prelude-val">Ok</span>(<span class="ident">url</span>) <span class="op">=&gt;</span> <span class="ident">BookmarkNode</span> {
                                 <span class="ident">guid</span>: <span class="prelude-val">Some</span>(<span class="ident">row</span>.<span class="ident">guid</span>.<span class="ident">clone</span>()),
                                 <span class="ident">date_added</span>: <span class="prelude-val">Some</span>(<span class="ident">row</span>.<span class="ident">date_added</span>),
                                 <span class="ident">last_modified</span>: <span class="prelude-val">Some</span>(<span class="ident">row</span>.<span class="ident">last_modified</span>),
@@ -3889,13 +3890,13 @@
                         <span class="comment">// know from desktop&#39;s experience that on-disk</span>
                         <span class="comment">// corruption can cause it, so it&#39;s possible) - but</span>
                         <span class="comment">// we treat it as an `error` rather than just a `warn`</span>
-                        <span class="prelude-val">None</span> <span class="op">=</span><span class="op">&gt;</span> {
+                        <span class="prelude-val">None</span> <span class="op">=&gt;</span> {
                             <span class="ident">log</span>::<span class="macro">error</span><span class="macro">!</span>(<span class="string">&quot;bookmark {:#} has missing url&quot;</span>, <span class="ident">row</span>.<span class="ident">guid</span>);
                             <span class="kw">return</span> <span class="prelude-val">Ok</span>(<span class="prelude-val">None</span>);
                         }
                     }
                 }
-                <span class="ident">BookmarkType</span>::<span class="ident">Separator</span> <span class="op">=</span><span class="op">&gt;</span> <span class="ident">SeparatorNode</span> {
+                <span class="ident">BookmarkType</span>::<span class="ident">Separator</span> <span class="op">=&gt;</span> <span class="ident">SeparatorNode</span> {
                     <span class="ident">guid</span>: <span class="prelude-val">Some</span>(<span class="ident">row</span>.<span class="ident">guid</span>.<span class="ident">clone</span>()),
                     <span class="ident">date_added</span>: <span class="prelude-val">Some</span>(<span class="ident">row</span>.<span class="ident">date_added</span>),
                     <span class="ident">last_modified</span>: <span class="prelude-val">Some</span>(<span class="ident">row</span>.<span class="ident">last_modified</span>),
@@ -3903,7 +3904,7 @@
                 .<span class="ident">into</span>(),
             }
         }
-        <span class="prelude-val">None</span> <span class="op">=</span><span class="op">&gt;</span> <span class="kw">return</span> <span class="prelude-val">Ok</span>(<span class="prelude-val">None</span>),
+        <span class="prelude-val">None</span> <span class="op">=&gt;</span> <span class="kw">return</span> <span class="prelude-val">Ok</span>(<span class="prelude-val">None</span>),
     };
 
     <span class="comment">// Skip the rest and return if root is not a folder</span>
@@ -3916,7 +3917,7 @@
     <span class="comment">// ordered children. We need this intermediate step because SQLite returns</span>
     <span class="comment">// results in level order, so we&#39;ll see a node&#39;s siblings and cousins (same</span>
     <span class="comment">// level, but different parents) before any of their descendants.</span>
-    <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">pseudo_tree</span>: <span class="ident">HashMap</span><span class="op">&lt;</span><span class="ident">SyncGuid</span>, <span class="ident">Vec</span><span class="op">&lt;</span><span class="ident">BookmarkTreeNode</span><span class="op">&gt;</span><span class="op">&gt;</span> <span class="op">=</span> <span class="ident">HashMap</span>::<span class="ident">new</span>();
+    <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">pseudo_tree</span>: <span class="ident">HashMap</span><span class="op">&lt;</span><span class="ident">SyncGuid</span>, <span class="ident">Vec</span><span class="op">&lt;</span><span class="ident">BookmarkTreeNode</span><span class="op">&gt;&gt;</span> <span class="op">=</span> <span class="ident">HashMap</span>::<span class="ident">new</span>();
     <span class="kw">for</span> <span class="ident">result</span> <span class="kw">in</span> <span class="ident">results</span> {
         <span class="kw">let</span> <span class="ident">row</span> <span class="op">=</span> <span class="ident">result</span><span class="question-mark">?</span>;
         <span class="ident">scope</span>.<span class="ident">err_if_interrupted</span>()<span class="question-mark">?</span>;
@@ -3927,9 +3928,9 @@
             }
         }
         <span class="kw">let</span> <span class="ident">node</span> <span class="op">=</span> <span class="kw">match</span> <span class="ident">row</span>.<span class="ident">node_type</span> {
-            <span class="ident">BookmarkType</span>::<span class="ident">Bookmark</span> <span class="op">=</span><span class="op">&gt;</span> <span class="kw">match</span> <span class="kw-2">&amp;</span><span class="ident">row</span>.<span class="ident">url</span> {
-                <span class="prelude-val">Some</span>(<span class="ident">url_str</span>) <span class="op">=</span><span class="op">&gt;</span> <span class="kw">match</span> <span class="ident">Url</span>::<span class="ident">parse</span>(<span class="kw-2">&amp;</span><span class="ident">url_str</span>) {
-                    <span class="prelude-val">Ok</span>(<span class="ident">url</span>) <span class="op">=</span><span class="op">&gt;</span> <span class="ident">BookmarkNode</span> {
+            <span class="ident">BookmarkType</span>::<span class="ident">Bookmark</span> <span class="op">=&gt;</span> <span class="kw">match</span> <span class="kw-2">&amp;</span><span class="ident">row</span>.<span class="ident">url</span> {
+                <span class="prelude-val">Some</span>(<span class="ident">url_str</span>) <span class="op">=&gt;</span> <span class="kw">match</span> <span class="ident">Url</span>::<span class="ident">parse</span>(<span class="kw-2">&amp;</span><span class="ident">url_str</span>) {
+                    <span class="prelude-val">Ok</span>(<span class="ident">url</span>) <span class="op">=&gt;</span> <span class="ident">BookmarkNode</span> {
                         <span class="ident">guid</span>: <span class="prelude-val">Some</span>(<span class="ident">row</span>.<span class="ident">guid</span>.<span class="ident">clone</span>()),
                         <span class="ident">date_added</span>: <span class="prelude-val">Some</span>(<span class="ident">row</span>.<span class="ident">date_added</span>),
                         <span class="ident">last_modified</span>: <span class="prelude-val">Some</span>(<span class="ident">row</span>.<span class="ident">last_modified</span>),
@@ -3937,7 +3938,7 @@
                         <span class="ident">url</span>,
                     }
                     .<span class="ident">into</span>(),
-                    <span class="prelude-val">Err</span>(<span class="ident">e</span>) <span class="op">=</span><span class="op">&gt;</span> {
+                    <span class="prelude-val">Err</span>(<span class="ident">e</span>) <span class="op">=&gt;</span> {
                         <span class="ident">log</span>::<span class="macro">warn</span><span class="macro">!</span>(
                             <span class="string">&quot;ignoring malformed bookmark {} - invalid URL: {:?}&quot;</span>,
                             <span class="ident">row</span>.<span class="ident">guid</span>,
@@ -3946,18 +3947,18 @@
                         <span class="kw">continue</span>;
                     }
                 },
-                <span class="prelude-val">None</span> <span class="op">=</span><span class="op">&gt;</span> {
+                <span class="prelude-val">None</span> <span class="op">=&gt;</span> {
                     <span class="ident">log</span>::<span class="macro">warn</span><span class="macro">!</span>(<span class="string">&quot;ignoring malformed bookmark {} - no URL&quot;</span>, <span class="ident">row</span>.<span class="ident">guid</span>);
                     <span class="kw">continue</span>;
                 }
             },
-            <span class="ident">BookmarkType</span>::<span class="ident">Separator</span> <span class="op">=</span><span class="op">&gt;</span> <span class="ident">SeparatorNode</span> {
+            <span class="ident">BookmarkType</span>::<span class="ident">Separator</span> <span class="op">=&gt;</span> <span class="ident">SeparatorNode</span> {
                 <span class="ident">guid</span>: <span class="prelude-val">Some</span>(<span class="ident">row</span>.<span class="ident">guid</span>.<span class="ident">clone</span>()),
                 <span class="ident">date_added</span>: <span class="prelude-val">Some</span>(<span class="ident">row</span>.<span class="ident">date_added</span>),
                 <span class="ident">last_modified</span>: <span class="prelude-val">Some</span>(<span class="ident">row</span>.<span class="ident">last_modified</span>),
             }
             .<span class="ident">into</span>(),
-            <span class="ident">BookmarkType</span>::<span class="ident">Folder</span> <span class="op">=</span><span class="op">&gt;</span> <span class="ident">FolderNode</span> {
+            <span class="ident">BookmarkType</span>::<span class="ident">Folder</span> <span class="op">=&gt;</span> <span class="ident">FolderNode</span> {
                 <span class="ident">guid</span>: <span class="prelude-val">Some</span>(<span class="ident">row</span>.<span class="ident">guid</span>.<span class="ident">clone</span>()),
                 <span class="ident">date_added</span>: <span class="prelude-val">Some</span>(<span class="ident">row</span>.<span class="ident">date_added</span>),
                 <span class="ident">last_modified</span>: <span class="prelude-val">Some</span>(<span class="ident">row</span>.<span class="ident">last_modified</span>),
@@ -3998,28 +3999,28 @@
 }
 
 <span class="kw">impl</span> <span class="ident">RawBookmark</span> {
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">from_row</span>(<span class="ident">row</span>: <span class="kw-2">&amp;</span><span class="ident">Row</span><span class="op">&lt;</span><span class="lifetime">&#39;_</span><span class="op">&gt;</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="self">Self</span><span class="op">&gt;</span> {
-        <span class="kw">let</span> <span class="ident">place_id</span> <span class="op">=</span> <span class="ident">row</span>.<span class="ident">get</span>::<span class="op">&lt;</span><span class="kw">_</span>, <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">RowId</span><span class="op">&gt;</span><span class="op">&gt;</span>(<span class="string">&quot;fk&quot;</span>)<span class="question-mark">?</span>;
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">from_row</span>(<span class="ident">row</span>: <span class="kw-2">&amp;</span><span class="ident">Row</span><span class="op">&lt;</span><span class="lifetime">&#39;_</span><span class="op">&gt;</span>) <span class="op">-&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="self">Self</span><span class="op">&gt;</span> {
+        <span class="kw">let</span> <span class="ident">place_id</span> <span class="op">=</span> <span class="ident">row</span>.<span class="ident">get</span>::<span class="op">&lt;</span><span class="kw">_</span>, <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">RowId</span><span class="op">&gt;&gt;</span>(<span class="string">&quot;fk&quot;</span>)<span class="question-mark">?</span>;
         <span class="prelude-val">Ok</span>(<span class="self">Self</span> {
             <span class="ident">row_id</span>: <span class="ident">row</span>.<span class="ident">get</span>(<span class="string">&quot;_id&quot;</span>)<span class="question-mark">?</span>,
             <span class="ident">place_id</span>,
-            <span class="ident">bookmark_type</span>: <span class="ident">BookmarkType</span>::<span class="ident">from_u8_with_valid_url</span>(<span class="ident">row</span>.<span class="ident">get</span>::<span class="op">&lt;</span><span class="kw">_</span>, <span class="ident">u8</span><span class="op">&gt;</span>(<span class="string">&quot;type&quot;</span>)<span class="question-mark">?</span>, <span class="op">|</span><span class="op">|</span> {
+            <span class="ident">bookmark_type</span>: <span class="ident">BookmarkType</span>::<span class="ident">from_u8_with_valid_url</span>(<span class="ident">row</span>.<span class="ident">get</span>::<span class="op">&lt;</span><span class="kw">_</span>, <span class="ident">u8</span><span class="op">&gt;</span>(<span class="string">&quot;type&quot;</span>)<span class="question-mark">?</span>, <span class="op">||</span> {
                 <span class="ident">place_id</span>.<span class="ident">is_some</span>()
             }),
             <span class="ident">parent_id</span>: <span class="ident">row</span>.<span class="ident">get</span>(<span class="string">&quot;_parentId&quot;</span>)<span class="question-mark">?</span>,
             <span class="ident">parent_guid</span>: <span class="ident">row</span>.<span class="ident">get</span>(<span class="string">&quot;parentGuid&quot;</span>)<span class="question-mark">?</span>,
             <span class="ident">position</span>: <span class="ident">row</span>.<span class="ident">get</span>(<span class="string">&quot;position&quot;</span>)<span class="question-mark">?</span>,
-            <span class="ident">title</span>: <span class="ident">row</span>.<span class="ident">get</span>::<span class="op">&lt;</span><span class="kw">_</span>, <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">String</span><span class="op">&gt;</span><span class="op">&gt;</span>(<span class="string">&quot;title&quot;</span>)<span class="question-mark">?</span>,
-            <span class="ident">url</span>: <span class="kw">match</span> <span class="ident">row</span>.<span class="ident">get</span>::<span class="op">&lt;</span><span class="kw">_</span>, <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">String</span><span class="op">&gt;</span><span class="op">&gt;</span>(<span class="string">&quot;url&quot;</span>)<span class="question-mark">?</span> {
-                <span class="prelude-val">Some</span>(<span class="ident">s</span>) <span class="op">=</span><span class="op">&gt;</span> <span class="prelude-val">Some</span>(<span class="ident">Url</span>::<span class="ident">parse</span>(<span class="kw-2">&amp;</span><span class="ident">s</span>)<span class="question-mark">?</span>),
-                <span class="prelude-val">None</span> <span class="op">=</span><span class="op">&gt;</span> <span class="prelude-val">None</span>,
+            <span class="ident">title</span>: <span class="ident">row</span>.<span class="ident">get</span>::<span class="op">&lt;</span><span class="kw">_</span>, <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">String</span><span class="op">&gt;&gt;</span>(<span class="string">&quot;title&quot;</span>)<span class="question-mark">?</span>,
+            <span class="ident">url</span>: <span class="kw">match</span> <span class="ident">row</span>.<span class="ident">get</span>::<span class="op">&lt;</span><span class="kw">_</span>, <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">String</span><span class="op">&gt;&gt;</span>(<span class="string">&quot;url&quot;</span>)<span class="question-mark">?</span> {
+                <span class="prelude-val">Some</span>(<span class="ident">s</span>) <span class="op">=&gt;</span> <span class="prelude-val">Some</span>(<span class="ident">Url</span>::<span class="ident">parse</span>(<span class="kw-2">&amp;</span><span class="ident">s</span>)<span class="question-mark">?</span>),
+                <span class="prelude-val">None</span> <span class="op">=&gt;</span> <span class="prelude-val">None</span>,
             },
             <span class="ident">date_added</span>: <span class="ident">row</span>.<span class="ident">get</span>(<span class="string">&quot;dateAdded&quot;</span>)<span class="question-mark">?</span>,
             <span class="ident">date_modified</span>: <span class="ident">row</span>.<span class="ident">get</span>(<span class="string">&quot;lastModified&quot;</span>)<span class="question-mark">?</span>,
             <span class="ident">guid</span>: <span class="ident">row</span>.<span class="ident">get</span>::<span class="op">&lt;</span><span class="kw">_</span>, <span class="ident">String</span><span class="op">&gt;</span>(<span class="string">&quot;guid&quot;</span>)<span class="question-mark">?</span>.<span class="ident">into</span>(),
             <span class="ident">sync_status</span>: <span class="ident">SyncStatus</span>::<span class="ident">from_u8</span>(<span class="ident">row</span>.<span class="ident">get</span>::<span class="op">&lt;</span><span class="kw">_</span>, <span class="ident">u8</span><span class="op">&gt;</span>(<span class="string">&quot;_syncStatus&quot;</span>)<span class="question-mark">?</span>),
             <span class="ident">sync_change_counter</span>: <span class="ident">row</span>
-                .<span class="ident">get</span>::<span class="op">&lt;</span><span class="kw">_</span>, <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">u32</span><span class="op">&gt;</span><span class="op">&gt;</span>(<span class="string">&quot;syncChangeCounter&quot;</span>)<span class="question-mark">?</span>
+                .<span class="ident">get</span>::<span class="op">&lt;</span><span class="kw">_</span>, <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">u32</span><span class="op">&gt;&gt;</span>(<span class="string">&quot;syncChangeCounter&quot;</span>)<span class="question-mark">?</span>
                 .<span class="ident">unwrap_or_default</span>(),
             <span class="ident">child_count</span>: <span class="ident">row</span>.<span class="ident">get</span>(<span class="string">&quot;_childCount&quot;</span>)<span class="question-mark">?</span>,
             <span class="ident">grandparent_id</span>: <span class="ident">row</span>.<span class="ident">get</span>(<span class="string">&quot;_grandparentId&quot;</span>)<span class="question-mark">?</span>,
@@ -4053,7 +4054,7 @@
     LEFT JOIN moz_places h ON h.id = b.fk
 &quot;</span>;
 
-<span class="kw">pub</span>(<span class="kw">crate</span>) <span class="kw">fn</span> <span class="ident">get_raw_bookmark</span>(<span class="ident">db</span>: <span class="kw-2">&amp;</span><span class="ident">PlacesDb</span>, <span class="ident">guid</span>: <span class="kw-2">&amp;</span><span class="ident">SyncGuid</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">RawBookmark</span><span class="op">&gt;</span><span class="op">&gt;</span> {
+<span class="kw">pub</span>(<span class="kw">crate</span>) <span class="kw">fn</span> <span class="ident">get_raw_bookmark</span>(<span class="ident">db</span>: <span class="kw-2">&amp;</span><span class="ident">PlacesDb</span>, <span class="ident">guid</span>: <span class="kw-2">&amp;</span><span class="ident">SyncGuid</span>) <span class="op">-&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">RawBookmark</span><span class="op">&gt;&gt;</span> {
     <span class="comment">// sql is based on fetchBookmark() in Desktop&#39;s Bookmarks.jsm, with &#39;fk&#39; added</span>
     <span class="comment">// and title&#39;s NULLIF handling.</span>
     <span class="prelude-val">Ok</span>(<span class="ident">db</span>.<span class="ident">try_query_row</span>(
@@ -4064,7 +4065,7 @@
     )<span class="question-mark">?</span>)
 }
 
-<span class="kw">fn</span> <span class="ident">get_raw_bookmarks_for_url</span>(<span class="ident">db</span>: <span class="kw-2">&amp;</span><span class="ident">PlacesDb</span>, <span class="ident">url</span>: <span class="kw-2">&amp;</span><span class="ident">Url</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">Vec</span><span class="op">&lt;</span><span class="ident">RawBookmark</span><span class="op">&gt;</span><span class="op">&gt;</span> {
+<span class="kw">fn</span> <span class="ident">get_raw_bookmarks_for_url</span>(<span class="ident">db</span>: <span class="kw-2">&amp;</span><span class="ident">PlacesDb</span>, <span class="ident">url</span>: <span class="kw-2">&amp;</span><span class="ident">Url</span>) <span class="op">-&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">Vec</span><span class="op">&lt;</span><span class="ident">RawBookmark</span><span class="op">&gt;&gt;</span> {
     <span class="prelude-val">Ok</span>(<span class="ident">db</span>.<span class="ident">query_rows_into_cached</span>(
         <span class="kw-2">&amp;</span><span class="macro">format</span><span class="macro">!</span>(
             <span class="string">&quot;{} WHERE h.url_hash = hash(:url) AND h.url = :url&quot;</span>,
@@ -4075,7 +4076,7 @@
     )<span class="question-mark">?</span>)
 }
 
-<span class="kw">fn</span> <span class="ident">reset_in_tx</span>(<span class="ident">db</span>: <span class="kw-2">&amp;</span><span class="ident">PlacesDb</span>, <span class="ident">assoc</span>: <span class="kw-2">&amp;</span><span class="ident">StoreSyncAssociation</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span>()<span class="op">&gt;</span> {
+<span class="kw">fn</span> <span class="ident">reset_in_tx</span>(<span class="ident">db</span>: <span class="kw-2">&amp;</span><span class="ident">PlacesDb</span>, <span class="ident">assoc</span>: <span class="kw-2">&amp;</span><span class="ident">StoreSyncAssociation</span>) <span class="op">-&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span>()<span class="op">&gt;</span> {
     <span class="comment">// Remove all synced bookmarks and pending tombstones, and mark all</span>
     <span class="comment">// local bookmarks as new.</span>
     <span class="ident">db</span>.<span class="ident">execute_batch</span>(<span class="kw-2">&amp;</span><span class="macro">format</span><span class="macro">!</span>(
@@ -4100,11 +4101,11 @@
     <span class="comment">// Clear the sync ID if we&#39;re signing out, or set it to whatever the</span>
     <span class="comment">// server gave us if we&#39;re signing in.</span>
     <span class="kw">match</span> <span class="ident">assoc</span> {
-        <span class="ident">StoreSyncAssociation</span>::<span class="ident">Disconnected</span> <span class="op">=</span><span class="op">&gt;</span> {
+        <span class="ident">StoreSyncAssociation</span>::<span class="ident">Disconnected</span> <span class="op">=&gt;</span> {
             <span class="ident">delete_meta</span>(<span class="ident">db</span>, <span class="ident">GLOBAL_SYNCID_META_KEY</span>)<span class="question-mark">?</span>;
             <span class="ident">delete_meta</span>(<span class="ident">db</span>, <span class="ident">COLLECTION_SYNCID_META_KEY</span>)<span class="question-mark">?</span>;
         }
-        <span class="ident">StoreSyncAssociation</span>::<span class="ident">Connected</span>(<span class="ident">ids</span>) <span class="op">=</span><span class="op">&gt;</span> {
+        <span class="ident">StoreSyncAssociation</span>::<span class="ident">Connected</span>(<span class="ident">ids</span>) <span class="op">=&gt;</span> {
             <span class="ident">put_meta</span>(<span class="ident">db</span>, <span class="ident">GLOBAL_SYNCID_META_KEY</span>, <span class="kw-2">&amp;</span><span class="ident">ids</span>.<span class="ident">global</span>)<span class="question-mark">?</span>;
             <span class="ident">put_meta</span>(<span class="ident">db</span>, <span class="ident">COLLECTION_SYNCID_META_KEY</span>, <span class="kw-2">&amp;</span><span class="ident">ids</span>.<span class="ident">coll</span>)<span class="question-mark">?</span>;
         }
@@ -4120,7 +4121,7 @@
     <span class="doccomment">/// Removes all sync metadata, including synced bookmarks, pending tombstones,</span>
     <span class="doccomment">/// change counters, sync statuses, the last sync time, and sync ID. This</span>
     <span class="doccomment">/// should be called when the user signs out of Sync.</span>
-    <span class="kw">pub</span>(<span class="kw">crate</span>) <span class="kw">fn</span> <span class="ident">reset</span>(<span class="ident">db</span>: <span class="kw-2">&amp;</span><span class="ident">PlacesDb</span>, <span class="ident">assoc</span>: <span class="kw-2">&amp;</span><span class="ident">StoreSyncAssociation</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span>()<span class="op">&gt;</span> {
+    <span class="kw">pub</span>(<span class="kw">crate</span>) <span class="kw">fn</span> <span class="ident">reset</span>(<span class="ident">db</span>: <span class="kw-2">&amp;</span><span class="ident">PlacesDb</span>, <span class="ident">assoc</span>: <span class="kw-2">&amp;</span><span class="ident">StoreSyncAssociation</span>) <span class="op">-&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span>()<span class="op">&gt;</span> {
         <span class="kw">let</span> <span class="ident">tx</span> <span class="op">=</span> <span class="ident">db</span>.<span class="ident">begin_transaction</span>()<span class="question-mark">?</span>;
         <span class="ident">reset_in_tx</span>(<span class="ident">db</span>, <span class="ident">assoc</span>)<span class="question-mark">?</span>;
         <span class="ident">tx</span>.<span class="ident">commit</span>()<span class="question-mark">?</span>;
@@ -4129,14 +4130,14 @@
 
     <span class="doccomment">/// Sets up the syncable roots. All items in `moz_bookmarks_synced` descend</span>
     <span class="doccomment">/// from these roots.</span>
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">create_synced_bookmark_roots</span>(<span class="ident">db</span>: <span class="kw-2">&amp;</span><span class="ident">PlacesDb</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span>()<span class="op">&gt;</span> {
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">create_synced_bookmark_roots</span>(<span class="ident">db</span>: <span class="kw-2">&amp;</span><span class="ident">PlacesDb</span>) <span class="op">-&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span>()<span class="op">&gt;</span> {
         <span class="comment">// NOTE: This is called in a transaction.</span>
         <span class="kw">fn</span> <span class="ident">maybe_insert</span>(
             <span class="ident">db</span>: <span class="kw-2">&amp;</span><span class="ident">PlacesDb</span>,
             <span class="ident">guid</span>: <span class="kw-2">&amp;</span><span class="ident">SyncGuid</span>,
             <span class="ident">parent_guid</span>: <span class="kw-2">&amp;</span><span class="ident">SyncGuid</span>,
             <span class="ident">pos</span>: <span class="ident">u32</span>,
-        ) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span>()<span class="op">&gt;</span> {
+        ) <span class="op">-&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span>()<span class="op">&gt;</span> {
             <span class="ident">db</span>.<span class="ident">execute_batch</span>(<span class="kw-2">&amp;</span><span class="macro">format</span><span class="macro">!</span>(
                 <span class="string">&quot;INSERT OR IGNORE INTO moz_bookmarks_synced(guid, parentGuid, kind)
                  VALUES(&#39;{guid}&#39;, &#39;{parent_guid}&#39;, {kind});
@@ -4186,7 +4187,7 @@
     <span class="kw">use</span> <span class="ident">serde_json</span>::<span class="ident">Value</span>;
     <span class="kw">use</span> <span class="ident">std</span>::<span class="ident">collections</span>::<span class="ident">HashSet</span>;
 
-    <span class="kw">fn</span> <span class="ident">get_pos</span>(<span class="ident">conn</span>: <span class="kw-2">&amp;</span><span class="ident">PlacesDb</span>, <span class="ident">guid</span>: <span class="kw-2">&amp;</span><span class="ident">SyncGuid</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">u32</span> {
+    <span class="kw">fn</span> <span class="ident">get_pos</span>(<span class="ident">conn</span>: <span class="kw-2">&amp;</span><span class="ident">PlacesDb</span>, <span class="ident">guid</span>: <span class="kw-2">&amp;</span><span class="ident">SyncGuid</span>) <span class="op">-&gt;</span> <span class="ident">u32</span> {
         <span class="ident">get_raw_bookmark</span>(<span class="ident">conn</span>, <span class="ident">guid</span>)
             .<span class="ident">expect</span>(<span class="string">&quot;should work&quot;</span>)
             .<span class="ident">unwrap</span>()
@@ -4194,7 +4195,7 @@
     }
 
     <span class="attribute">#[<span class="ident">test</span>]</span>
-    <span class="kw">fn</span> <span class="ident">test_bookmark_url_for_keyword</span>() <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span>()<span class="op">&gt;</span> {
+    <span class="kw">fn</span> <span class="ident">test_bookmark_url_for_keyword</span>() <span class="op">-&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span>()<span class="op">&gt;</span> {
         <span class="kw">let</span> <span class="ident">conn</span> <span class="op">=</span> <span class="ident">new_mem_connection</span>();
 
         <span class="kw">let</span> <span class="ident">url</span> <span class="op">=</span> <span class="ident">Url</span>::<span class="ident">parse</span>(<span class="string">&quot;http://example.com&quot;</span>)
@@ -4245,7 +4246,7 @@
     }
 
     <span class="attribute">#[<span class="ident">test</span>]</span>
-    <span class="kw">fn</span> <span class="ident">test_bookmark_invalid_url_for_keyword</span>() <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span>()<span class="op">&gt;</span> {
+    <span class="kw">fn</span> <span class="ident">test_bookmark_invalid_url_for_keyword</span>() <span class="op">-&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span>()<span class="op">&gt;</span> {
         <span class="kw">let</span> <span class="ident">conn</span> <span class="op">=</span> <span class="ident">new_mem_connection</span>();
 
         <span class="kw">let</span> <span class="ident">place_id</span> <span class="op">=</span> <span class="ident">append_invalid_bookmark</span>(
@@ -4272,7 +4273,7 @@
     }
 
     <span class="attribute">#[<span class="ident">test</span>]</span>
-    <span class="kw">fn</span> <span class="ident">test_insert</span>() <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span>()<span class="op">&gt;</span> {
+    <span class="kw">fn</span> <span class="ident">test_insert</span>() <span class="op">-&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span>()<span class="op">&gt;</span> {
         <span class="kw">let</span> <span class="kw">_</span> <span class="op">=</span> <span class="ident">env_logger</span>::<span class="ident">try_init</span>();
         <span class="kw">let</span> <span class="ident">conn</span> <span class="op">=</span> <span class="ident">new_mem_connection</span>();
         <span class="kw">let</span> <span class="ident">url</span> <span class="op">=</span> <span class="ident">Url</span>::<span class="ident">parse</span>(<span class="string">&quot;https://www.example.com&quot;</span>)<span class="question-mark">?</span>;
@@ -4315,7 +4316,7 @@
     }
 
     <span class="attribute">#[<span class="ident">test</span>]</span>
-    <span class="kw">fn</span> <span class="ident">test_insert_titles</span>() <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span>()<span class="op">&gt;</span> {
+    <span class="kw">fn</span> <span class="ident">test_insert_titles</span>() <span class="op">-&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span>()<span class="op">&gt;</span> {
         <span class="kw">let</span> <span class="kw">_</span> <span class="op">=</span> <span class="ident">env_logger</span>::<span class="ident">try_init</span>();
         <span class="kw">let</span> <span class="ident">conn</span> <span class="op">=</span> <span class="ident">new_mem_connection</span>();
         <span class="kw">let</span> <span class="ident">url</span> <span class="op">=</span> <span class="ident">Url</span>::<span class="ident">parse</span>(<span class="string">&quot;https://www.example.com&quot;</span>)<span class="question-mark">?</span>;
@@ -4349,7 +4350,7 @@
     }
 
     <span class="attribute">#[<span class="ident">test</span>]</span>
-    <span class="kw">fn</span> <span class="ident">test_delete</span>() <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span>()<span class="op">&gt;</span> {
+    <span class="kw">fn</span> <span class="ident">test_delete</span>() <span class="op">-&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span>()<span class="op">&gt;</span> {
         <span class="kw">let</span> <span class="kw">_</span> <span class="op">=</span> <span class="ident">env_logger</span>::<span class="ident">try_init</span>();
         <span class="kw">let</span> <span class="ident">conn</span> <span class="op">=</span> <span class="ident">new_mem_connection</span>();
 
@@ -4418,7 +4419,7 @@
     }
 
     <span class="attribute">#[<span class="ident">test</span>]</span>
-    <span class="kw">fn</span> <span class="ident">test_delete_roots</span>() <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span>()<span class="op">&gt;</span> {
+    <span class="kw">fn</span> <span class="ident">test_delete_roots</span>() <span class="op">-&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span>()<span class="op">&gt;</span> {
         <span class="kw">let</span> <span class="kw">_</span> <span class="op">=</span> <span class="ident">env_logger</span>::<span class="ident">try_init</span>();
         <span class="kw">let</span> <span class="ident">conn</span> <span class="op">=</span> <span class="ident">new_mem_connection</span>();
 
@@ -4429,7 +4430,7 @@
     }
 
     <span class="attribute">#[<span class="ident">test</span>]</span>
-    <span class="kw">fn</span> <span class="ident">test_insert_pos_too_large</span>() <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span>()<span class="op">&gt;</span> {
+    <span class="kw">fn</span> <span class="ident">test_insert_pos_too_large</span>() <span class="op">-&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span>()<span class="op">&gt;</span> {
         <span class="kw">let</span> <span class="kw">_</span> <span class="op">=</span> <span class="ident">env_logger</span>::<span class="ident">try_init</span>();
         <span class="kw">let</span> <span class="ident">conn</span> <span class="op">=</span> <span class="ident">new_mem_connection</span>();
         <span class="kw">let</span> <span class="ident">url</span> <span class="op">=</span> <span class="ident">Url</span>::<span class="ident">parse</span>(<span class="string">&quot;https://www.example.com&quot;</span>)<span class="question-mark">?</span>;
@@ -4453,7 +4454,7 @@
     }
 
     <span class="attribute">#[<span class="ident">test</span>]</span>
-    <span class="kw">fn</span> <span class="ident">test_update_move_same_parent</span>() <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span>()<span class="op">&gt;</span> {
+    <span class="kw">fn</span> <span class="ident">test_update_move_same_parent</span>() <span class="op">-&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span>()<span class="op">&gt;</span> {
         <span class="kw">let</span> <span class="kw">_</span> <span class="op">=</span> <span class="ident">env_logger</span>::<span class="ident">try_init</span>();
         <span class="kw">let</span> <span class="ident">conn</span> <span class="op">=</span> <span class="ident">new_mem_connection</span>();
         <span class="kw">let</span> <span class="ident">unfiled</span> <span class="op">=</span> <span class="kw-2">&amp;</span><span class="ident">BookmarkRootGuid</span>::<span class="ident">Unfiled</span>.<span class="ident">as_guid</span>();
@@ -4552,7 +4553,7 @@
     }
 
     <span class="attribute">#[<span class="ident">test</span>]</span>
-    <span class="kw">fn</span> <span class="ident">test_update</span>() <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span>()<span class="op">&gt;</span> {
+    <span class="kw">fn</span> <span class="ident">test_update</span>() <span class="op">-&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span>()<span class="op">&gt;</span> {
         <span class="kw">let</span> <span class="kw">_</span> <span class="op">=</span> <span class="ident">env_logger</span>::<span class="ident">try_init</span>();
         <span class="kw">let</span> <span class="ident">conn</span> <span class="op">=</span> <span class="ident">new_mem_connection</span>();
         <span class="kw">let</span> <span class="ident">unfiled</span> <span class="op">=</span> <span class="kw-2">&amp;</span><span class="ident">BookmarkRootGuid</span>::<span class="ident">Unfiled</span>.<span class="ident">as_guid</span>();
@@ -4700,7 +4701,7 @@
     }
 
     <span class="attribute">#[<span class="ident">test</span>]</span>
-    <span class="kw">fn</span> <span class="ident">test_update_titles</span>() <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span>()<span class="op">&gt;</span> {
+    <span class="kw">fn</span> <span class="ident">test_update_titles</span>() <span class="op">-&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span>()<span class="op">&gt;</span> {
         <span class="kw">let</span> <span class="kw">_</span> <span class="op">=</span> <span class="ident">env_logger</span>::<span class="ident">try_init</span>();
         <span class="kw">let</span> <span class="ident">conn</span> <span class="op">=</span> <span class="ident">new_mem_connection</span>();
         <span class="kw">let</span> <span class="ident">guid</span>: <span class="ident">SyncGuid</span> <span class="op">=</span> <span class="string">&quot;bookmark1___&quot;</span>.<span class="ident">into</span>();
@@ -4768,7 +4769,7 @@
     }
 
     <span class="attribute">#[<span class="ident">test</span>]</span>
-    <span class="kw">fn</span> <span class="ident">test_update_statuses</span>() <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span>()<span class="op">&gt;</span> {
+    <span class="kw">fn</span> <span class="ident">test_update_statuses</span>() <span class="op">-&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span>()<span class="op">&gt;</span> {
         <span class="kw">let</span> <span class="kw">_</span> <span class="op">=</span> <span class="ident">env_logger</span>::<span class="ident">try_init</span>();
         <span class="kw">let</span> <span class="ident">conn</span> <span class="op">=</span> <span class="ident">new_mem_connection</span>();
         <span class="kw">let</span> <span class="ident">unfiled</span> <span class="op">=</span> <span class="kw-2">&amp;</span><span class="ident">BookmarkRootGuid</span>::<span class="ident">Unfiled</span>.<span class="ident">as_guid</span>();
@@ -4777,7 +4778,7 @@
             <span class="kw">let</span> <span class="ident">sql</span> <span class="op">=</span> <span class="string">&quot;SELECT guid FROM moz_bookmarks WHERE syncChangeCounter != 0&quot;</span>;
             <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">stmt</span> <span class="op">=</span> <span class="ident">conn</span>.<span class="ident">prepare</span>(<span class="ident">sql</span>).<span class="ident">expect</span>(<span class="string">&quot;sql is ok&quot;</span>);
             <span class="kw">let</span> <span class="ident">got_guids</span>: <span class="ident">HashSet</span><span class="op">&lt;</span><span class="ident">String</span><span class="op">&gt;</span> <span class="op">=</span> <span class="ident">stmt</span>
-                .<span class="ident">query_and_then</span>(<span class="ident">NO_PARAMS</span>, <span class="op">|</span><span class="ident">row</span><span class="op">|</span> <span class="op">-</span><span class="op">&gt;</span> <span class="ident">rusqlite</span>::<span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="kw">_</span><span class="op">&gt;</span> {
+                .<span class="ident">query_and_then</span>(<span class="ident">NO_PARAMS</span>, <span class="op">|</span><span class="ident">row</span><span class="op">|</span> <span class="op">-&gt;</span> <span class="ident">rusqlite</span>::<span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="kw">_</span><span class="op">&gt;</span> {
                     <span class="prelude-val">Ok</span>(<span class="ident">row</span>.<span class="ident">get</span>::<span class="op">&lt;</span><span class="kw">_</span>, <span class="ident">String</span><span class="op">&gt;</span>(<span class="number">0</span>)<span class="question-mark">?</span>)
                 })
                 .<span class="ident">expect</span>(<span class="string">&quot;should work&quot;</span>)
@@ -4799,7 +4800,7 @@
 
             <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">stmt</span> <span class="op">=</span> <span class="ident">conn</span>.<span class="ident">prepare</span>(<span class="ident">sql</span>).<span class="ident">expect</span>(<span class="string">&quot;sql is ok&quot;</span>);
             <span class="kw">let</span> <span class="ident">got_guids</span>: <span class="ident">HashSet</span><span class="op">&lt;</span><span class="ident">String</span><span class="op">&gt;</span> <span class="op">=</span> <span class="ident">stmt</span>
-                .<span class="ident">query_and_then</span>(<span class="ident">NO_PARAMS</span>, <span class="op">|</span><span class="ident">row</span><span class="op">|</span> <span class="op">-</span><span class="op">&gt;</span> <span class="ident">rusqlite</span>::<span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="kw">_</span><span class="op">&gt;</span> {
+                .<span class="ident">query_and_then</span>(<span class="ident">NO_PARAMS</span>, <span class="op">|</span><span class="ident">row</span><span class="op">|</span> <span class="op">-&gt;</span> <span class="ident">rusqlite</span>::<span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="kw">_</span><span class="op">&gt;</span> {
                     <span class="prelude-val">Ok</span>(<span class="ident">row</span>.<span class="ident">get</span>::<span class="op">&lt;</span><span class="kw">_</span>, <span class="ident">String</span><span class="op">&gt;</span>(<span class="number">0</span>)<span class="question-mark">?</span>)
                 })
                 .<span class="ident">expect</span>(<span class="string">&quot;should work&quot;</span>)
@@ -4906,7 +4907,7 @@
     }
 
     <span class="attribute">#[<span class="ident">test</span>]</span>
-    <span class="kw">fn</span> <span class="ident">test_update_errors</span>() <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span>()<span class="op">&gt;</span> {
+    <span class="kw">fn</span> <span class="ident">test_update_errors</span>() <span class="op">-&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span>()<span class="op">&gt;</span> {
         <span class="kw">let</span> <span class="kw">_</span> <span class="op">=</span> <span class="ident">env_logger</span>::<span class="ident">try_init</span>();
         <span class="kw">let</span> <span class="ident">conn</span> <span class="op">=</span> <span class="ident">new_mem_connection</span>();
 
@@ -4978,7 +4979,7 @@
     }
 
     <span class="attribute">#[<span class="ident">test</span>]</span>
-    <span class="kw">fn</span> <span class="ident">test_fetch_root</span>() <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span>()<span class="op">&gt;</span> {
+    <span class="kw">fn</span> <span class="ident">test_fetch_root</span>() <span class="op">-&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span>()<span class="op">&gt;</span> {
         <span class="kw">let</span> <span class="kw">_</span> <span class="op">=</span> <span class="ident">env_logger</span>::<span class="ident">try_init</span>();
         <span class="kw">let</span> <span class="ident">conn</span> <span class="op">=</span> <span class="ident">new_mem_connection</span>();
 
@@ -4986,8 +4987,8 @@
         <span class="kw">let</span> (<span class="ident">t</span>, <span class="kw">_</span>, <span class="kw">_</span>) <span class="op">=</span>
             <span class="ident">fetch_tree</span>(<span class="kw-2">&amp;</span><span class="ident">conn</span>, <span class="kw-2">&amp;</span><span class="ident">BookmarkRootGuid</span>::<span class="ident">Root</span>.<span class="ident">into</span>(), <span class="kw-2">&amp;</span><span class="ident">FetchDepth</span>::<span class="ident">Deepest</span>)<span class="question-mark">?</span>.<span class="ident">unwrap</span>();
         <span class="kw">let</span> <span class="ident">f</span> <span class="op">=</span> <span class="kw">match</span> <span class="ident">t</span> {
-            <span class="ident">BookmarkTreeNode</span>::<span class="ident">Folder</span>(<span class="kw-2">ref</span> <span class="ident">f</span>) <span class="op">=</span><span class="op">&gt;</span> <span class="ident">f</span>,
-            <span class="kw">_</span> <span class="op">=</span><span class="op">&gt;</span> <span class="macro">panic</span><span class="macro">!</span>(<span class="string">&quot;tree root must be a folder&quot;</span>),
+            <span class="ident">BookmarkTreeNode</span>::<span class="ident">Folder</span>(<span class="kw-2">ref</span> <span class="ident">f</span>) <span class="op">=&gt;</span> <span class="ident">f</span>,
+            <span class="kw">_</span> <span class="op">=&gt;</span> <span class="macro">panic</span><span class="macro">!</span>(<span class="string">&quot;tree root must be a folder&quot;</span>),
         };
         <span class="macro">assert_eq</span><span class="macro">!</span>(<span class="ident">f</span>.<span class="ident">guid</span>, <span class="prelude-val">Some</span>(<span class="ident">BookmarkRootGuid</span>::<span class="ident">Root</span>.<span class="ident">into</span>()));
         <span class="macro">assert_eq</span><span class="macro">!</span>(<span class="ident">f</span>.<span class="ident">children</span>.<span class="ident">len</span>(), <span class="number">4</span>);
@@ -4995,7 +4996,7 @@
     }
 
     <span class="attribute">#[<span class="ident">test</span>]</span>
-    <span class="kw">fn</span> <span class="ident">test_insert_tree_and_fetch_level</span>() <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span>()<span class="op">&gt;</span> {
+    <span class="kw">fn</span> <span class="ident">test_insert_tree_and_fetch_level</span>() <span class="op">-&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span>()<span class="op">&gt;</span> {
         <span class="kw">let</span> <span class="kw">_</span> <span class="op">=</span> <span class="ident">env_logger</span>::<span class="ident">try_init</span>();
         <span class="kw">let</span> <span class="ident">conn</span> <span class="op">=</span> <span class="ident">new_mem_connection</span>();
 
@@ -5111,7 +5112,7 @@
     }
 
     <span class="attribute">#[<span class="ident">test</span>]</span>
-    <span class="kw">fn</span> <span class="ident">test_delete_everything</span>() <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span>()<span class="op">&gt;</span> {
+    <span class="kw">fn</span> <span class="ident">test_delete_everything</span>() <span class="op">-&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span>()<span class="op">&gt;</span> {
         <span class="kw">let</span> <span class="kw">_</span> <span class="op">=</span> <span class="ident">env_logger</span>::<span class="ident">try_init</span>();
         <span class="kw">let</span> <span class="ident">conn</span> <span class="op">=</span> <span class="ident">new_mem_connection</span>();
 
@@ -5163,7 +5164,7 @@
             <span class="kw">let</span> <span class="ident">unfiled</span> <span class="op">=</span> <span class="ident">root</span>
                 .<span class="ident">children</span>
                 .<span class="ident">iter</span>()
-                .<span class="ident">find</span>(<span class="op">|</span><span class="ident">c</span><span class="op">|</span> <span class="ident">c</span>.<span class="ident">guid</span>() <span class="op">=</span><span class="op">=</span> <span class="ident">BookmarkRootGuid</span>::<span class="ident">Unfiled</span>.<span class="ident">guid</span>())
+                .<span class="ident">find</span>(<span class="op">|</span><span class="ident">c</span><span class="op">|</span> <span class="ident">c</span>.<span class="ident">guid</span>() <span class="op">==</span> <span class="ident">BookmarkRootGuid</span>::<span class="ident">Unfiled</span>.<span class="ident">guid</span>())
                 .<span class="ident">expect</span>(<span class="string">&quot;Should return unfiled root&quot;</span>);
             <span class="kw">if</span> <span class="kw">let</span> <span class="ident">BookmarkTreeNode</span>::<span class="ident">Folder</span>(<span class="ident">unfiled</span>) <span class="op">=</span> <span class="ident">unfiled</span> {
                 <span class="macro">assert</span><span class="macro">!</span>(<span class="ident">unfiled</span>.<span class="ident">children</span>.<span class="ident">is_empty</span>());
@@ -5178,7 +5179,7 @@
     }
 
     <span class="attribute">#[<span class="ident">test</span>]</span>
-    <span class="kw">fn</span> <span class="ident">test_sync_reset</span>() <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span>()<span class="op">&gt;</span> {
+    <span class="kw">fn</span> <span class="ident">test_sync_reset</span>() <span class="op">-&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span>()<span class="op">&gt;</span> {
         <span class="kw">let</span> <span class="kw">_</span> <span class="op">=</span> <span class="ident">env_logger</span>::<span class="ident">try_init</span>();
         <span class="kw">let</span> <span class="ident">conn</span> <span class="op">=</span> <span class="ident">new_mem_connection</span>();
 

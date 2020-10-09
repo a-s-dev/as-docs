@@ -1,4 +1,5 @@
-<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source to the Rust file `components/places/src/db/db.rs`."><meta name="keywords" content="rust, rustlang, rust-lang"><title>db.rs.html -- source</title><link rel="stylesheet" type="text/css" href="../../../normalize.css"><link rel="stylesheet" type="text/css" href="../../../rustdoc.css" id="mainThemeStyle"><link rel="stylesheet" type="text/css" href="../../../dark.css"><link rel="stylesheet" type="text/css" href="../../../light.css" id="themeStyle"><script src="../../../storage.js"></script><noscript><link rel="stylesheet" href="../../../noscript.css"></noscript><link rel="shortcut icon" href="../../../favicon.ico"><style type="text/css">#crate-search{background-image:url("../../../down-arrow.svg");}</style></head><body class="rustdoc source"><!--[if lte IE 8]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="sidebar"><div class="sidebar-menu">&#9776;</div><a href='../../../places/index.html'><div class='logo-container'><img src='../../../rust-logo.png' alt='logo'></div></a></nav><div class="theme-picker"><button id="theme-picker" aria-label="Pick another theme!"><img src="../../../brush.svg" width="18" alt="Pick another theme!"></button><div id="theme-choices"></div></div><script src="../../../theme.js"></script><nav class="sub"><form class="search-form"><div class="search-container"><div><select id="crate-search"><option value="All crates">All crates</option></select><input class="search-input" name="search" disabled autocomplete="off" spellcheck="false" placeholder="Click or press ‘S’ to search, ‘?’ for more options…" type="search"></div><a id="settings-menu" href="../../../settings.html"><img src="../../../wheel.svg" width="18" alt="Change settings"></a></div></form></nav><section id="main" class="content"><pre class="line-numbers"><span id="1">  1</span>
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source to the Rust file `components/places/src/db/db.rs`."><meta name="keywords" content="rust, rustlang, rust-lang"><title>db.rs.html -- source</title><link rel="stylesheet" type="text/css" href="../../../normalize.css"><link rel="stylesheet" type="text/css" href="../../../rustdoc.css" id="mainThemeStyle"><link rel="stylesheet" type="text/css" href="../../../light.css"  id="themeStyle"><link rel="stylesheet" type="text/css" href="../../../dark.css" disabled ><link rel="stylesheet" type="text/css" href="../../../ayu.css" disabled ><script src="../../../storage.js"></script><noscript><link rel="stylesheet" href="../../../noscript.css"></noscript><link rel="shortcut icon" href="../../../favicon.ico"><style type="text/css">#crate-search{background-image:url("../../../down-arrow.svg");}</style></head><body class="rustdoc source"><!--[if lte IE 8]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="sidebar"><div class="sidebar-menu">&#9776;</div><a href='../../../places/index.html'><div class='logo-container rust-logo'><img src='../../../rust-logo.png' alt='logo'></div></a></nav><div class="theme-picker"><button id="theme-picker" aria-label="Pick another theme!"><img src="../../../brush.svg" width="18" alt="Pick another theme!"></button><div id="theme-choices"></div></div><script src="../../../theme.js"></script><nav class="sub"><form class="search-form"><div class="search-container"><div><select id="crate-search"><option value="All crates">All crates</option></select><input class="search-input" name="search" disabled autocomplete="off" spellcheck="false" placeholder="Click or press ‘S’ to search, ‘?’ for more options…" type="search"></div><span class="help-button">?</span>
+                <a id="settings-menu" href="../../../settings.html"><img src="../../../wheel.svg" width="18" alt="Change settings"></a></div></form></nav><section id="main" class="content"><pre class="line-numbers"><span id="1">  1</span>
 <span id="2">  2</span>
 <span id="3">  3</span>
 <span id="4">  4</span>
@@ -502,7 +503,7 @@
 <span class="macro">lazy_static</span><span class="macro">!</span> {
     <span class="comment">// Each API has a single bookmark change counter shared across all connections.</span>
     <span class="comment">// This hashmap indexes them by the &quot;api id&quot; of the API.</span>
-    <span class="kw">pub</span> <span class="kw">static</span> <span class="kw-2">ref</span> <span class="ident">GLOBAL_BOOKMARK_CHANGE_COUNTERS</span>: <span class="ident">RwLock</span><span class="op">&lt;</span><span class="ident">HashMap</span><span class="op">&lt;</span><span class="ident">usize</span>, <span class="ident">AtomicI64</span><span class="op">&gt;</span><span class="op">&gt;</span> <span class="op">=</span> <span class="ident">RwLock</span>::<span class="ident">new</span>(<span class="ident">HashMap</span>::<span class="ident">new</span>());
+    <span class="kw">pub</span> <span class="kw">static</span> <span class="kw-2">ref</span> <span class="ident">GLOBAL_BOOKMARK_CHANGE_COUNTERS</span>: <span class="ident">RwLock</span><span class="op">&lt;</span><span class="ident">HashMap</span><span class="op">&lt;</span><span class="ident">usize</span>, <span class="ident">AtomicI64</span><span class="op">&gt;&gt;</span> <span class="op">=</span> <span class="ident">RwLock</span>::<span class="ident">new</span>(<span class="ident">HashMap</span>::<span class="ident">new</span>());
 }
 
 <span class="attribute">#[<span class="ident">derive</span>(<span class="ident">Debug</span>)]</span>
@@ -511,7 +512,7 @@
     <span class="ident">conn_type</span>: <span class="ident">ConnectionType</span>,
     <span class="ident">interrupt_counter</span>: <span class="ident">Arc</span><span class="op">&lt;</span><span class="ident">AtomicUsize</span><span class="op">&gt;</span>,
     <span class="ident">api_id</span>: <span class="ident">usize</span>,
-    <span class="kw">pub</span>(<span class="kw">super</span>) <span class="ident">coop_tx_lock</span>: <span class="ident">Arc</span><span class="op">&lt;</span><span class="ident">Mutex</span><span class="op">&lt;</span>()<span class="op">&gt;</span><span class="op">&gt;</span>,
+    <span class="kw">pub</span>(<span class="kw">super</span>) <span class="ident">coop_tx_lock</span>: <span class="ident">Arc</span><span class="op">&lt;</span><span class="ident">Mutex</span><span class="op">&lt;</span>()<span class="op">&gt;&gt;</span>,
 }
 
 <span class="kw">impl</span> <span class="ident">PlacesDb</span> {
@@ -519,8 +520,8 @@
         <span class="ident">db</span>: <span class="ident">Connection</span>,
         <span class="ident">conn_type</span>: <span class="ident">ConnectionType</span>,
         <span class="ident">api_id</span>: <span class="ident">usize</span>,
-        <span class="ident">coop_tx_lock</span>: <span class="ident">Arc</span><span class="op">&lt;</span><span class="ident">Mutex</span><span class="op">&lt;</span>()<span class="op">&gt;</span><span class="op">&gt;</span>,
-    ) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="self">Self</span><span class="op">&gt;</span> {
+        <span class="ident">coop_tx_lock</span>: <span class="ident">Arc</span><span class="op">&lt;</span><span class="ident">Mutex</span><span class="op">&lt;</span>()<span class="op">&gt;&gt;</span>,
+    ) <span class="op">-&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="self">Self</span><span class="op">&gt;</span> {
         <span class="kw">let</span> <span class="ident">initial_pragmas</span> <span class="op">=</span> <span class="string">&quot;
             -- The value we use was taken from Desktop Firefox, and seems necessary to
             -- help ensure good performance on autocomplete-style queries. The default value is 1024,
@@ -571,8 +572,8 @@
         <span class="kw">match</span> <span class="ident">res</span>.<span class="ident">conn_type</span>() {
             <span class="comment">// For read-only connections, we can avoid opening a transaction,</span>
             <span class="comment">// since we know we won&#39;t be migrating or initializing anything.</span>
-            <span class="ident">ConnectionType</span>::<span class="ident">ReadOnly</span> <span class="op">=</span><span class="op">&gt;</span> {}
-            <span class="kw">_</span> <span class="op">=</span><span class="op">&gt;</span> {
+            <span class="ident">ConnectionType</span>::<span class="ident">ReadOnly</span> <span class="op">=&gt;</span> {}
+            <span class="kw">_</span> <span class="op">=&gt;</span> {
                 <span class="comment">// Even though we&#39;re the owner of the db, we need it to be an unchecked tx</span>
                 <span class="comment">// since we want to pass &amp;PlacesDb and not &amp;Connection to schema::init.</span>
                 <span class="kw">let</span> <span class="ident">tx</span> <span class="op">=</span> <span class="ident">res</span>.<span class="ident">unchecked_transaction</span>()<span class="question-mark">?</span>;
@@ -588,8 +589,8 @@
         <span class="ident">path</span>: <span class="kw">impl</span> <span class="ident">AsRef</span><span class="op">&lt;</span><span class="ident">Path</span><span class="op">&gt;</span>,
         <span class="ident">conn_type</span>: <span class="ident">ConnectionType</span>,
         <span class="ident">api_id</span>: <span class="ident">usize</span>,
-        <span class="ident">coop_tx_lock</span>: <span class="ident">Arc</span><span class="op">&lt;</span><span class="ident">Mutex</span><span class="op">&lt;</span>()<span class="op">&gt;</span><span class="op">&gt;</span>,
-    ) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="self">Self</span><span class="op">&gt;</span> {
+        <span class="ident">coop_tx_lock</span>: <span class="ident">Arc</span><span class="op">&lt;</span><span class="ident">Mutex</span><span class="op">&lt;</span>()<span class="op">&gt;&gt;</span>,
+    ) <span class="op">-&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="self">Self</span><span class="op">&gt;</span> {
         <span class="prelude-val">Ok</span>(<span class="self">Self</span>::<span class="ident">with_connection</span>(
             <span class="ident">Connection</span>::<span class="ident">open_with_flags</span>(<span class="ident">path</span>, <span class="ident">conn_type</span>.<span class="ident">rusqlite_flags</span>())<span class="question-mark">?</span>,
             <span class="ident">conn_type</span>,
@@ -601,7 +602,7 @@
     <span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">test</span>)]</span>
     <span class="comment">// Useful for some tests (although most tests should use helper functions</span>
     <span class="comment">// in api::places_api::test)</span>
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">open_in_memory</span>(<span class="ident">conn_ty</span>: <span class="ident">ConnectionType</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="self">Self</span><span class="op">&gt;</span> {
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">open_in_memory</span>(<span class="ident">conn_ty</span>: <span class="ident">ConnectionType</span>) <span class="op">-&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="self">Self</span><span class="op">&gt;</span> {
         <span class="prelude-val">Ok</span>(<span class="self">Self</span>::<span class="ident">with_connection</span>(
             <span class="ident">Connection</span>::<span class="ident">open_in_memory</span>()<span class="question-mark">?</span>,
             <span class="ident">conn_ty</span>,
@@ -610,7 +611,7 @@
         )<span class="question-mark">?</span>)
     }
 
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">new_interrupt_handle</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">SqlInterruptHandle</span> {
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">new_interrupt_handle</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-&gt;</span> <span class="ident">SqlInterruptHandle</span> {
         <span class="ident">SqlInterruptHandle</span>::<span class="ident">new</span>(
             <span class="self">self</span>.<span class="ident">db</span>.<span class="ident">get_interrupt_handle</span>(),
             <span class="self">self</span>.<span class="ident">interrupt_counter</span>.<span class="ident">clone</span>(),
@@ -618,12 +619,12 @@
     }
 
     <span class="attribute">#[<span class="ident">inline</span>]</span>
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">begin_interrupt_scope</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">SqlInterruptScope</span> {
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">begin_interrupt_scope</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-&gt;</span> <span class="ident">SqlInterruptScope</span> {
         <span class="ident">SqlInterruptScope</span>::<span class="ident">new</span>(<span class="self">self</span>.<span class="ident">interrupt_counter</span>.<span class="ident">clone</span>())
     }
 
     <span class="attribute">#[<span class="ident">inline</span>]</span>
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">conn_type</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">ConnectionType</span> {
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">conn_type</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-&gt;</span> <span class="ident">ConnectionType</span> {
         <span class="self">self</span>.<span class="ident">conn_type</span>
     }
 
@@ -631,12 +632,12 @@
     <span class="doccomment">/// to bookmarks since this was called.</span>
     <span class="doccomment">/// While this conceptually should live on the PlacesApi, the things that</span>
     <span class="doccomment">/// need this typically only have a PlacesDb, so we expose it here.</span>
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">global_bookmark_change_tracker</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">GlobalChangeCounterTracker</span> {
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">global_bookmark_change_tracker</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-&gt;</span> <span class="ident">GlobalChangeCounterTracker</span> {
         <span class="ident">GlobalChangeCounterTracker</span>::<span class="ident">new</span>(<span class="self">self</span>.<span class="ident">api_id</span>)
     }
 
     <span class="attribute">#[<span class="ident">inline</span>]</span>
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">api_id</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">usize</span> {
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">api_id</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-&gt;</span> <span class="ident">usize</span> {
         <span class="self">self</span>.<span class="ident">api_id</span>
     }
 }
@@ -654,7 +655,7 @@
 
 <span class="kw">impl</span> <span class="ident">ConnExt</span> <span class="kw">for</span> <span class="ident">PlacesDb</span> {
     <span class="attribute">#[<span class="ident">inline</span>]</span>
-    <span class="kw">fn</span> <span class="ident">conn</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="kw-2">&amp;</span><span class="ident">Connection</span> {
+    <span class="kw">fn</span> <span class="ident">conn</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-&gt;</span> <span class="kw-2">&amp;</span><span class="ident">Connection</span> {
         <span class="kw-2">&amp;</span><span class="self">self</span>.<span class="ident">db</span>
     }
 }
@@ -662,7 +663,7 @@
 <span class="kw">impl</span> <span class="ident">Deref</span> <span class="kw">for</span> <span class="ident">PlacesDb</span> {
     <span class="kw">type</span> <span class="ident">Target</span> <span class="op">=</span> <span class="ident">Connection</span>;
     <span class="attribute">#[<span class="ident">inline</span>]</span>
-    <span class="kw">fn</span> <span class="ident">deref</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="kw-2">&amp;</span><span class="ident">Connection</span> {
+    <span class="kw">fn</span> <span class="ident">deref</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-&gt;</span> <span class="kw-2">&amp;</span><span class="ident">Connection</span> {
         <span class="kw-2">&amp;</span><span class="self">self</span>.<span class="ident">db</span>
     }
 }
@@ -675,7 +676,7 @@
 }
 
 <span class="kw">impl</span> <span class="ident">GlobalChangeCounterTracker</span> {
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">new</span>(<span class="ident">api_id</span>: <span class="ident">usize</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="self">Self</span> {
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">new</span>(<span class="ident">api_id</span>: <span class="ident">usize</span>) <span class="op">-&gt;</span> <span class="self">Self</span> {
         <span class="ident">GlobalChangeCounterTracker</span> {
             <span class="ident">api_id</span>,
             <span class="ident">start_value</span>: <span class="self">Self</span>::<span class="ident">cur_value</span>(<span class="ident">api_id</span>),
@@ -684,22 +685,22 @@
 
     <span class="comment">// The value is an implementation detail, so just expose what we care</span>
     <span class="comment">// about - ie, &quot;has it changed?&quot;</span>
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">changed</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">bool</span> {
-        <span class="self">Self</span>::<span class="ident">cur_value</span>(<span class="self">self</span>.<span class="ident">api_id</span>) <span class="op">!</span><span class="op">=</span> <span class="self">self</span>.<span class="ident">start_value</span>
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">changed</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-&gt;</span> <span class="ident">bool</span> {
+        <span class="self">Self</span>::<span class="ident">cur_value</span>(<span class="self">self</span>.<span class="ident">api_id</span>) <span class="op">!=</span> <span class="self">self</span>.<span class="ident">start_value</span>
     }
 
-    <span class="kw">fn</span> <span class="ident">cur_value</span>(<span class="ident">api_id</span>: <span class="ident">usize</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">i64</span> {
+    <span class="kw">fn</span> <span class="ident">cur_value</span>(<span class="ident">api_id</span>: <span class="ident">usize</span>) <span class="op">-&gt;</span> <span class="ident">i64</span> {
         <span class="kw">let</span> <span class="ident">map</span> <span class="op">=</span> <span class="ident">GLOBAL_BOOKMARK_CHANGE_COUNTERS</span>
             .<span class="ident">read</span>()
             .<span class="ident">expect</span>(<span class="string">&quot;gbcc poisoned&quot;</span>);
         <span class="kw">match</span> <span class="ident">map</span>.<span class="ident">get</span>(<span class="kw-2">&amp;</span><span class="ident">api_id</span>) {
-            <span class="prelude-val">Some</span>(<span class="ident">counter</span>) <span class="op">=</span><span class="op">&gt;</span> <span class="ident">counter</span>.<span class="ident">load</span>(<span class="ident">Ordering</span>::<span class="ident">Acquire</span>),
-            <span class="prelude-val">None</span> <span class="op">=</span><span class="op">&gt;</span> <span class="number">0</span>,
+            <span class="prelude-val">Some</span>(<span class="ident">counter</span>) <span class="op">=&gt;</span> <span class="ident">counter</span>.<span class="ident">load</span>(<span class="ident">Ordering</span>::<span class="ident">Acquire</span>),
+            <span class="prelude-val">None</span> <span class="op">=&gt;</span> <span class="number">0</span>,
         }
     }
 }
 
-<span class="kw">fn</span> <span class="ident">define_functions</span>(<span class="ident">c</span>: <span class="kw-2">&amp;</span><span class="ident">Connection</span>, <span class="ident">api_id</span>: <span class="ident">usize</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span>()<span class="op">&gt;</span> {
+<span class="kw">fn</span> <span class="ident">define_functions</span>(<span class="ident">c</span>: <span class="kw-2">&amp;</span><span class="ident">Connection</span>, <span class="ident">api_id</span>: <span class="ident">usize</span>) <span class="op">-&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span>()<span class="op">&gt;</span> {
     <span class="kw">use</span> <span class="ident">rusqlite</span>::<span class="ident">functions</span>::<span class="ident">FunctionFlags</span>;
     <span class="ident">c</span>.<span class="ident">create_scalar_function</span>(
         <span class="string">&quot;get_prefix&quot;</span>,
@@ -748,7 +749,7 @@
         <span class="string">&quot;note_bookmarks_sync_change&quot;</span>,
         <span class="number">0</span>,
         <span class="ident">FunctionFlags</span>::<span class="ident">SQLITE_UTF8</span>,
-        <span class="kw">move</span> <span class="op">|</span><span class="ident">ctx</span><span class="op">|</span> <span class="op">-</span><span class="op">&gt;</span> <span class="ident">rusqlite</span>::<span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">i64</span><span class="op">&gt;</span> { <span class="ident">sql_fns</span>::<span class="ident">note_bookmarks_sync_change</span>(<span class="ident">ctx</span>, <span class="ident">api_id</span>) },
+        <span class="kw">move</span> <span class="op">|</span><span class="ident">ctx</span><span class="op">|</span> <span class="op">-&gt;</span> <span class="ident">rusqlite</span>::<span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">i64</span><span class="op">&gt;</span> { <span class="ident">sql_fns</span>::<span class="ident">note_bookmarks_sync_change</span>(<span class="ident">ctx</span>, <span class="ident">api_id</span>) },
     )<span class="question-mark">?</span>;
     <span class="prelude-val">Ok</span>(())
 }
@@ -764,7 +765,7 @@
     <span class="kw">use</span> <span class="ident">types</span>::<span class="ident">Timestamp</span>;
 
     <span class="comment">// Helpers for define_functions</span>
-    <span class="kw">fn</span> <span class="ident">get_raw_str</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span><span class="op">&gt;</span>(<span class="ident">ctx</span>: <span class="kw-2">&amp;</span><span class="lifetime">&#39;a</span> <span class="ident">Context</span><span class="op">&lt;</span><span class="lifetime">&#39;_</span><span class="op">&gt;</span>, <span class="ident">fname</span>: <span class="kw-2">&amp;</span><span class="lifetime">&#39;static</span> <span class="ident">str</span>, <span class="ident">idx</span>: <span class="ident">usize</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="kw-2">&amp;</span><span class="lifetime">&#39;a</span> <span class="ident">str</span><span class="op">&gt;</span> {
+    <span class="kw">fn</span> <span class="ident">get_raw_str</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span><span class="op">&gt;</span>(<span class="ident">ctx</span>: <span class="kw-2">&amp;</span><span class="lifetime">&#39;a</span> <span class="ident">Context</span><span class="op">&lt;</span><span class="lifetime">&#39;_</span><span class="op">&gt;</span>, <span class="ident">fname</span>: <span class="kw-2">&amp;</span><span class="lifetime">&#39;static</span> <span class="ident">str</span>, <span class="ident">idx</span>: <span class="ident">usize</span>) <span class="op">-&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="kw-2">&amp;</span><span class="lifetime">&#39;a</span> <span class="ident">str</span><span class="op">&gt;</span> {
         <span class="ident">ctx</span>.<span class="ident">get_raw</span>(<span class="ident">idx</span>).<span class="ident">as_str</span>().<span class="ident">map_err</span>(<span class="op">|</span><span class="ident">e</span><span class="op">|</span> {
             <span class="ident">Error</span>::<span class="ident">UserFunctionError</span>(<span class="macro">format</span><span class="macro">!</span>(<span class="string">&quot;Bad arg {} to &#39;{}&#39;: {}&quot;</span>, <span class="ident">idx</span>, <span class="ident">fname</span>, <span class="ident">e</span>).<span class="ident">into</span>())
         })
@@ -774,9 +775,9 @@
         <span class="ident">ctx</span>: <span class="kw-2">&amp;</span><span class="lifetime">&#39;a</span> <span class="ident">Context</span><span class="op">&lt;</span><span class="lifetime">&#39;_</span><span class="op">&gt;</span>,
         <span class="ident">fname</span>: <span class="kw-2">&amp;</span><span class="lifetime">&#39;static</span> <span class="ident">str</span>,
         <span class="ident">idx</span>: <span class="ident">usize</span>,
-    ) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="kw-2">&amp;</span><span class="lifetime">&#39;a</span> <span class="ident">str</span><span class="op">&gt;</span><span class="op">&gt;</span> {
+    ) <span class="op">-&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="kw-2">&amp;</span><span class="lifetime">&#39;a</span> <span class="ident">str</span><span class="op">&gt;&gt;</span> {
         <span class="kw">let</span> <span class="ident">raw</span> <span class="op">=</span> <span class="ident">ctx</span>.<span class="ident">get_raw</span>(<span class="ident">idx</span>);
-        <span class="kw">if</span> <span class="ident">raw</span> <span class="op">=</span><span class="op">=</span> <span class="ident">ValueRef</span>::<span class="ident">Null</span> {
+        <span class="kw">if</span> <span class="ident">raw</span> <span class="op">==</span> <span class="ident">ValueRef</span>::<span class="ident">Null</span> {
             <span class="kw">return</span> <span class="prelude-val">Ok</span>(<span class="prelude-val">None</span>);
         }
         <span class="prelude-val">Ok</span>(<span class="prelude-val">Some</span>(<span class="ident">raw</span>.<span class="ident">as_str</span>().<span class="ident">map_err</span>(<span class="op">|</span><span class="ident">e</span><span class="op">|</span> {
@@ -790,9 +791,9 @@
     <span class="comment">// #[inline(never)] ensures they show up in profiles.</span>
 
     <span class="attribute">#[<span class="ident">inline</span>(<span class="ident">never</span>)]</span>
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">hash</span>(<span class="ident">ctx</span>: <span class="kw-2">&amp;</span><span class="ident">Context</span><span class="op">&lt;</span><span class="lifetime">&#39;_</span><span class="op">&gt;</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">rusqlite</span>::<span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">i64</span><span class="op">&gt;</span><span class="op">&gt;</span> {
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">hash</span>(<span class="ident">ctx</span>: <span class="kw-2">&amp;</span><span class="ident">Context</span><span class="op">&lt;</span><span class="lifetime">&#39;_</span><span class="op">&gt;</span>) <span class="op">-&gt;</span> <span class="ident">rusqlite</span>::<span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">i64</span><span class="op">&gt;&gt;</span> {
         <span class="prelude-val">Ok</span>(<span class="kw">match</span> <span class="ident">ctx</span>.<span class="ident">len</span>() {
-            <span class="number">1</span> <span class="op">=</span><span class="op">&gt;</span> {
+            <span class="number">1</span> <span class="op">=&gt;</span> {
                 <span class="comment">// This is a deterministic function, which means sqlite</span>
                 <span class="comment">// does certain optimizations which means hash() may be called</span>
                 <span class="comment">// with a null value even though the query prevents the null</span>
@@ -802,15 +803,15 @@
                 <span class="comment">// actually use the null should fail.</span>
                 <span class="ident">get_raw_opt_str</span>(<span class="ident">ctx</span>, <span class="string">&quot;hash&quot;</span>, <span class="number">0</span>)<span class="question-mark">?</span>.<span class="ident">map</span>(<span class="op">|</span><span class="ident">value</span><span class="op">|</span> <span class="ident">hash</span>::<span class="ident">hash_url</span>(<span class="ident">value</span>) <span class="kw">as</span> <span class="ident">i64</span>)
             }
-            <span class="number">2</span> <span class="op">=</span><span class="op">&gt;</span> {
+            <span class="number">2</span> <span class="op">=&gt;</span> {
                 <span class="kw">let</span> <span class="ident">value</span> <span class="op">=</span> <span class="ident">get_raw_opt_str</span>(<span class="ident">ctx</span>, <span class="string">&quot;hash&quot;</span>, <span class="number">0</span>)<span class="question-mark">?</span>;
                 <span class="kw">let</span> <span class="ident">mode</span> <span class="op">=</span> <span class="ident">get_raw_str</span>(<span class="ident">ctx</span>, <span class="string">&quot;hash&quot;</span>, <span class="number">1</span>)<span class="question-mark">?</span>;
                 <span class="kw">if</span> <span class="kw">let</span> <span class="prelude-val">Some</span>(<span class="ident">value</span>) <span class="op">=</span> <span class="ident">value</span> {
                     <span class="prelude-val">Some</span>(<span class="kw">match</span> <span class="ident">mode</span> {
-                        <span class="string">&quot;&quot;</span> <span class="op">=</span><span class="op">&gt;</span> <span class="ident">hash</span>::<span class="ident">hash_url</span>(<span class="kw-2">&amp;</span><span class="ident">value</span>),
-                        <span class="string">&quot;prefix_lo&quot;</span> <span class="op">=</span><span class="op">&gt;</span> <span class="ident">hash</span>::<span class="ident">hash_url_prefix</span>(<span class="kw-2">&amp;</span><span class="ident">value</span>, <span class="ident">hash</span>::<span class="ident">PrefixMode</span>::<span class="ident">Lo</span>),
-                        <span class="string">&quot;prefix_hi&quot;</span> <span class="op">=</span><span class="op">&gt;</span> <span class="ident">hash</span>::<span class="ident">hash_url_prefix</span>(<span class="kw-2">&amp;</span><span class="ident">value</span>, <span class="ident">hash</span>::<span class="ident">PrefixMode</span>::<span class="ident">Hi</span>),
-                        <span class="ident">arg</span> <span class="op">=</span><span class="op">&gt;</span> {
+                        <span class="string">&quot;&quot;</span> <span class="op">=&gt;</span> <span class="ident">hash</span>::<span class="ident">hash_url</span>(<span class="kw-2">&amp;</span><span class="ident">value</span>),
+                        <span class="string">&quot;prefix_lo&quot;</span> <span class="op">=&gt;</span> <span class="ident">hash</span>::<span class="ident">hash_url_prefix</span>(<span class="kw-2">&amp;</span><span class="ident">value</span>, <span class="ident">hash</span>::<span class="ident">PrefixMode</span>::<span class="ident">Lo</span>),
+                        <span class="string">&quot;prefix_hi&quot;</span> <span class="op">=&gt;</span> <span class="ident">hash</span>::<span class="ident">hash_url_prefix</span>(<span class="kw-2">&amp;</span><span class="ident">value</span>, <span class="ident">hash</span>::<span class="ident">PrefixMode</span>::<span class="ident">Hi</span>),
+                        <span class="ident">arg</span> <span class="op">=&gt;</span> {
                             <span class="kw">return</span> <span class="prelude-val">Err</span>(<span class="ident">rusqlite</span>::<span class="ident">Error</span>::<span class="ident">UserFunctionError</span>(<span class="macro">format</span><span class="macro">!</span>(
                                 <span class="string">&quot;`hash` second argument must be either &#39;&#39;, &#39;prefix_lo&#39;, or &#39;prefix_hi&#39;, got {:?}.&quot;</span>,
                                 <span class="ident">arg</span>).<span class="ident">into</span>()));
@@ -820,7 +821,7 @@
                     <span class="prelude-val">None</span>
                 }
             }
-            <span class="ident">n</span> <span class="op">=</span><span class="op">&gt;</span> {
+            <span class="ident">n</span> <span class="op">=&gt;</span> {
                 <span class="kw">return</span> <span class="prelude-val">Err</span>(<span class="ident">rusqlite</span>::<span class="ident">Error</span>::<span class="ident">UserFunctionError</span>(
                     <span class="macro">format</span><span class="macro">!</span>(<span class="string">&quot;`hash` expects 1 or 2 arguments, got {}.&quot;</span>, <span class="ident">n</span>).<span class="ident">into</span>(),
                 ));
@@ -829,7 +830,7 @@
     }
 
     <span class="attribute">#[<span class="ident">inline</span>(<span class="ident">never</span>)]</span>
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">autocomplete_match</span>(<span class="ident">ctx</span>: <span class="kw-2">&amp;</span><span class="ident">Context</span><span class="op">&lt;</span><span class="lifetime">&#39;_</span><span class="op">&gt;</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">bool</span><span class="op">&gt;</span> {
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">autocomplete_match</span>(<span class="ident">ctx</span>: <span class="kw-2">&amp;</span><span class="ident">Context</span><span class="op">&lt;</span><span class="lifetime">&#39;_</span><span class="op">&gt;</span>) <span class="op">-&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">bool</span><span class="op">&gt;</span> {
         <span class="kw">let</span> <span class="ident">search_str</span> <span class="op">=</span> <span class="ident">get_raw_str</span>(<span class="ident">ctx</span>, <span class="string">&quot;autocomplete_match&quot;</span>, <span class="number">0</span>)<span class="question-mark">?</span>;
         <span class="kw">let</span> <span class="ident">url_str</span> <span class="op">=</span> <span class="ident">get_raw_str</span>(<span class="ident">ctx</span>, <span class="string">&quot;autocomplete_match&quot;</span>, <span class="number">1</span>)<span class="question-mark">?</span>;
         <span class="kw">let</span> <span class="ident">title_str</span> <span class="op">=</span> <span class="ident">get_raw_opt_str</span>(<span class="ident">ctx</span>, <span class="string">&quot;autocomplete_match&quot;</span>, <span class="number">2</span>)<span class="question-mark">?</span>.<span class="ident">unwrap_or_default</span>();
@@ -837,7 +838,7 @@
         <span class="kw">let</span> <span class="ident">visit_count</span> <span class="op">=</span> <span class="ident">ctx</span>.<span class="ident">get</span>::<span class="op">&lt;</span><span class="ident">u32</span><span class="op">&gt;</span>(<span class="number">4</span>)<span class="question-mark">?</span>;
         <span class="kw">let</span> <span class="ident">typed</span> <span class="op">=</span> <span class="ident">ctx</span>.<span class="ident">get</span>::<span class="op">&lt;</span><span class="ident">bool</span><span class="op">&gt;</span>(<span class="number">5</span>)<span class="question-mark">?</span>;
         <span class="kw">let</span> <span class="ident">bookmarked</span> <span class="op">=</span> <span class="ident">ctx</span>.<span class="ident">get</span>::<span class="op">&lt;</span><span class="ident">bool</span><span class="op">&gt;</span>(<span class="number">6</span>)<span class="question-mark">?</span>;
-        <span class="kw">let</span> <span class="ident">open_page_count</span> <span class="op">=</span> <span class="ident">ctx</span>.<span class="ident">get</span>::<span class="op">&lt;</span><span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">u32</span><span class="op">&gt;</span><span class="op">&gt;</span>(<span class="number">7</span>)<span class="question-mark">?</span>.<span class="ident">unwrap_or</span>(<span class="number">0</span>);
+        <span class="kw">let</span> <span class="ident">open_page_count</span> <span class="op">=</span> <span class="ident">ctx</span>.<span class="ident">get</span>::<span class="op">&lt;</span><span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">u32</span><span class="op">&gt;&gt;</span>(<span class="number">7</span>)<span class="question-mark">?</span>.<span class="ident">unwrap_or</span>(<span class="number">0</span>);
         <span class="kw">let</span> <span class="ident">match_behavior</span> <span class="op">=</span> <span class="ident">ctx</span>.<span class="ident">get</span>::<span class="op">&lt;</span><span class="ident">MatchBehavior</span><span class="op">&gt;</span>(<span class="number">8</span>)<span class="question-mark">?</span>;
         <span class="kw">let</span> <span class="ident">search_behavior</span> <span class="op">=</span> <span class="ident">ctx</span>.<span class="ident">get</span>::<span class="op">&lt;</span><span class="ident">SearchBehavior</span><span class="op">&gt;</span>(<span class="number">9</span>)<span class="question-mark">?</span>;
 
@@ -857,7 +858,7 @@
     }
 
     <span class="attribute">#[<span class="ident">inline</span>(<span class="ident">never</span>)]</span>
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">reverse_host</span>(<span class="ident">ctx</span>: <span class="kw-2">&amp;</span><span class="ident">Context</span><span class="op">&lt;</span><span class="lifetime">&#39;_</span><span class="op">&gt;</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">String</span><span class="op">&gt;</span> {
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">reverse_host</span>(<span class="ident">ctx</span>: <span class="kw-2">&amp;</span><span class="ident">Context</span><span class="op">&lt;</span><span class="lifetime">&#39;_</span><span class="op">&gt;</span>) <span class="op">-&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">String</span><span class="op">&gt;</span> {
         <span class="comment">// We reuse this memory so no need for get_raw.</span>
         <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">host</span> <span class="op">=</span> <span class="ident">ctx</span>.<span class="ident">get</span>::<span class="op">&lt;</span><span class="ident">String</span><span class="op">&gt;</span>(<span class="number">0</span>)<span class="question-mark">?</span>;
         <span class="macro">debug_assert</span><span class="macro">!</span>(<span class="ident">host</span>.<span class="ident">is_ascii</span>(), <span class="string">&quot;Hosts must be Punycoded&quot;</span>);
@@ -874,41 +875,41 @@
     }
 
     <span class="attribute">#[<span class="ident">inline</span>(<span class="ident">never</span>)]</span>
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">get_prefix</span>(<span class="ident">ctx</span>: <span class="kw-2">&amp;</span><span class="ident">Context</span><span class="op">&lt;</span><span class="lifetime">&#39;_</span><span class="op">&gt;</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">String</span><span class="op">&gt;</span> {
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">get_prefix</span>(<span class="ident">ctx</span>: <span class="kw-2">&amp;</span><span class="ident">Context</span><span class="op">&lt;</span><span class="lifetime">&#39;_</span><span class="op">&gt;</span>) <span class="op">-&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">String</span><span class="op">&gt;</span> {
         <span class="kw">let</span> <span class="ident">href</span> <span class="op">=</span> <span class="ident">get_raw_str</span>(<span class="ident">ctx</span>, <span class="string">&quot;get_prefix&quot;</span>, <span class="number">0</span>)<span class="question-mark">?</span>;
         <span class="kw">let</span> (<span class="ident">prefix</span>, <span class="kw">_</span>) <span class="op">=</span> <span class="ident">split_after_prefix</span>(<span class="kw-2">&amp;</span><span class="ident">href</span>);
         <span class="prelude-val">Ok</span>(<span class="ident">prefix</span>.<span class="ident">to_owned</span>())
     }
 
     <span class="attribute">#[<span class="ident">inline</span>(<span class="ident">never</span>)]</span>
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">get_host_and_port</span>(<span class="ident">ctx</span>: <span class="kw-2">&amp;</span><span class="ident">Context</span><span class="op">&lt;</span><span class="lifetime">&#39;_</span><span class="op">&gt;</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">String</span><span class="op">&gt;</span> {
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">get_host_and_port</span>(<span class="ident">ctx</span>: <span class="kw-2">&amp;</span><span class="ident">Context</span><span class="op">&lt;</span><span class="lifetime">&#39;_</span><span class="op">&gt;</span>) <span class="op">-&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">String</span><span class="op">&gt;</span> {
         <span class="kw">let</span> <span class="ident">href</span> <span class="op">=</span> <span class="ident">get_raw_str</span>(<span class="ident">ctx</span>, <span class="string">&quot;get_host_and_port&quot;</span>, <span class="number">0</span>)<span class="question-mark">?</span>;
         <span class="kw">let</span> (<span class="ident">host_and_port</span>, <span class="kw">_</span>) <span class="op">=</span> <span class="ident">split_after_host_and_port</span>(<span class="kw-2">&amp;</span><span class="ident">href</span>);
         <span class="prelude-val">Ok</span>(<span class="ident">host_and_port</span>.<span class="ident">to_owned</span>())
     }
 
     <span class="attribute">#[<span class="ident">inline</span>(<span class="ident">never</span>)]</span>
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">strip_prefix_and_userinfo</span>(<span class="ident">ctx</span>: <span class="kw-2">&amp;</span><span class="ident">Context</span><span class="op">&lt;</span><span class="lifetime">&#39;_</span><span class="op">&gt;</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">String</span><span class="op">&gt;</span> {
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">strip_prefix_and_userinfo</span>(<span class="ident">ctx</span>: <span class="kw-2">&amp;</span><span class="ident">Context</span><span class="op">&lt;</span><span class="lifetime">&#39;_</span><span class="op">&gt;</span>) <span class="op">-&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">String</span><span class="op">&gt;</span> {
         <span class="kw">let</span> <span class="ident">href</span> <span class="op">=</span> <span class="ident">get_raw_str</span>(<span class="ident">ctx</span>, <span class="string">&quot;strip_prefix_and_userinfo&quot;</span>, <span class="number">0</span>)<span class="question-mark">?</span>;
         <span class="kw">let</span> (<span class="ident">host_and_port</span>, <span class="ident">remainder</span>) <span class="op">=</span> <span class="ident">split_after_host_and_port</span>(<span class="kw-2">&amp;</span><span class="ident">href</span>);
         <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">res</span> <span class="op">=</span> <span class="ident">String</span>::<span class="ident">with_capacity</span>(<span class="ident">host_and_port</span>.<span class="ident">len</span>() <span class="op">+</span> <span class="ident">remainder</span>.<span class="ident">len</span>() <span class="op">+</span> <span class="number">1</span>);
-        <span class="ident">res</span> <span class="op">+</span><span class="op">=</span> <span class="ident">host_and_port</span>;
-        <span class="ident">res</span> <span class="op">+</span><span class="op">=</span> <span class="ident">remainder</span>;
+        <span class="ident">res</span> <span class="op">+=</span> <span class="ident">host_and_port</span>;
+        <span class="ident">res</span> <span class="op">+=</span> <span class="ident">remainder</span>;
         <span class="prelude-val">Ok</span>(<span class="ident">res</span>)
     }
 
     <span class="attribute">#[<span class="ident">inline</span>(<span class="ident">never</span>)]</span>
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">now</span>(<span class="ident">_ctx</span>: <span class="kw-2">&amp;</span><span class="ident">Context</span><span class="op">&lt;</span><span class="lifetime">&#39;_</span><span class="op">&gt;</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">Timestamp</span><span class="op">&gt;</span> {
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">now</span>(<span class="ident">_ctx</span>: <span class="kw-2">&amp;</span><span class="ident">Context</span><span class="op">&lt;</span><span class="lifetime">&#39;_</span><span class="op">&gt;</span>) <span class="op">-&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">Timestamp</span><span class="op">&gt;</span> {
         <span class="prelude-val">Ok</span>(<span class="ident">Timestamp</span>::<span class="ident">now</span>())
     }
 
     <span class="attribute">#[<span class="ident">inline</span>(<span class="ident">never</span>)]</span>
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">generate_guid</span>(<span class="ident">_ctx</span>: <span class="kw-2">&amp;</span><span class="ident">Context</span><span class="op">&lt;</span><span class="lifetime">&#39;_</span><span class="op">&gt;</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">SyncGuid</span><span class="op">&gt;</span> {
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">generate_guid</span>(<span class="ident">_ctx</span>: <span class="kw-2">&amp;</span><span class="ident">Context</span><span class="op">&lt;</span><span class="lifetime">&#39;_</span><span class="op">&gt;</span>) <span class="op">-&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">SyncGuid</span><span class="op">&gt;</span> {
         <span class="prelude-val">Ok</span>(<span class="ident">SyncGuid</span>::<span class="ident">random</span>())
     }
 
     <span class="attribute">#[<span class="ident">inline</span>(<span class="ident">never</span>)]</span>
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">note_bookmarks_sync_change</span>(<span class="ident">_ctx</span>: <span class="kw-2">&amp;</span><span class="ident">Context</span><span class="op">&lt;</span><span class="lifetime">&#39;_</span><span class="op">&gt;</span>, <span class="ident">api_id</span>: <span class="ident">usize</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">i64</span><span class="op">&gt;</span> {
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">note_bookmarks_sync_change</span>(<span class="ident">_ctx</span>: <span class="kw-2">&amp;</span><span class="ident">Context</span><span class="op">&lt;</span><span class="lifetime">&#39;_</span><span class="op">&gt;</span>, <span class="ident">api_id</span>: <span class="ident">usize</span>) <span class="op">-&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">i64</span><span class="op">&gt;</span> {
         <span class="kw">let</span> <span class="ident">map</span> <span class="op">=</span> <span class="ident">GLOBAL_BOOKMARK_CHANGE_COUNTERS</span>
             .<span class="ident">read</span>()
             .<span class="ident">expect</span>(<span class="string">&quot;gbcc poisoned&quot;</span>);

@@ -1,4 +1,5 @@
-<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source to the Rust file `examples/cli-support/src/fxa_creds.rs`."><meta name="keywords" content="rust, rustlang, rust-lang"><title>fxa_creds.rs.html -- source</title><link rel="stylesheet" type="text/css" href="../../normalize.css"><link rel="stylesheet" type="text/css" href="../../rustdoc.css" id="mainThemeStyle"><link rel="stylesheet" type="text/css" href="../../dark.css"><link rel="stylesheet" type="text/css" href="../../light.css" id="themeStyle"><script src="../../storage.js"></script><noscript><link rel="stylesheet" href="../../noscript.css"></noscript><link rel="shortcut icon" href="../../favicon.ico"><style type="text/css">#crate-search{background-image:url("../../down-arrow.svg");}</style></head><body class="rustdoc source"><!--[if lte IE 8]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="sidebar"><div class="sidebar-menu">&#9776;</div><a href='../../cli_support/index.html'><div class='logo-container'><img src='../../rust-logo.png' alt='logo'></div></a></nav><div class="theme-picker"><button id="theme-picker" aria-label="Pick another theme!"><img src="../../brush.svg" width="18" alt="Pick another theme!"></button><div id="theme-choices"></div></div><script src="../../theme.js"></script><nav class="sub"><form class="search-form"><div class="search-container"><div><select id="crate-search"><option value="All crates">All crates</option></select><input class="search-input" name="search" disabled autocomplete="off" spellcheck="false" placeholder="Click or press ‘S’ to search, ‘?’ for more options…" type="search"></div><a id="settings-menu" href="../../settings.html"><img src="../../wheel.svg" width="18" alt="Change settings"></a></div></form></nav><section id="main" class="content"><pre class="line-numbers"><span id="1">  1</span>
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source to the Rust file `examples/cli-support/src/fxa_creds.rs`."><meta name="keywords" content="rust, rustlang, rust-lang"><title>fxa_creds.rs.html -- source</title><link rel="stylesheet" type="text/css" href="../../normalize.css"><link rel="stylesheet" type="text/css" href="../../rustdoc.css" id="mainThemeStyle"><link rel="stylesheet" type="text/css" href="../../light.css"  id="themeStyle"><link rel="stylesheet" type="text/css" href="../../dark.css" disabled ><link rel="stylesheet" type="text/css" href="../../ayu.css" disabled ><script src="../../storage.js"></script><noscript><link rel="stylesheet" href="../../noscript.css"></noscript><link rel="shortcut icon" href="../../favicon.ico"><style type="text/css">#crate-search{background-image:url("../../down-arrow.svg");}</style></head><body class="rustdoc source"><!--[if lte IE 8]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="sidebar"><div class="sidebar-menu">&#9776;</div><a href='../../cli_support/index.html'><div class='logo-container rust-logo'><img src='../../rust-logo.png' alt='logo'></div></a></nav><div class="theme-picker"><button id="theme-picker" aria-label="Pick another theme!"><img src="../../brush.svg" width="18" alt="Pick another theme!"></button><div id="theme-choices"></div></div><script src="../../theme.js"></script><nav class="sub"><form class="search-form"><div class="search-container"><div><select id="crate-search"><option value="All crates">All crates</option></select><input class="search-input" name="search" disabled autocomplete="off" spellcheck="false" placeholder="Click or press ‘S’ to search, ‘?’ for more options…" type="search"></div><span class="help-button">?</span>
+                <a id="settings-menu" href="../../settings.html"><img src="../../wheel.svg" width="18" alt="Change settings"></a></div></form></nav><section id="main" class="content"><pre class="line-numbers"><span id="1">  1</span>
 <span id="2">  2</span>
 <span id="3">  3</span>
 <span id="4">  4</span>
@@ -152,14 +153,14 @@
 <span class="kw">const</span> <span class="ident">REDIRECT_URI</span>: <span class="kw-2">&amp;</span><span class="ident">str</span> <span class="op">=</span> <span class="string">&quot;https://lockbox.firefox.com/fxa/android-redirect.html&quot;</span>;
 <span class="kw">const</span> <span class="ident">SYNC_SCOPE</span>: <span class="kw-2">&amp;</span><span class="ident">str</span> <span class="op">=</span> <span class="string">&quot;https://identity.mozilla.com/apps/oldsync&quot;</span>;
 
-<span class="kw">fn</span> <span class="ident">load_fxa_creds</span>(<span class="ident">path</span>: <span class="kw-2">&amp;</span><span class="ident">str</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">FirefoxAccount</span><span class="op">&gt;</span> {
+<span class="kw">fn</span> <span class="ident">load_fxa_creds</span>(<span class="ident">path</span>: <span class="kw-2">&amp;</span><span class="ident">str</span>) <span class="op">-&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">FirefoxAccount</span><span class="op">&gt;</span> {
     <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">file</span> <span class="op">=</span> <span class="ident">fs</span>::<span class="ident">File</span>::<span class="ident">open</span>(<span class="ident">path</span>)<span class="question-mark">?</span>;
     <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">s</span> <span class="op">=</span> <span class="ident">String</span>::<span class="ident">new</span>();
     <span class="ident">file</span>.<span class="ident">read_to_string</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">s</span>)<span class="question-mark">?</span>;
     <span class="prelude-val">Ok</span>(<span class="ident">FirefoxAccount</span>::<span class="ident">from_json</span>(<span class="kw-2">&amp;</span><span class="ident">s</span>)<span class="question-mark">?</span>)
 }
 
-<span class="kw">fn</span> <span class="ident">load_or_create_fxa_creds</span>(<span class="ident">path</span>: <span class="kw-2">&amp;</span><span class="ident">str</span>, <span class="ident">cfg</span>: <span class="ident">Config</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">FirefoxAccount</span><span class="op">&gt;</span> {
+<span class="kw">fn</span> <span class="ident">load_or_create_fxa_creds</span>(<span class="ident">path</span>: <span class="kw-2">&amp;</span><span class="ident">str</span>, <span class="ident">cfg</span>: <span class="ident">Config</span>) <span class="op">-&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">FirefoxAccount</span><span class="op">&gt;</span> {
     <span class="ident">load_fxa_creds</span>(<span class="ident">path</span>).<span class="ident">or_else</span>(<span class="op">|</span><span class="ident">e</span><span class="op">|</span> {
         <span class="ident">log</span>::<span class="macro">info</span><span class="macro">!</span>(
             <span class="string">&quot;Failed to load existing FxA credentials from {:?} (error: {}), launching OAuth flow&quot;</span>,
@@ -170,7 +171,7 @@
     })
 }
 
-<span class="kw">fn</span> <span class="ident">create_fxa_creds</span>(<span class="ident">path</span>: <span class="kw-2">&amp;</span><span class="ident">str</span>, <span class="ident">cfg</span>: <span class="ident">Config</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">FirefoxAccount</span><span class="op">&gt;</span> {
+<span class="kw">fn</span> <span class="ident">create_fxa_creds</span>(<span class="ident">path</span>: <span class="kw-2">&amp;</span><span class="ident">str</span>, <span class="ident">cfg</span>: <span class="ident">Config</span>) <span class="op">-&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">FirefoxAccount</span><span class="op">&gt;</span> {
     <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">acct</span> <span class="op">=</span> <span class="ident">FirefoxAccount</span>::<span class="ident">with_config</span>(<span class="ident">cfg</span>);
     <span class="kw">let</span> <span class="ident">oauth_uri</span> <span class="op">=</span> <span class="ident">acct</span>.<span class="ident">begin_oauth_flow</span>(<span class="kw-2">&amp;</span>[<span class="ident">SYNC_SCOPE</span>], <span class="string">&quot;fxa_creds&quot;</span>, <span class="prelude-val">None</span>)<span class="question-mark">?</span>;
 
@@ -186,7 +187,7 @@
     <span class="kw">let</span> <span class="ident">query_params</span> <span class="op">=</span> <span class="ident">final_url</span>
         .<span class="ident">query_pairs</span>()
         .<span class="ident">into_owned</span>()
-        .<span class="ident">collect</span>::<span class="op">&lt;</span><span class="ident">HashMap</span><span class="op">&lt;</span><span class="ident">String</span>, <span class="ident">String</span><span class="op">&gt;</span><span class="op">&gt;</span>();
+        .<span class="ident">collect</span>::<span class="op">&lt;</span><span class="ident">HashMap</span><span class="op">&lt;</span><span class="ident">String</span>, <span class="ident">String</span><span class="op">&gt;&gt;</span>();
 
     <span class="ident">acct</span>.<span class="ident">complete_oauth_flow</span>(<span class="kw-2">&amp;</span><span class="ident">query_params</span>[<span class="string">&quot;code&quot;</span>], <span class="kw-2">&amp;</span><span class="ident">query_params</span>[<span class="string">&quot;state&quot;</span>])<span class="question-mark">?</span>;
     <span class="comment">// Device registration.</span>
@@ -200,39 +201,39 @@
 <span class="comment">// Our public functions. It would be awesome if we could somehow integrate</span>
 <span class="comment">// better with clap, so we could automagically support various args (such as</span>
 <span class="comment">// the config to use or filenames to read), but this will do for now.</span>
-<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">get_default_fxa_config</span>() <span class="op">-</span><span class="op">&gt;</span> <span class="ident">Config</span> {
+<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">get_default_fxa_config</span>() <span class="op">-&gt;</span> <span class="ident">Config</span> {
     <span class="ident">Config</span>::<span class="ident">release</span>(<span class="ident">CLIENT_ID</span>, <span class="ident">REDIRECT_URI</span>)
 }
 
 <span class="kw">fn</span> <span class="ident">get_account_and_token</span>(
     <span class="ident">config</span>: <span class="ident">Config</span>,
     <span class="ident">cred_file</span>: <span class="kw-2">&amp;</span><span class="ident">str</span>,
-) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span>(<span class="ident">FirefoxAccount</span>, <span class="ident">AccessTokenInfo</span>)<span class="op">&gt;</span> {
+) <span class="op">-&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span>(<span class="ident">FirefoxAccount</span>, <span class="ident">AccessTokenInfo</span>)<span class="op">&gt;</span> {
     <span class="comment">// TODO: we should probably set a persist callback on acct?</span>
     <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">acct</span> <span class="op">=</span> <span class="ident">load_or_create_fxa_creds</span>(<span class="ident">cred_file</span>, <span class="ident">config</span>.<span class="ident">clone</span>())<span class="question-mark">?</span>;
     <span class="comment">// `scope` could be a param, but I can&#39;t see it changing.</span>
     <span class="kw">match</span> <span class="ident">acct</span>.<span class="ident">get_access_token</span>(<span class="ident">SYNC_SCOPE</span>, <span class="prelude-val">None</span>) {
-        <span class="prelude-val">Ok</span>(<span class="ident">t</span>) <span class="op">=</span><span class="op">&gt;</span> <span class="prelude-val">Ok</span>((<span class="ident">acct</span>, <span class="ident">t</span>)),
-        <span class="prelude-val">Err</span>(<span class="ident">e</span>) <span class="op">=</span><span class="op">&gt;</span> {
+        <span class="prelude-val">Ok</span>(<span class="ident">t</span>) <span class="op">=&gt;</span> <span class="prelude-val">Ok</span>((<span class="ident">acct</span>, <span class="ident">t</span>)),
+        <span class="prelude-val">Err</span>(<span class="ident">e</span>) <span class="op">=&gt;</span> {
             <span class="kw">match</span> <span class="ident">e</span>.<span class="ident">kind</span>() {
                 <span class="comment">// We can retry an auth error.</span>
-                <span class="ident">error</span>::<span class="ident">ErrorKind</span>::<span class="ident">RemoteError</span> { <span class="ident">code</span>: <span class="number">401</span>, .. } <span class="op">=</span><span class="op">&gt;</span> {
+                <span class="ident">error</span>::<span class="ident">ErrorKind</span>::<span class="ident">RemoteError</span> { <span class="ident">code</span>: <span class="number">401</span>, .. } <span class="op">=&gt;</span> {
                     <span class="macro">println</span><span class="macro">!</span>(<span class="string">&quot;Saw an auth error using stored credentials - recreating them...&quot;</span>);
                     <span class="ident">acct</span> <span class="op">=</span> <span class="ident">create_fxa_creds</span>(<span class="ident">cred_file</span>, <span class="ident">config</span>)<span class="question-mark">?</span>;
                     <span class="kw">let</span> <span class="ident">token</span> <span class="op">=</span> <span class="ident">acct</span>.<span class="ident">get_access_token</span>(<span class="ident">SYNC_SCOPE</span>, <span class="prelude-val">None</span>)<span class="question-mark">?</span>;
                     <span class="prelude-val">Ok</span>((<span class="ident">acct</span>, <span class="ident">token</span>))
                 }
-                <span class="kw">_</span> <span class="op">=</span><span class="op">&gt;</span> <span class="prelude-val">Err</span>(<span class="ident">e</span>.<span class="ident">into</span>()),
+                <span class="kw">_</span> <span class="op">=&gt;</span> <span class="prelude-val">Err</span>(<span class="ident">e</span>.<span class="ident">into</span>()),
             }
         }
     }
 }
 
-<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">get_cli_fxa</span>(<span class="ident">config</span>: <span class="ident">Config</span>, <span class="ident">cred_file</span>: <span class="kw-2">&amp;</span><span class="ident">str</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">CliFxa</span><span class="op">&gt;</span> {
+<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">get_cli_fxa</span>(<span class="ident">config</span>: <span class="ident">Config</span>, <span class="ident">cred_file</span>: <span class="kw-2">&amp;</span><span class="ident">str</span>) <span class="op">-&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">CliFxa</span><span class="op">&gt;</span> {
     <span class="kw">let</span> <span class="ident">tokenserver_url</span> <span class="op">=</span> <span class="ident">config</span>.<span class="ident">token_server_endpoint_url</span>()<span class="question-mark">?</span>;
     <span class="kw">let</span> (<span class="ident">acct</span>, <span class="ident">token_info</span>) <span class="op">=</span> <span class="kw">match</span> <span class="ident">get_account_and_token</span>(<span class="ident">config</span>, <span class="ident">cred_file</span>) {
-        <span class="prelude-val">Ok</span>(<span class="ident">v</span>) <span class="op">=</span><span class="op">&gt;</span> <span class="ident">v</span>,
-        <span class="prelude-val">Err</span>(<span class="ident">e</span>) <span class="op">=</span><span class="op">&gt;</span> <span class="ident">anyhow</span>::<span class="macro">bail</span><span class="macro">!</span>(<span class="string">&quot;Failed to use saved credentials. {}&quot;</span>, <span class="ident">e</span>),
+        <span class="prelude-val">Ok</span>(<span class="ident">v</span>) <span class="op">=&gt;</span> <span class="ident">v</span>,
+        <span class="prelude-val">Err</span>(<span class="ident">e</span>) <span class="op">=&gt;</span> <span class="ident">anyhow</span>::<span class="macro">bail</span><span class="macro">!</span>(<span class="string">&quot;Failed to use saved credentials. {}&quot;</span>, <span class="ident">e</span>),
     };
     <span class="kw">let</span> <span class="ident">key</span> <span class="op">=</span> <span class="ident">token_info</span>.<span class="ident">key</span>.<span class="ident">unwrap</span>();
 

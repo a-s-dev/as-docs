@@ -1,4 +1,5 @@
-<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source to the Rust file `components/places/ffi/src/lib.rs`."><meta name="keywords" content="rust, rustlang, rust-lang"><title>lib.rs.html -- source</title><link rel="stylesheet" type="text/css" href="../../normalize.css"><link rel="stylesheet" type="text/css" href="../../rustdoc.css" id="mainThemeStyle"><link rel="stylesheet" type="text/css" href="../../dark.css"><link rel="stylesheet" type="text/css" href="../../light.css" id="themeStyle"><script src="../../storage.js"></script><noscript><link rel="stylesheet" href="../../noscript.css"></noscript><link rel="shortcut icon" href="../../favicon.ico"><style type="text/css">#crate-search{background-image:url("../../down-arrow.svg");}</style></head><body class="rustdoc source"><!--[if lte IE 8]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="sidebar"><div class="sidebar-menu">&#9776;</div><a href='../../places_ffi/index.html'><div class='logo-container'><img src='../../rust-logo.png' alt='logo'></div></a></nav><div class="theme-picker"><button id="theme-picker" aria-label="Pick another theme!"><img src="../../brush.svg" width="18" alt="Pick another theme!"></button><div id="theme-choices"></div></div><script src="../../theme.js"></script><nav class="sub"><form class="search-form"><div class="search-container"><div><select id="crate-search"><option value="All crates">All crates</option></select><input class="search-input" name="search" disabled autocomplete="off" spellcheck="false" placeholder="Click or press ‘S’ to search, ‘?’ for more options…" type="search"></div><a id="settings-menu" href="../../settings.html"><img src="../../wheel.svg" width="18" alt="Change settings"></a></div></form></nav><section id="main" class="content"><pre class="line-numbers"><span id="1">  1</span>
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source to the Rust file `components/places/ffi/src/lib.rs`."><meta name="keywords" content="rust, rustlang, rust-lang"><title>lib.rs.html -- source</title><link rel="stylesheet" type="text/css" href="../../normalize.css"><link rel="stylesheet" type="text/css" href="../../rustdoc.css" id="mainThemeStyle"><link rel="stylesheet" type="text/css" href="../../light.css"  id="themeStyle"><link rel="stylesheet" type="text/css" href="../../dark.css" disabled ><link rel="stylesheet" type="text/css" href="../../ayu.css" disabled ><script src="../../storage.js"></script><noscript><link rel="stylesheet" href="../../noscript.css"></noscript><link rel="shortcut icon" href="../../favicon.ico"><style type="text/css">#crate-search{background-image:url("../../down-arrow.svg");}</style></head><body class="rustdoc source"><!--[if lte IE 8]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="sidebar"><div class="sidebar-menu">&#9776;</div><a href='../../places_ffi/index.html'><div class='logo-container rust-logo'><img src='../../rust-logo.png' alt='logo'></div></a></nav><div class="theme-picker"><button id="theme-picker" aria-label="Pick another theme!"><img src="../../brush.svg" width="18" alt="Pick another theme!"></button><div id="theme-choices"></div></div><script src="../../theme.js"></script><nav class="sub"><form class="search-form"><div class="search-container"><div><select id="crate-search"><option value="All crates">All crates</option></select><input class="search-input" name="search" disabled autocomplete="off" spellcheck="false" placeholder="Click or press ‘S’ to search, ‘?’ for more options…" type="search"></div><span class="help-button">?</span>
+                <a id="settings-menu" href="../../settings.html"><img src="../../wheel.svg" width="18" alt="Change settings"></a></div></form></nav><section id="main" class="content"><pre class="line-numbers"><span id="1">  1</span>
 <span id="2">  2</span>
 <span id="3">  3</span>
 <span id="4">  4</span>
@@ -753,21 +754,21 @@
 <span class="kw">use</span> <span class="ident">places</span>::<span class="ident">api</span>::<span class="ident">matcher</span>::{<span class="self">self</span>, <span class="ident">match_url</span>, <span class="ident">search_frecent</span>, <span class="ident">SearchParams</span>};
 
 <span class="comment">// indirection to help `?` figure out the target error type</span>
-<span class="kw">fn</span> <span class="ident">parse_url</span>(<span class="ident">url</span>: <span class="kw-2">&amp;</span><span class="ident">str</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">places</span>::<span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">url</span>::<span class="ident">Url</span><span class="op">&gt;</span> {
+<span class="kw">fn</span> <span class="ident">parse_url</span>(<span class="ident">url</span>: <span class="kw-2">&amp;</span><span class="ident">str</span>) <span class="op">-&gt;</span> <span class="ident">places</span>::<span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">url</span>::<span class="ident">Url</span><span class="op">&gt;</span> {
     <span class="prelude-val">Ok</span>(<span class="ident">url</span>::<span class="ident">Url</span>::<span class="ident">parse</span>(<span class="ident">url</span>)<span class="question-mark">?</span>)
 }
 
 <span class="ident">lazy_static</span>::<span class="macro">lazy_static</span><span class="macro">!</span> {
-    <span class="kw">pub</span> <span class="kw">static</span> <span class="kw-2">ref</span> <span class="ident">APIS</span>: <span class="ident">ConcurrentHandleMap</span><span class="op">&lt;</span><span class="ident">Arc</span><span class="op">&lt;</span><span class="ident">PlacesApi</span><span class="op">&gt;</span><span class="op">&gt;</span> <span class="op">=</span> <span class="ident">ConcurrentHandleMap</span>::<span class="ident">new</span>();
+    <span class="kw">pub</span> <span class="kw">static</span> <span class="kw-2">ref</span> <span class="ident">APIS</span>: <span class="ident">ConcurrentHandleMap</span><span class="op">&lt;</span><span class="ident">Arc</span><span class="op">&lt;</span><span class="ident">PlacesApi</span><span class="op">&gt;&gt;</span> <span class="op">=</span> <span class="ident">ConcurrentHandleMap</span>::<span class="ident">new</span>();
     <span class="kw">static</span> <span class="kw-2">ref</span> <span class="ident">CONNECTIONS</span>: <span class="ident">ConcurrentHandleMap</span><span class="op">&lt;</span><span class="ident">PlacesDb</span><span class="op">&gt;</span> <span class="op">=</span> <span class="ident">ConcurrentHandleMap</span>::<span class="ident">new</span>();
 }
 
 <span class="doccomment">/// Instantiate a places API. Returned api must be freed with</span>
 <span class="doccomment">/// `places_api_destroy`. Returns null and logs on errors (for now).</span>
 <span class="attribute">#[<span class="ident">no_mangle</span>]</span>
-<span class="kw">pub</span> <span class="kw">extern</span> <span class="string">&quot;C&quot;</span> <span class="kw">fn</span> <span class="ident">places_api_new</span>(<span class="ident">db_path</span>: <span class="ident">FfiStr</span><span class="op">&lt;</span><span class="lifetime">&#39;_</span><span class="op">&gt;</span>, <span class="ident">error</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">ExternError</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">u64</span> {
+<span class="kw">pub</span> <span class="kw">extern</span> <span class="string">&quot;C&quot;</span> <span class="kw">fn</span> <span class="ident">places_api_new</span>(<span class="ident">db_path</span>: <span class="ident">FfiStr</span><span class="op">&lt;</span><span class="lifetime">&#39;_</span><span class="op">&gt;</span>, <span class="ident">error</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">ExternError</span>) <span class="op">-&gt;</span> <span class="ident">u64</span> {
     <span class="ident">log</span>::<span class="macro">debug</span><span class="macro">!</span>(<span class="string">&quot;places_api_new&quot;</span>);
-    <span class="ident">APIS</span>.<span class="ident">insert_with_result</span>(<span class="ident">error</span>, <span class="op">|</span><span class="op">|</span> {
+    <span class="ident">APIS</span>.<span class="ident">insert_with_result</span>(<span class="ident">error</span>, <span class="op">||</span> {
         <span class="kw">let</span> <span class="ident">path</span> <span class="op">=</span> <span class="ident">db_path</span>.<span class="ident">as_str</span>();
         <span class="ident">PlacesApi</span>::<span class="ident">new</span>(<span class="ident">path</span>)
     })
@@ -778,9 +779,9 @@
 <span class="kw">pub</span> <span class="kw">extern</span> <span class="string">&quot;C&quot;</span> <span class="kw">fn</span> <span class="ident">places_new_sync_conn_interrupt_handle</span>(
     <span class="ident">handle</span>: <span class="ident">u64</span>,
     <span class="ident">error</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">ExternError</span>,
-) <span class="op">-</span><span class="op">&gt;</span> <span class="kw-2">*</span><span class="kw-2">mut</span> <span class="ident">SqlInterruptHandle</span> {
+) <span class="op">-&gt;</span> <span class="kw-2">*</span><span class="kw-2">mut</span> <span class="ident">SqlInterruptHandle</span> {
     <span class="ident">log</span>::<span class="macro">debug</span><span class="macro">!</span>(<span class="string">&quot;places_new_sync_conn_interrupt_handle&quot;</span>);
-    <span class="ident">APIS</span>.<span class="ident">call_with_result</span>(<span class="ident">error</span>, <span class="ident">handle</span>, <span class="op">|</span><span class="ident">api</span><span class="op">|</span> <span class="op">-</span><span class="op">&gt;</span> <span class="ident">places</span>::<span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="kw">_</span><span class="op">&gt;</span> {
+    <span class="ident">APIS</span>.<span class="ident">call_with_result</span>(<span class="ident">error</span>, <span class="ident">handle</span>, <span class="op">|</span><span class="ident">api</span><span class="op">|</span> <span class="op">-&gt;</span> <span class="ident">places</span>::<span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="kw">_</span><span class="op">&gt;</span> {
         <span class="ident">api</span>.<span class="ident">new_sync_conn_interrupt_handle</span>()
     })
 }
@@ -790,15 +791,15 @@
     <span class="ident">handle</span>: <span class="ident">u64</span>,
     <span class="ident">conn_type_val</span>: <span class="ident">u8</span>,
     <span class="ident">error</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">ExternError</span>,
-) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">u64</span> {
+) <span class="op">-&gt;</span> <span class="ident">u64</span> {
     <span class="ident">log</span>::<span class="macro">debug</span><span class="macro">!</span>(<span class="string">&quot;places_connection_new&quot;</span>);
-    <span class="ident">APIS</span>.<span class="ident">call_with_result</span>(<span class="ident">error</span>, <span class="ident">handle</span>, <span class="op">|</span><span class="ident">api</span><span class="op">|</span> <span class="op">-</span><span class="op">&gt;</span> <span class="ident">places</span>::<span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="kw">_</span><span class="op">&gt;</span> {
+    <span class="ident">APIS</span>.<span class="ident">call_with_result</span>(<span class="ident">error</span>, <span class="ident">handle</span>, <span class="op">|</span><span class="ident">api</span><span class="op">|</span> <span class="op">-&gt;</span> <span class="ident">places</span>::<span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="kw">_</span><span class="op">&gt;</span> {
         <span class="kw">let</span> <span class="ident">conn_type</span> <span class="op">=</span> <span class="kw">match</span> <span class="ident">ConnectionType</span>::<span class="ident">from_primitive</span>(<span class="ident">conn_type_val</span>) {
             <span class="comment">// You can&#39;t open a sync connection using this method.</span>
-            <span class="prelude-val">None</span> <span class="op">|</span> <span class="prelude-val">Some</span>(<span class="ident">ConnectionType</span>::<span class="ident">Sync</span>) <span class="op">=</span><span class="op">&gt;</span> {
+            <span class="prelude-val">None</span> <span class="op">|</span> <span class="prelude-val">Some</span>(<span class="ident">ConnectionType</span>::<span class="ident">Sync</span>) <span class="op">=&gt;</span> {
                 <span class="kw">return</span> <span class="prelude-val">Err</span>(<span class="ident">ErrorKind</span>::<span class="ident">InvalidConnectionType</span>.<span class="ident">into</span>());
             }
-            <span class="prelude-val">Some</span>(<span class="ident">val</span>) <span class="op">=</span><span class="op">&gt;</span> <span class="ident">val</span>,
+            <span class="prelude-val">Some</span>(<span class="ident">val</span>) <span class="op">=&gt;</span> <span class="ident">val</span>,
         };
         <span class="prelude-val">Ok</span>(<span class="ident">CONNECTIONS</span>.<span class="ident">insert</span>(<span class="ident">api</span>.<span class="ident">open_connection</span>(<span class="ident">conn_type</span>)<span class="question-mark">?</span>))
     })
@@ -811,7 +812,7 @@
     <span class="ident">error</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">ExternError</span>,
 ) {
     <span class="ident">log</span>::<span class="macro">debug</span><span class="macro">!</span>(<span class="string">&quot;places_bookmarks_import_from_ios&quot;</span>);
-    <span class="ident">APIS</span>.<span class="ident">call_with_result</span>(<span class="ident">error</span>, <span class="ident">api_handle</span>, <span class="op">|</span><span class="ident">api</span><span class="op">|</span> <span class="op">-</span><span class="op">&gt;</span> <span class="ident">places</span>::<span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="kw">_</span><span class="op">&gt;</span> {
+    <span class="ident">APIS</span>.<span class="ident">call_with_result</span>(<span class="ident">error</span>, <span class="ident">api_handle</span>, <span class="op">|</span><span class="ident">api</span><span class="op">|</span> <span class="op">-&gt;</span> <span class="ident">places</span>::<span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="kw">_</span><span class="op">&gt;</span> {
         <span class="ident">places</span>::<span class="ident">import</span>::<span class="ident">import_ios_bookmarks</span>(<span class="ident">api</span>, <span class="ident">db_path</span>.<span class="ident">as_str</span>())<span class="question-mark">?</span>;
         <span class="prelude-val">Ok</span>(())
     })
@@ -822,9 +823,9 @@
     <span class="ident">api_handle</span>: <span class="ident">u64</span>,
     <span class="ident">db_path</span>: <span class="ident">FfiStr</span><span class="op">&lt;</span><span class="lifetime">&#39;_</span><span class="op">&gt;</span>,
     <span class="ident">error</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">ExternError</span>,
-) <span class="op">-</span><span class="op">&gt;</span> <span class="kw-2">*</span><span class="kw-2">mut</span> <span class="ident">c_char</span> {
+) <span class="op">-&gt;</span> <span class="kw-2">*</span><span class="kw-2">mut</span> <span class="ident">c_char</span> {
     <span class="ident">log</span>::<span class="macro">debug</span><span class="macro">!</span>(<span class="string">&quot;places_bookmarks_import_from_fennec&quot;</span>);
-    <span class="ident">APIS</span>.<span class="ident">call_with_result</span>(<span class="ident">error</span>, <span class="ident">api_handle</span>, <span class="op">|</span><span class="ident">api</span><span class="op">|</span> <span class="op">-</span><span class="op">&gt;</span> <span class="ident">places</span>::<span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="kw">_</span><span class="op">&gt;</span> {
+    <span class="ident">APIS</span>.<span class="ident">call_with_result</span>(<span class="ident">error</span>, <span class="ident">api_handle</span>, <span class="op">|</span><span class="ident">api</span><span class="op">|</span> <span class="op">-&gt;</span> <span class="ident">places</span>::<span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="kw">_</span><span class="op">&gt;</span> {
         <span class="kw">let</span> <span class="ident">import_metrics</span> <span class="op">=</span> <span class="ident">places</span>::<span class="ident">import</span>::<span class="ident">import_fennec_bookmarks</span>(<span class="ident">api</span>, <span class="ident">db_path</span>.<span class="ident">as_str</span>())<span class="question-mark">?</span>;
         <span class="kw">let</span> <span class="ident">result</span> <span class="op">=</span> <span class="ident">serde_json</span>::<span class="ident">to_string</span>(<span class="kw-2">&amp;</span><span class="ident">import_metrics</span>)<span class="question-mark">?</span>;
         <span class="prelude-val">Ok</span>(<span class="ident">result</span>)
@@ -836,9 +837,9 @@
     <span class="ident">api_handle</span>: <span class="ident">u64</span>,
     <span class="ident">db_path</span>: <span class="ident">FfiStr</span><span class="op">&lt;</span><span class="lifetime">&#39;_</span><span class="op">&gt;</span>,
     <span class="ident">error</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">ExternError</span>,
-) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">ByteBuffer</span> {
+) <span class="op">-&gt;</span> <span class="ident">ByteBuffer</span> {
     <span class="ident">log</span>::<span class="macro">debug</span><span class="macro">!</span>(<span class="string">&quot;places_pinned_sites_import_from_fennec&quot;</span>);
-    <span class="ident">APIS</span>.<span class="ident">call_with_result</span>(<span class="ident">error</span>, <span class="ident">api_handle</span>, <span class="op">|</span><span class="ident">api</span><span class="op">|</span> <span class="op">-</span><span class="op">&gt;</span> <span class="ident">places</span>::<span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="kw">_</span><span class="op">&gt;</span> {
+    <span class="ident">APIS</span>.<span class="ident">call_with_result</span>(<span class="ident">error</span>, <span class="ident">api_handle</span>, <span class="op">|</span><span class="ident">api</span><span class="op">|</span> <span class="op">-&gt;</span> <span class="ident">places</span>::<span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="kw">_</span><span class="op">&gt;</span> {
         <span class="prelude-val">Ok</span>(<span class="ident">BookmarkNodeList</span>::<span class="ident">from</span>(
             <span class="ident">places</span>::<span class="ident">import</span>::<span class="ident">import_fennec_pinned_sites</span>(<span class="ident">api</span>, <span class="ident">db_path</span>.<span class="ident">as_str</span>())<span class="question-mark">?</span>,
         ))
@@ -850,9 +851,9 @@
     <span class="ident">api_handle</span>: <span class="ident">u64</span>,
     <span class="ident">db_path</span>: <span class="ident">FfiStr</span><span class="op">&lt;</span><span class="lifetime">&#39;_</span><span class="op">&gt;</span>,
     <span class="ident">error</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">ExternError</span>,
-) <span class="op">-</span><span class="op">&gt;</span> <span class="kw-2">*</span><span class="kw-2">mut</span> <span class="ident">c_char</span> {
+) <span class="op">-&gt;</span> <span class="kw-2">*</span><span class="kw-2">mut</span> <span class="ident">c_char</span> {
     <span class="ident">log</span>::<span class="macro">debug</span><span class="macro">!</span>(<span class="string">&quot;places_history_import_from_fennec&quot;</span>);
-    <span class="ident">APIS</span>.<span class="ident">call_with_result</span>(<span class="ident">error</span>, <span class="ident">api_handle</span>, <span class="op">|</span><span class="ident">api</span><span class="op">|</span> <span class="op">-</span><span class="op">&gt;</span> <span class="ident">places</span>::<span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">String</span><span class="op">&gt;</span> {
+    <span class="ident">APIS</span>.<span class="ident">call_with_result</span>(<span class="ident">error</span>, <span class="ident">api_handle</span>, <span class="op">|</span><span class="ident">api</span><span class="op">|</span> <span class="op">-&gt;</span> <span class="ident">places</span>::<span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">String</span><span class="op">&gt;</span> {
         <span class="kw">let</span> <span class="ident">import_metrics</span> <span class="op">=</span> <span class="ident">places</span>::<span class="ident">import</span>::<span class="ident">import_fennec_history</span>(<span class="ident">api</span>, <span class="ident">db_path</span>.<span class="ident">as_str</span>())<span class="question-mark">?</span>;
         <span class="kw">let</span> <span class="ident">result</span> <span class="op">=</span> <span class="ident">serde_json</span>::<span class="ident">to_string</span>(<span class="kw-2">&amp;</span><span class="ident">import_metrics</span>)<span class="question-mark">?</span>;
         <span class="prelude-val">Ok</span>(<span class="ident">result</span>)
@@ -867,7 +868,7 @@
     <span class="ident">error</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">ExternError</span>,
 ) {
     <span class="ident">log</span>::<span class="macro">debug</span><span class="macro">!</span>(<span class="string">&quot;places_api_return_write_conn&quot;</span>);
-    <span class="ident">APIS</span>.<span class="ident">call_with_result</span>(<span class="ident">error</span>, <span class="ident">api_handle</span>, <span class="op">|</span><span class="ident">api</span><span class="op">|</span> <span class="op">-</span><span class="op">&gt;</span> <span class="ident">places</span>::<span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="kw">_</span><span class="op">&gt;</span> {
+    <span class="ident">APIS</span>.<span class="ident">call_with_result</span>(<span class="ident">error</span>, <span class="ident">api_handle</span>, <span class="op">|</span><span class="ident">api</span><span class="op">|</span> <span class="op">-&gt;</span> <span class="ident">places</span>::<span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="kw">_</span><span class="op">&gt;</span> {
         <span class="kw">let</span> <span class="ident">write_conn</span> <span class="op">=</span> <span class="kw">if</span> <span class="kw">let</span> <span class="prelude-val">Ok</span>(<span class="prelude-val">Some</span>(<span class="ident">conn</span>)) <span class="op">=</span> <span class="ident">CONNECTIONS</span>.<span class="ident">remove_u64</span>(<span class="ident">write_handle</span>) {
             <span class="ident">conn</span>
         } <span class="kw">else</span> {
@@ -887,13 +888,13 @@
 <span class="kw">pub</span> <span class="kw">extern</span> <span class="string">&quot;C&quot;</span> <span class="kw">fn</span> <span class="ident">places_new_interrupt_handle</span>(
     <span class="ident">handle</span>: <span class="ident">u64</span>,
     <span class="ident">error</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">ExternError</span>,
-) <span class="op">-</span><span class="op">&gt;</span> <span class="kw-2">*</span><span class="kw-2">mut</span> <span class="ident">SqlInterruptHandle</span> {
+) <span class="op">-&gt;</span> <span class="kw-2">*</span><span class="kw-2">mut</span> <span class="ident">SqlInterruptHandle</span> {
     <span class="ident">CONNECTIONS</span>.<span class="ident">call_with_output</span>(<span class="ident">error</span>, <span class="ident">handle</span>, <span class="op">|</span><span class="ident">conn</span><span class="op">|</span> <span class="ident">conn</span>.<span class="ident">new_interrupt_handle</span>())
 }
 
 <span class="attribute">#[<span class="ident">no_mangle</span>]</span>
 <span class="kw">pub</span> <span class="kw">extern</span> <span class="string">&quot;C&quot;</span> <span class="kw">fn</span> <span class="ident">places_interrupt</span>(<span class="ident">handle</span>: <span class="kw-2">&amp;</span><span class="ident">SqlInterruptHandle</span>, <span class="ident">error</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">ExternError</span>) {
-    <span class="ident">ffi_support</span>::<span class="ident">call_with_output</span>(<span class="ident">error</span>, <span class="op">|</span><span class="op">|</span> <span class="ident">handle</span>.<span class="ident">interrupt</span>())
+    <span class="ident">ffi_support</span>::<span class="ident">call_with_output</span>(<span class="ident">error</span>, <span class="op">||</span> <span class="ident">handle</span>.<span class="ident">interrupt</span>())
 }
 
 <span class="doccomment">/// Add an observation to the database. The observation is a VisitObservation represented as JSON.</span>
@@ -920,9 +921,9 @@
     <span class="ident">search</span>: <span class="ident">FfiStr</span><span class="op">&lt;</span><span class="lifetime">&#39;_</span><span class="op">&gt;</span>,
     <span class="ident">limit</span>: <span class="ident">u32</span>,
     <span class="ident">error</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">ExternError</span>,
-) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">ByteBuffer</span> {
+) <span class="op">-&gt;</span> <span class="ident">ByteBuffer</span> {
     <span class="ident">log</span>::<span class="macro">debug</span><span class="macro">!</span>(<span class="string">&quot;places_query_autocomplete&quot;</span>);
-    <span class="ident">CONNECTIONS</span>.<span class="ident">call_with_result</span>(<span class="ident">error</span>, <span class="ident">handle</span>, <span class="op">|</span><span class="ident">conn</span><span class="op">|</span> <span class="op">-</span><span class="op">&gt;</span> <span class="ident">places</span>::<span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="kw">_</span><span class="op">&gt;</span> {
+    <span class="ident">CONNECTIONS</span>.<span class="ident">call_with_result</span>(<span class="ident">error</span>, <span class="ident">handle</span>, <span class="op">|</span><span class="ident">conn</span><span class="op">|</span> <span class="op">-&gt;</span> <span class="ident">places</span>::<span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="kw">_</span><span class="op">&gt;</span> {
         <span class="kw">let</span> <span class="ident">results</span> <span class="op">=</span> <span class="ident">search_frecent</span>(
             <span class="ident">conn</span>,
             <span class="ident">SearchParams</span> {
@@ -944,7 +945,7 @@
     <span class="ident">handle</span>: <span class="ident">u64</span>,
     <span class="ident">search</span>: <span class="ident">FfiStr</span><span class="op">&lt;</span><span class="lifetime">&#39;_</span><span class="op">&gt;</span>,
     <span class="ident">error</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">ExternError</span>,
-) <span class="op">-</span><span class="op">&gt;</span> <span class="kw-2">*</span><span class="kw-2">mut</span> <span class="ident">c_char</span> {
+) <span class="op">-&gt;</span> <span class="kw-2">*</span><span class="kw-2">mut</span> <span class="ident">c_char</span> {
     <span class="ident">log</span>::<span class="macro">debug</span><span class="macro">!</span>(<span class="string">&quot;places_match_url&quot;</span>);
     <span class="ident">CONNECTIONS</span>.<span class="ident">call_with_result</span>(<span class="ident">error</span>, <span class="ident">handle</span>, <span class="op">|</span><span class="ident">conn</span><span class="op">|</span> <span class="ident">match_url</span>(<span class="ident">conn</span>, <span class="ident">search</span>.<span class="ident">as_str</span>()))
 }
@@ -964,9 +965,9 @@
 ) {
     <span class="ident">log</span>::<span class="macro">debug</span><span class="macro">!</span>(<span class="string">&quot;places_get_visited&quot;</span>);
     <span class="comment">// This function has a dumb amount of overhead and copying...</span>
-    <span class="ident">CONNECTIONS</span>.<span class="ident">call_with_result</span>(<span class="ident">error</span>, <span class="ident">handle</span>, <span class="op">|</span><span class="ident">conn</span><span class="op">|</span> <span class="op">-</span><span class="op">&gt;</span> <span class="ident">places</span>::<span class="prelude-ty">Result</span><span class="op">&lt;</span>()<span class="op">&gt;</span> {
+    <span class="ident">CONNECTIONS</span>.<span class="ident">call_with_result</span>(<span class="ident">error</span>, <span class="ident">handle</span>, <span class="op">|</span><span class="ident">conn</span><span class="op">|</span> <span class="op">-&gt;</span> <span class="ident">places</span>::<span class="prelude-ty">Result</span><span class="op">&lt;</span>()<span class="op">&gt;</span> {
         <span class="macro">assert</span><span class="macro">!</span>(
-            <span class="ident">urls_len</span> <span class="op">&gt;</span><span class="op">=</span> <span class="number">0</span>,
+            <span class="ident">urls_len</span> <span class="op">&gt;=</span> <span class="number">0</span>,
             <span class="string">&quot;Negative array length provided to places_get_visited {}&quot;</span>,
             <span class="ident">urls_len</span>
         );
@@ -980,7 +981,7 @@
                 <span class="kw">let</span> <span class="ident">s</span> <span class="op">=</span> <span class="ident">FfiStr</span>::<span class="ident">from_raw</span>(<span class="ident">p</span>).<span class="ident">as_str</span>();
                 <span class="ident">url</span>::<span class="ident">Url</span>::<span class="ident">parse</span>(<span class="ident">s</span>).<span class="ident">ok</span>().<span class="ident">map</span>(<span class="op">|</span><span class="ident">url</span><span class="op">|</span> (<span class="ident">idx</span>, <span class="ident">url</span>))
             })
-            .<span class="ident">collect</span>::<span class="op">&lt;</span><span class="ident">Vec</span><span class="op">&lt;</span><span class="kw">_</span><span class="op">&gt;</span><span class="op">&gt;</span>();
+            .<span class="ident">collect</span>::<span class="op">&lt;</span><span class="ident">Vec</span><span class="op">&lt;</span><span class="kw">_</span><span class="op">&gt;&gt;</span>();
         <span class="ident">storage</span>::<span class="ident">history</span>::<span class="ident">get_visited_into</span>(<span class="ident">conn</span>, <span class="kw-2">&amp;</span><span class="ident">urls</span>, <span class="ident">output</span>)<span class="question-mark">?</span>;
         <span class="prelude-val">Ok</span>(())
     })
@@ -993,15 +994,15 @@
     <span class="ident">end</span>: <span class="ident">i64</span>,
     <span class="ident">include_remote</span>: <span class="ident">u8</span>, <span class="comment">// JNA has issues with bools...</span>
     <span class="ident">error</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">ExternError</span>,
-) <span class="op">-</span><span class="op">&gt;</span> <span class="kw-2">*</span><span class="kw-2">mut</span> <span class="ident">c_char</span> {
+) <span class="op">-&gt;</span> <span class="kw-2">*</span><span class="kw-2">mut</span> <span class="ident">c_char</span> {
     <span class="ident">log</span>::<span class="macro">debug</span><span class="macro">!</span>(<span class="string">&quot;places_get_visited_in_range&quot;</span>);
-    <span class="ident">CONNECTIONS</span>.<span class="ident">call_with_result</span>(<span class="ident">error</span>, <span class="ident">handle</span>, <span class="op">|</span><span class="ident">conn</span><span class="op">|</span> <span class="op">-</span><span class="op">&gt;</span> <span class="ident">places</span>::<span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="kw">_</span><span class="op">&gt;</span> {
+    <span class="ident">CONNECTIONS</span>.<span class="ident">call_with_result</span>(<span class="ident">error</span>, <span class="ident">handle</span>, <span class="op">|</span><span class="ident">conn</span><span class="op">|</span> <span class="op">-&gt;</span> <span class="ident">places</span>::<span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="kw">_</span><span class="op">&gt;</span> {
         <span class="kw">let</span> <span class="ident">visited</span> <span class="op">=</span> <span class="ident">storage</span>::<span class="ident">history</span>::<span class="ident">get_visited_urls</span>(
             <span class="ident">conn</span>,
             <span class="comment">// Probably should allow into()...</span>
             <span class="ident">types</span>::<span class="ident">Timestamp</span>(<span class="ident">start</span>.<span class="ident">max</span>(<span class="number">0</span>) <span class="kw">as</span> <span class="ident">u64</span>),
             <span class="ident">types</span>::<span class="ident">Timestamp</span>(<span class="ident">end</span>.<span class="ident">max</span>(<span class="number">0</span>) <span class="kw">as</span> <span class="ident">u64</span>),
-            <span class="ident">include_remote</span> <span class="op">!</span><span class="op">=</span> <span class="number">0</span>,
+            <span class="ident">include_remote</span> <span class="op">!=</span> <span class="number">0</span>,
         )<span class="question-mark">?</span>;
         <span class="prelude-val">Ok</span>(<span class="ident">serde_json</span>::<span class="ident">to_string</span>(<span class="kw-2">&amp;</span><span class="ident">visited</span>)<span class="question-mark">?</span>)
     })
@@ -1010,11 +1011,11 @@
 <span class="attribute">#[<span class="ident">no_mangle</span>]</span>
 <span class="kw">pub</span> <span class="kw">extern</span> <span class="string">&quot;C&quot;</span> <span class="kw">fn</span> <span class="ident">places_delete_visits_for</span>(<span class="ident">handle</span>: <span class="ident">u64</span>, <span class="ident">url</span>: <span class="ident">FfiStr</span><span class="op">&lt;</span><span class="lifetime">&#39;_</span><span class="op">&gt;</span>, <span class="ident">error</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">ExternError</span>) {
     <span class="ident">log</span>::<span class="macro">debug</span><span class="macro">!</span>(<span class="string">&quot;places_delete_visits_for&quot;</span>);
-    <span class="ident">CONNECTIONS</span>.<span class="ident">call_with_result</span>(<span class="ident">error</span>, <span class="ident">handle</span>, <span class="op">|</span><span class="ident">conn</span><span class="op">|</span> <span class="op">-</span><span class="op">&gt;</span> <span class="ident">places</span>::<span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="kw">_</span><span class="op">&gt;</span> {
+    <span class="ident">CONNECTIONS</span>.<span class="ident">call_with_result</span>(<span class="ident">error</span>, <span class="ident">handle</span>, <span class="op">|</span><span class="ident">conn</span><span class="op">|</span> <span class="op">-&gt;</span> <span class="ident">places</span>::<span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="kw">_</span><span class="op">&gt;</span> {
         <span class="kw">let</span> <span class="ident">url</span> <span class="op">=</span> <span class="ident">parse_url</span>(<span class="ident">url</span>.<span class="ident">as_str</span>())<span class="question-mark">?</span>;
         <span class="kw">let</span> <span class="ident">guid</span> <span class="op">=</span> <span class="kw">match</span> <span class="ident">parse_url</span>(<span class="ident">url</span>.<span class="ident">as_str</span>()) {
-            <span class="prelude-val">Ok</span>(<span class="ident">url</span>) <span class="op">=</span><span class="op">&gt;</span> <span class="ident">storage</span>::<span class="ident">history</span>::<span class="ident">url_to_guid</span>(<span class="ident">conn</span>, <span class="kw-2">&amp;</span><span class="ident">url</span>)<span class="question-mark">?</span>,
-            <span class="prelude-val">Err</span>(<span class="ident">e</span>) <span class="op">=</span><span class="op">&gt;</span> {
+            <span class="prelude-val">Ok</span>(<span class="ident">url</span>) <span class="op">=&gt;</span> <span class="ident">storage</span>::<span class="ident">history</span>::<span class="ident">url_to_guid</span>(<span class="ident">conn</span>, <span class="kw-2">&amp;</span><span class="ident">url</span>)<span class="question-mark">?</span>,
+            <span class="prelude-val">Err</span>(<span class="ident">e</span>) <span class="op">=&gt;</span> {
                 <span class="ident">log</span>::<span class="macro">warn</span><span class="macro">!</span>(<span class="string">&quot;Invalid URL passed to places_delete_visits_for, {}&quot;</span>, <span class="ident">e</span>);
                 <span class="ident">storage</span>::<span class="ident">history</span>::<span class="ident">href_to_guid</span>(<span class="ident">conn</span>, <span class="ident">url</span>.<span class="ident">clone</span>().<span class="ident">as_str</span>())<span class="question-mark">?</span>
             }
@@ -1034,7 +1035,7 @@
     <span class="ident">error</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">ExternError</span>,
 ) {
     <span class="ident">log</span>::<span class="macro">debug</span><span class="macro">!</span>(<span class="string">&quot;places_delete_visits_between&quot;</span>);
-    <span class="ident">CONNECTIONS</span>.<span class="ident">call_with_result</span>(<span class="ident">error</span>, <span class="ident">handle</span>, <span class="op">|</span><span class="ident">conn</span><span class="op">|</span> <span class="op">-</span><span class="op">&gt;</span> <span class="ident">places</span>::<span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="kw">_</span><span class="op">&gt;</span> {
+    <span class="ident">CONNECTIONS</span>.<span class="ident">call_with_result</span>(<span class="ident">error</span>, <span class="ident">handle</span>, <span class="op">|</span><span class="ident">conn</span><span class="op">|</span> <span class="op">-&gt;</span> <span class="ident">places</span>::<span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="kw">_</span><span class="op">&gt;</span> {
         <span class="ident">storage</span>::<span class="ident">history</span>::<span class="ident">delete_visits_between</span>(
             <span class="ident">conn</span>,
             <span class="ident">types</span>::<span class="ident">Timestamp</span>(<span class="ident">start</span>.<span class="ident">max</span>(<span class="number">0</span>) <span class="kw">as</span> <span class="ident">u64</span>),
@@ -1052,16 +1053,16 @@
     <span class="ident">error</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">ExternError</span>,
 ) {
     <span class="ident">log</span>::<span class="macro">debug</span><span class="macro">!</span>(<span class="string">&quot;places_delete_visit&quot;</span>);
-    <span class="ident">CONNECTIONS</span>.<span class="ident">call_with_result</span>(<span class="ident">error</span>, <span class="ident">handle</span>, <span class="op">|</span><span class="ident">conn</span><span class="op">|</span> <span class="op">-</span><span class="op">&gt;</span> <span class="ident">places</span>::<span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="kw">_</span><span class="op">&gt;</span> {
+    <span class="ident">CONNECTIONS</span>.<span class="ident">call_with_result</span>(<span class="ident">error</span>, <span class="ident">handle</span>, <span class="op">|</span><span class="ident">conn</span><span class="op">|</span> <span class="op">-&gt;</span> <span class="ident">places</span>::<span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="kw">_</span><span class="op">&gt;</span> {
         <span class="kw">match</span> <span class="ident">parse_url</span>(<span class="ident">url</span>.<span class="ident">as_str</span>()) {
-            <span class="prelude-val">Ok</span>(<span class="ident">url</span>) <span class="op">=</span><span class="op">&gt;</span> {
+            <span class="prelude-val">Ok</span>(<span class="ident">url</span>) <span class="op">=&gt;</span> {
                 <span class="ident">storage</span>::<span class="ident">history</span>::<span class="ident">delete_place_visit_at_time</span>(
                     <span class="ident">conn</span>,
                     <span class="kw-2">&amp;</span><span class="ident">url</span>,
                     <span class="ident">types</span>::<span class="ident">Timestamp</span>(<span class="ident">timestamp</span>.<span class="ident">max</span>(<span class="number">0</span>) <span class="kw">as</span> <span class="ident">u64</span>),
                 )<span class="question-mark">?</span>;
             }
-            <span class="prelude-val">Err</span>(<span class="ident">e</span>) <span class="op">=</span><span class="op">&gt;</span> {
+            <span class="prelude-val">Err</span>(<span class="ident">e</span>) <span class="op">=&gt;</span> {
                 <span class="ident">log</span>::<span class="macro">warn</span><span class="macro">!</span>(<span class="string">&quot;Invalid URL passed to places_delete_visit, {}&quot;</span>, <span class="ident">e</span>);
                 <span class="ident">storage</span>::<span class="ident">history</span>::<span class="ident">delete_place_visit_at_time_by_href</span>(
                     <span class="ident">conn</span>,
@@ -1107,9 +1108,9 @@
     <span class="ident">handle</span>: <span class="ident">u64</span>,
     <span class="ident">num_items</span>: <span class="ident">i32</span>,
     <span class="ident">error</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">ExternError</span>,
-) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">ByteBuffer</span> {
+) <span class="op">-&gt;</span> <span class="ident">ByteBuffer</span> {
     <span class="ident">log</span>::<span class="macro">debug</span><span class="macro">!</span>(<span class="string">&quot;places_get_top_frecent_site_infos&quot;</span>);
-    <span class="ident">CONNECTIONS</span>.<span class="ident">call_with_result</span>(<span class="ident">error</span>, <span class="ident">handle</span>, <span class="op">|</span><span class="ident">conn</span><span class="op">|</span> <span class="op">-</span><span class="op">&gt;</span> <span class="ident">places</span>::<span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="kw">_</span><span class="op">&gt;</span> {
+    <span class="ident">CONNECTIONS</span>.<span class="ident">call_with_result</span>(<span class="ident">error</span>, <span class="ident">handle</span>, <span class="op">|</span><span class="ident">conn</span><span class="op">|</span> <span class="op">-&gt;</span> <span class="ident">places</span>::<span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="kw">_</span><span class="op">&gt;</span> {
         <span class="prelude-val">Ok</span>(<span class="ident">storage</span>::<span class="ident">history</span>::<span class="ident">get_top_frecent_site_infos</span>(
             <span class="ident">conn</span>, <span class="ident">num_items</span>,
         )<span class="question-mark">?</span>)
@@ -1123,9 +1124,9 @@
     <span class="ident">end_date</span>: <span class="ident">i64</span>,
     <span class="ident">exclude_types</span>: <span class="ident">i32</span>,
     <span class="ident">error</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">ExternError</span>,
-) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">ByteBuffer</span> {
+) <span class="op">-&gt;</span> <span class="ident">ByteBuffer</span> {
     <span class="ident">log</span>::<span class="macro">debug</span><span class="macro">!</span>(<span class="string">&quot;places_get_visit_infos&quot;</span>);
-    <span class="ident">CONNECTIONS</span>.<span class="ident">call_with_result</span>(<span class="ident">error</span>, <span class="ident">handle</span>, <span class="op">|</span><span class="ident">conn</span><span class="op">|</span> <span class="op">-</span><span class="op">&gt;</span> <span class="ident">places</span>::<span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="kw">_</span><span class="op">&gt;</span> {
+    <span class="ident">CONNECTIONS</span>.<span class="ident">call_with_result</span>(<span class="ident">error</span>, <span class="ident">handle</span>, <span class="op">|</span><span class="ident">conn</span><span class="op">|</span> <span class="op">-&gt;</span> <span class="ident">places</span>::<span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="kw">_</span><span class="op">&gt;</span> {
         <span class="prelude-val">Ok</span>(<span class="ident">storage</span>::<span class="ident">history</span>::<span class="ident">get_visit_infos</span>(
             <span class="ident">conn</span>,
             <span class="ident">types</span>::<span class="ident">Timestamp</span>(<span class="ident">start_date</span>.<span class="ident">max</span>(<span class="number">0</span>) <span class="kw">as</span> <span class="ident">u64</span>),
@@ -1141,9 +1142,9 @@
     <span class="ident">handle</span>: <span class="ident">u64</span>,
     <span class="ident">exclude_types</span>: <span class="ident">i32</span>,
     <span class="ident">error</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">ExternError</span>,
-) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">i64</span> {
+) <span class="op">-&gt;</span> <span class="ident">i64</span> {
     <span class="ident">log</span>::<span class="macro">debug</span><span class="macro">!</span>(<span class="string">&quot;places_get_visit_count&quot;</span>);
-    <span class="ident">CONNECTIONS</span>.<span class="ident">call_with_result</span>(<span class="ident">error</span>, <span class="ident">handle</span>, <span class="op">|</span><span class="ident">conn</span><span class="op">|</span> <span class="op">-</span><span class="op">&gt;</span> <span class="ident">places</span>::<span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="kw">_</span><span class="op">&gt;</span> {
+    <span class="ident">CONNECTIONS</span>.<span class="ident">call_with_result</span>(<span class="ident">error</span>, <span class="ident">handle</span>, <span class="op">|</span><span class="ident">conn</span><span class="op">|</span> <span class="op">-&gt;</span> <span class="ident">places</span>::<span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="kw">_</span><span class="op">&gt;</span> {
         <span class="ident">storage</span>::<span class="ident">history</span>::<span class="ident">get_visit_count</span>(
             <span class="ident">conn</span>,
             <span class="comment">// Note: it&#39;s a bug in our FFI android (or swift, eventually) code</span>
@@ -1161,9 +1162,9 @@
     <span class="ident">count</span>: <span class="ident">i64</span>,
     <span class="ident">exclude_types</span>: <span class="ident">i32</span>,
     <span class="ident">error</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">ExternError</span>,
-) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">ByteBuffer</span> {
+) <span class="op">-&gt;</span> <span class="ident">ByteBuffer</span> {
     <span class="ident">log</span>::<span class="macro">debug</span><span class="macro">!</span>(<span class="string">&quot;places_get_visit_page&quot;</span>);
-    <span class="ident">CONNECTIONS</span>.<span class="ident">call_with_result</span>(<span class="ident">error</span>, <span class="ident">handle</span>, <span class="op">|</span><span class="ident">conn</span><span class="op">|</span> <span class="op">-</span><span class="op">&gt;</span> <span class="ident">places</span>::<span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="kw">_</span><span class="op">&gt;</span> {
+    <span class="ident">CONNECTIONS</span>.<span class="ident">call_with_result</span>(<span class="ident">error</span>, <span class="ident">handle</span>, <span class="op">|</span><span class="ident">conn</span><span class="op">|</span> <span class="op">-&gt;</span> <span class="ident">places</span>::<span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="kw">_</span><span class="op">&gt;</span> {
         <span class="ident">storage</span>::<span class="ident">history</span>::<span class="ident">get_visit_page</span>(
             <span class="ident">conn</span>,
             <span class="ident">offset</span>,
@@ -1184,9 +1185,9 @@
     <span class="ident">count</span>: <span class="ident">i64</span>,
     <span class="ident">exclude_types</span>: <span class="ident">i32</span>,
     <span class="ident">error</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">ExternError</span>,
-) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">ByteBuffer</span> {
+) <span class="op">-&gt;</span> <span class="ident">ByteBuffer</span> {
     <span class="ident">log</span>::<span class="macro">debug</span><span class="macro">!</span>(<span class="string">&quot;places_get_visit_page&quot;</span>);
-    <span class="ident">CONNECTIONS</span>.<span class="ident">call_with_result</span>(<span class="ident">error</span>, <span class="ident">handle</span>, <span class="op">|</span><span class="ident">conn</span><span class="op">|</span> <span class="op">-</span><span class="op">&gt;</span> <span class="ident">places</span>::<span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="kw">_</span><span class="op">&gt;</span> {
+    <span class="ident">CONNECTIONS</span>.<span class="ident">call_with_result</span>(<span class="ident">error</span>, <span class="ident">handle</span>, <span class="op">|</span><span class="ident">conn</span><span class="op">|</span> <span class="op">-&gt;</span> <span class="ident">places</span>::<span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="kw">_</span><span class="op">&gt;</span> {
         <span class="ident">storage</span>::<span class="ident">history</span>::<span class="ident">get_visit_page_with_bound</span>(
             <span class="ident">conn</span>,
             <span class="ident">bound</span>,
@@ -1206,7 +1207,7 @@
     <span class="ident">error</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">ExternError</span>,
 ) {
     <span class="ident">log</span>::<span class="macro">debug</span><span class="macro">!</span>(<span class="string">&quot;places_accept_result&quot;</span>);
-    <span class="ident">CONNECTIONS</span>.<span class="ident">call_with_result</span>(<span class="ident">error</span>, <span class="ident">handle</span>, <span class="op">|</span><span class="ident">conn</span><span class="op">|</span> <span class="op">-</span><span class="op">&gt;</span> <span class="ident">places</span>::<span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="kw">_</span><span class="op">&gt;</span> {
+    <span class="ident">CONNECTIONS</span>.<span class="ident">call_with_result</span>(<span class="ident">error</span>, <span class="ident">handle</span>, <span class="op">|</span><span class="ident">conn</span><span class="op">|</span> <span class="op">-&gt;</span> <span class="ident">places</span>::<span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="kw">_</span><span class="op">&gt;</span> {
         <span class="kw">let</span> <span class="ident">search_string</span> <span class="op">=</span> <span class="ident">search_string</span>.<span class="ident">as_str</span>();
         <span class="kw">let</span> <span class="ident">url</span> <span class="op">=</span> <span class="kw">if</span> <span class="kw">let</span> <span class="prelude-val">Ok</span>(<span class="ident">url</span>) <span class="op">=</span> <span class="ident">parse_url</span>(<span class="ident">url</span>.<span class="ident">as_str</span>()) {
             <span class="ident">url</span>
@@ -1222,7 +1223,7 @@
 <span class="attribute">#[<span class="ident">no_mangle</span>]</span>
 <span class="kw">pub</span> <span class="kw">extern</span> <span class="string">&quot;C&quot;</span> <span class="kw">fn</span> <span class="ident">places_reset</span>(<span class="ident">handle</span>: <span class="ident">u64</span>, <span class="ident">error</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">ExternError</span>) {
     <span class="ident">log</span>::<span class="macro">debug</span><span class="macro">!</span>(<span class="string">&quot;places_reset&quot;</span>);
-    <span class="ident">APIS</span>.<span class="ident">call_with_result</span>(<span class="ident">error</span>, <span class="ident">handle</span>, <span class="op">|</span><span class="ident">api</span><span class="op">|</span> <span class="op">-</span><span class="op">&gt;</span> <span class="ident">places</span>::<span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="kw">_</span><span class="op">&gt;</span> {
+    <span class="ident">APIS</span>.<span class="ident">call_with_result</span>(<span class="ident">error</span>, <span class="ident">handle</span>, <span class="op">|</span><span class="ident">api</span><span class="op">|</span> <span class="op">-&gt;</span> <span class="ident">places</span>::<span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="kw">_</span><span class="op">&gt;</span> {
         <span class="ident">api</span>.<span class="ident">reset_history</span>()<span class="question-mark">?</span>;
         <span class="prelude-val">Ok</span>(())
     })
@@ -1231,7 +1232,7 @@
 <span class="attribute">#[<span class="ident">no_mangle</span>]</span>
 <span class="kw">pub</span> <span class="kw">extern</span> <span class="string">&quot;C&quot;</span> <span class="kw">fn</span> <span class="ident">bookmarks_reset</span>(<span class="ident">handle</span>: <span class="ident">u64</span>, <span class="ident">error</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">ExternError</span>) {
     <span class="ident">log</span>::<span class="macro">debug</span><span class="macro">!</span>(<span class="string">&quot;bookmarks_reset&quot;</span>);
-    <span class="ident">APIS</span>.<span class="ident">call_with_result</span>(<span class="ident">error</span>, <span class="ident">handle</span>, <span class="op">|</span><span class="ident">api</span><span class="op">|</span> <span class="op">-</span><span class="op">&gt;</span> <span class="ident">places</span>::<span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="kw">_</span><span class="op">&gt;</span> {
+    <span class="ident">APIS</span>.<span class="ident">call_with_result</span>(<span class="ident">error</span>, <span class="ident">handle</span>, <span class="op">|</span><span class="ident">api</span><span class="op">|</span> <span class="op">-&gt;</span> <span class="ident">places</span>::<span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="kw">_</span><span class="op">&gt;</span> {
         <span class="ident">api</span>.<span class="ident">reset_bookmarks</span>()<span class="question-mark">?</span>;
         <span class="prelude-val">Ok</span>(())
     })
@@ -1245,9 +1246,9 @@
     <span class="ident">sync_key</span>: <span class="ident">FfiStr</span><span class="op">&lt;</span><span class="lifetime">&#39;_</span><span class="op">&gt;</span>,
     <span class="ident">tokenserver_url</span>: <span class="ident">FfiStr</span><span class="op">&lt;</span><span class="lifetime">&#39;_</span><span class="op">&gt;</span>,
     <span class="ident">error</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">ExternError</span>,
-) <span class="op">-</span><span class="op">&gt;</span> <span class="kw-2">*</span><span class="kw-2">mut</span> <span class="ident">c_char</span> {
+) <span class="op">-&gt;</span> <span class="kw-2">*</span><span class="kw-2">mut</span> <span class="ident">c_char</span> {
     <span class="ident">log</span>::<span class="macro">debug</span><span class="macro">!</span>(<span class="string">&quot;sync15_history_sync&quot;</span>);
-    <span class="ident">APIS</span>.<span class="ident">call_with_result</span>(<span class="ident">error</span>, <span class="ident">handle</span>, <span class="op">|</span><span class="ident">api</span><span class="op">|</span> <span class="op">-</span><span class="op">&gt;</span> <span class="ident">places</span>::<span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="kw">_</span><span class="op">&gt;</span> {
+    <span class="ident">APIS</span>.<span class="ident">call_with_result</span>(<span class="ident">error</span>, <span class="ident">handle</span>, <span class="op">|</span><span class="ident">api</span><span class="op">|</span> <span class="op">-&gt;</span> <span class="ident">places</span>::<span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="kw">_</span><span class="op">&gt;</span> {
         <span class="kw">let</span> <span class="ident">ping</span> <span class="op">=</span> <span class="ident">api</span>.<span class="ident">sync_history</span>(
             <span class="kw-2">&amp;</span><span class="ident">sync15</span>::<span class="ident">Sync15StorageClientInit</span> {
                 <span class="ident">key_id</span>: <span class="ident">key_id</span>.<span class="ident">into_string</span>(),
@@ -1268,9 +1269,9 @@
     <span class="ident">sync_key</span>: <span class="ident">FfiStr</span><span class="op">&lt;</span><span class="lifetime">&#39;_</span><span class="op">&gt;</span>,
     <span class="ident">tokenserver_url</span>: <span class="ident">FfiStr</span><span class="op">&lt;</span><span class="lifetime">&#39;_</span><span class="op">&gt;</span>,
     <span class="ident">error</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">ExternError</span>,
-) <span class="op">-</span><span class="op">&gt;</span> <span class="kw-2">*</span><span class="kw-2">mut</span> <span class="ident">c_char</span> {
+) <span class="op">-&gt;</span> <span class="kw-2">*</span><span class="kw-2">mut</span> <span class="ident">c_char</span> {
     <span class="ident">log</span>::<span class="macro">debug</span><span class="macro">!</span>(<span class="string">&quot;sync15_bookmarks_sync&quot;</span>);
-    <span class="ident">APIS</span>.<span class="ident">call_with_result</span>(<span class="ident">error</span>, <span class="ident">handle</span>, <span class="op">|</span><span class="ident">api</span><span class="op">|</span> <span class="op">-</span><span class="op">&gt;</span> <span class="ident">places</span>::<span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="kw">_</span><span class="op">&gt;</span> {
+    <span class="ident">APIS</span>.<span class="ident">call_with_result</span>(<span class="ident">error</span>, <span class="ident">handle</span>, <span class="op">|</span><span class="ident">api</span><span class="op">|</span> <span class="op">-&gt;</span> <span class="ident">places</span>::<span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="kw">_</span><span class="op">&gt;</span> {
         <span class="kw">let</span> <span class="ident">ping</span> <span class="op">=</span> <span class="ident">api</span>.<span class="ident">sync_bookmarks</span>(
             <span class="kw-2">&amp;</span><span class="ident">sync15</span>::<span class="ident">Sync15StorageClientInit</span> {
                 <span class="ident">key_id</span>: <span class="ident">key_id</span>.<span class="ident">into_string</span>(),
@@ -1288,9 +1289,9 @@
     <span class="ident">handle</span>: <span class="ident">u64</span>,
     <span class="ident">guid</span>: <span class="ident">FfiStr</span><span class="op">&lt;</span><span class="lifetime">&#39;_</span><span class="op">&gt;</span>,
     <span class="ident">error</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">ExternError</span>,
-) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">ByteBuffer</span> {
+) <span class="op">-&gt;</span> <span class="ident">ByteBuffer</span> {
     <span class="ident">log</span>::<span class="macro">debug</span><span class="macro">!</span>(<span class="string">&quot;bookmarks_get_tree&quot;</span>);
-    <span class="ident">CONNECTIONS</span>.<span class="ident">call_with_result</span>(<span class="ident">error</span>, <span class="ident">handle</span>, <span class="op">|</span><span class="ident">conn</span><span class="op">|</span> <span class="op">-</span><span class="op">&gt;</span> <span class="ident">places</span>::<span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="kw">_</span><span class="op">&gt;</span> {
+    <span class="ident">CONNECTIONS</span>.<span class="ident">call_with_result</span>(<span class="ident">error</span>, <span class="ident">handle</span>, <span class="op">|</span><span class="ident">conn</span><span class="op">|</span> <span class="op">-&gt;</span> <span class="ident">places</span>::<span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="kw">_</span><span class="op">&gt;</span> {
         <span class="kw">let</span> <span class="ident">root_id</span> <span class="op">=</span> <span class="ident">SyncGuid</span>::<span class="ident">from</span>(<span class="ident">guid</span>.<span class="ident">as_str</span>());
         <span class="prelude-val">Ok</span>(<span class="ident">bookmarks</span>::<span class="ident">public_node</span>::<span class="ident">fetch_public_tree</span>(<span class="ident">conn</span>, <span class="kw-2">&amp;</span><span class="ident">root_id</span>)<span class="question-mark">?</span>)
     })
@@ -1299,7 +1300,7 @@
 <span class="attribute">#[<span class="ident">no_mangle</span>]</span>
 <span class="kw">pub</span> <span class="kw">extern</span> <span class="string">&quot;C&quot;</span> <span class="kw">fn</span> <span class="ident">bookmarks_delete_everything</span>(<span class="ident">handle</span>: <span class="ident">u64</span>, <span class="ident">error</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">ExternError</span>) {
     <span class="ident">log</span>::<span class="macro">debug</span><span class="macro">!</span>(<span class="string">&quot;bookmarks_delete_everything&quot;</span>);
-    <span class="ident">CONNECTIONS</span>.<span class="ident">call_with_result</span>(<span class="ident">error</span>, <span class="ident">handle</span>, <span class="op">|</span><span class="ident">conn</span><span class="op">|</span> <span class="op">-</span><span class="op">&gt;</span> <span class="ident">places</span>::<span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="kw">_</span><span class="op">&gt;</span> {
+    <span class="ident">CONNECTIONS</span>.<span class="ident">call_with_result</span>(<span class="ident">error</span>, <span class="ident">handle</span>, <span class="op">|</span><span class="ident">conn</span><span class="op">|</span> <span class="op">-&gt;</span> <span class="ident">places</span>::<span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="kw">_</span><span class="op">&gt;</span> {
         <span class="ident">bookmarks</span>::<span class="ident">delete_everything</span>(<span class="ident">conn</span>)<span class="question-mark">?</span>;
         <span class="prelude-val">Ok</span>(())
     })
@@ -1311,21 +1312,21 @@
     <span class="ident">guid</span>: <span class="ident">FfiStr</span><span class="op">&lt;</span><span class="lifetime">&#39;_</span><span class="op">&gt;</span>,
     <span class="ident">get_direct_children</span>: <span class="ident">u8</span>,
     <span class="ident">error</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">ExternError</span>,
-) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">ByteBuffer</span> {
+) <span class="op">-&gt;</span> <span class="ident">ByteBuffer</span> {
     <span class="ident">log</span>::<span class="macro">debug</span><span class="macro">!</span>(<span class="string">&quot;bookmarks_get_by_guid&quot;</span>);
-    <span class="ident">CONNECTIONS</span>.<span class="ident">call_with_result</span>(<span class="ident">error</span>, <span class="ident">handle</span>, <span class="op">|</span><span class="ident">conn</span><span class="op">|</span> <span class="op">-</span><span class="op">&gt;</span> <span class="ident">places</span>::<span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="kw">_</span><span class="op">&gt;</span> {
+    <span class="ident">CONNECTIONS</span>.<span class="ident">call_with_result</span>(<span class="ident">error</span>, <span class="ident">handle</span>, <span class="op">|</span><span class="ident">conn</span><span class="op">|</span> <span class="op">-&gt;</span> <span class="ident">places</span>::<span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="kw">_</span><span class="op">&gt;</span> {
         <span class="kw">let</span> <span class="ident">guid</span> <span class="op">=</span> <span class="ident">SyncGuid</span>::<span class="ident">from</span>(<span class="ident">guid</span>.<span class="ident">as_str</span>());
         <span class="prelude-val">Ok</span>(<span class="ident">bookmarks</span>::<span class="ident">public_node</span>::<span class="ident">fetch_bookmark</span>(
             <span class="ident">conn</span>,
             <span class="kw-2">&amp;</span><span class="ident">guid</span>,
-            <span class="ident">get_direct_children</span> <span class="op">!</span><span class="op">=</span> <span class="number">0</span>,
+            <span class="ident">get_direct_children</span> <span class="op">!=</span> <span class="number">0</span>,
         )<span class="question-mark">?</span>)
     })
 }
 
-<span class="kw">unsafe</span> <span class="kw">fn</span> <span class="ident">get_buffer</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span><span class="op">&gt;</span>(<span class="ident">data</span>: <span class="kw-2">*</span><span class="kw">const</span> <span class="ident">u8</span>, <span class="ident">len</span>: <span class="ident">i32</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="kw-2">&amp;</span><span class="lifetime">&#39;a</span> [<span class="ident">u8</span>] {
-    <span class="macro">assert</span><span class="macro">!</span>(<span class="ident">len</span> <span class="op">&gt;</span><span class="op">=</span> <span class="number">0</span>, <span class="string">&quot;Bad buffer len: {}&quot;</span>, <span class="ident">len</span>);
-    <span class="kw">if</span> <span class="ident">len</span> <span class="op">=</span><span class="op">=</span> <span class="number">0</span> {
+<span class="kw">unsafe</span> <span class="kw">fn</span> <span class="ident">get_buffer</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span><span class="op">&gt;</span>(<span class="ident">data</span>: <span class="kw-2">*</span><span class="kw">const</span> <span class="ident">u8</span>, <span class="ident">len</span>: <span class="ident">i32</span>) <span class="op">-&gt;</span> <span class="kw-2">&amp;</span><span class="lifetime">&#39;a</span> [<span class="ident">u8</span>] {
+    <span class="macro">assert</span><span class="macro">!</span>(<span class="ident">len</span> <span class="op">&gt;=</span> <span class="number">0</span>, <span class="string">&quot;Bad buffer len: {}&quot;</span>, <span class="ident">len</span>);
+    <span class="kw">if</span> <span class="ident">len</span> <span class="op">==</span> <span class="number">0</span> {
         <span class="comment">// This will still fail, but as a bad protobuf format.</span>
         <span class="kw-2">&amp;</span>[]
     } <span class="kw">else</span> {
@@ -1341,10 +1342,10 @@
     <span class="ident">data</span>: <span class="kw-2">*</span><span class="kw">const</span> <span class="ident">u8</span>,
     <span class="ident">len</span>: <span class="ident">i32</span>,
     <span class="ident">error</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">ExternError</span>,
-) <span class="op">-</span><span class="op">&gt;</span> <span class="kw-2">*</span><span class="kw-2">mut</span> <span class="ident">c_char</span> {
+) <span class="op">-&gt;</span> <span class="kw-2">*</span><span class="kw-2">mut</span> <span class="ident">c_char</span> {
     <span class="ident">log</span>::<span class="macro">debug</span><span class="macro">!</span>(<span class="string">&quot;bookmarks_insert&quot;</span>);
     <span class="kw">use</span> <span class="ident">places</span>::<span class="ident">msg_types</span>::<span class="ident">BookmarkNode</span>;
-    <span class="ident">CONNECTIONS</span>.<span class="ident">call_with_result</span>(<span class="ident">error</span>, <span class="ident">handle</span>, <span class="op">|</span><span class="ident">conn</span><span class="op">|</span> <span class="op">-</span><span class="op">&gt;</span> <span class="ident">places</span>::<span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="kw">_</span><span class="op">&gt;</span> {
+    <span class="ident">CONNECTIONS</span>.<span class="ident">call_with_result</span>(<span class="ident">error</span>, <span class="ident">handle</span>, <span class="op">|</span><span class="ident">conn</span><span class="op">|</span> <span class="op">-&gt;</span> <span class="ident">places</span>::<span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="kw">_</span><span class="op">&gt;</span> {
         <span class="kw">let</span> <span class="ident">buffer</span> <span class="op">=</span> <span class="ident">get_buffer</span>(<span class="ident">data</span>, <span class="ident">len</span>);
         <span class="kw">let</span> <span class="ident">bookmark</span>: <span class="ident">BookmarkNode</span> <span class="op">=</span> <span class="ident">prost</span>::<span class="ident">Message</span>::<span class="ident">decode</span>(<span class="ident">buffer</span>)<span class="question-mark">?</span>;
         <span class="kw">let</span> <span class="ident">insertable</span> <span class="op">=</span> <span class="ident">bookmark</span>.<span class="ident">into_insertable</span>()<span class="question-mark">?</span>;
@@ -1364,7 +1365,7 @@
 ) {
     <span class="ident">log</span>::<span class="macro">debug</span><span class="macro">!</span>(<span class="string">&quot;bookmarks_update&quot;</span>);
     <span class="kw">use</span> <span class="ident">places</span>::<span class="ident">msg_types</span>::<span class="ident">BookmarkNode</span>;
-    <span class="ident">CONNECTIONS</span>.<span class="ident">call_with_result</span>(<span class="ident">error</span>, <span class="ident">handle</span>, <span class="op">|</span><span class="ident">conn</span><span class="op">|</span> <span class="op">-</span><span class="op">&gt;</span> <span class="ident">places</span>::<span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="kw">_</span><span class="op">&gt;</span> {
+    <span class="ident">CONNECTIONS</span>.<span class="ident">call_with_result</span>(<span class="ident">error</span>, <span class="ident">handle</span>, <span class="op">|</span><span class="ident">conn</span><span class="op">|</span> <span class="op">-&gt;</span> <span class="ident">places</span>::<span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="kw">_</span><span class="op">&gt;</span> {
         <span class="kw">let</span> <span class="ident">buffer</span> <span class="op">=</span> <span class="ident">get_buffer</span>(<span class="ident">data</span>, <span class="ident">len</span>);
         <span class="kw">let</span> <span class="ident">bookmark</span>: <span class="ident">BookmarkNode</span> <span class="op">=</span> <span class="ident">prost</span>::<span class="ident">Message</span>::<span class="ident">decode</span>(<span class="ident">buffer</span>)<span class="question-mark">?</span>;
         <span class="ident">bookmarks</span>::<span class="ident">public_node</span>::<span class="ident">update_bookmark_from_message</span>(<span class="ident">conn</span>, <span class="ident">bookmark</span>)<span class="question-mark">?</span>;
@@ -1373,9 +1374,9 @@
 }
 
 <span class="attribute">#[<span class="ident">no_mangle</span>]</span>
-<span class="kw">pub</span> <span class="kw">extern</span> <span class="string">&quot;C&quot;</span> <span class="kw">fn</span> <span class="ident">bookmarks_delete</span>(<span class="ident">handle</span>: <span class="ident">u64</span>, <span class="ident">id</span>: <span class="ident">FfiStr</span><span class="op">&lt;</span><span class="lifetime">&#39;_</span><span class="op">&gt;</span>, <span class="ident">error</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">ExternError</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">u8</span> {
+<span class="kw">pub</span> <span class="kw">extern</span> <span class="string">&quot;C&quot;</span> <span class="kw">fn</span> <span class="ident">bookmarks_delete</span>(<span class="ident">handle</span>: <span class="ident">u64</span>, <span class="ident">id</span>: <span class="ident">FfiStr</span><span class="op">&lt;</span><span class="lifetime">&#39;_</span><span class="op">&gt;</span>, <span class="ident">error</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">ExternError</span>) <span class="op">-&gt;</span> <span class="ident">u8</span> {
     <span class="ident">log</span>::<span class="macro">debug</span><span class="macro">!</span>(<span class="string">&quot;bookmarks_delete&quot;</span>);
-    <span class="ident">CONNECTIONS</span>.<span class="ident">call_with_result</span>(<span class="ident">error</span>, <span class="ident">handle</span>, <span class="op">|</span><span class="ident">conn</span><span class="op">|</span> <span class="op">-</span><span class="op">&gt;</span> <span class="ident">places</span>::<span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="kw">_</span><span class="op">&gt;</span> {
+    <span class="ident">CONNECTIONS</span>.<span class="ident">call_with_result</span>(<span class="ident">error</span>, <span class="ident">handle</span>, <span class="op">|</span><span class="ident">conn</span><span class="op">|</span> <span class="op">-&gt;</span> <span class="ident">places</span>::<span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="kw">_</span><span class="op">&gt;</span> {
         <span class="kw">let</span> <span class="ident">guid</span> <span class="op">=</span> <span class="ident">SyncGuid</span>::<span class="ident">from</span>(<span class="ident">id</span>.<span class="ident">as_str</span>());
         <span class="kw">let</span> <span class="ident">did_delete</span> <span class="op">=</span> <span class="ident">bookmarks</span>::<span class="ident">delete_bookmark</span>(<span class="ident">conn</span>, <span class="kw-2">&amp;</span><span class="ident">guid</span>)<span class="question-mark">?</span>;
         <span class="prelude-val">Ok</span>(<span class="ident">did_delete</span>)
@@ -1387,14 +1388,14 @@
     <span class="ident">handle</span>: <span class="ident">u64</span>,
     <span class="ident">url</span>: <span class="ident">FfiStr</span><span class="op">&lt;</span><span class="lifetime">&#39;_</span><span class="op">&gt;</span>,
     <span class="ident">error</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">ExternError</span>,
-) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">ByteBuffer</span> {
+) <span class="op">-&gt;</span> <span class="ident">ByteBuffer</span> {
     <span class="ident">log</span>::<span class="macro">debug</span><span class="macro">!</span>(<span class="string">&quot;bookmarks_get_all_with_url&quot;</span>);
-    <span class="ident">CONNECTIONS</span>.<span class="ident">call_with_result</span>(<span class="ident">error</span>, <span class="ident">handle</span>, <span class="op">|</span><span class="ident">conn</span><span class="op">|</span> <span class="op">-</span><span class="op">&gt;</span> <span class="ident">places</span>::<span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="kw">_</span><span class="op">&gt;</span> {
+    <span class="ident">CONNECTIONS</span>.<span class="ident">call_with_result</span>(<span class="ident">error</span>, <span class="ident">handle</span>, <span class="op">|</span><span class="ident">conn</span><span class="op">|</span> <span class="op">-&gt;</span> <span class="ident">places</span>::<span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="kw">_</span><span class="op">&gt;</span> {
         <span class="prelude-val">Ok</span>(<span class="kw">match</span> <span class="ident">parse_url</span>(<span class="ident">url</span>.<span class="ident">as_str</span>()) {
-            <span class="prelude-val">Ok</span>(<span class="ident">url</span>) <span class="op">=</span><span class="op">&gt;</span> {
+            <span class="prelude-val">Ok</span>(<span class="ident">url</span>) <span class="op">=&gt;</span> {
                 <span class="ident">BookmarkNodeList</span>::<span class="ident">from</span>(<span class="ident">bookmarks</span>::<span class="ident">public_node</span>::<span class="ident">fetch_bookmarks_by_url</span>(<span class="ident">conn</span>, <span class="kw-2">&amp;</span><span class="ident">url</span>)<span class="question-mark">?</span>)
             }
-            <span class="prelude-val">Err</span>(<span class="ident">e</span>) <span class="op">=</span><span class="op">&gt;</span> {
+            <span class="prelude-val">Err</span>(<span class="ident">e</span>) <span class="op">=&gt;</span> {
                 <span class="comment">// There are no bookmarks with the URL if it&#39;s invalid.</span>
                 <span class="ident">log</span>::<span class="macro">warn</span><span class="macro">!</span>(<span class="string">&quot;Invalid URL passed to bookmarks_get_all_with_url, {}&quot;</span>, <span class="ident">e</span>);
                 <span class="ident">BookmarkNodeList</span>::<span class="ident">from</span>(<span class="ident">Vec</span>::<span class="op">&lt;</span><span class="ident">bookmarks</span>::<span class="ident">public_node</span>::<span class="ident">PublicNode</span><span class="op">&gt;</span>::<span class="ident">new</span>())
@@ -1410,9 +1411,9 @@
     <span class="ident">handle</span>: <span class="ident">u64</span>,
     <span class="ident">keyword</span>: <span class="ident">FfiStr</span><span class="op">&lt;</span><span class="lifetime">&#39;_</span><span class="op">&gt;</span>,
     <span class="ident">error</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">ExternError</span>,
-) <span class="op">-</span><span class="op">&gt;</span> <span class="kw-2">*</span><span class="kw-2">mut</span> <span class="ident">c_char</span> {
+) <span class="op">-&gt;</span> <span class="kw-2">*</span><span class="kw-2">mut</span> <span class="ident">c_char</span> {
     <span class="ident">log</span>::<span class="macro">debug</span><span class="macro">!</span>(<span class="string">&quot;bookmarks_get_url_for_keyword&quot;</span>);
-    <span class="ident">CONNECTIONS</span>.<span class="ident">call_with_result</span>(<span class="ident">error</span>, <span class="ident">handle</span>, <span class="op">|</span><span class="ident">conn</span><span class="op">|</span> <span class="op">-</span><span class="op">&gt;</span> <span class="ident">places</span>::<span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="kw">_</span><span class="op">&gt;</span> {
+    <span class="ident">CONNECTIONS</span>.<span class="ident">call_with_result</span>(<span class="ident">error</span>, <span class="ident">handle</span>, <span class="op">|</span><span class="ident">conn</span><span class="op">|</span> <span class="op">-&gt;</span> <span class="ident">places</span>::<span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="kw">_</span><span class="op">&gt;</span> {
         <span class="kw">let</span> <span class="ident">url</span> <span class="op">=</span> <span class="ident">bookmarks</span>::<span class="ident">bookmarks_get_url_for_keyword</span>(<span class="ident">conn</span>, <span class="ident">keyword</span>.<span class="ident">as_str</span>())<span class="question-mark">?</span>;
         <span class="prelude-val">Ok</span>(<span class="ident">url</span>.<span class="ident">map</span>(<span class="ident">url</span>::<span class="ident">Url</span>::<span class="ident">into_string</span>))
     })
@@ -1424,9 +1425,9 @@
     <span class="ident">query</span>: <span class="ident">FfiStr</span><span class="op">&lt;</span><span class="lifetime">&#39;_</span><span class="op">&gt;</span>,
     <span class="ident">limit</span>: <span class="ident">i32</span>,
     <span class="ident">error</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">ExternError</span>,
-) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">ByteBuffer</span> {
+) <span class="op">-&gt;</span> <span class="ident">ByteBuffer</span> {
     <span class="ident">log</span>::<span class="macro">debug</span><span class="macro">!</span>(<span class="string">&quot;bookmarks_search&quot;</span>);
-    <span class="ident">CONNECTIONS</span>.<span class="ident">call_with_result</span>(<span class="ident">error</span>, <span class="ident">handle</span>, <span class="op">|</span><span class="ident">conn</span><span class="op">|</span> <span class="op">-</span><span class="op">&gt;</span> <span class="ident">places</span>::<span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="kw">_</span><span class="op">&gt;</span> {
+    <span class="ident">CONNECTIONS</span>.<span class="ident">call_with_result</span>(<span class="ident">error</span>, <span class="ident">handle</span>, <span class="op">|</span><span class="ident">conn</span><span class="op">|</span> <span class="op">-&gt;</span> <span class="ident">places</span>::<span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="kw">_</span><span class="op">&gt;</span> {
         <span class="prelude-val">Ok</span>(<span class="ident">BookmarkNodeList</span>::<span class="ident">from</span>(
             <span class="ident">bookmarks</span>::<span class="ident">public_node</span>::<span class="ident">search_bookmarks</span>(<span class="ident">conn</span>, <span class="ident">query</span>.<span class="ident">as_str</span>(), <span class="ident">limit</span> <span class="kw">as</span> <span class="ident">u32</span>)<span class="question-mark">?</span>,
         ))
@@ -1438,9 +1439,9 @@
     <span class="ident">handle</span>: <span class="ident">u64</span>,
     <span class="ident">limit</span>: <span class="ident">i32</span>,
     <span class="ident">error</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">ExternError</span>,
-) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">ByteBuffer</span> {
+) <span class="op">-&gt;</span> <span class="ident">ByteBuffer</span> {
     <span class="ident">log</span>::<span class="macro">debug</span><span class="macro">!</span>(<span class="string">&quot;bookmarks_get_recent&quot;</span>);
-    <span class="ident">CONNECTIONS</span>.<span class="ident">call_with_result</span>(<span class="ident">error</span>, <span class="ident">handle</span>, <span class="op">|</span><span class="ident">conn</span><span class="op">|</span> <span class="op">-</span><span class="op">&gt;</span> <span class="ident">places</span>::<span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="kw">_</span><span class="op">&gt;</span> {
+    <span class="ident">CONNECTIONS</span>.<span class="ident">call_with_result</span>(<span class="ident">error</span>, <span class="ident">handle</span>, <span class="op">|</span><span class="ident">conn</span><span class="op">|</span> <span class="op">-&gt;</span> <span class="ident">places</span>::<span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="kw">_</span><span class="op">&gt;</span> {
         <span class="prelude-val">Ok</span>(<span class="ident">BookmarkNodeList</span>::<span class="ident">from</span>(
             <span class="ident">bookmarks</span>::<span class="ident">public_node</span>::<span class="ident">recent_bookmarks</span>(<span class="ident">conn</span>, <span class="ident">limit</span> <span class="kw">as</span> <span class="ident">u32</span>)<span class="question-mark">?</span>,
         ))

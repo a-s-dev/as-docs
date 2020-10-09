@@ -1,4 +1,5 @@
-<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source to the Rust file `components/places/src/storage/history.rs`."><meta name="keywords" content="rust, rustlang, rust-lang"><title>history.rs.html -- source</title><link rel="stylesheet" type="text/css" href="../../../normalize.css"><link rel="stylesheet" type="text/css" href="../../../rustdoc.css" id="mainThemeStyle"><link rel="stylesheet" type="text/css" href="../../../dark.css"><link rel="stylesheet" type="text/css" href="../../../light.css" id="themeStyle"><script src="../../../storage.js"></script><noscript><link rel="stylesheet" href="../../../noscript.css"></noscript><link rel="shortcut icon" href="../../../favicon.ico"><style type="text/css">#crate-search{background-image:url("../../../down-arrow.svg");}</style></head><body class="rustdoc source"><!--[if lte IE 8]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="sidebar"><div class="sidebar-menu">&#9776;</div><a href='../../../places/index.html'><div class='logo-container'><img src='../../../rust-logo.png' alt='logo'></div></a></nav><div class="theme-picker"><button id="theme-picker" aria-label="Pick another theme!"><img src="../../../brush.svg" width="18" alt="Pick another theme!"></button><div id="theme-choices"></div></div><script src="../../../theme.js"></script><nav class="sub"><form class="search-form"><div class="search-container"><div><select id="crate-search"><option value="All crates">All crates</option></select><input class="search-input" name="search" disabled autocomplete="off" spellcheck="false" placeholder="Click or press ‘S’ to search, ‘?’ for more options…" type="search"></div><a id="settings-menu" href="../../../settings.html"><img src="../../../wheel.svg" width="18" alt="Change settings"></a></div></form></nav><section id="main" class="content"><pre class="line-numbers"><span id="1">   1</span>
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source to the Rust file `components/places/src/storage/history.rs`."><meta name="keywords" content="rust, rustlang, rust-lang"><title>history.rs.html -- source</title><link rel="stylesheet" type="text/css" href="../../../normalize.css"><link rel="stylesheet" type="text/css" href="../../../rustdoc.css" id="mainThemeStyle"><link rel="stylesheet" type="text/css" href="../../../light.css"  id="themeStyle"><link rel="stylesheet" type="text/css" href="../../../dark.css" disabled ><link rel="stylesheet" type="text/css" href="../../../ayu.css" disabled ><script src="../../../storage.js"></script><noscript><link rel="stylesheet" href="../../../noscript.css"></noscript><link rel="shortcut icon" href="../../../favicon.ico"><style type="text/css">#crate-search{background-image:url("../../../down-arrow.svg");}</style></head><body class="rustdoc source"><!--[if lte IE 8]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="sidebar"><div class="sidebar-menu">&#9776;</div><a href='../../../places/index.html'><div class='logo-container rust-logo'><img src='../../../rust-logo.png' alt='logo'></div></a></nav><div class="theme-picker"><button id="theme-picker" aria-label="Pick another theme!"><img src="../../../brush.svg" width="18" alt="Pick another theme!"></button><div id="theme-choices"></div></div><script src="../../../theme.js"></script><nav class="sub"><form class="search-form"><div class="search-container"><div><select id="crate-search"><option value="All crates">All crates</option></select><input class="search-input" name="search" disabled autocomplete="off" spellcheck="false" placeholder="Click or press ‘S’ to search, ‘?’ for more options…" type="search"></div><span class="help-button">?</span>
+                <a id="settings-menu" href="../../../settings.html"><img src="../../../wheel.svg" width="18" alt="Change settings"></a></div></form></nav><section id="main" class="content"><pre class="line-numbers"><span id="1">   1</span>
 <span id="2">   2</span>
 <span id="3">   3</span>
 <span id="4">   4</span>
@@ -2967,7 +2968,7 @@
 <span class="kw">static</span> <span class="ident">DELETION_HIGH_WATER_MARK_META_KEY</span>: <span class="kw-2">&amp;</span><span class="ident">str</span> <span class="op">=</span> <span class="string">&quot;history_deleted_hwm&quot;</span>;
 
 <span class="doccomment">/// Returns the RowId of a new visit in moz_historyvisits, or None if no new visit was added.</span>
-<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">apply_observation</span>(<span class="ident">db</span>: <span class="kw-2">&amp;</span><span class="ident">PlacesDb</span>, <span class="ident">visit_ob</span>: <span class="ident">VisitObservation</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">RowId</span><span class="op">&gt;</span><span class="op">&gt;</span> {
+<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">apply_observation</span>(<span class="ident">db</span>: <span class="kw-2">&amp;</span><span class="ident">PlacesDb</span>, <span class="ident">visit_ob</span>: <span class="ident">VisitObservation</span>) <span class="op">-&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">RowId</span><span class="op">&gt;&gt;</span> {
     <span class="kw">let</span> <span class="ident">tx</span> <span class="op">=</span> <span class="ident">db</span>.<span class="ident">begin_transaction</span>()<span class="question-mark">?</span>;
     <span class="kw">let</span> <span class="ident">result</span> <span class="op">=</span> <span class="ident">apply_observation_direct</span>(<span class="ident">db</span>, <span class="ident">visit_ob</span>)<span class="question-mark">?</span>;
     <span class="ident">delete_pending_temp_tables</span>(<span class="ident">db</span>)<span class="question-mark">?</span>;
@@ -2979,15 +2980,15 @@
 <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">apply_observation_direct</span>(
     <span class="ident">db</span>: <span class="kw-2">&amp;</span><span class="ident">PlacesDb</span>,
     <span class="ident">visit_ob</span>: <span class="ident">VisitObservation</span>,
-) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">RowId</span><span class="op">&gt;</span><span class="op">&gt;</span> {
+) <span class="op">-&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">RowId</span><span class="op">&gt;&gt;</span> {
     <span class="kw">let</span> <span class="ident">url</span> <span class="op">=</span> <span class="ident">Url</span>::<span class="ident">parse</span>(<span class="kw-2">&amp;</span><span class="ident">visit_ob</span>.<span class="ident">url</span>)<span class="question-mark">?</span>;
     <span class="comment">// Don&#39;t insert urls larger than our length max.</span>
     <span class="kw">if</span> <span class="ident">url</span>.<span class="ident">as_str</span>().<span class="ident">len</span>() <span class="op">&gt;</span> <span class="kw">super</span>::<span class="ident">URL_LENGTH_MAX</span> {
         <span class="kw">return</span> <span class="prelude-val">Ok</span>(<span class="prelude-val">None</span>);
     }
     <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">page_info</span> <span class="op">=</span> <span class="kw">match</span> <span class="ident">fetch_page_info</span>(<span class="ident">db</span>, <span class="kw-2">&amp;</span><span class="ident">url</span>)<span class="question-mark">?</span> {
-        <span class="prelude-val">Some</span>(<span class="ident">info</span>) <span class="op">=</span><span class="op">&gt;</span> <span class="ident">info</span>.<span class="ident">page</span>,
-        <span class="prelude-val">None</span> <span class="op">=</span><span class="op">&gt;</span> <span class="ident">new_page_info</span>(<span class="ident">db</span>, <span class="kw-2">&amp;</span><span class="ident">url</span>, <span class="prelude-val">None</span>)<span class="question-mark">?</span>,
+        <span class="prelude-val">Some</span>(<span class="ident">info</span>) <span class="op">=&gt;</span> <span class="ident">info</span>.<span class="ident">page</span>,
+        <span class="prelude-val">None</span> <span class="op">=&gt;</span> <span class="ident">new_page_info</span>(<span class="ident">db</span>, <span class="kw-2">&amp;</span><span class="ident">url</span>, <span class="prelude-val">None</span>)<span class="question-mark">?</span>,
     };
     <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">update_change_counter</span> <span class="op">=</span> <span class="bool-val">false</span>;
     <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">update_frec</span> <span class="op">=</span> <span class="bool-val">false</span>;
@@ -3001,13 +3002,13 @@
     <span class="comment">// There&#39;s a new visit, so update everything that implies. To help with</span>
     <span class="comment">// testing we return the rowid of the visit we added.</span>
     <span class="kw">let</span> <span class="ident">visit_row_id</span> <span class="op">=</span> <span class="kw">match</span> <span class="ident">visit_ob</span>.<span class="ident">visit_type</span> {
-        <span class="prelude-val">Some</span>(<span class="ident">visit_type</span>) <span class="op">=</span><span class="op">&gt;</span> {
+        <span class="prelude-val">Some</span>(<span class="ident">visit_type</span>) <span class="op">=&gt;</span> {
             <span class="comment">// A single non-hidden visit makes the place non-hidden.</span>
             <span class="kw">if</span> <span class="op">!</span><span class="ident">visit_ob</span>.<span class="ident">get_is_hidden</span>() {
                 <span class="ident">updates</span>.<span class="ident">push</span>((<span class="string">&quot;hidden&quot;</span>, <span class="string">&quot;:hidden&quot;</span>, <span class="kw-2">&amp;</span><span class="bool-val">false</span>));
             }
-            <span class="kw">if</span> <span class="ident">visit_type</span> <span class="op">=</span><span class="op">=</span> <span class="ident">VisitTransition</span>::<span class="ident">Typed</span> {
-                <span class="ident">page_info</span>.<span class="ident">typed</span> <span class="op">+</span><span class="op">=</span> <span class="number">1</span>;
+            <span class="kw">if</span> <span class="ident">visit_type</span> <span class="op">==</span> <span class="ident">VisitTransition</span>::<span class="ident">Typed</span> {
+                <span class="ident">page_info</span>.<span class="ident">typed</span> <span class="op">+=</span> <span class="number">1</span>;
                 <span class="ident">updates</span>.<span class="ident">push</span>((<span class="string">&quot;typed&quot;</span>, <span class="string">&quot;:typed&quot;</span>, <span class="kw-2">&amp;</span><span class="ident">page_info</span>.<span class="ident">typed</span>));
             }
 
@@ -3021,11 +3022,11 @@
             <span class="ident">update_change_counter</span> <span class="op">=</span> <span class="bool-val">true</span>;
             <span class="prelude-val">Some</span>(<span class="ident">row_id</span>)
         }
-        <span class="prelude-val">None</span> <span class="op">=</span><span class="op">&gt;</span> <span class="prelude-val">None</span>,
+        <span class="prelude-val">None</span> <span class="op">=&gt;</span> <span class="prelude-val">None</span>,
     };
 
     <span class="kw">if</span> <span class="ident">update_change_counter</span> {
-        <span class="ident">page_info</span>.<span class="ident">sync_change_counter</span> <span class="op">+</span><span class="op">=</span> <span class="number">1</span>;
+        <span class="ident">page_info</span>.<span class="ident">sync_change_counter</span> <span class="op">+=</span> <span class="number">1</span>;
         <span class="ident">updates</span>.<span class="ident">push</span>((
             <span class="string">&quot;sync_change_counter&quot;</span>,
             <span class="string">&quot;:sync_change_counter&quot;</span>,
@@ -3060,7 +3061,7 @@
     <span class="prelude-val">Ok</span>(<span class="ident">visit_row_id</span>)
 }
 
-<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">update_frecency</span>(<span class="ident">db</span>: <span class="kw-2">&amp;</span><span class="ident">PlacesDb</span>, <span class="ident">id</span>: <span class="ident">RowId</span>, <span class="ident">redirect_boost</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">bool</span><span class="op">&gt;</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span>()<span class="op">&gt;</span> {
+<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">update_frecency</span>(<span class="ident">db</span>: <span class="kw-2">&amp;</span><span class="ident">PlacesDb</span>, <span class="ident">id</span>: <span class="ident">RowId</span>, <span class="ident">redirect_boost</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">bool</span><span class="op">&gt;</span>) <span class="op">-&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span>()<span class="op">&gt;</span> {
     <span class="kw">let</span> <span class="ident">score</span> <span class="op">=</span> <span class="ident">frecency</span>::<span class="ident">calculate_frecency</span>(
         <span class="ident">db</span>.<span class="ident">conn</span>(),
         <span class="kw-2">&amp;</span><span class="ident">frecency</span>::<span class="ident">DEFAULT_FRECENCY_SETTINGS</span>,
@@ -3080,14 +3081,14 @@
 }
 
 <span class="doccomment">/// Indicates if and when a URL&#39;s frecency was marked as stale.</span>
-<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">frecency_stale_at</span>(<span class="ident">db</span>: <span class="kw-2">&amp;</span><span class="ident">PlacesDb</span>, <span class="ident">url</span>: <span class="kw-2">&amp;</span><span class="ident">Url</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">Timestamp</span><span class="op">&gt;</span><span class="op">&gt;</span> {
+<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">frecency_stale_at</span>(<span class="ident">db</span>: <span class="kw-2">&amp;</span><span class="ident">PlacesDb</span>, <span class="ident">url</span>: <span class="kw-2">&amp;</span><span class="ident">Url</span>) <span class="op">-&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">Timestamp</span><span class="op">&gt;&gt;</span> {
     <span class="kw">let</span> <span class="ident">result</span> <span class="op">=</span> <span class="ident">db</span>.<span class="ident">try_query_row</span>(
         <span class="string">&quot;SELECT stale_at FROM moz_places_stale_frecencies s
          JOIN moz_places h ON h.id = s.place_id
          WHERE h.url_hash = hash(:url) AND
                h.url = :url&quot;</span>,
         <span class="kw-2">&amp;</span>[(<span class="string">&quot;:url&quot;</span>, <span class="kw-2">&amp;</span><span class="ident">url</span>.<span class="ident">as_str</span>())],
-        <span class="op">|</span><span class="ident">row</span><span class="op">|</span> <span class="op">-</span><span class="op">&gt;</span> <span class="ident">rusqlite</span>::<span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="kw">_</span><span class="op">&gt;</span> { <span class="prelude-val">Ok</span>(<span class="ident">row</span>.<span class="ident">get</span>::<span class="op">&lt;</span><span class="kw">_</span>, <span class="ident">Timestamp</span><span class="op">&gt;</span>(<span class="number">0</span>)<span class="question-mark">?</span>) },
+        <span class="op">|</span><span class="ident">row</span><span class="op">|</span> <span class="op">-&gt;</span> <span class="ident">rusqlite</span>::<span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="kw">_</span><span class="op">&gt;</span> { <span class="prelude-val">Ok</span>(<span class="ident">row</span>.<span class="ident">get</span>::<span class="op">&lt;</span><span class="kw">_</span>, <span class="ident">Timestamp</span><span class="op">&gt;</span>(<span class="number">0</span>)<span class="question-mark">?</span>) },
         <span class="bool-val">true</span>,
     )<span class="question-mark">?</span>;
     <span class="prelude-val">Ok</span>(<span class="ident">result</span>)
@@ -3103,7 +3104,7 @@
     <span class="ident">visit_date</span>: <span class="ident">Timestamp</span>,
     <span class="ident">visit_type</span>: <span class="ident">VisitTransition</span>,
     <span class="ident">is_local</span>: <span class="ident">bool</span>,
-) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">RowId</span><span class="op">&gt;</span> {
+) <span class="op">-&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">RowId</span><span class="op">&gt;</span> {
     <span class="kw">let</span> <span class="ident">sql</span> <span class="op">=</span> <span class="string">&quot;INSERT INTO moz_historyvisits
             (from_visit, place_id, visit_date, visit_type, is_local)
         VALUES (:from_visit, :page_id, :visit_date, :visit_type, :is_local)&quot;</span>;
@@ -3129,19 +3130,19 @@
 }
 
 <span class="doccomment">/// Returns the GUID for the specified Url, or None if it doesn&#39;t exist.</span>
-<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">url_to_guid</span>(<span class="ident">db</span>: <span class="kw-2">&amp;</span><span class="ident">PlacesDb</span>, <span class="ident">url</span>: <span class="kw-2">&amp;</span><span class="ident">Url</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">SyncGuid</span><span class="op">&gt;</span><span class="op">&gt;</span> {
+<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">url_to_guid</span>(<span class="ident">db</span>: <span class="kw-2">&amp;</span><span class="ident">PlacesDb</span>, <span class="ident">url</span>: <span class="kw-2">&amp;</span><span class="ident">Url</span>) <span class="op">-&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">SyncGuid</span><span class="op">&gt;&gt;</span> {
     <span class="ident">href_to_guid</span>(<span class="ident">db</span>, <span class="ident">url</span>.<span class="ident">clone</span>().<span class="ident">as_str</span>())
 }
 
 <span class="doccomment">/// Returns the GUID for the specified Url String, or None if it doesn&#39;t exist.</span>
-<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">href_to_guid</span>(<span class="ident">db</span>: <span class="kw-2">&amp;</span><span class="ident">PlacesDb</span>, <span class="ident">url</span>: <span class="kw-2">&amp;</span><span class="ident">str</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">SyncGuid</span><span class="op">&gt;</span><span class="op">&gt;</span> {
+<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">href_to_guid</span>(<span class="ident">db</span>: <span class="kw-2">&amp;</span><span class="ident">PlacesDb</span>, <span class="ident">url</span>: <span class="kw-2">&amp;</span><span class="ident">str</span>) <span class="op">-&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">SyncGuid</span><span class="op">&gt;&gt;</span> {
     <span class="kw">let</span> <span class="ident">sql</span> <span class="op">=</span> <span class="string">&quot;SELECT guid FROM moz_places WHERE url_hash = hash(:url) AND url = :url&quot;</span>;
     <span class="kw">let</span> <span class="ident">result</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">SyncGuid</span><span class="op">&gt;</span> <span class="op">=</span> <span class="ident">db</span>.<span class="ident">try_query_row</span>(
         <span class="ident">sql</span>,
         <span class="kw-2">&amp;</span>[(<span class="string">&quot;:url&quot;</span>, <span class="kw-2">&amp;</span><span class="ident">url</span>.<span class="ident">to_owned</span>())],
         <span class="comment">// subtle: we explicitly need to specify rusqlite::Result or the compiler</span>
         <span class="comment">// struggles to work out what error type to return from try_query_row.</span>
-        <span class="op">|</span><span class="ident">row</span><span class="op">|</span> <span class="op">-</span><span class="op">&gt;</span> <span class="ident">rusqlite</span>::<span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="kw">_</span><span class="op">&gt;</span> { <span class="prelude-val">Ok</span>(<span class="ident">row</span>.<span class="ident">get</span>::<span class="op">&lt;</span><span class="kw">_</span>, <span class="ident">SyncGuid</span><span class="op">&gt;</span>(<span class="number">0</span>)<span class="question-mark">?</span>) },
+        <span class="op">|</span><span class="ident">row</span><span class="op">|</span> <span class="op">-&gt;</span> <span class="ident">rusqlite</span>::<span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="kw">_</span><span class="op">&gt;</span> { <span class="prelude-val">Ok</span>(<span class="ident">row</span>.<span class="ident">get</span>::<span class="op">&lt;</span><span class="kw">_</span>, <span class="ident">SyncGuid</span><span class="op">&gt;</span>(<span class="number">0</span>)<span class="question-mark">?</span>) },
         <span class="bool-val">true</span>,
     )<span class="question-mark">?</span>;
     <span class="prelude-val">Ok</span>(<span class="ident">result</span>)
@@ -3149,7 +3150,7 @@
 
 <span class="doccomment">/// Internal function for deleting a page, creating a tombstone if necessary.</span>
 <span class="doccomment">/// Assumes a transaction is already set up by the caller.</span>
-<span class="kw">fn</span> <span class="ident">delete_visits_for_in_tx</span>(<span class="ident">db</span>: <span class="kw-2">&amp;</span><span class="ident">PlacesDb</span>, <span class="ident">guid</span>: <span class="kw-2">&amp;</span><span class="ident">SyncGuid</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span>()<span class="op">&gt;</span> {
+<span class="kw">fn</span> <span class="ident">delete_visits_for_in_tx</span>(<span class="ident">db</span>: <span class="kw-2">&amp;</span><span class="ident">PlacesDb</span>, <span class="ident">guid</span>: <span class="kw-2">&amp;</span><span class="ident">SyncGuid</span>) <span class="op">-&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span>()<span class="op">&gt;</span> {
     <span class="comment">// We only create tombstones for history which exists and with sync_status</span>
     <span class="comment">// == SyncStatus::Normal</span>
     <span class="kw">let</span> <span class="ident">to_clean</span> <span class="op">=</span> <span class="ident">db</span>.<span class="ident">conn</span>().<span class="ident">try_query_row</span>(
@@ -3169,7 +3170,7 @@
             <span class="ident">has_foreign</span>: <span class="bool-val">true</span>,
             <span class="ident">sync_status</span>: <span class="ident">SyncStatus</span>::<span class="ident">Normal</span>,
             ..
-        }) <span class="op">=</span><span class="op">&gt;</span> {
+        }) <span class="op">=&gt;</span> {
             <span class="comment">// If our page is syncing, and has foreign key references (like</span>
             <span class="comment">// local or synced bookmarks, keywords, and tags), we can&#39;t delete</span>
             <span class="comment">// its row from `moz_places` directly; that would cause a constraint</span>
@@ -3184,7 +3185,7 @@
             <span class="ident">has_foreign</span>: <span class="bool-val">false</span>,
             <span class="ident">sync_status</span>: <span class="ident">SyncStatus</span>::<span class="ident">Normal</span>,
             ..
-        }) <span class="op">=</span><span class="op">&gt;</span> {
+        }) <span class="op">=&gt;</span> {
             <span class="comment">// However, if our page is syncing and _doesn&#39;t_ have any foreign</span>
             <span class="comment">// key references, we can delete it from `moz_places` outright, and</span>
             <span class="comment">// write a tombstone for the page instead of all the visits.</span>
@@ -3195,7 +3196,7 @@
             <span class="ident">id</span>,
             <span class="ident">has_foreign</span>: <span class="bool-val">true</span>,
             ..
-        }) <span class="op">=</span><span class="op">&gt;</span> {
+        }) <span class="op">=&gt;</span> {
             <span class="comment">// If our page has foreign key references but _isn&#39;t_ syncing,</span>
             <span class="comment">// we still can&#39;t delete it; we must delete its visits. But we</span>
             <span class="comment">// don&#39;t need to write any tombstones for those deleted visits.</span>
@@ -3205,19 +3206,19 @@
             <span class="ident">id</span>,
             <span class="ident">has_foreign</span>: <span class="bool-val">false</span>,
             ..
-        }) <span class="op">=</span><span class="op">&gt;</span> {
+        }) <span class="op">=&gt;</span> {
             <span class="comment">// And, finally, the easiest case: not syncing, and no foreign</span>
             <span class="comment">// key references, so just delete the page.</span>
             <span class="ident">delete_page</span>(<span class="ident">db</span>, <span class="ident">id</span>)<span class="question-mark">?</span>;
         }
-        <span class="prelude-val">None</span> <span class="op">=</span><span class="op">&gt;</span> {}
+        <span class="prelude-val">None</span> <span class="op">=&gt;</span> {}
     }
     <span class="ident">delete_pending_temp_tables</span>(<span class="ident">db</span>)<span class="question-mark">?</span>;
     <span class="prelude-val">Ok</span>(())
 }
 
 <span class="doccomment">/// Inserts Sync tombstones for all of a page&#39;s visits.</span>
-<span class="kw">fn</span> <span class="ident">insert_tombstones_for_all_page_visits</span>(<span class="ident">db</span>: <span class="kw-2">&amp;</span><span class="ident">PlacesDb</span>, <span class="ident">page_id</span>: <span class="ident">RowId</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span>()<span class="op">&gt;</span> {
+<span class="kw">fn</span> <span class="ident">insert_tombstones_for_all_page_visits</span>(<span class="ident">db</span>: <span class="kw-2">&amp;</span><span class="ident">PlacesDb</span>, <span class="ident">page_id</span>: <span class="ident">RowId</span>) <span class="op">-&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span>()<span class="op">&gt;</span> {
     <span class="ident">db</span>.<span class="ident">execute_named_cached</span>(
         <span class="string">&quot;INSERT OR IGNORE INTO moz_historyvisit_tombstones(place_id, visit_date)
          SELECT place_id, visit_date
@@ -3229,7 +3230,7 @@
 }
 
 <span class="doccomment">/// Removes all visits from a page.</span>
-<span class="kw">fn</span> <span class="ident">delete_all_visits_for_page</span>(<span class="ident">db</span>: <span class="kw-2">&amp;</span><span class="ident">PlacesDb</span>, <span class="ident">page_id</span>: <span class="ident">RowId</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span>()<span class="op">&gt;</span> {
+<span class="kw">fn</span> <span class="ident">delete_all_visits_for_page</span>(<span class="ident">db</span>: <span class="kw-2">&amp;</span><span class="ident">PlacesDb</span>, <span class="ident">page_id</span>: <span class="ident">RowId</span>) <span class="op">-&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span>()<span class="op">&gt;</span> {
     <span class="ident">db</span>.<span class="ident">execute_named_cached</span>(
         <span class="string">&quot;DELETE FROM moz_historyvisits
          WHERE place_id = :page_id&quot;</span>,
@@ -3239,7 +3240,7 @@
 }
 
 <span class="doccomment">/// Inserts a Sync tombstone for a page.</span>
-<span class="kw">fn</span> <span class="ident">insert_tombstone_for_page</span>(<span class="ident">db</span>: <span class="kw-2">&amp;</span><span class="ident">PlacesDb</span>, <span class="ident">guid</span>: <span class="kw-2">&amp;</span><span class="ident">SyncGuid</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span>()<span class="op">&gt;</span> {
+<span class="kw">fn</span> <span class="ident">insert_tombstone_for_page</span>(<span class="ident">db</span>: <span class="kw-2">&amp;</span><span class="ident">PlacesDb</span>, <span class="ident">guid</span>: <span class="kw-2">&amp;</span><span class="ident">SyncGuid</span>) <span class="op">-&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span>()<span class="op">&gt;</span> {
     <span class="ident">db</span>.<span class="ident">execute_named_cached</span>(
         <span class="string">&quot;INSERT OR IGNORE INTO moz_places_tombstones (guid)
          VALUES(:guid)&quot;</span>,
@@ -3250,7 +3251,7 @@
 
 <span class="doccomment">/// Deletes a page. Note that this throws a constraint violation if the page is</span>
 <span class="doccomment">/// bookmarked, or has a keyword or tags.</span>
-<span class="kw">fn</span> <span class="ident">delete_page</span>(<span class="ident">db</span>: <span class="kw-2">&amp;</span><span class="ident">PlacesDb</span>, <span class="ident">page_id</span>: <span class="ident">RowId</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span>()<span class="op">&gt;</span> {
+<span class="kw">fn</span> <span class="ident">delete_page</span>(<span class="ident">db</span>: <span class="kw-2">&amp;</span><span class="ident">PlacesDb</span>, <span class="ident">page_id</span>: <span class="ident">RowId</span>) <span class="op">-&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span>()<span class="op">&gt;</span> {
     <span class="ident">db</span>.<span class="ident">execute_named_cached</span>(
         <span class="string">&quot;DELETE FROM moz_places
          WHERE id = :page_id&quot;</span>,
@@ -3261,7 +3262,7 @@
 
 <span class="doccomment">/// Deletes all visits for a page given its GUID, creating tombstones if</span>
 <span class="doccomment">/// necessary.</span>
-<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">delete_visits_for</span>(<span class="ident">db</span>: <span class="kw-2">&amp;</span><span class="ident">PlacesDb</span>, <span class="ident">guid</span>: <span class="kw-2">&amp;</span><span class="ident">SyncGuid</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span>()<span class="op">&gt;</span> {
+<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">delete_visits_for</span>(<span class="ident">db</span>: <span class="kw-2">&amp;</span><span class="ident">PlacesDb</span>, <span class="ident">guid</span>: <span class="kw-2">&amp;</span><span class="ident">SyncGuid</span>) <span class="op">-&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span>()<span class="op">&gt;</span> {
     <span class="kw">let</span> <span class="ident">tx</span> <span class="op">=</span> <span class="ident">db</span>.<span class="ident">begin_transaction</span>()<span class="question-mark">?</span>;
     <span class="kw">let</span> <span class="ident">result</span> <span class="op">=</span> <span class="ident">delete_visits_for_in_tx</span>(<span class="ident">db</span>, <span class="ident">guid</span>);
     <span class="ident">tx</span>.<span class="ident">commit</span>()<span class="question-mark">?</span>;
@@ -3269,14 +3270,14 @@
 }
 
 <span class="doccomment">/// Delete all visits in a date range.</span>
-<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">delete_visits_between</span>(<span class="ident">db</span>: <span class="kw-2">&amp;</span><span class="ident">PlacesDb</span>, <span class="ident">start</span>: <span class="ident">Timestamp</span>, <span class="ident">end</span>: <span class="ident">Timestamp</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span>()<span class="op">&gt;</span> {
+<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">delete_visits_between</span>(<span class="ident">db</span>: <span class="kw-2">&amp;</span><span class="ident">PlacesDb</span>, <span class="ident">start</span>: <span class="ident">Timestamp</span>, <span class="ident">end</span>: <span class="ident">Timestamp</span>) <span class="op">-&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span>()<span class="op">&gt;</span> {
     <span class="kw">let</span> <span class="ident">tx</span> <span class="op">=</span> <span class="ident">db</span>.<span class="ident">begin_transaction</span>()<span class="question-mark">?</span>;
     <span class="ident">delete_visits_between_in_tx</span>(<span class="ident">db</span>, <span class="ident">start</span>, <span class="ident">end</span>)<span class="question-mark">?</span>;
     <span class="ident">tx</span>.<span class="ident">commit</span>()<span class="question-mark">?</span>;
     <span class="prelude-val">Ok</span>(())
 }
 
-<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">delete_place_visit_at_time</span>(<span class="ident">db</span>: <span class="kw-2">&amp;</span><span class="ident">PlacesDb</span>, <span class="ident">place</span>: <span class="kw-2">&amp;</span><span class="ident">Url</span>, <span class="ident">visit</span>: <span class="ident">Timestamp</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span>()<span class="op">&gt;</span> {
+<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">delete_place_visit_at_time</span>(<span class="ident">db</span>: <span class="kw-2">&amp;</span><span class="ident">PlacesDb</span>, <span class="ident">place</span>: <span class="kw-2">&amp;</span><span class="ident">Url</span>, <span class="ident">visit</span>: <span class="ident">Timestamp</span>) <span class="op">-&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span>()<span class="op">&gt;</span> {
     <span class="ident">delete_place_visit_at_time_by_href</span>(<span class="ident">db</span>, <span class="ident">place</span>.<span class="ident">as_str</span>(), <span class="ident">visit</span>)
 }
 
@@ -3284,19 +3285,19 @@
     <span class="ident">db</span>: <span class="kw-2">&amp;</span><span class="ident">PlacesDb</span>,
     <span class="ident">place</span>: <span class="kw-2">&amp;</span><span class="ident">str</span>,
     <span class="ident">visit</span>: <span class="ident">Timestamp</span>,
-) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span>()<span class="op">&gt;</span> {
+) <span class="op">-&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span>()<span class="op">&gt;</span> {
     <span class="kw">let</span> <span class="ident">tx</span> <span class="op">=</span> <span class="ident">db</span>.<span class="ident">begin_transaction</span>()<span class="question-mark">?</span>;
     <span class="ident">delete_place_visit_at_time_in_tx</span>(<span class="ident">db</span>, <span class="ident">place</span>, <span class="ident">visit</span>)<span class="question-mark">?</span>;
     <span class="ident">tx</span>.<span class="ident">commit</span>()<span class="question-mark">?</span>;
     <span class="prelude-val">Ok</span>(())
 }
 
-<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">prune_destructively</span>(<span class="ident">db</span>: <span class="kw-2">&amp;</span><span class="ident">PlacesDb</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span>()<span class="op">&gt;</span> {
+<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">prune_destructively</span>(<span class="ident">db</span>: <span class="kw-2">&amp;</span><span class="ident">PlacesDb</span>) <span class="op">-&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span>()<span class="op">&gt;</span> {
     <span class="comment">// For now, just fall back to wipe_local until we decide how this should work.</span>
     <span class="ident">wipe_local</span>(<span class="ident">db</span>)
 }
 
-<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">wipe_local</span>(<span class="ident">db</span>: <span class="kw-2">&amp;</span><span class="ident">PlacesDb</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span>()<span class="op">&gt;</span> {
+<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">wipe_local</span>(<span class="ident">db</span>: <span class="kw-2">&amp;</span><span class="ident">PlacesDb</span>) <span class="op">-&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span>()<span class="op">&gt;</span> {
     <span class="kw">let</span> <span class="ident">tx</span> <span class="op">=</span> <span class="ident">db</span>.<span class="ident">begin_transaction</span>()<span class="question-mark">?</span>;
     <span class="ident">wipe_local_in_tx</span>(<span class="ident">db</span>)<span class="question-mark">?</span>;
     <span class="ident">tx</span>.<span class="ident">commit</span>()<span class="question-mark">?</span>;
@@ -3305,7 +3306,7 @@
     <span class="prelude-val">Ok</span>(())
 }
 
-<span class="kw">fn</span> <span class="ident">wipe_local_in_tx</span>(<span class="ident">db</span>: <span class="kw-2">&amp;</span><span class="ident">PlacesDb</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span>()<span class="op">&gt;</span> {
+<span class="kw">fn</span> <span class="ident">wipe_local_in_tx</span>(<span class="ident">db</span>: <span class="kw-2">&amp;</span><span class="ident">PlacesDb</span>) <span class="op">-&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span>()<span class="op">&gt;</span> {
     <span class="kw">use</span> <span class="kw">crate</span>::<span class="ident">frecency</span>::<span class="ident">DEFAULT_FRECENCY_SETTINGS</span>;
     <span class="ident">db</span>.<span class="ident">execute_all</span>(<span class="kw-2">&amp;</span>[
         <span class="string">&quot;DELETE FROM moz_places WHERE foreign_count == 0&quot;</span>,
@@ -3340,7 +3341,7 @@
     <span class="prelude-val">Ok</span>(())
 }
 
-<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">delete_everything</span>(<span class="ident">db</span>: <span class="kw-2">&amp;</span><span class="ident">PlacesDb</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span>()<span class="op">&gt;</span> {
+<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">delete_everything</span>(<span class="ident">db</span>: <span class="kw-2">&amp;</span><span class="ident">PlacesDb</span>) <span class="op">-&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span>()<span class="op">&gt;</span> {
     <span class="kw">let</span> <span class="ident">tx</span> <span class="op">=</span> <span class="ident">db</span>.<span class="ident">begin_transaction</span>()<span class="question-mark">?</span>;
 
     <span class="comment">// Remote visits could have a higher date than `now` if our clock is weird.</span>
@@ -3370,7 +3371,7 @@
     <span class="prelude-val">Ok</span>(())
 }
 
-<span class="kw">fn</span> <span class="ident">delete_place_visit_at_time_in_tx</span>(<span class="ident">db</span>: <span class="kw-2">&amp;</span><span class="ident">PlacesDb</span>, <span class="ident">url</span>: <span class="kw-2">&amp;</span><span class="ident">str</span>, <span class="ident">visit_date</span>: <span class="ident">Timestamp</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span>()<span class="op">&gt;</span> {
+<span class="kw">fn</span> <span class="ident">delete_place_visit_at_time_in_tx</span>(<span class="ident">db</span>: <span class="kw-2">&amp;</span><span class="ident">PlacesDb</span>, <span class="ident">url</span>: <span class="kw-2">&amp;</span><span class="ident">str</span>, <span class="ident">visit_date</span>: <span class="ident">Timestamp</span>) <span class="op">-&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span>()<span class="op">&gt;</span> {
     <span class="kw">let</span> <span class="ident">place</span> <span class="op">=</span> <span class="ident">db</span>.<span class="ident">conn</span>().<span class="ident">try_query_row</span>(
         <span class="string">&quot;SELECT h.id
          FROM moz_places h
@@ -3423,7 +3424,7 @@
     <span class="prelude-val">Ok</span>(())
 }
 
-<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">delete_visits_between_in_tx</span>(<span class="ident">db</span>: <span class="kw-2">&amp;</span><span class="ident">PlacesDb</span>, <span class="ident">start</span>: <span class="ident">Timestamp</span>, <span class="ident">end</span>: <span class="ident">Timestamp</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span>()<span class="op">&gt;</span> {
+<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">delete_visits_between_in_tx</span>(<span class="ident">db</span>: <span class="kw-2">&amp;</span><span class="ident">PlacesDb</span>, <span class="ident">start</span>: <span class="ident">Timestamp</span>, <span class="ident">end</span>: <span class="ident">Timestamp</span>) <span class="op">-&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span>()<span class="op">&gt;</span> {
     <span class="comment">// Like desktop&#39;s removeVisitsByFilter, we query the visit and place ids</span>
     <span class="comment">// affected, then delete all visits, then delete all place ids in the set</span>
     <span class="comment">// which are orphans after the delete.</span>
@@ -3436,7 +3437,7 @@
     <span class="kw">let</span> <span class="ident">visits</span> <span class="op">=</span> <span class="ident">db</span>.<span class="ident">query_rows_and_then_named</span>(
         <span class="ident">sql</span>,
         <span class="kw-2">&amp;</span>[(<span class="string">&quot;:start&quot;</span>, <span class="kw-2">&amp;</span><span class="ident">start</span>), (<span class="string">&quot;:end&quot;</span>, <span class="kw-2">&amp;</span><span class="ident">end</span>)],
-        <span class="op">|</span><span class="ident">row</span><span class="op">|</span> <span class="op">-</span><span class="op">&gt;</span> <span class="ident">rusqlite</span>::<span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="kw">_</span><span class="op">&gt;</span> {
+        <span class="op">|</span><span class="ident">row</span><span class="op">|</span> <span class="op">-&gt;</span> <span class="ident">rusqlite</span>::<span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="kw">_</span><span class="op">&gt;</span> {
             <span class="prelude-val">Ok</span>((
                 <span class="ident">row</span>.<span class="ident">get</span>::<span class="op">&lt;</span><span class="kw">_</span>, <span class="ident">RowId</span><span class="op">&gt;</span>(<span class="number">0</span>)<span class="question-mark">?</span>,
                 <span class="ident">row</span>.<span class="ident">get</span>::<span class="op">&lt;</span><span class="kw">_</span>, <span class="ident">RowId</span><span class="op">&gt;</span>(<span class="number">1</span>)<span class="question-mark">?</span>,
@@ -3448,7 +3449,7 @@
     <span class="ident">sql_support</span>::<span class="ident">each_chunk_mapped</span>(
         <span class="kw-2">&amp;</span><span class="ident">visits</span>,
         <span class="op">|</span>(<span class="ident">visit_id</span>, <span class="kw">_</span>, <span class="kw">_</span>)<span class="op">|</span> <span class="ident">visit_id</span>,
-        <span class="op">|</span><span class="ident">chunk</span>, <span class="kw">_</span><span class="op">|</span> <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span>()<span class="op">&gt;</span> {
+        <span class="op">|</span><span class="ident">chunk</span>, <span class="kw">_</span><span class="op">|</span> <span class="op">-&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span>()<span class="op">&gt;</span> {
             <span class="ident">db</span>.<span class="ident">conn</span>().<span class="ident">execute</span>(
                 <span class="kw-2">&amp;</span><span class="macro">format</span><span class="macro">!</span>(
                     <span class="string">&quot;DELETE from moz_historyvisits WHERE id IN ({})&quot;</span>,
@@ -3476,7 +3477,7 @@
     <span class="ident">sql_support</span>::<span class="ident">each_chunk_mapped</span>(
         <span class="kw-2">&amp;</span><span class="ident">visits</span>,
         <span class="op">|</span>(<span class="kw">_</span>, <span class="ident">place_id</span>, <span class="kw">_</span>)<span class="op">|</span> <span class="ident">place_id</span>.<span class="number">0</span>,
-        <span class="op">|</span><span class="ident">chunk</span>, <span class="kw">_</span><span class="op">|</span> <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span>()<span class="op">&gt;</span> {
+        <span class="op">|</span><span class="ident">chunk</span>, <span class="kw">_</span><span class="op">|</span> <span class="op">-&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span>()<span class="op">&gt;</span> {
             <span class="kw">let</span> <span class="ident">query</span> <span class="op">=</span> <span class="macro">format</span><span class="macro">!</span>(
                 <span class="string">&quot;SELECT id, -- url, url_hash, guid
                     (foreign_count != 0) AS has_foreign,
@@ -3489,7 +3490,7 @@
 
             <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">stmt</span> <span class="op">=</span> <span class="ident">db</span>.<span class="ident">conn</span>().<span class="ident">prepare</span>(<span class="kw-2">&amp;</span><span class="ident">query</span>)<span class="question-mark">?</span>;
             <span class="kw">let</span> <span class="ident">page_results</span> <span class="op">=</span> <span class="ident">stmt</span>.<span class="ident">query_and_then</span>(<span class="ident">chunk</span>, <span class="ident">PageToClean</span>::<span class="ident">from_row</span>)<span class="question-mark">?</span>;
-            <span class="kw">let</span> <span class="ident">pages</span>: <span class="ident">Vec</span><span class="op">&lt;</span><span class="ident">PageToClean</span><span class="op">&gt;</span> <span class="op">=</span> <span class="ident">page_results</span>.<span class="ident">collect</span>::<span class="op">&lt;</span><span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="kw">_</span><span class="op">&gt;</span><span class="op">&gt;</span>()<span class="question-mark">?</span>;
+            <span class="kw">let</span> <span class="ident">pages</span>: <span class="ident">Vec</span><span class="op">&lt;</span><span class="ident">PageToClean</span><span class="op">&gt;</span> <span class="op">=</span> <span class="ident">page_results</span>.<span class="ident">collect</span>::<span class="op">&lt;</span><span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="kw">_</span><span class="op">&gt;&gt;</span>()<span class="question-mark">?</span>;
             <span class="ident">cleanup_pages</span>(<span class="ident">db</span>, <span class="kw-2">&amp;</span><span class="ident">pages</span>)
         },
     )<span class="question-mark">?</span>;
@@ -3506,7 +3507,7 @@
 }
 
 <span class="kw">impl</span> <span class="ident">PageToClean</span> {
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">from_row</span>(<span class="ident">row</span>: <span class="kw-2">&amp;</span><span class="ident">Row</span><span class="op">&lt;</span><span class="lifetime">&#39;_</span><span class="op">&gt;</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="self">Self</span><span class="op">&gt;</span> {
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">from_row</span>(<span class="ident">row</span>: <span class="kw-2">&amp;</span><span class="ident">Row</span><span class="op">&lt;</span><span class="lifetime">&#39;_</span><span class="op">&gt;</span>) <span class="op">-&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="self">Self</span><span class="op">&gt;</span> {
         <span class="prelude-val">Ok</span>(<span class="self">Self</span> {
             <span class="ident">id</span>: <span class="ident">row</span>.<span class="ident">get</span>(<span class="string">&quot;id&quot;</span>)<span class="question-mark">?</span>,
             <span class="ident">has_foreign</span>: <span class="ident">row</span>.<span class="ident">get</span>(<span class="string">&quot;has_foreign&quot;</span>)<span class="question-mark">?</span>,
@@ -3521,12 +3522,12 @@
 <span class="doccomment">/// typically because all visits have been removed and there</span>
 <span class="doccomment">/// are no more foreign keys such as bookmarks) or updating</span>
 <span class="doccomment">/// their frecency.</span>
-<span class="kw">fn</span> <span class="ident">cleanup_pages</span>(<span class="ident">db</span>: <span class="kw-2">&amp;</span><span class="ident">PlacesDb</span>, <span class="ident">pages</span>: <span class="kw-2">&amp;</span>[<span class="ident">PageToClean</span>]) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span>()<span class="op">&gt;</span> {
+<span class="kw">fn</span> <span class="ident">cleanup_pages</span>(<span class="ident">db</span>: <span class="kw-2">&amp;</span><span class="ident">PlacesDb</span>, <span class="ident">pages</span>: <span class="kw-2">&amp;</span>[<span class="ident">PageToClean</span>]) <span class="op">-&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span>()<span class="op">&gt;</span> {
     <span class="comment">// desktop does this frecency work using a function in a single sql</span>
     <span class="comment">// statement - we should see if we can do that too.</span>
     <span class="kw">let</span> <span class="ident">frec_ids</span> <span class="op">=</span> <span class="ident">pages</span>
         .<span class="ident">iter</span>()
-        .<span class="ident">filter</span>(<span class="op">|</span><span class="kw-2">&amp;</span><span class="ident">p</span><span class="op">|</span> <span class="ident">p</span>.<span class="ident">has_foreign</span> <span class="op">|</span><span class="op">|</span> <span class="ident">p</span>.<span class="ident">has_visits</span>)
+        .<span class="ident">filter</span>(<span class="op">|</span><span class="kw-2">&amp;</span><span class="ident">p</span><span class="op">|</span> <span class="ident">p</span>.<span class="ident">has_foreign</span> <span class="op">||</span> <span class="ident">p</span>.<span class="ident">has_visits</span>)
         .<span class="ident">map</span>(<span class="op">|</span><span class="ident">p</span><span class="op">|</span> <span class="ident">p</span>.<span class="ident">id</span>);
 
     <span class="kw">for</span> <span class="ident">id</span> <span class="kw">in</span> <span class="ident">frec_ids</span> {
@@ -3540,10 +3541,10 @@
     <span class="comment">// we do it anyway.</span>
     <span class="kw">let</span> <span class="ident">remove_ids</span>: <span class="ident">Vec</span><span class="op">&lt;</span><span class="ident">RowId</span><span class="op">&gt;</span> <span class="op">=</span> <span class="ident">pages</span>
         .<span class="ident">iter</span>()
-        .<span class="ident">filter</span>(<span class="op">|</span><span class="ident">p</span><span class="op">|</span> <span class="op">!</span><span class="ident">p</span>.<span class="ident">has_foreign</span> <span class="kw-2">&amp;</span><span class="op">&amp;</span> <span class="op">!</span><span class="ident">p</span>.<span class="ident">has_visits</span>)
+        .<span class="ident">filter</span>(<span class="op">|</span><span class="ident">p</span><span class="op">|</span> <span class="op">!</span><span class="ident">p</span>.<span class="ident">has_foreign</span> <span class="op">&amp;&amp;</span> <span class="op">!</span><span class="ident">p</span>.<span class="ident">has_visits</span>)
         .<span class="ident">map</span>(<span class="op">|</span><span class="ident">p</span><span class="op">|</span> <span class="ident">p</span>.<span class="ident">id</span>)
         .<span class="ident">collect</span>();
-    <span class="ident">sql_support</span>::<span class="ident">each_chunk</span>(<span class="kw-2">&amp;</span><span class="ident">remove_ids</span>, <span class="op">|</span><span class="ident">chunk</span>, <span class="kw">_</span><span class="op">|</span> <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span>()<span class="op">&gt;</span> {
+    <span class="ident">sql_support</span>::<span class="ident">each_chunk</span>(<span class="kw-2">&amp;</span><span class="ident">remove_ids</span>, <span class="op">|</span><span class="ident">chunk</span>, <span class="kw">_</span><span class="op">|</span> <span class="op">-&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span>()<span class="op">&gt;</span> {
         <span class="comment">// tombstones first.</span>
         <span class="ident">db</span>.<span class="ident">conn</span>().<span class="ident">execute</span>(
             <span class="kw-2">&amp;</span><span class="macro">format</span><span class="macro">!</span>(
@@ -3577,7 +3578,7 @@
     <span class="prelude-val">Ok</span>(())
 }
 
-<span class="kw">fn</span> <span class="ident">reset_in_tx</span>(<span class="ident">db</span>: <span class="kw-2">&amp;</span><span class="ident">PlacesDb</span>, <span class="ident">assoc</span>: <span class="kw-2">&amp;</span><span class="ident">StoreSyncAssociation</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span>()<span class="op">&gt;</span> {
+<span class="kw">fn</span> <span class="ident">reset_in_tx</span>(<span class="ident">db</span>: <span class="kw-2">&amp;</span><span class="ident">PlacesDb</span>, <span class="ident">assoc</span>: <span class="kw-2">&amp;</span><span class="ident">StoreSyncAssociation</span>) <span class="op">-&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span>()<span class="op">&gt;</span> {
     <span class="comment">// Reset change counters and sync statuses for all URLs.</span>
     <span class="ident">db</span>.<span class="ident">execute_cached</span>(
         <span class="kw-2">&amp;</span><span class="macro">format</span><span class="macro">!</span>(
@@ -3597,11 +3598,11 @@
     <span class="comment">// Clear the sync ID if we&#39;re signing out, or set it to whatever the</span>
     <span class="comment">// server gave us if we&#39;re signing in.</span>
     <span class="kw">match</span> <span class="ident">assoc</span> {
-        <span class="ident">StoreSyncAssociation</span>::<span class="ident">Disconnected</span> <span class="op">=</span><span class="op">&gt;</span> {
+        <span class="ident">StoreSyncAssociation</span>::<span class="ident">Disconnected</span> <span class="op">=&gt;</span> {
             <span class="ident">delete_meta</span>(<span class="ident">db</span>, <span class="ident">GLOBAL_SYNCID_META_KEY</span>)<span class="question-mark">?</span>;
             <span class="ident">delete_meta</span>(<span class="ident">db</span>, <span class="ident">COLLECTION_SYNCID_META_KEY</span>)<span class="question-mark">?</span>;
         }
-        <span class="ident">StoreSyncAssociation</span>::<span class="ident">Connected</span>(<span class="ident">ids</span>) <span class="op">=</span><span class="op">&gt;</span> {
+        <span class="ident">StoreSyncAssociation</span>::<span class="ident">Connected</span>(<span class="ident">ids</span>) <span class="op">=&gt;</span> {
             <span class="ident">put_meta</span>(<span class="ident">db</span>, <span class="ident">GLOBAL_SYNCID_META_KEY</span>, <span class="kw-2">&amp;</span><span class="ident">ids</span>.<span class="ident">global</span>)<span class="question-mark">?</span>;
             <span class="ident">put_meta</span>(<span class="ident">db</span>, <span class="ident">COLLECTION_SYNCID_META_KEY</span>, <span class="kw-2">&amp;</span><span class="ident">ids</span>.<span class="ident">coll</span>)<span class="question-mark">?</span>;
         }
@@ -3625,14 +3626,14 @@
     }
 
     <span class="kw">impl</span> <span class="ident">FetchedVisit</span> {
-        <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">from_row</span>(<span class="ident">row</span>: <span class="kw-2">&amp;</span><span class="ident">Row</span><span class="op">&lt;</span><span class="lifetime">&#39;_</span><span class="op">&gt;</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="self">Self</span><span class="op">&gt;</span> {
+        <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">from_row</span>(<span class="ident">row</span>: <span class="kw-2">&amp;</span><span class="ident">Row</span><span class="op">&lt;</span><span class="lifetime">&#39;_</span><span class="op">&gt;</span>) <span class="op">-&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="self">Self</span><span class="op">&gt;</span> {
             <span class="prelude-val">Ok</span>(<span class="self">Self</span> {
                 <span class="ident">is_local</span>: <span class="ident">row</span>.<span class="ident">get</span>(<span class="string">&quot;is_local&quot;</span>)<span class="question-mark">?</span>,
                 <span class="ident">visit_date</span>: <span class="ident">row</span>
-                    .<span class="ident">get</span>::<span class="op">&lt;</span><span class="kw">_</span>, <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">Timestamp</span><span class="op">&gt;</span><span class="op">&gt;</span>(<span class="string">&quot;visit_date&quot;</span>)<span class="question-mark">?</span>
+                    .<span class="ident">get</span>::<span class="op">&lt;</span><span class="kw">_</span>, <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">Timestamp</span><span class="op">&gt;&gt;</span>(<span class="string">&quot;visit_date&quot;</span>)<span class="question-mark">?</span>
                     .<span class="ident">unwrap_or_default</span>(),
                 <span class="ident">visit_type</span>: <span class="ident">VisitTransition</span>::<span class="ident">from_primitive</span>(
-                    <span class="ident">row</span>.<span class="ident">get</span>::<span class="op">&lt;</span><span class="kw">_</span>, <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">u8</span><span class="op">&gt;</span><span class="op">&gt;</span>(<span class="string">&quot;visit_type&quot;</span>)<span class="question-mark">?</span>.<span class="ident">unwrap_or</span>(<span class="number">0</span>),
+                    <span class="ident">row</span>.<span class="ident">get</span>::<span class="op">&lt;</span><span class="kw">_</span>, <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">u8</span><span class="op">&gt;&gt;</span>(<span class="string">&quot;visit_type&quot;</span>)<span class="question-mark">?</span>.<span class="ident">unwrap_or</span>(<span class="number">0</span>),
                 ),
             })
         }
@@ -3647,12 +3648,12 @@
     }
 
     <span class="kw">impl</span> <span class="ident">FetchedVisitPage</span> {
-        <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">from_row</span>(<span class="ident">row</span>: <span class="kw-2">&amp;</span><span class="ident">Row</span><span class="op">&lt;</span><span class="lifetime">&#39;_</span><span class="op">&gt;</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="self">Self</span><span class="op">&gt;</span> {
+        <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">from_row</span>(<span class="ident">row</span>: <span class="kw-2">&amp;</span><span class="ident">Row</span><span class="op">&lt;</span><span class="lifetime">&#39;_</span><span class="op">&gt;</span>) <span class="op">-&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="self">Self</span><span class="op">&gt;</span> {
             <span class="prelude-val">Ok</span>(<span class="self">Self</span> {
                 <span class="ident">url</span>: <span class="ident">Url</span>::<span class="ident">parse</span>(<span class="kw-2">&amp;</span><span class="ident">row</span>.<span class="ident">get</span>::<span class="op">&lt;</span><span class="kw">_</span>, <span class="ident">String</span><span class="op">&gt;</span>(<span class="string">&quot;url&quot;</span>)<span class="question-mark">?</span>)<span class="question-mark">?</span>,
                 <span class="ident">guid</span>: <span class="ident">row</span>.<span class="ident">get</span>::<span class="op">&lt;</span><span class="kw">_</span>, <span class="ident">String</span><span class="op">&gt;</span>(<span class="string">&quot;guid&quot;</span>)<span class="question-mark">?</span>.<span class="ident">into</span>(),
                 <span class="ident">row_id</span>: <span class="ident">row</span>.<span class="ident">get</span>(<span class="string">&quot;id&quot;</span>)<span class="question-mark">?</span>,
-                <span class="ident">title</span>: <span class="ident">row</span>.<span class="ident">get</span>::<span class="op">&lt;</span><span class="kw">_</span>, <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">String</span><span class="op">&gt;</span><span class="op">&gt;</span>(<span class="string">&quot;title&quot;</span>)<span class="question-mark">?</span>.<span class="ident">unwrap_or_default</span>(),
+                <span class="ident">title</span>: <span class="ident">row</span>.<span class="ident">get</span>::<span class="op">&lt;</span><span class="kw">_</span>, <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">String</span><span class="op">&gt;&gt;</span>(<span class="string">&quot;title&quot;</span>)<span class="question-mark">?</span>.<span class="ident">unwrap_or_default</span>(),
             })
         }
     }
@@ -3661,7 +3662,7 @@
         <span class="ident">db</span>: <span class="kw-2">&amp;</span><span class="ident">PlacesDb</span>,
         <span class="ident">url</span>: <span class="kw-2">&amp;</span><span class="ident">Url</span>,
         <span class="ident">limit</span>: <span class="ident">usize</span>,
-    ) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="prelude-ty">Option</span><span class="op">&lt;</span>(<span class="ident">FetchedVisitPage</span>, <span class="ident">Vec</span><span class="op">&lt;</span><span class="ident">FetchedVisit</span><span class="op">&gt;</span>)<span class="op">&gt;</span><span class="op">&gt;</span> {
+    ) <span class="op">-&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="prelude-ty">Option</span><span class="op">&lt;</span>(<span class="ident">FetchedVisitPage</span>, <span class="ident">Vec</span><span class="op">&lt;</span><span class="ident">FetchedVisit</span><span class="op">&gt;</span>)<span class="op">&gt;&gt;</span> {
         <span class="comment">// We do this in 2 steps - &quot;do we have a page&quot; then &quot;get visits&quot;</span>
         <span class="kw">let</span> <span class="ident">page_sql</span> <span class="op">=</span> <span class="string">&quot;
           SELECT guid, url, id, title
@@ -3674,8 +3675,8 @@
             <span class="ident">FetchedVisitPage</span>::<span class="ident">from_row</span>,
             <span class="bool-val">true</span>,
         )<span class="question-mark">?</span> {
-            <span class="prelude-val">None</span> <span class="op">=</span><span class="op">&gt;</span> <span class="kw">return</span> <span class="prelude-val">Ok</span>(<span class="prelude-val">None</span>),
-            <span class="prelude-val">Some</span>(<span class="ident">pi</span>) <span class="op">=</span><span class="op">&gt;</span> <span class="ident">pi</span>,
+            <span class="prelude-val">None</span> <span class="op">=&gt;</span> <span class="kw">return</span> <span class="prelude-val">Ok</span>(<span class="prelude-val">None</span>),
+            <span class="prelude-val">Some</span>(<span class="ident">pi</span>) <span class="op">=&gt;</span> <span class="ident">pi</span>,
         };
 
         <span class="kw">let</span> <span class="ident">visits</span> <span class="op">=</span> <span class="ident">db</span>.<span class="ident">query_rows_and_then_named</span>(
@@ -3700,7 +3701,7 @@
         <span class="ident">url</span>: <span class="kw-2">&amp;</span><span class="ident">Url</span>,
         <span class="ident">title</span>: <span class="kw-2">&amp;</span><span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">String</span><span class="op">&gt;</span>,
         <span class="ident">visits</span>: <span class="kw-2">&amp;</span>[<span class="ident">HistoryRecordVisit</span>],
-    ) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span>()<span class="op">&gt;</span> {
+    ) <span class="op">-&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span>()<span class="op">&gt;</span> {
         <span class="comment">// At some point we may have done a local wipe of all visits. We skip applying</span>
         <span class="comment">// incoming visits that could have been part of that deletion, to avoid them</span>
         <span class="comment">// trickling back in.</span>
@@ -3711,17 +3712,17 @@
             .<span class="ident">iter</span>()
             .<span class="ident">cloned</span>()
             .<span class="ident">filter</span>(<span class="op">|</span><span class="ident">v</span><span class="op">|</span> <span class="ident">Timestamp</span>::<span class="ident">from</span>(<span class="ident">v</span>.<span class="ident">date</span>) <span class="op">&gt;</span> <span class="ident">visit_ignored_mark</span>)
-            .<span class="ident">collect</span>::<span class="op">&lt;</span><span class="ident">Vec</span><span class="op">&lt;</span><span class="kw">_</span><span class="op">&gt;</span><span class="op">&gt;</span>();
+            .<span class="ident">collect</span>::<span class="op">&lt;</span><span class="ident">Vec</span><span class="op">&lt;</span><span class="kw">_</span><span class="op">&gt;&gt;</span>();
 
         <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">counter_incr</span> <span class="op">=</span> <span class="number">0</span>;
         <span class="kw">let</span> <span class="ident">page_info</span> <span class="op">=</span> <span class="kw">match</span> <span class="ident">fetch_page_info</span>(<span class="ident">db</span>, <span class="kw-2">&amp;</span><span class="ident">url</span>)<span class="question-mark">?</span> {
-            <span class="prelude-val">Some</span>(<span class="kw-2">mut</span> <span class="ident">info</span>) <span class="op">=</span><span class="op">&gt;</span> {
+            <span class="prelude-val">Some</span>(<span class="kw-2">mut</span> <span class="ident">info</span>) <span class="op">=&gt;</span> {
                 <span class="comment">// If the existing record has not yet been synced, then we will</span>
                 <span class="comment">// change the GUID to the incoming one. If it has been synced</span>
                 <span class="comment">// we keep the existing guid, but still apply the visits.</span>
                 <span class="comment">// See doc/history_duping.rst for more details.</span>
-                <span class="kw">if</span> <span class="kw-2">&amp;</span><span class="ident">info</span>.<span class="ident">page</span>.<span class="ident">guid</span> <span class="op">!</span><span class="op">=</span> <span class="ident">incoming_guid</span> {
-                    <span class="kw">if</span> <span class="ident">info</span>.<span class="ident">page</span>.<span class="ident">sync_status</span> <span class="op">=</span><span class="op">=</span> <span class="ident">SyncStatus</span>::<span class="ident">New</span> {
+                <span class="kw">if</span> <span class="kw-2">&amp;</span><span class="ident">info</span>.<span class="ident">page</span>.<span class="ident">guid</span> <span class="op">!=</span> <span class="ident">incoming_guid</span> {
+                    <span class="kw">if</span> <span class="ident">info</span>.<span class="ident">page</span>.<span class="ident">sync_status</span> <span class="op">==</span> <span class="ident">SyncStatus</span>::<span class="ident">New</span> {
                         <span class="ident">db</span>.<span class="ident">execute_named_cached</span>(
                             <span class="string">&quot;UPDATE moz_places SET guid = :new_guid WHERE id = :row_id&quot;</span>,
                             <span class="kw-2">&amp;</span>[(<span class="string">&quot;:new_guid&quot;</span>, <span class="ident">incoming_guid</span>), (<span class="string">&quot;:row_id&quot;</span>, <span class="kw-2">&amp;</span><span class="ident">info</span>.<span class="ident">page</span>.<span class="ident">row_id</span>)],
@@ -3735,7 +3736,7 @@
                 }
                 <span class="ident">info</span>.<span class="ident">page</span>
             }
-            <span class="prelude-val">None</span> <span class="op">=</span><span class="op">&gt;</span> {
+            <span class="prelude-val">None</span> <span class="op">=&gt;</span> {
                 <span class="comment">// Before we insert a new page_info, make sure we actually will</span>
                 <span class="comment">// have any visits to add.</span>
                 <span class="kw">if</span> <span class="ident">visits</span>.<span class="ident">is_empty</span>() {
@@ -3822,7 +3823,7 @@
         <span class="prelude-val">Ok</span>(())
     }
 
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">apply_synced_reconciliation</span>(<span class="ident">db</span>: <span class="kw-2">&amp;</span><span class="ident">PlacesDb</span>, <span class="ident">guid</span>: <span class="kw-2">&amp;</span><span class="ident">SyncGuid</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span>()<span class="op">&gt;</span> {
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">apply_synced_reconciliation</span>(<span class="ident">db</span>: <span class="kw-2">&amp;</span><span class="ident">PlacesDb</span>, <span class="ident">guid</span>: <span class="kw-2">&amp;</span><span class="ident">SyncGuid</span>) <span class="op">-&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span>()<span class="op">&gt;</span> {
         <span class="ident">db</span>.<span class="ident">execute_named_cached</span>(
             <span class="string">&quot;UPDATE moz_places
                 SET sync_status = :status,
@@ -3833,7 +3834,7 @@
         <span class="prelude-val">Ok</span>(())
     }
 
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">apply_synced_deletion</span>(<span class="ident">db</span>: <span class="kw-2">&amp;</span><span class="ident">PlacesDb</span>, <span class="ident">guid</span>: <span class="kw-2">&amp;</span><span class="ident">SyncGuid</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span>()<span class="op">&gt;</span> {
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">apply_synced_deletion</span>(<span class="ident">db</span>: <span class="kw-2">&amp;</span><span class="ident">PlacesDb</span>, <span class="ident">guid</span>: <span class="kw-2">&amp;</span><span class="ident">SyncGuid</span>) <span class="op">-&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span>()<span class="op">&gt;</span> {
         <span class="ident">db</span>.<span class="ident">execute_named_cached</span>(
             <span class="string">&quot;DELETE FROM moz_places WHERE guid = :guid&quot;</span>,
             <span class="kw-2">&amp;</span>[(<span class="string">&quot;:guid&quot;</span>, <span class="ident">guid</span>)],
@@ -3851,7 +3852,7 @@
         <span class="ident">db</span>: <span class="kw-2">&amp;</span><span class="ident">PlacesDb</span>,
         <span class="ident">max_places</span>: <span class="ident">usize</span>,
         <span class="ident">max_visits</span>: <span class="ident">usize</span>,
-    ) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">HashMap</span><span class="op">&lt;</span><span class="ident">SyncGuid</span>, <span class="ident">OutgoingInfo</span><span class="op">&gt;</span><span class="op">&gt;</span> {
+    ) <span class="op">-&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">HashMap</span><span class="op">&lt;</span><span class="ident">SyncGuid</span>, <span class="ident">OutgoingInfo</span><span class="op">&gt;&gt;</span> {
         <span class="comment">// Note that we want *all* &quot;new&quot; regardless of change counter,</span>
         <span class="comment">// so that we do the right thing after a &quot;reset&quot;. We also</span>
         <span class="comment">// exclude hidden URLs from syncing, to match Desktop</span>
@@ -3885,7 +3886,7 @@
         <span class="kw">let</span> <span class="ident">ts_rows</span> <span class="op">=</span> <span class="ident">db</span>.<span class="ident">query_rows_and_then_named</span>(
             <span class="ident">tombstones_sql</span>,
             <span class="kw-2">&amp;</span>[(<span class="string">&quot;:max_places&quot;</span>, <span class="kw-2">&amp;</span>(<span class="ident">max_places</span> <span class="kw">as</span> <span class="ident">u32</span>))],
-            <span class="op">|</span><span class="ident">row</span><span class="op">|</span> <span class="op">-</span><span class="op">&gt;</span> <span class="ident">rusqlite</span>::<span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">SyncGuid</span><span class="op">&gt;</span> { <span class="prelude-val">Ok</span>(<span class="ident">row</span>.<span class="ident">get</span>::<span class="op">&lt;</span><span class="kw">_</span>, <span class="ident">String</span><span class="op">&gt;</span>(<span class="string">&quot;guid&quot;</span>)<span class="question-mark">?</span>.<span class="ident">into</span>()) },
+            <span class="op">|</span><span class="ident">row</span><span class="op">|</span> <span class="op">-&gt;</span> <span class="ident">rusqlite</span>::<span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">SyncGuid</span><span class="op">&gt;</span> { <span class="prelude-val">Ok</span>(<span class="ident">row</span>.<span class="ident">get</span>::<span class="op">&lt;</span><span class="kw">_</span>, <span class="ident">String</span><span class="op">&gt;</span>(<span class="string">&quot;guid&quot;</span>)<span class="question-mark">?</span>.<span class="ident">into</span>()) },
         )<span class="question-mark">?</span>;
         <span class="comment">// It&#39;s unfortunatee that query_rows_and_then_named returns a Vec instead of an iterator</span>
         <span class="comment">// (which would be very hard to do), but as long as we have it, we might as well make use</span>
@@ -3927,7 +3928,7 @@
                     (<span class="string">&quot;:max_visits&quot;</span>, <span class="kw-2">&amp;</span>(<span class="ident">max_visits</span> <span class="kw">as</span> <span class="ident">u32</span>)),
                     (<span class="string">&quot;:place_id&quot;</span>, <span class="kw-2">&amp;</span><span class="ident">page</span>.<span class="ident">row_id</span>),
                 ],
-                <span class="op">|</span><span class="ident">row</span><span class="op">|</span> <span class="op">-</span><span class="op">&gt;</span> <span class="ident">RusqliteResult</span><span class="op">&lt;</span><span class="kw">_</span><span class="op">&gt;</span> {
+                <span class="op">|</span><span class="ident">row</span><span class="op">|</span> <span class="op">-&gt;</span> <span class="ident">RusqliteResult</span><span class="op">&lt;</span><span class="kw">_</span><span class="op">&gt;</span> {
                     <span class="prelude-val">Ok</span>(<span class="ident">HistoryRecordVisit</span> {
                         <span class="ident">date</span>: <span class="ident">row</span>.<span class="ident">get</span>::<span class="op">&lt;</span><span class="kw">_</span>, <span class="ident">Timestamp</span><span class="op">&gt;</span>(<span class="string">&quot;date&quot;</span>)<span class="question-mark">?</span>.<span class="ident">into</span>(),
                         <span class="ident">transition</span>: <span class="ident">row</span>.<span class="ident">get</span>::<span class="op">&lt;</span><span class="kw">_</span>, <span class="ident">u8</span><span class="op">&gt;</span>(<span class="string">&quot;transition&quot;</span>)<span class="question-mark">?</span>,
@@ -3976,7 +3977,7 @@
         <span class="comment">// the upload, because if we are interrupted between upload and writing</span>
         <span class="comment">// we could end up with local items with state New even though we</span>
         <span class="comment">// uploaded them.</span>
-        <span class="ident">sql_support</span>::<span class="ident">each_chunk</span>(<span class="kw-2">&amp;</span><span class="ident">ids_to_update</span>, <span class="op">|</span><span class="ident">chunk</span>, <span class="kw">_</span><span class="op">|</span> <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span>()<span class="op">&gt;</span> {
+        <span class="ident">sql_support</span>::<span class="ident">each_chunk</span>(<span class="kw-2">&amp;</span><span class="ident">ids_to_update</span>, <span class="op">|</span><span class="ident">chunk</span>, <span class="kw">_</span><span class="op">|</span> <span class="op">-&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span>()<span class="op">&gt;</span> {
             <span class="ident">db</span>.<span class="ident">conn</span>().<span class="ident">execute</span>(
                 <span class="kw-2">&amp;</span><span class="macro">format</span><span class="macro">!</span>(
                     <span class="string">&quot;UPDATE moz_places SET sync_status={status}
@@ -3992,7 +3993,7 @@
         <span class="prelude-val">Ok</span>(<span class="ident">result</span>)
     }
 
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">finish_outgoing</span>(<span class="ident">db</span>: <span class="kw-2">&amp;</span><span class="ident">PlacesDb</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span>()<span class="op">&gt;</span> {
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">finish_outgoing</span>(<span class="ident">db</span>: <span class="kw-2">&amp;</span><span class="ident">PlacesDb</span>) <span class="op">-&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span>()<span class="op">&gt;</span> {
         <span class="comment">// So all items *other* than those above must be set to &quot;not dirty&quot;</span>
         <span class="comment">// (ie, status=SyncStatus::Normal, change_counter=0). Otherwise every</span>
         <span class="comment">// subsequent sync will continue to add more and more local pages</span>
@@ -4037,7 +4038,7 @@
     <span class="doccomment">/// Resets all sync metadata, including change counters, sync statuses,</span>
     <span class="doccomment">/// the last sync time, and sync ID. This should be called when the user</span>
     <span class="doccomment">/// signs out of Sync.</span>
-    <span class="kw">pub</span>(<span class="kw">crate</span>) <span class="kw">fn</span> <span class="ident">reset</span>(<span class="ident">db</span>: <span class="kw-2">&amp;</span><span class="ident">PlacesDb</span>, <span class="ident">assoc</span>: <span class="kw-2">&amp;</span><span class="ident">StoreSyncAssociation</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span>()<span class="op">&gt;</span> {
+    <span class="kw">pub</span>(<span class="kw">crate</span>) <span class="kw">fn</span> <span class="ident">reset</span>(<span class="ident">db</span>: <span class="kw-2">&amp;</span><span class="ident">PlacesDb</span>, <span class="ident">assoc</span>: <span class="kw-2">&amp;</span><span class="ident">StoreSyncAssociation</span>) <span class="op">-&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span>()<span class="op">&gt;</span> {
         <span class="kw">let</span> <span class="ident">tx</span> <span class="op">=</span> <span class="ident">db</span>.<span class="ident">begin_transaction</span>()<span class="question-mark">?</span>;
         <span class="ident">reset_in_tx</span>(<span class="ident">db</span>, <span class="ident">assoc</span>)<span class="question-mark">?</span>;
         <span class="ident">tx</span>.<span class="ident">commit</span>()<span class="question-mark">?</span>;
@@ -4045,14 +4046,14 @@
     }
 } <span class="comment">// end of sync module.</span>
 
-<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">get_visited</span><span class="op">&lt;</span><span class="ident">I</span><span class="op">&gt;</span>(<span class="ident">db</span>: <span class="kw-2">&amp;</span><span class="ident">PlacesDb</span>, <span class="ident">urls</span>: <span class="ident">I</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">Vec</span><span class="op">&lt;</span><span class="ident">bool</span><span class="op">&gt;</span><span class="op">&gt;</span>
+<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">get_visited</span><span class="op">&lt;</span><span class="ident">I</span><span class="op">&gt;</span>(<span class="ident">db</span>: <span class="kw-2">&amp;</span><span class="ident">PlacesDb</span>, <span class="ident">urls</span>: <span class="ident">I</span>) <span class="op">-&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">Vec</span><span class="op">&lt;</span><span class="ident">bool</span><span class="op">&gt;&gt;</span>
 <span class="kw">where</span>
     <span class="ident">I</span>: <span class="ident">IntoIterator</span><span class="op">&lt;</span><span class="ident">Item</span> <span class="op">=</span> <span class="ident">Url</span><span class="op">&gt;</span>,
     <span class="ident">I</span>::<span class="ident">IntoIter</span>: <span class="ident">ExactSizeIterator</span>,
 {
     <span class="kw">let</span> <span class="ident">iter</span> <span class="op">=</span> <span class="ident">urls</span>.<span class="ident">into_iter</span>();
     <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">result</span> <span class="op">=</span> <span class="macro">vec</span><span class="macro">!</span>[<span class="bool-val">false</span>; <span class="ident">iter</span>.<span class="ident">len</span>()];
-    <span class="kw">let</span> <span class="ident">url_idxs</span> <span class="op">=</span> <span class="ident">iter</span>.<span class="ident">enumerate</span>().<span class="ident">collect</span>::<span class="op">&lt;</span><span class="ident">Vec</span><span class="op">&lt;</span><span class="kw">_</span><span class="op">&gt;</span><span class="op">&gt;</span>();
+    <span class="kw">let</span> <span class="ident">url_idxs</span> <span class="op">=</span> <span class="ident">iter</span>.<span class="ident">enumerate</span>().<span class="ident">collect</span>::<span class="op">&lt;</span><span class="ident">Vec</span><span class="op">&lt;</span><span class="kw">_</span><span class="op">&gt;&gt;</span>();
     <span class="ident">get_visited_into</span>(<span class="ident">db</span>, <span class="kw-2">&amp;</span><span class="ident">url_idxs</span>, <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">result</span>)<span class="question-mark">?</span>;
     <span class="prelude-val">Ok</span>(<span class="ident">result</span>)
 }
@@ -4067,11 +4068,11 @@
     <span class="ident">db</span>: <span class="kw-2">&amp;</span><span class="ident">PlacesDb</span>,
     <span class="ident">urls_idxs</span>: <span class="kw-2">&amp;</span>[(<span class="ident">usize</span>, <span class="ident">Url</span>)],
     <span class="ident">result</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> [<span class="ident">bool</span>],
-) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span>()<span class="op">&gt;</span> {
+) <span class="op">-&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span>()<span class="op">&gt;</span> {
     <span class="ident">sql_support</span>::<span class="ident">each_chunk_mapped</span>(
         <span class="kw-2">&amp;</span><span class="ident">urls_idxs</span>,
         <span class="op">|</span>(<span class="kw">_</span>, <span class="ident">url</span>)<span class="op">|</span> <span class="ident">url</span>.<span class="ident">as_str</span>(),
-        <span class="op">|</span><span class="ident">chunk</span>, <span class="ident">offset</span><span class="op">|</span> <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span>()<span class="op">&gt;</span> {
+        <span class="op">|</span><span class="ident">chunk</span>, <span class="ident">offset</span><span class="op">|</span> <span class="op">-&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span>()<span class="op">&gt;</span> {
             <span class="kw">let</span> <span class="ident">values_with_idx</span> <span class="op">=</span> <span class="ident">sql_support</span>::<span class="ident">repeat_display</span>(<span class="ident">chunk</span>.<span class="ident">len</span>(), <span class="string">&quot;,&quot;</span>, <span class="op">|</span><span class="ident">i</span>, <span class="ident">f</span><span class="op">|</span> {
                 <span class="kw">let</span> (<span class="ident">idx</span>, <span class="ident">url</span>) <span class="op">=</span> <span class="kw-2">&amp;</span><span class="ident">urls_idxs</span>[<span class="ident">i</span> <span class="op">+</span> <span class="ident">offset</span>];
                 <span class="macro">write</span><span class="macro">!</span>(<span class="ident">f</span>, <span class="string">&quot;({},{},?)&quot;</span>, <span class="kw-2">*</span><span class="ident">idx</span>, <span class="ident">hash</span>::<span class="ident">hash_url</span>(<span class="ident">url</span>.<span class="ident">as_str</span>()))
@@ -4085,7 +4086,7 @@
                 <span class="ident">values_with_idx</span>
             );
             <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">stmt</span> <span class="op">=</span> <span class="ident">db</span>.<span class="ident">prepare</span>(<span class="kw-2">&amp;</span><span class="ident">sql</span>)<span class="question-mark">?</span>;
-            <span class="kw">for</span> <span class="ident">idx_r</span> <span class="kw">in</span> <span class="ident">stmt</span>.<span class="ident">query_and_then</span>(<span class="ident">chunk</span>, <span class="op">|</span><span class="ident">row</span><span class="op">|</span> <span class="op">-</span><span class="op">&gt;</span> <span class="ident">rusqlite</span>::<span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="kw">_</span><span class="op">&gt;</span> {
+            <span class="kw">for</span> <span class="ident">idx_r</span> <span class="kw">in</span> <span class="ident">stmt</span>.<span class="ident">query_and_then</span>(<span class="ident">chunk</span>, <span class="op">|</span><span class="ident">row</span><span class="op">|</span> <span class="op">-&gt;</span> <span class="ident">rusqlite</span>::<span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="kw">_</span><span class="op">&gt;</span> {
                 <span class="prelude-val">Ok</span>(<span class="ident">row</span>.<span class="ident">get</span>::<span class="op">&lt;</span><span class="kw">_</span>, <span class="ident">i64</span><span class="op">&gt;</span>(<span class="number">0</span>)<span class="question-mark">?</span> <span class="kw">as</span> <span class="ident">usize</span>)
             })<span class="question-mark">?</span> {
                 <span class="kw">let</span> <span class="ident">idx</span> <span class="op">=</span> <span class="ident">idx_r</span><span class="question-mark">?</span>;
@@ -4104,7 +4105,7 @@
     <span class="ident">start</span>: <span class="ident">Timestamp</span>,
     <span class="ident">end</span>: <span class="ident">Timestamp</span>,
     <span class="ident">include_remote</span>: <span class="ident">bool</span>,
-) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">Vec</span><span class="op">&lt;</span><span class="ident">String</span><span class="op">&gt;</span><span class="op">&gt;</span> {
+) <span class="op">-&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">Vec</span><span class="op">&lt;</span><span class="ident">String</span><span class="op">&gt;&gt;</span> {
     <span class="comment">// TODO: if `end` is &gt;= now then we can probably just look at last_visit_date_{local,remote},</span>
     <span class="comment">// and avoid touching `moz_historyvisits` at all. That said, this query is taken more or less</span>
     <span class="comment">// from what places does so it&#39;s probably fine.</span>
@@ -4123,11 +4124,11 @@
     <span class="prelude-val">Ok</span>(<span class="ident">db</span>.<span class="ident">query_rows_and_then_named_cached</span>(
         <span class="kw-2">&amp;</span><span class="ident">sql</span>,
         <span class="kw-2">&amp;</span>[(<span class="string">&quot;:start&quot;</span>, <span class="kw-2">&amp;</span><span class="ident">start</span>), (<span class="string">&quot;:end&quot;</span>, <span class="kw-2">&amp;</span><span class="ident">end</span>)],
-        <span class="op">|</span><span class="ident">row</span><span class="op">|</span> <span class="op">-</span><span class="op">&gt;</span> <span class="ident">RusqliteResult</span><span class="op">&lt;</span><span class="kw">_</span><span class="op">&gt;</span> { <span class="prelude-val">Ok</span>(<span class="ident">row</span>.<span class="ident">get</span>::<span class="op">&lt;</span><span class="kw">_</span>, <span class="ident">String</span><span class="op">&gt;</span>(<span class="number">0</span>)<span class="question-mark">?</span>) },
+        <span class="op">|</span><span class="ident">row</span><span class="op">|</span> <span class="op">-&gt;</span> <span class="ident">RusqliteResult</span><span class="op">&lt;</span><span class="kw">_</span><span class="op">&gt;</span> { <span class="prelude-val">Ok</span>(<span class="ident">row</span>.<span class="ident">get</span>::<span class="op">&lt;</span><span class="kw">_</span>, <span class="ident">String</span><span class="op">&gt;</span>(<span class="number">0</span>)<span class="question-mark">?</span>) },
     )<span class="question-mark">?</span>)
 }
 
-<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">get_top_frecent_site_infos</span>(<span class="ident">db</span>: <span class="kw-2">&amp;</span><span class="ident">PlacesDb</span>, <span class="ident">num_items</span>: <span class="ident">i32</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">TopFrecentSiteInfos</span><span class="op">&gt;</span> {
+<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">get_top_frecent_site_infos</span>(<span class="ident">db</span>: <span class="kw-2">&amp;</span><span class="ident">PlacesDb</span>, <span class="ident">num_items</span>: <span class="ident">i32</span>) <span class="op">-&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">TopFrecentSiteInfos</span><span class="op">&gt;</span> {
     <span class="comment">// Get the complement of the visit types that should be excluded.</span>
     <span class="kw">let</span> <span class="ident">allowed_types</span> <span class="op">=</span> <span class="ident">VisitTransitionSet</span>::<span class="ident">for_specific</span>(<span class="kw-2">&amp;</span>[
         <span class="ident">VisitTransition</span>::<span class="ident">Download</span>,
@@ -4167,7 +4168,7 @@
     <span class="ident">start</span>: <span class="ident">Timestamp</span>,
     <span class="ident">end</span>: <span class="ident">Timestamp</span>,
     <span class="ident">exclude_types</span>: <span class="ident">VisitTransitionSet</span>,
-) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">HistoryVisitInfos</span><span class="op">&gt;</span> {
+) <span class="op">-&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">HistoryVisitInfos</span><span class="op">&gt;</span> {
     <span class="kw">let</span> <span class="ident">allowed_types</span> <span class="op">=</span> <span class="ident">exclude_types</span>.<span class="ident">complement</span>();
     <span class="kw">let</span> <span class="ident">infos</span> <span class="op">=</span> <span class="ident">db</span>.<span class="ident">query_rows_and_then_named_cached</span>(
         <span class="string">&quot;SELECT h.url, h.title, v.visit_date, v.visit_type, h.hidden
@@ -4188,7 +4189,7 @@
     <span class="prelude-val">Ok</span>(<span class="ident">HistoryVisitInfos</span> { <span class="ident">infos</span> })
 }
 
-<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">get_visit_count</span>(<span class="ident">db</span>: <span class="kw-2">&amp;</span><span class="ident">PlacesDb</span>, <span class="ident">exclude_types</span>: <span class="ident">VisitTransitionSet</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">i64</span><span class="op">&gt;</span> {
+<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">get_visit_count</span>(<span class="ident">db</span>: <span class="kw-2">&amp;</span><span class="ident">PlacesDb</span>, <span class="ident">exclude_types</span>: <span class="ident">VisitTransitionSet</span>) <span class="op">-&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">i64</span><span class="op">&gt;</span> {
     <span class="kw">let</span> <span class="ident">count</span> <span class="op">=</span> <span class="kw">if</span> <span class="ident">exclude_types</span>.<span class="ident">is_empty</span>() {
         <span class="ident">db</span>.<span class="ident">query_one</span>::<span class="op">&lt;</span><span class="ident">i64</span><span class="op">&gt;</span>(<span class="string">&quot;SELECT COUNT(*) FROM moz_historyvisits&quot;</span>)<span class="question-mark">?</span>
     } <span class="kw">else</span> {
@@ -4212,7 +4213,7 @@
     <span class="ident">offset</span>: <span class="ident">i64</span>,
     <span class="ident">count</span>: <span class="ident">i64</span>,
     <span class="ident">exclude_types</span>: <span class="ident">VisitTransitionSet</span>,
-) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">HistoryVisitInfos</span><span class="op">&gt;</span> {
+) <span class="op">-&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">HistoryVisitInfos</span><span class="op">&gt;</span> {
     <span class="kw">let</span> <span class="ident">allowed_types</span> <span class="op">=</span> <span class="ident">exclude_types</span>.<span class="ident">complement</span>();
     <span class="kw">let</span> <span class="ident">infos</span> <span class="op">=</span> <span class="ident">db</span>.<span class="ident">query_rows_and_then_named_cached</span>(
         <span class="string">&quot;SELECT h.url, h.title, v.visit_date, v.visit_type, h.hidden
@@ -4240,7 +4241,7 @@
     <span class="ident">offset</span>: <span class="ident">i64</span>,
     <span class="ident">count</span>: <span class="ident">i64</span>,
     <span class="ident">exclude_types</span>: <span class="ident">VisitTransitionSet</span>,
-) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">HistoryVisitInfosWithBound</span><span class="op">&gt;</span> {
+) <span class="op">-&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">HistoryVisitInfosWithBound</span><span class="op">&gt;</span> {
     <span class="kw">let</span> <span class="ident">allowed_types</span> <span class="op">=</span> <span class="ident">exclude_types</span>.<span class="ident">complement</span>();
     <span class="kw">let</span> <span class="ident">infos</span> <span class="op">=</span> <span class="ident">db</span>.<span class="ident">query_rows_and_then_named_cached</span>(
         <span class="string">&quot;SELECT h.url, h.title, v.visit_date, v.visit_type, h.hidden
@@ -4263,7 +4264,7 @@
     )<span class="question-mark">?</span>;
 
     <span class="kw">if</span> <span class="kw">let</span> <span class="prelude-val">Some</span>(<span class="ident">l</span>) <span class="op">=</span> <span class="ident">infos</span>.<span class="ident">last</span>() {
-        <span class="kw">if</span> <span class="ident">l</span>.<span class="ident">timestamp</span> <span class="op">=</span><span class="op">=</span> <span class="ident">bound</span> {
+        <span class="kw">if</span> <span class="ident">l</span>.<span class="ident">timestamp</span> <span class="op">==</span> <span class="ident">bound</span> {
             <span class="comment">// all items&#39; timestamp are equal to the previous bound</span>
             <span class="kw">let</span> <span class="ident">offset</span> <span class="op">=</span> <span class="ident">offset</span> <span class="op">+</span> <span class="ident">infos</span>.<span class="ident">len</span>() <span class="kw">as</span> <span class="ident">i64</span>;
             <span class="prelude-val">Ok</span>(<span class="ident">HistoryVisitInfosWithBound</span> {
@@ -4276,7 +4277,7 @@
             <span class="kw">let</span> <span class="ident">offset</span> <span class="op">=</span> <span class="ident">infos</span>
                 .<span class="ident">iter</span>()
                 .<span class="ident">rev</span>()
-                .<span class="ident">take_while</span>(<span class="op">|</span><span class="ident">i</span><span class="op">|</span> <span class="ident">i</span>.<span class="ident">timestamp</span> <span class="op">=</span><span class="op">=</span> <span class="ident">bound</span>)
+                .<span class="ident">take_while</span>(<span class="op">|</span><span class="ident">i</span><span class="op">|</span> <span class="ident">i</span>.<span class="ident">timestamp</span> <span class="op">==</span> <span class="ident">bound</span>)
                 .<span class="ident">count</span>() <span class="kw">as</span> <span class="ident">i64</span>;
             <span class="prelude-val">Ok</span>(<span class="ident">HistoryVisitInfosWithBound</span> {
                 <span class="ident">infos</span>,
@@ -4366,7 +4367,7 @@
         )
         .<span class="ident">unwrap</span>()
         .<span class="ident">into_iter</span>()
-        .<span class="ident">collect</span>::<span class="op">&lt;</span><span class="ident">HashSet</span><span class="op">&lt;</span><span class="kw">_</span><span class="op">&gt;</span><span class="op">&gt;</span>();
+        .<span class="ident">collect</span>::<span class="op">&lt;</span><span class="ident">HashSet</span><span class="op">&lt;</span><span class="kw">_</span><span class="op">&gt;&gt;</span>();
 
         <span class="kw">let</span> <span class="ident">visited_local</span> <span class="op">=</span> <span class="ident">get_visited_urls</span>(
             <span class="kw-2">&amp;</span><span class="ident">conn</span>,
@@ -4376,7 +4377,7 @@
         )
         .<span class="ident">unwrap</span>()
         .<span class="ident">into_iter</span>()
-        .<span class="ident">collect</span>::<span class="op">&lt;</span><span class="ident">HashSet</span><span class="op">&lt;</span><span class="kw">_</span><span class="op">&gt;</span><span class="op">&gt;</span>();
+        .<span class="ident">collect</span>::<span class="op">&lt;</span><span class="ident">HashSet</span><span class="op">&lt;</span><span class="kw">_</span><span class="op">&gt;&gt;</span>();
 
         <span class="kw">for</span> <span class="kw-2">&amp;</span>(<span class="ident">url</span>, <span class="ident">ts</span>, <span class="ident">is_remote</span>, (<span class="ident">expected_in_all</span>, <span class="ident">expected_in_local</span>)) <span class="kw">in</span> <span class="kw-2">&amp;</span><span class="ident">to_add</span> {
             <span class="comment">// Make sure we format stuff the same way (in practice, just trailing slashes)</span>
@@ -4396,9 +4397,9 @@
         }
     }
 
-    <span class="kw">fn</span> <span class="ident">get_custom_observed_page</span><span class="op">&lt;</span><span class="ident">F</span><span class="op">&gt;</span>(<span class="ident">conn</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">PlacesDb</span>, <span class="ident">url</span>: <span class="kw-2">&amp;</span><span class="ident">str</span>, <span class="ident">custom</span>: <span class="ident">F</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">PageInfo</span><span class="op">&gt;</span>
+    <span class="kw">fn</span> <span class="ident">get_custom_observed_page</span><span class="op">&lt;</span><span class="ident">F</span><span class="op">&gt;</span>(<span class="ident">conn</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">PlacesDb</span>, <span class="ident">url</span>: <span class="kw-2">&amp;</span><span class="ident">str</span>, <span class="ident">custom</span>: <span class="ident">F</span>) <span class="op">-&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">PageInfo</span><span class="op">&gt;</span>
     <span class="kw">where</span>
-        <span class="ident">F</span>: <span class="ident">Fn</span>(<span class="ident">VisitObservation</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">VisitObservation</span>,
+        <span class="ident">F</span>: <span class="ident">Fn</span>(<span class="ident">VisitObservation</span>) <span class="op">-&gt;</span> <span class="ident">VisitObservation</span>,
     {
         <span class="kw">let</span> <span class="ident">u</span> <span class="op">=</span> <span class="ident">Url</span>::<span class="ident">parse</span>(<span class="ident">url</span>)<span class="question-mark">?</span>;
         <span class="kw">let</span> <span class="ident">obs</span> <span class="op">=</span> <span class="ident">VisitObservation</span>::<span class="ident">new</span>(<span class="ident">u</span>.<span class="ident">clone</span>()).<span class="ident">with_visit_type</span>(<span class="ident">VisitTransition</span>::<span class="ident">Link</span>);
@@ -4408,12 +4409,12 @@
             .<span class="ident">page</span>)
     }
 
-    <span class="kw">fn</span> <span class="ident">get_observed_page</span>(<span class="ident">conn</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">PlacesDb</span>, <span class="ident">url</span>: <span class="kw-2">&amp;</span><span class="ident">str</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">PageInfo</span><span class="op">&gt;</span> {
+    <span class="kw">fn</span> <span class="ident">get_observed_page</span>(<span class="ident">conn</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">PlacesDb</span>, <span class="ident">url</span>: <span class="kw-2">&amp;</span><span class="ident">str</span>) <span class="op">-&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">PageInfo</span><span class="op">&gt;</span> {
         <span class="ident">get_custom_observed_page</span>(<span class="ident">conn</span>, <span class="ident">url</span>, <span class="op">|</span><span class="ident">o</span><span class="op">|</span> <span class="ident">o</span>)
     }
 
-    <span class="kw">fn</span> <span class="ident">get_tombstone_count</span>(<span class="ident">conn</span>: <span class="kw-2">&amp;</span><span class="ident">PlacesDb</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">u32</span> {
-        <span class="kw">let</span> <span class="ident">result</span>: <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">u32</span><span class="op">&gt;</span><span class="op">&gt;</span> <span class="op">=</span> <span class="ident">conn</span>.<span class="ident">try_query_row</span>(
+    <span class="kw">fn</span> <span class="ident">get_tombstone_count</span>(<span class="ident">conn</span>: <span class="kw-2">&amp;</span><span class="ident">PlacesDb</span>) <span class="op">-&gt;</span> <span class="ident">u32</span> {
+        <span class="kw">let</span> <span class="ident">result</span>: <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">u32</span><span class="op">&gt;&gt;</span> <span class="op">=</span> <span class="ident">conn</span>.<span class="ident">try_query_row</span>(
             <span class="string">&quot;SELECT COUNT(*) from moz_places_tombstones;&quot;</span>,
             <span class="kw-2">&amp;</span>[],
             <span class="op">|</span><span class="ident">row</span><span class="op">|</span> <span class="prelude-val">Ok</span>(<span class="ident">row</span>.<span class="ident">get</span>::<span class="op">&lt;</span><span class="kw">_</span>, <span class="ident">u32</span><span class="op">&gt;</span>(<span class="number">0</span>)<span class="question-mark">?</span>),
@@ -4425,7 +4426,7 @@
     }
 
     <span class="attribute">#[<span class="ident">test</span>]</span>
-    <span class="kw">fn</span> <span class="ident">test_visit_counts</span>() <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span>()<span class="op">&gt;</span> {
+    <span class="kw">fn</span> <span class="ident">test_visit_counts</span>() <span class="op">-&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span>()<span class="op">&gt;</span> {
         <span class="kw">let</span> <span class="kw">_</span> <span class="op">=</span> <span class="ident">env_logger</span>::<span class="ident">try_init</span>();
         <span class="kw">let</span> <span class="ident">conn</span> <span class="op">=</span> <span class="ident">PlacesDb</span>::<span class="ident">open_in_memory</span>(<span class="ident">ConnectionType</span>::<span class="ident">ReadWrite</span>)<span class="question-mark">?</span>;
         <span class="kw">let</span> <span class="ident">url</span> <span class="op">=</span> <span class="ident">Url</span>::<span class="ident">parse</span>(<span class="string">&quot;https://www.example.com&quot;</span>).<span class="ident">expect</span>(<span class="string">&quot;it&#39;s a valid url&quot;</span>);
@@ -4514,7 +4515,7 @@
     }
 
     <span class="attribute">#[<span class="ident">test</span>]</span>
-    <span class="kw">fn</span> <span class="ident">test_get_visited</span>() <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span>()<span class="op">&gt;</span> {
+    <span class="kw">fn</span> <span class="ident">test_get_visited</span>() <span class="op">-&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span>()<span class="op">&gt;</span> {
         <span class="kw">let</span> <span class="kw">_</span> <span class="op">=</span> <span class="ident">env_logger</span>::<span class="ident">try_init</span>();
         <span class="kw">let</span> <span class="ident">conn</span> <span class="op">=</span> <span class="ident">PlacesDb</span>::<span class="ident">open_in_memory</span>(<span class="ident">ConnectionType</span>::<span class="ident">ReadWrite</span>)<span class="question-mark">?</span>;
 
@@ -4574,7 +4575,7 @@
         <span class="kw">let</span> <span class="ident">urls</span> <span class="op">=</span> <span class="ident">to_search</span>
             .<span class="ident">iter</span>()
             .<span class="ident">map</span>(<span class="op">|</span>(<span class="ident">url</span>, <span class="ident">_expect</span>)<span class="op">|</span> <span class="ident">Url</span>::<span class="ident">parse</span>(<span class="kw-2">&amp;</span><span class="ident">url</span>).<span class="ident">unwrap</span>())
-            .<span class="ident">collect</span>::<span class="op">&lt;</span><span class="ident">Vec</span><span class="op">&lt;</span><span class="kw">_</span><span class="op">&gt;</span><span class="op">&gt;</span>();
+            .<span class="ident">collect</span>::<span class="op">&lt;</span><span class="ident">Vec</span><span class="op">&lt;</span><span class="kw">_</span><span class="op">&gt;&gt;</span>();
 
         <span class="kw">let</span> <span class="ident">visited</span> <span class="op">=</span> <span class="ident">get_visited</span>(<span class="kw-2">&amp;</span><span class="ident">conn</span>, <span class="ident">urls</span>).<span class="ident">unwrap</span>();
 
@@ -4738,7 +4739,7 @@
     }
 
     <span class="attribute">#[<span class="ident">test</span>]</span>
-    <span class="kw">fn</span> <span class="ident">test_change_counter</span>() <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span>()<span class="op">&gt;</span> {
+    <span class="kw">fn</span> <span class="ident">test_change_counter</span>() <span class="op">-&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span>()<span class="op">&gt;</span> {
         <span class="kw">let</span> <span class="kw">_</span> <span class="op">=</span> <span class="ident">env_logger</span>::<span class="ident">try_init</span>();
         <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">conn</span> <span class="op">=</span> <span class="ident">PlacesDb</span>::<span class="ident">open_in_memory</span>(<span class="ident">ConnectionType</span>::<span class="ident">ReadWrite</span>).<span class="ident">expect</span>(<span class="string">&quot;no memory db&quot;</span>);
         <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">pi</span> <span class="op">=</span> <span class="ident">get_observed_page</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">conn</span>, <span class="string">&quot;http://example.com&quot;</span>)<span class="question-mark">?</span>;
@@ -4756,7 +4757,7 @@
     }
 
     <span class="attribute">#[<span class="ident">test</span>]</span>
-    <span class="kw">fn</span> <span class="ident">test_status_columns</span>() <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span>()<span class="op">&gt;</span> {
+    <span class="kw">fn</span> <span class="ident">test_status_columns</span>() <span class="op">-&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span>()<span class="op">&gt;</span> {
         <span class="kw">let</span> <span class="kw">_</span> <span class="op">=</span> <span class="ident">env_logger</span>::<span class="ident">try_init</span>();
         <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">conn</span> <span class="op">=</span> <span class="ident">PlacesDb</span>::<span class="ident">open_in_memory</span>(<span class="ident">ConnectionType</span>::<span class="ident">ReadWrite</span>)<span class="question-mark">?</span>;
         <span class="kw">let</span> <span class="kw">_</span> <span class="op">=</span> <span class="ident">env_logger</span>::<span class="ident">try_init</span>();
@@ -4798,14 +4799,14 @@
         <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">records</span>: <span class="ident">Vec</span><span class="op">&lt;</span><span class="ident">HistoryRecord</span><span class="op">&gt;</span> <span class="op">=</span> <span class="ident">Vec</span>::<span class="ident">with_capacity</span>(<span class="ident">outgoing</span>.<span class="ident">len</span>());
         <span class="kw">for</span> (<span class="kw">_</span>, <span class="ident">outgoing</span>) <span class="kw">in</span> <span class="ident">outgoing</span>.<span class="ident">drain</span>() {
             <span class="ident">records</span>.<span class="ident">push</span>(<span class="kw">match</span> <span class="ident">outgoing</span> {
-                <span class="ident">OutgoingInfo</span>::<span class="ident">Record</span>(<span class="ident">record</span>) <span class="op">=</span><span class="op">&gt;</span> <span class="ident">record</span>,
-                <span class="kw">_</span> <span class="op">=</span><span class="op">&gt;</span> <span class="kw">continue</span>,
+                <span class="ident">OutgoingInfo</span>::<span class="ident">Record</span>(<span class="ident">record</span>) <span class="op">=&gt;</span> <span class="ident">record</span>,
+                <span class="kw">_</span> <span class="op">=&gt;</span> <span class="kw">continue</span>,
             });
         }
         <span class="comment">// want p1 or pi1 (but order is indeterminate)</span>
-        <span class="macro">assert</span><span class="macro">!</span>(<span class="ident">records</span>[<span class="number">0</span>].<span class="ident">id</span> <span class="op">!</span><span class="op">=</span> <span class="ident">records</span>[<span class="number">1</span>].<span class="ident">id</span>);
-        <span class="macro">assert</span><span class="macro">!</span>(<span class="ident">records</span>[<span class="number">0</span>].<span class="ident">id</span> <span class="op">=</span><span class="op">=</span> <span class="ident">pi</span>.<span class="ident">guid</span> <span class="op">|</span><span class="op">|</span> <span class="ident">records</span>[<span class="number">0</span>].<span class="ident">id</span> <span class="op">=</span><span class="op">=</span> <span class="ident">pi2</span>.<span class="ident">guid</span>);
-        <span class="macro">assert</span><span class="macro">!</span>(<span class="ident">records</span>[<span class="number">1</span>].<span class="ident">id</span> <span class="op">=</span><span class="op">=</span> <span class="ident">pi</span>.<span class="ident">guid</span> <span class="op">|</span><span class="op">|</span> <span class="ident">records</span>[<span class="number">1</span>].<span class="ident">id</span> <span class="op">=</span><span class="op">=</span> <span class="ident">pi2</span>.<span class="ident">guid</span>);
+        <span class="macro">assert</span><span class="macro">!</span>(<span class="ident">records</span>[<span class="number">0</span>].<span class="ident">id</span> <span class="op">!=</span> <span class="ident">records</span>[<span class="number">1</span>].<span class="ident">id</span>);
+        <span class="macro">assert</span><span class="macro">!</span>(<span class="ident">records</span>[<span class="number">0</span>].<span class="ident">id</span> <span class="op">==</span> <span class="ident">pi</span>.<span class="ident">guid</span> <span class="op">||</span> <span class="ident">records</span>[<span class="number">0</span>].<span class="ident">id</span> <span class="op">==</span> <span class="ident">pi2</span>.<span class="ident">guid</span>);
+        <span class="macro">assert</span><span class="macro">!</span>(<span class="ident">records</span>[<span class="number">1</span>].<span class="ident">id</span> <span class="op">==</span> <span class="ident">pi</span>.<span class="ident">guid</span> <span class="op">||</span> <span class="ident">records</span>[<span class="number">1</span>].<span class="ident">id</span> <span class="op">==</span> <span class="ident">pi2</span>.<span class="ident">guid</span>);
         <span class="ident">finish_outgoing</span>(<span class="kw-2">&amp;</span><span class="ident">conn</span>)<span class="question-mark">?</span>;
 
         <span class="ident">pi</span> <span class="op">=</span> <span class="ident">fetch_page_info</span>(<span class="kw-2">&amp;</span><span class="ident">conn</span>, <span class="kw-2">&amp;</span><span class="ident">pi</span>.<span class="ident">url</span>)<span class="question-mark">?</span>
@@ -4829,7 +4830,7 @@
     }
 
     <span class="attribute">#[<span class="ident">test</span>]</span>
-    <span class="kw">fn</span> <span class="ident">test_delete_visits_for</span>() <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span>()<span class="op">&gt;</span> {
+    <span class="kw">fn</span> <span class="ident">test_delete_visits_for</span>() <span class="op">-&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span>()<span class="op">&gt;</span> {
         <span class="kw">use</span> <span class="kw">crate</span>::<span class="ident">storage</span>::<span class="ident">bookmarks</span>::{
             <span class="self">self</span>, <span class="ident">BookmarkPosition</span>, <span class="ident">BookmarkRootGuid</span>, <span class="ident">InsertableBookmark</span>,
         };
@@ -4843,7 +4844,7 @@
             <span class="ident">keyword</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="kw-2">&amp;</span><span class="lifetime">&#39;static</span> <span class="ident">str</span><span class="op">&gt;</span>,
         }
 
-        <span class="kw">fn</span> <span class="ident">page_has_tombstone</span>(<span class="ident">conn</span>: <span class="kw-2">&amp;</span><span class="ident">PlacesDb</span>, <span class="ident">guid</span>: <span class="kw-2">&amp;</span><span class="ident">SyncGuid</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">bool</span><span class="op">&gt;</span> {
+        <span class="kw">fn</span> <span class="ident">page_has_tombstone</span>(<span class="ident">conn</span>: <span class="kw-2">&amp;</span><span class="ident">PlacesDb</span>, <span class="ident">guid</span>: <span class="kw-2">&amp;</span><span class="ident">SyncGuid</span>) <span class="op">-&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">bool</span><span class="op">&gt;</span> {
             <span class="kw">let</span> <span class="ident">exists</span> <span class="op">=</span> <span class="ident">conn</span>
                 .<span class="ident">try_query_one</span>::<span class="op">&lt;</span><span class="ident">bool</span><span class="op">&gt;</span>(
                     <span class="string">&quot;SELECT EXISTS(SELECT 1 FROM moz_places_tombstones
@@ -4855,7 +4856,7 @@
             <span class="prelude-val">Ok</span>(<span class="ident">exists</span>)
         }
 
-        <span class="kw">fn</span> <span class="ident">page_has_visit_tombstones</span>(<span class="ident">conn</span>: <span class="kw-2">&amp;</span><span class="ident">PlacesDb</span>, <span class="ident">page_id</span>: <span class="ident">RowId</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">bool</span><span class="op">&gt;</span> {
+        <span class="kw">fn</span> <span class="ident">page_has_visit_tombstones</span>(<span class="ident">conn</span>: <span class="kw-2">&amp;</span><span class="ident">PlacesDb</span>, <span class="ident">page_id</span>: <span class="ident">RowId</span>) <span class="op">-&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">bool</span><span class="op">&gt;</span> {
             <span class="kw">let</span> <span class="ident">exists</span> <span class="op">=</span> <span class="ident">conn</span>
                 .<span class="ident">try_query_one</span>::<span class="op">&lt;</span><span class="ident">bool</span><span class="op">&gt;</span>(
                     <span class="string">&quot;SELECT EXISTS(SELECT 1 FROM moz_historyvisit_tombstones
@@ -4957,9 +4958,9 @@
 
             <span class="kw">match</span> (
                 <span class="ident">page</span>.<span class="ident">synced</span>,
-                <span class="ident">page</span>.<span class="ident">bookmark_title</span>.<span class="ident">is_some</span>() <span class="op">|</span><span class="op">|</span> <span class="ident">page</span>.<span class="ident">keyword</span>.<span class="ident">is_some</span>(),
+                <span class="ident">page</span>.<span class="ident">bookmark_title</span>.<span class="ident">is_some</span>() <span class="op">||</span> <span class="ident">page</span>.<span class="ident">keyword</span>.<span class="ident">is_some</span>(),
             ) {
-                (<span class="bool-val">true</span>, <span class="bool-val">true</span>) <span class="op">=</span><span class="op">&gt;</span> {
+                (<span class="bool-val">true</span>, <span class="bool-val">true</span>) <span class="op">=&gt;</span> {
                     <span class="kw">let</span> (<span class="kw">_</span>, <span class="ident">visits</span>) <span class="op">=</span> <span class="ident">fetch_visits</span>(<span class="kw-2">&amp;</span><span class="ident">db</span>, <span class="kw-2">&amp;</span><span class="ident">url</span>, <span class="number">0</span>)<span class="question-mark">?</span>
                         .<span class="ident">expect</span>(<span class="string">&quot;Shouldn&#39;t delete synced page with foreign count&quot;</span>);
                     <span class="macro">assert</span><span class="macro">!</span>(
@@ -4975,7 +4976,7 @@
                         <span class="string">&quot;Should insert visit tombstones for synced page with foreign count&quot;</span>
                     );
                 }
-                (<span class="bool-val">true</span>, <span class="bool-val">false</span>) <span class="op">=</span><span class="op">&gt;</span> {
+                (<span class="bool-val">true</span>, <span class="bool-val">false</span>) <span class="op">=&gt;</span> {
                     <span class="macro">assert</span><span class="macro">!</span>(
                         <span class="op">!</span><span class="ident">fetch_visits</span>(<span class="kw-2">&amp;</span><span class="ident">db</span>, <span class="kw-2">&amp;</span><span class="ident">url</span>, <span class="number">0</span>)<span class="question-mark">?</span>.<span class="ident">is_some</span>(),
                         <span class="string">&quot;Should delete synced page&quot;</span>
@@ -4989,7 +4990,7 @@
                         <span class="string">&quot;Shouldn&#39;t insert visit tombstones for synced page&quot;</span>
                     );
                 }
-                (<span class="bool-val">false</span>, <span class="bool-val">true</span>) <span class="op">=</span><span class="op">&gt;</span> {
+                (<span class="bool-val">false</span>, <span class="bool-val">true</span>) <span class="op">=&gt;</span> {
                     <span class="kw">let</span> (<span class="kw">_</span>, <span class="ident">visits</span>) <span class="op">=</span> <span class="ident">fetch_visits</span>(<span class="kw-2">&amp;</span><span class="ident">db</span>, <span class="kw-2">&amp;</span><span class="ident">url</span>, <span class="number">0</span>)<span class="question-mark">?</span>
                         .<span class="ident">expect</span>(<span class="string">&quot;Shouldn&#39;t delete page with foreign count&quot;</span>);
                     <span class="macro">assert</span><span class="macro">!</span>(
@@ -5005,7 +5006,7 @@
                         <span class="string">&quot;Shouldn&#39;t insert visit tombstones for page with foreign count&quot;</span>
                     );
                 }
-                (<span class="bool-val">false</span>, <span class="bool-val">false</span>) <span class="op">=</span><span class="op">&gt;</span> {
+                (<span class="bool-val">false</span>, <span class="bool-val">false</span>) <span class="op">=&gt;</span> {
                     <span class="macro">assert</span><span class="macro">!</span>(<span class="op">!</span><span class="ident">fetch_visits</span>(<span class="kw-2">&amp;</span><span class="ident">db</span>, <span class="kw-2">&amp;</span><span class="ident">url</span>, <span class="number">0</span>)<span class="question-mark">?</span>.<span class="ident">is_some</span>(), <span class="string">&quot;Should delete page&quot;</span>);
                     <span class="macro">assert</span><span class="macro">!</span>(
                         <span class="op">!</span><span class="ident">page_has_tombstone</span>(<span class="kw-2">&amp;</span><span class="ident">db</span>, <span class="kw-2">&amp;</span><span class="ident">info</span>.<span class="ident">guid</span>)<span class="question-mark">?</span>,
@@ -5023,7 +5024,7 @@
     }
 
     <span class="attribute">#[<span class="ident">test</span>]</span>
-    <span class="kw">fn</span> <span class="ident">test_tombstones</span>() <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span>()<span class="op">&gt;</span> {
+    <span class="kw">fn</span> <span class="ident">test_tombstones</span>() <span class="op">-&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span>()<span class="op">&gt;</span> {
         <span class="kw">let</span> <span class="kw">_</span> <span class="op">=</span> <span class="ident">env_logger</span>::<span class="ident">try_init</span>();
         <span class="kw">let</span> <span class="ident">db</span> <span class="op">=</span> <span class="ident">PlacesDb</span>::<span class="ident">open_in_memory</span>(<span class="ident">ConnectionType</span>::<span class="ident">ReadWrite</span>)<span class="question-mark">?</span>;
         <span class="kw">let</span> <span class="ident">url</span> <span class="op">=</span> <span class="ident">Url</span>::<span class="ident">parse</span>(<span class="string">&quot;https://example.com&quot;</span>)<span class="question-mark">?</span>;
@@ -5060,8 +5061,8 @@
     }
 
     <span class="attribute">#[<span class="ident">test</span>]</span>
-    <span class="kw">fn</span> <span class="ident">test_reset</span>() <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span>()<span class="op">&gt;</span> {
-        <span class="kw">fn</span> <span class="ident">mark_all_as_synced</span>(<span class="ident">db</span>: <span class="kw-2">&amp;</span><span class="ident">PlacesDb</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span>()<span class="op">&gt;</span> {
+    <span class="kw">fn</span> <span class="ident">test_reset</span>() <span class="op">-&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span>()<span class="op">&gt;</span> {
+        <span class="kw">fn</span> <span class="ident">mark_all_as_synced</span>(<span class="ident">db</span>: <span class="kw-2">&amp;</span><span class="ident">PlacesDb</span>) <span class="op">-&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span>()<span class="op">&gt;</span> {
             <span class="ident">db</span>.<span class="ident">execute_cached</span>(
                 <span class="kw-2">&amp;</span><span class="macro">format</span><span class="macro">!</span>(
                     <span class="string">&quot;UPDATE moz_places set sync_status = {}&quot;</span>,
@@ -5139,7 +5140,7 @@
     }
 
     <span class="attribute">#[<span class="ident">test</span>]</span>
-    <span class="kw">fn</span> <span class="ident">test_fetch_visits</span>() <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span>()<span class="op">&gt;</span> {
+    <span class="kw">fn</span> <span class="ident">test_fetch_visits</span>() <span class="op">-&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span>()<span class="op">&gt;</span> {
         <span class="kw">let</span> <span class="kw">_</span> <span class="op">=</span> <span class="ident">env_logger</span>::<span class="ident">try_init</span>();
         <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">conn</span> <span class="op">=</span> <span class="ident">PlacesDb</span>::<span class="ident">open_in_memory</span>(<span class="ident">ConnectionType</span>::<span class="ident">ReadWrite</span>).<span class="ident">expect</span>(<span class="string">&quot;no memory db&quot;</span>);
         <span class="kw">let</span> <span class="ident">pi</span> <span class="op">=</span> <span class="ident">get_observed_page</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">conn</span>, <span class="string">&quot;http://example.com/1&quot;</span>)<span class="question-mark">?</span>;
@@ -5149,7 +5150,7 @@
     }
 
     <span class="attribute">#[<span class="ident">test</span>]</span>
-    <span class="kw">fn</span> <span class="ident">test_apply_synced_reconciliation</span>() <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span>()<span class="op">&gt;</span> {
+    <span class="kw">fn</span> <span class="ident">test_apply_synced_reconciliation</span>() <span class="op">-&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span>()<span class="op">&gt;</span> {
         <span class="kw">let</span> <span class="kw">_</span> <span class="op">=</span> <span class="ident">env_logger</span>::<span class="ident">try_init</span>();
         <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">conn</span> <span class="op">=</span> <span class="ident">PlacesDb</span>::<span class="ident">open_in_memory</span>(<span class="ident">ConnectionType</span>::<span class="ident">ReadWrite</span>)<span class="question-mark">?</span>;
         <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">pi</span> <span class="op">=</span> <span class="ident">get_observed_page</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">conn</span>, <span class="string">&quot;http://example.com/1&quot;</span>)<span class="question-mark">?</span>;
@@ -5165,7 +5166,7 @@
     }
 
     <span class="attribute">#[<span class="ident">test</span>]</span>
-    <span class="kw">fn</span> <span class="ident">test_apply_synced_deletion_new</span>() <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span>()<span class="op">&gt;</span> {
+    <span class="kw">fn</span> <span class="ident">test_apply_synced_deletion_new</span>() <span class="op">-&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span>()<span class="op">&gt;</span> {
         <span class="kw">let</span> <span class="kw">_</span> <span class="op">=</span> <span class="ident">env_logger</span>::<span class="ident">try_init</span>();
         <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">conn</span> <span class="op">=</span> <span class="ident">PlacesDb</span>::<span class="ident">open_in_memory</span>(<span class="ident">ConnectionType</span>::<span class="ident">ReadWrite</span>)<span class="question-mark">?</span>;
         <span class="kw">let</span> <span class="ident">pi</span> <span class="op">=</span> <span class="ident">get_observed_page</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">conn</span>, <span class="string">&quot;http://example.com/1&quot;</span>)<span class="question-mark">?</span>;
@@ -5180,7 +5181,7 @@
     }
 
     <span class="attribute">#[<span class="ident">test</span>]</span>
-    <span class="kw">fn</span> <span class="ident">test_apply_synced_deletion_normal</span>() <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span>()<span class="op">&gt;</span> {
+    <span class="kw">fn</span> <span class="ident">test_apply_synced_deletion_normal</span>() <span class="op">-&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span>()<span class="op">&gt;</span> {
         <span class="kw">let</span> <span class="kw">_</span> <span class="op">=</span> <span class="ident">env_logger</span>::<span class="ident">try_init</span>();
         <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">conn</span> <span class="op">=</span> <span class="ident">PlacesDb</span>::<span class="ident">open_in_memory</span>(<span class="ident">ConnectionType</span>::<span class="ident">ReadWrite</span>)<span class="question-mark">?</span>;
         <span class="kw">let</span> <span class="ident">pi</span> <span class="op">=</span> <span class="ident">get_observed_page</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">conn</span>, <span class="string">&quot;http://example.com/1&quot;</span>)<span class="question-mark">?</span>;
@@ -5209,7 +5210,7 @@
             .<span class="ident">query_rows_and_then_named</span>(
                 <span class="string">&quot;SELECT place_id, visit_date FROM moz_historyvisit_tombstones&quot;</span>,
                 <span class="kw-2">&amp;</span>[],
-                <span class="op">|</span><span class="ident">row</span><span class="op">|</span> <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="kw">_</span><span class="op">&gt;</span> { <span class="prelude-val">Ok</span>((<span class="ident">row</span>.<span class="ident">get</span>::<span class="op">&lt;</span><span class="kw">_</span>, <span class="ident">RowId</span><span class="op">&gt;</span>(<span class="number">0</span>)<span class="question-mark">?</span>, <span class="ident">row</span>.<span class="ident">get</span>::<span class="op">&lt;</span><span class="kw">_</span>, <span class="ident">Timestamp</span><span class="op">&gt;</span>(<span class="number">1</span>)<span class="question-mark">?</span>)) },
+                <span class="op">|</span><span class="ident">row</span><span class="op">|</span> <span class="op">-&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="kw">_</span><span class="op">&gt;</span> { <span class="prelude-val">Ok</span>((<span class="ident">row</span>.<span class="ident">get</span>::<span class="op">&lt;</span><span class="kw">_</span>, <span class="ident">RowId</span><span class="op">&gt;</span>(<span class="number">0</span>)<span class="question-mark">?</span>, <span class="ident">row</span>.<span class="ident">get</span>::<span class="op">&lt;</span><span class="kw">_</span>, <span class="ident">Timestamp</span><span class="op">&gt;</span>(<span class="number">1</span>)<span class="question-mark">?</span>)) },
             )
             .<span class="ident">unwrap</span>();
         <span class="ident">tombstones</span>.<span class="ident">sort</span>();
@@ -5253,7 +5254,7 @@
         );
 
         <span class="macro">assert</span><span class="macro">!</span>(
-            <span class="ident">visits0</span>.<span class="ident">iter</span>().<span class="ident">find</span>(<span class="op">|</span><span class="ident">v</span><span class="op">|</span> <span class="ident">v</span>.<span class="ident">visit_date</span> <span class="op">=</span><span class="op">=</span> <span class="ident">dates</span>[<span class="number">1</span>]).<span class="ident">is_none</span>(),
+            <span class="ident">visits0</span>.<span class="ident">iter</span>().<span class="ident">find</span>(<span class="op">|</span><span class="ident">v</span><span class="op">|</span> <span class="ident">v</span>.<span class="ident">visit_date</span> <span class="op">==</span> <span class="ident">dates</span>[<span class="number">1</span>]).<span class="ident">is_none</span>(),
             <span class="string">&quot;Shouldn&#39;t have deleted visit&quot;</span>
         );
 
@@ -5290,7 +5291,7 @@
                     <span class="ident">date</span>: <span class="ident">d</span>.<span class="ident">into</span>(),
                     <span class="ident">transition</span>: <span class="ident">VisitTransition</span>::<span class="ident">Link</span> <span class="kw">as</span> <span class="ident">u8</span>,
                 })
-                .<span class="ident">collect</span>::<span class="op">&lt;</span><span class="ident">Vec</span><span class="op">&lt;</span><span class="kw">_</span><span class="op">&gt;</span><span class="op">&gt;</span>(),
+                .<span class="ident">collect</span>::<span class="op">&lt;</span><span class="ident">Vec</span><span class="op">&lt;</span><span class="kw">_</span><span class="op">&gt;&gt;</span>(),
         )
         .<span class="ident">unwrap</span>();
 
@@ -5510,7 +5511,7 @@
         <span class="comment">// those URLs.</span>
         <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">places_stmt</span> <span class="op">=</span> <span class="ident">conn</span>.<span class="ident">prepare</span>(<span class="string">&quot;SELECT url FROM moz_places&quot;</span>).<span class="ident">unwrap</span>();
         <span class="kw">let</span> <span class="ident">remaining_urls</span>: <span class="ident">Vec</span><span class="op">&lt;</span><span class="ident">String</span><span class="op">&gt;</span> <span class="op">=</span> <span class="ident">places_stmt</span>
-            .<span class="ident">query_and_then</span>(<span class="ident">NO_PARAMS</span>, <span class="op">|</span><span class="ident">row</span><span class="op">|</span> <span class="op">-</span><span class="op">&gt;</span> <span class="ident">rusqlite</span>::<span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="kw">_</span><span class="op">&gt;</span> {
+            .<span class="ident">query_and_then</span>(<span class="ident">NO_PARAMS</span>, <span class="op">|</span><span class="ident">row</span><span class="op">|</span> <span class="op">-&gt;</span> <span class="ident">rusqlite</span>::<span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="kw">_</span><span class="op">&gt;</span> {
                 <span class="prelude-val">Ok</span>(<span class="ident">row</span>.<span class="ident">get</span>::<span class="op">&lt;</span><span class="kw">_</span>, <span class="ident">String</span><span class="op">&gt;</span>(<span class="number">0</span>)<span class="question-mark">?</span>)
             })
             .<span class="ident">expect</span>(<span class="string">&quot;Should fetch remaining URLs&quot;</span>)
@@ -5520,7 +5521,7 @@
 
         <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">input_stmt</span> <span class="op">=</span> <span class="ident">conn</span>.<span class="ident">prepare</span>(<span class="string">&quot;SELECT input FROM moz_inputhistory&quot;</span>).<span class="ident">unwrap</span>();
         <span class="kw">let</span> <span class="ident">remaining_inputs</span>: <span class="ident">Vec</span><span class="op">&lt;</span><span class="ident">String</span><span class="op">&gt;</span> <span class="op">=</span> <span class="ident">input_stmt</span>
-            .<span class="ident">query_and_then</span>(<span class="ident">NO_PARAMS</span>, <span class="op">|</span><span class="ident">row</span><span class="op">|</span> <span class="op">-</span><span class="op">&gt;</span> <span class="ident">rusqlite</span>::<span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="kw">_</span><span class="op">&gt;</span> {
+            .<span class="ident">query_and_then</span>(<span class="ident">NO_PARAMS</span>, <span class="op">|</span><span class="ident">row</span><span class="op">|</span> <span class="op">-&gt;</span> <span class="ident">rusqlite</span>::<span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="kw">_</span><span class="op">&gt;</span> {
                 <span class="prelude-val">Ok</span>(<span class="ident">row</span>.<span class="ident">get</span>::<span class="op">&lt;</span><span class="kw">_</span>, <span class="ident">String</span><span class="op">&gt;</span>(<span class="number">0</span>)<span class="question-mark">?</span>)
             })
             .<span class="ident">expect</span>(<span class="string">&quot;Should fetch remaining autocomplete history entries&quot;</span>)
@@ -5637,12 +5638,12 @@
         <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">origins</span> <span class="op">=</span> <span class="ident">conn</span>
             .<span class="ident">prepare</span>(<span class="string">&quot;SELECT host FROM moz_origins&quot;</span>)
             .<span class="ident">expect</span>(<span class="string">&quot;Should prepare origins statement&quot;</span>)
-            .<span class="ident">query_and_then</span>(<span class="ident">NO_PARAMS</span>, <span class="op">|</span><span class="ident">row</span><span class="op">|</span> <span class="op">-</span><span class="op">&gt;</span> <span class="ident">rusqlite</span>::<span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="kw">_</span><span class="op">&gt;</span> {
+            .<span class="ident">query_and_then</span>(<span class="ident">NO_PARAMS</span>, <span class="op">|</span><span class="ident">row</span><span class="op">|</span> <span class="op">-&gt;</span> <span class="ident">rusqlite</span>::<span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="kw">_</span><span class="op">&gt;</span> {
                 <span class="prelude-val">Ok</span>(<span class="ident">row</span>.<span class="ident">get</span>::<span class="op">&lt;</span><span class="kw">_</span>, <span class="ident">String</span><span class="op">&gt;</span>(<span class="number">0</span>)<span class="question-mark">?</span>)
             })
             .<span class="ident">expect</span>(<span class="string">&quot;Should fetch all origins&quot;</span>)
             .<span class="ident">map</span>(<span class="op">|</span><span class="ident">r</span><span class="op">|</span> <span class="ident">r</span>.<span class="ident">expect</span>(<span class="string">&quot;Should get origin from row&quot;</span>))
-            .<span class="ident">collect</span>::<span class="op">&lt;</span><span class="ident">Vec</span><span class="op">&lt;</span><span class="kw">_</span><span class="op">&gt;</span><span class="op">&gt;</span>();
+            .<span class="ident">collect</span>::<span class="op">&lt;</span><span class="ident">Vec</span><span class="op">&lt;</span><span class="kw">_</span><span class="op">&gt;&gt;</span>();
         <span class="ident">origins</span>.<span class="ident">sort</span>();
         <span class="macro">assert_eq</span><span class="macro">!</span>(<span class="ident">origins</span>, <span class="kw-2">&amp;</span>[<span class="string">&quot;example1.com&quot;</span>, <span class="string">&quot;example2.com&quot;</span>,]);
     }
@@ -5653,7 +5654,7 @@
         <span class="kw">let</span> <span class="ident">conn</span> <span class="op">=</span> <span class="ident">PlacesDb</span>::<span class="ident">open_in_memory</span>(<span class="ident">ConnectionType</span>::<span class="ident">ReadWrite</span>).<span class="ident">unwrap</span>();
         <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">url</span> <span class="op">=</span> <span class="string">&quot;http://www.example.com&quot;</span>.<span class="ident">to_string</span>();
         <span class="kw">while</span> <span class="ident">url</span>.<span class="ident">len</span>() <span class="op">&lt;</span> <span class="kw">crate</span>::<span class="ident">storage</span>::<span class="ident">URL_LENGTH_MAX</span> {
-            <span class="ident">url</span> <span class="op">+</span><span class="op">=</span> <span class="string">&quot;/garbage&quot;</span>;
+            <span class="ident">url</span> <span class="op">+=</span> <span class="string">&quot;/garbage&quot;</span>;
         }
         <span class="kw">let</span> <span class="ident">maybe_row</span> <span class="op">=</span> <span class="ident">apply_observation</span>(
             <span class="kw-2">&amp;</span><span class="ident">conn</span>,
@@ -5666,7 +5667,7 @@
         <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">title</span> <span class="op">=</span> <span class="string">&quot;example 1 2 3&quot;</span>.<span class="ident">to_string</span>();
         <span class="comment">// Make sure whatever we use here surpasses the length.</span>
         <span class="kw">while</span> <span class="ident">title</span>.<span class="ident">len</span>() <span class="op">&lt;</span> <span class="kw">crate</span>::<span class="ident">storage</span>::<span class="ident">TITLE_LENGTH_MAX</span> <span class="op">+</span> <span class="number">10</span> {
-            <span class="ident">title</span> <span class="op">+</span><span class="op">=</span> <span class="string">&quot; test test&quot;</span>;
+            <span class="ident">title</span> <span class="op">+=</span> <span class="string">&quot; test test&quot;</span>;
         }
         <span class="kw">let</span> <span class="ident">maybe_row</span> <span class="op">=</span> <span class="ident">apply_observation</span>(
             <span class="kw-2">&amp;</span><span class="ident">conn</span>,

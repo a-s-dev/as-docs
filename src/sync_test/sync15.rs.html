@@ -1,4 +1,5 @@
-<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source to the Rust file `testing/sync-test/src/sync15.rs`."><meta name="keywords" content="rust, rustlang, rust-lang"><title>sync15.rs.html -- source</title><link rel="stylesheet" type="text/css" href="../../normalize.css"><link rel="stylesheet" type="text/css" href="../../rustdoc.css" id="mainThemeStyle"><link rel="stylesheet" type="text/css" href="../../dark.css"><link rel="stylesheet" type="text/css" href="../../light.css" id="themeStyle"><script src="../../storage.js"></script><noscript><link rel="stylesheet" href="../../noscript.css"></noscript><link rel="shortcut icon" href="../../favicon.ico"><style type="text/css">#crate-search{background-image:url("../../down-arrow.svg");}</style></head><body class="rustdoc source"><!--[if lte IE 8]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="sidebar"><div class="sidebar-menu">&#9776;</div><a href='../../sync_test/index.html'><div class='logo-container'><img src='../../rust-logo.png' alt='logo'></div></a></nav><div class="theme-picker"><button id="theme-picker" aria-label="Pick another theme!"><img src="../../brush.svg" width="18" alt="Pick another theme!"></button><div id="theme-choices"></div></div><script src="../../theme.js"></script><nav class="sub"><form class="search-form"><div class="search-container"><div><select id="crate-search"><option value="All crates">All crates</option></select><input class="search-input" name="search" disabled autocomplete="off" spellcheck="false" placeholder="Click or press ‘S’ to search, ‘?’ for more options…" type="search"></div><a id="settings-menu" href="../../settings.html"><img src="../../wheel.svg" width="18" alt="Change settings"></a></div></form></nav><section id="main" class="content"><pre class="line-numbers"><span id="1">  1</span>
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source to the Rust file `testing/sync-test/src/sync15.rs`."><meta name="keywords" content="rust, rustlang, rust-lang"><title>sync15.rs.html -- source</title><link rel="stylesheet" type="text/css" href="../../normalize.css"><link rel="stylesheet" type="text/css" href="../../rustdoc.css" id="mainThemeStyle"><link rel="stylesheet" type="text/css" href="../../light.css"  id="themeStyle"><link rel="stylesheet" type="text/css" href="../../dark.css" disabled ><link rel="stylesheet" type="text/css" href="../../ayu.css" disabled ><script src="../../storage.js"></script><noscript><link rel="stylesheet" href="../../noscript.css"></noscript><link rel="shortcut icon" href="../../favicon.ico"><style type="text/css">#crate-search{background-image:url("../../down-arrow.svg");}</style></head><body class="rustdoc source"><!--[if lte IE 8]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="sidebar"><div class="sidebar-menu">&#9776;</div><a href='../../sync_test/index.html'><div class='logo-container rust-logo'><img src='../../rust-logo.png' alt='logo'></div></a></nav><div class="theme-picker"><button id="theme-picker" aria-label="Pick another theme!"><img src="../../brush.svg" width="18" alt="Pick another theme!"></button><div id="theme-choices"></div></div><script src="../../theme.js"></script><nav class="sub"><form class="search-form"><div class="search-container"><div><select id="crate-search"><option value="All crates">All crates</option></select><input class="search-input" name="search" disabled autocomplete="off" spellcheck="false" placeholder="Click or press ‘S’ to search, ‘?’ for more options…" type="search"></div><span class="help-button">?</span>
+                <a id="settings-menu" href="../../settings.html"><img src="../../wheel.svg" width="18" alt="Change settings"></a></div></form></nav><section id="main" class="content"><pre class="line-numbers"><span id="1">  1</span>
 <span id="2">  2</span>
 <span id="3">  3</span>
 <span id="4">  4</span>
@@ -292,7 +293,7 @@ http://creativecommons.org/publicdomain/zero/1.0/ */</span>
 
 <span class="kw">pub</span> <span class="kw">struct</span> <span class="ident">TestStore</span> {
     <span class="kw">pub</span> <span class="ident">name</span>: <span class="kw-2">&amp;</span><span class="lifetime">&#39;static</span> <span class="ident">str</span>,
-    <span class="kw">pub</span> <span class="ident">test_records</span>: <span class="ident">RefCell</span><span class="op">&lt;</span><span class="ident">Vec</span><span class="op">&lt;</span><span class="ident">TestRecord</span><span class="op">&gt;</span><span class="op">&gt;</span>,
+    <span class="kw">pub</span> <span class="ident">test_records</span>: <span class="ident">RefCell</span><span class="op">&lt;</span><span class="ident">Vec</span><span class="op">&lt;</span><span class="ident">TestRecord</span><span class="op">&gt;&gt;</span>,
     <span class="kw">pub</span> <span class="ident">store_sync_assoc</span>: <span class="ident">RefCell</span><span class="op">&lt;</span><span class="ident">StoreSyncAssociation</span><span class="op">&gt;</span>,
     <span class="kw">pub</span> <span class="ident">was_reset_called</span>: <span class="ident">Cell</span><span class="op">&lt;</span><span class="ident">bool</span><span class="op">&gt;</span>,
 
@@ -302,7 +303,7 @@ http://creativecommons.org/publicdomain/zero/1.0/ */</span>
 
 <span class="comment">// Lotsa boilerplate to implement `Store`... 😅</span>
 <span class="kw">impl</span> <span class="ident">Store</span> <span class="kw">for</span> <span class="ident">TestStore</span> {
-    <span class="kw">fn</span> <span class="ident">collection_name</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">std</span>::<span class="ident">borrow</span>::<span class="ident">Cow</span><span class="op">&lt;</span><span class="lifetime">&#39;static</span>, <span class="ident">str</span><span class="op">&gt;</span> {
+    <span class="kw">fn</span> <span class="ident">collection_name</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-&gt;</span> <span class="ident">std</span>::<span class="ident">borrow</span>::<span class="ident">Cow</span><span class="op">&lt;</span><span class="lifetime">&#39;static</span>, <span class="ident">str</span><span class="op">&gt;</span> {
         <span class="comment">// HACK: We have to use a &quot;well-known&quot; collection name in `meta/global`</span>
         <span class="comment">// (you can see the list in `DEFAULT_ENGINES`, inside</span>
         <span class="comment">// `components/sync15/src/state.rs`). Otherwise, `LocalCollStateMachine`</span>
@@ -316,7 +317,7 @@ http://creativecommons.org/publicdomain/zero/1.0/ */</span>
         <span class="kw-2">&amp;</span><span class="self">self</span>,
         <span class="ident">inbound</span>: <span class="ident">Vec</span><span class="op">&lt;</span><span class="ident">IncomingChangeset</span><span class="op">&gt;</span>,
         <span class="ident">_telem</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">telemetry</span>::<span class="ident">Engine</span>,
-    ) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">anyhow</span>::<span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">OutgoingChangeset</span><span class="op">&gt;</span> {
+    ) <span class="op">-&gt;</span> <span class="ident">anyhow</span>::<span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">OutgoingChangeset</span><span class="op">&gt;</span> {
         <span class="comment">// Notice the `&amp;mut *` and `.borrow_mut()` to extract the Vec from</span>
         <span class="comment">// the RefCell.</span>
         <span class="kw">let</span> <span class="ident">temp</span>: <span class="ident">Vec</span><span class="op">&lt;</span><span class="ident">TestRecord</span><span class="op">&gt;</span> <span class="op">=</span> <span class="ident">mem</span>::<span class="ident">take</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="kw-2">*</span><span class="self">self</span>.<span class="ident">test_records</span>.<span class="ident">borrow_mut</span>());
@@ -333,7 +334,7 @@ http://creativecommons.org/publicdomain/zero/1.0/ */</span>
         <span class="ident">outgoing</span>.<span class="ident">changes</span> <span class="op">=</span> <span class="ident">temp</span>
             .<span class="ident">into_iter</span>()
             .<span class="ident">map</span>(<span class="ident">Payload</span>::<span class="ident">from_record</span>)
-            .<span class="ident">collect</span>::<span class="op">&lt;</span><span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">Vec</span><span class="op">&lt;</span><span class="ident">Payload</span><span class="op">&gt;</span>, <span class="ident">serde_json</span>::<span class="ident">error</span>::<span class="ident">Error</span><span class="op">&gt;</span><span class="op">&gt;</span>()<span class="question-mark">?</span>;
+            .<span class="ident">collect</span>::<span class="op">&lt;</span><span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">Vec</span><span class="op">&lt;</span><span class="ident">Payload</span><span class="op">&gt;</span>, <span class="ident">serde_json</span>::<span class="ident">error</span>::<span class="ident">Error</span><span class="op">&gt;&gt;</span>()<span class="question-mark">?</span>;
 
         <span class="prelude-val">Ok</span>(<span class="ident">outgoing</span>)
     }
@@ -342,7 +343,7 @@ http://creativecommons.org/publicdomain/zero/1.0/ */</span>
         <span class="kw-2">&amp;</span><span class="self">self</span>,
         <span class="ident">_new_timestamp</span>: <span class="ident">ServerTimestamp</span>,
         <span class="ident">records_synced</span>: <span class="ident">Vec</span><span class="op">&lt;</span><span class="ident">Guid</span><span class="op">&gt;</span>,
-    ) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">anyhow</span>::<span class="prelude-ty">Result</span><span class="op">&lt;</span>()<span class="op">&gt;</span> {
+    ) <span class="op">-&gt;</span> <span class="ident">anyhow</span>::<span class="prelude-ty">Result</span><span class="op">&lt;</span>()<span class="op">&gt;</span> {
         <span class="comment">// This should print something like:</span>
         <span class="comment">// `[... INFO sync_test::sync15] Uploaded records: [Guid(&quot;ai5xy_LtNAuN&quot;)]`</span>
         <span class="comment">// If we were a real store, this is where we&#39;d mark our outgoing records</span>
@@ -354,7 +355,7 @@ http://creativecommons.org/publicdomain/zero/1.0/ */</span>
     <span class="kw">fn</span> <span class="ident">get_collection_requests</span>(
         <span class="kw-2">&amp;</span><span class="self">self</span>,
         <span class="ident">_server_timestamp</span>: <span class="ident">ServerTimestamp</span>,
-    ) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">anyhow</span>::<span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">Vec</span><span class="op">&lt;</span><span class="ident">CollectionRequest</span><span class="op">&gt;</span><span class="op">&gt;</span> {
+    ) <span class="op">-&gt;</span> <span class="ident">anyhow</span>::<span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">Vec</span><span class="op">&lt;</span><span class="ident">CollectionRequest</span><span class="op">&gt;&gt;</span> {
         <span class="comment">// This is where we can add a `since` bound, so we only fetch records</span>
         <span class="comment">// since the last sync time...but, we aren&#39;t storing that yet, so we</span>
         <span class="comment">// just fetch all records that we&#39;ve ever written.</span>
@@ -363,7 +364,7 @@ http://creativecommons.org/publicdomain/zero/1.0/ */</span>
 
     <span class="doccomment">/// This is where we return our test collection&#39;s sync ID (and global sync</span>
     <span class="doccomment">/// ID).</span>
-    <span class="kw">fn</span> <span class="ident">get_sync_assoc</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">anyhow</span>::<span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">StoreSyncAssociation</span><span class="op">&gt;</span> {
+    <span class="kw">fn</span> <span class="ident">get_sync_assoc</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-&gt;</span> <span class="ident">anyhow</span>::<span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">StoreSyncAssociation</span><span class="op">&gt;</span> {
         <span class="kw">let</span> <span class="ident">our_assoc</span> <span class="op">=</span> <span class="self">self</span>.<span class="ident">store_sync_assoc</span>.<span class="ident">borrow</span>();
         <span class="macro">println</span><span class="macro">!</span>(
             <span class="string">&quot;TEST {}: get_sync_assoc called with {:?}&quot;</span>,
@@ -374,7 +375,7 @@ http://creativecommons.org/publicdomain/zero/1.0/ */</span>
 
     <span class="doccomment">/// Reset the store without wiping local data, ready for a &quot;first sync&quot;.</span>
     <span class="doccomment">/// `assoc` defines how this store is to be associated with sync.</span>
-    <span class="kw">fn</span> <span class="ident">reset</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">assoc</span>: <span class="kw-2">&amp;</span><span class="ident">StoreSyncAssociation</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">anyhow</span>::<span class="prelude-ty">Result</span><span class="op">&lt;</span>()<span class="op">&gt;</span> {
+    <span class="kw">fn</span> <span class="ident">reset</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">assoc</span>: <span class="kw-2">&amp;</span><span class="ident">StoreSyncAssociation</span>) <span class="op">-&gt;</span> <span class="ident">anyhow</span>::<span class="prelude-ty">Result</span><span class="op">&lt;</span>()<span class="op">&gt;</span> {
         <span class="macro">println</span><span class="macro">!</span>(<span class="string">&quot;TEST {}: Reset called&quot;</span>, <span class="self">self</span>.<span class="ident">name</span>);
         <span class="self">self</span>.<span class="ident">was_reset_called</span>.<span class="ident">set</span>(<span class="bool-val">true</span>);
         <span class="kw-2">*</span><span class="self">self</span>.<span class="ident">store_sync_assoc</span>.<span class="ident">borrow_mut</span>() <span class="op">=</span> <span class="ident">assoc</span>.<span class="ident">clone</span>();
@@ -382,7 +383,7 @@ http://creativecommons.org/publicdomain/zero/1.0/ */</span>
     }
 
     <span class="comment">// Won&#39;t really be used anywhere.</span>
-    <span class="kw">fn</span> <span class="ident">wipe</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">anyhow</span>::<span class="prelude-ty">Result</span><span class="op">&lt;</span>()<span class="op">&gt;</span> {
+    <span class="kw">fn</span> <span class="ident">wipe</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-&gt;</span> <span class="ident">anyhow</span>::<span class="prelude-ty">Result</span><span class="op">&lt;</span>()<span class="op">&gt;</span> {
         <span class="comment">// This is where we&#39;d erase all data and Sync state. Since we&#39;re</span>
         <span class="comment">// just an in-memory store, and `sync_multiple` doesn&#39;t exercise</span>
         <span class="comment">// this, we do nothing.</span>
@@ -496,7 +497,7 @@ http://creativecommons.org/publicdomain/zero/1.0/ */</span>
 }
 
 <span class="comment">// Boilerplate...</span>
-<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">get_test_group</span>() <span class="op">-</span><span class="op">&gt;</span> <span class="ident">TestGroup</span> {
+<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">get_test_group</span>() <span class="op">-&gt;</span> <span class="ident">TestGroup</span> {
     <span class="ident">TestGroup</span>::<span class="ident">new</span>(<span class="string">&quot;sync15&quot;</span>, <span class="macro">vec</span><span class="macro">!</span>[(<span class="string">&quot;test_sync_multiple&quot;</span>, <span class="ident">test_sync_multiple</span>)])
 }
 </pre></div>

@@ -1,3 +1,3 @@
 (function() {var implementors = {};
-implementors["ffi_support"] = [{"text":"impl&lt;T&gt; <a class=\"trait\" href=\"https://doc.rust-lang.org/nightly/core/ops/index/trait.Index.html\" title=\"trait core::ops::index::Index\">Index</a>&lt;<a class=\"struct\" href=\"ffi_support/handle_map/struct.Handle.html\" title=\"struct ffi_support::handle_map::Handle\">Handle</a>&gt; for <a class=\"struct\" href=\"ffi_support/handle_map/struct.HandleMap.html\" title=\"struct ffi_support::handle_map::HandleMap\">HandleMap</a>&lt;T&gt;","synthetic":false,"types":["ffi_support::handle_map::HandleMap"]}];
+implementors["ffi_support"] = [{"text":"impl&lt;T&gt; Index&lt;Handle&gt; for HandleMap&lt;T&gt;","synthetic":false,"types":[]}];
 if (window.register_implementors) {window.register_implementors(implementors);} else {window.pending_implementors = implementors;}})()

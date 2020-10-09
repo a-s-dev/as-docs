@@ -1,4 +1,5 @@
-<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source to the Rust file `components/support/sql/src/conn_ext.rs`."><meta name="keywords" content="rust, rustlang, rust-lang"><title>conn_ext.rs.html -- source</title><link rel="stylesheet" type="text/css" href="../../normalize.css"><link rel="stylesheet" type="text/css" href="../../rustdoc.css" id="mainThemeStyle"><link rel="stylesheet" type="text/css" href="../../dark.css"><link rel="stylesheet" type="text/css" href="../../light.css" id="themeStyle"><script src="../../storage.js"></script><noscript><link rel="stylesheet" href="../../noscript.css"></noscript><link rel="shortcut icon" href="../../favicon.ico"><style type="text/css">#crate-search{background-image:url("../../down-arrow.svg");}</style></head><body class="rustdoc source"><!--[if lte IE 8]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="sidebar"><div class="sidebar-menu">&#9776;</div><a href='../../sql_support/index.html'><div class='logo-container'><img src='../../rust-logo.png' alt='logo'></div></a></nav><div class="theme-picker"><button id="theme-picker" aria-label="Pick another theme!"><img src="../../brush.svg" width="18" alt="Pick another theme!"></button><div id="theme-choices"></div></div><script src="../../theme.js"></script><nav class="sub"><form class="search-form"><div class="search-container"><div><select id="crate-search"><option value="All crates">All crates</option></select><input class="search-input" name="search" disabled autocomplete="off" spellcheck="false" placeholder="Click or press ‘S’ to search, ‘?’ for more options…" type="search"></div><a id="settings-menu" href="../../settings.html"><img src="../../wheel.svg" width="18" alt="Change settings"></a></div></form></nav><section id="main" class="content"><pre class="line-numbers"><span id="1">  1</span>
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source to the Rust file `components/support/sql/src/conn_ext.rs`."><meta name="keywords" content="rust, rustlang, rust-lang"><title>conn_ext.rs.html -- source</title><link rel="stylesheet" type="text/css" href="../../normalize.css"><link rel="stylesheet" type="text/css" href="../../rustdoc.css" id="mainThemeStyle"><link rel="stylesheet" type="text/css" href="../../light.css"  id="themeStyle"><link rel="stylesheet" type="text/css" href="../../dark.css" disabled ><link rel="stylesheet" type="text/css" href="../../ayu.css" disabled ><script src="../../storage.js"></script><noscript><link rel="stylesheet" href="../../noscript.css"></noscript><link rel="shortcut icon" href="../../favicon.ico"><style type="text/css">#crate-search{background-image:url("../../down-arrow.svg");}</style></head><body class="rustdoc source"><!--[if lte IE 8]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="sidebar"><div class="sidebar-menu">&#9776;</div><a href='../../sql_support/index.html'><div class='logo-container rust-logo'><img src='../../rust-logo.png' alt='logo'></div></a></nav><div class="theme-picker"><button id="theme-picker" aria-label="Pick another theme!"><img src="../../brush.svg" width="18" alt="Pick another theme!"></button><div id="theme-choices"></div></div><script src="../../theme.js"></script><nav class="sub"><form class="search-form"><div class="search-container"><div><select id="crate-search"><option value="All crates">All crates</option></select><input class="search-input" name="search" disabled autocomplete="off" spellcheck="false" placeholder="Click or press ‘S’ to search, ‘?’ for more options…" type="search"></div><span class="help-button">?</span>
+                <a id="settings-menu" href="../../settings.html"><img src="../../wheel.svg" width="18" alt="Change settings"></a></div></form></nav><section id="main" class="content"><pre class="line-numbers"><span id="1">  1</span>
 <span id="2">  2</span>
 <span id="3">  3</span>
 <span id="4">  4</span>
@@ -400,10 +401,10 @@
 <span class="doccomment">/// Note that you must import ConnExt in order to call these methods on anything.</span>
 <span class="kw">pub</span> <span class="kw">trait</span> <span class="ident">ConnExt</span> {
     <span class="doccomment">/// The method you need to implement to opt in to all of this.</span>
-    <span class="kw">fn</span> <span class="ident">conn</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="kw-2">&amp;</span><span class="ident">Connection</span>;
+    <span class="kw">fn</span> <span class="ident">conn</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-&gt;</span> <span class="kw-2">&amp;</span><span class="ident">Connection</span>;
 
     <span class="doccomment">/// Set the value of the pragma on the main database. Returns the same object, for chaining.</span>
-    <span class="kw">fn</span> <span class="ident">set_pragma</span><span class="op">&lt;</span><span class="ident">T</span><span class="op">&gt;</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">pragma_name</span>: <span class="kw-2">&amp;</span><span class="ident">str</span>, <span class="ident">pragma_value</span>: <span class="ident">T</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">SqlResult</span><span class="op">&lt;</span><span class="kw-2">&amp;</span><span class="self">Self</span><span class="op">&gt;</span>
+    <span class="kw">fn</span> <span class="ident">set_pragma</span><span class="op">&lt;</span><span class="ident">T</span><span class="op">&gt;</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">pragma_name</span>: <span class="kw-2">&amp;</span><span class="ident">str</span>, <span class="ident">pragma_value</span>: <span class="ident">T</span>) <span class="op">-&gt;</span> <span class="ident">SqlResult</span><span class="op">&lt;</span><span class="kw-2">&amp;</span><span class="self">Self</span><span class="op">&gt;</span>
     <span class="kw">where</span>
         <span class="ident">T</span>: <span class="ident">ToSql</span>,
         <span class="self">Self</span>: <span class="ident">Sized</span>,
@@ -419,21 +420,21 @@
         <span class="kw-2">&amp;</span><span class="lifetime">&#39;conn</span> <span class="self">self</span>,
         <span class="ident">sql</span>: <span class="kw-2">&amp;</span><span class="ident">str</span>,
         <span class="ident">cache</span>: <span class="ident">bool</span>,
-    ) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">SqlResult</span><span class="op">&lt;</span><span class="ident">MaybeCached</span><span class="op">&lt;</span><span class="lifetime">&#39;conn</span><span class="op">&gt;</span><span class="op">&gt;</span> {
+    ) <span class="op">-&gt;</span> <span class="ident">SqlResult</span><span class="op">&lt;</span><span class="ident">MaybeCached</span><span class="op">&lt;</span><span class="lifetime">&#39;conn</span><span class="op">&gt;&gt;</span> {
         <span class="ident">MaybeCached</span>::<span class="ident">prepare</span>(<span class="self">self</span>.<span class="ident">conn</span>(), <span class="ident">sql</span>, <span class="ident">cache</span>)
     }
 
     <span class="doccomment">/// Execute all the provided statements.</span>
-    <span class="kw">fn</span> <span class="ident">execute_all</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">stmts</span>: <span class="kw-2">&amp;</span>[<span class="kw-2">&amp;</span><span class="ident">str</span>]) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">SqlResult</span><span class="op">&lt;</span>()<span class="op">&gt;</span> {
+    <span class="kw">fn</span> <span class="ident">execute_all</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">stmts</span>: <span class="kw-2">&amp;</span>[<span class="kw-2">&amp;</span><span class="ident">str</span>]) <span class="op">-&gt;</span> <span class="ident">SqlResult</span><span class="op">&lt;</span>()<span class="op">&gt;</span> {
         <span class="kw">let</span> <span class="ident">conn</span> <span class="op">=</span> <span class="self">self</span>.<span class="ident">conn</span>();
         <span class="kw">for</span> <span class="ident">sql</span> <span class="kw">in</span> <span class="ident">stmts</span> {
             <span class="kw">let</span> <span class="ident">r</span> <span class="op">=</span> <span class="ident">conn</span>.<span class="ident">execute</span>(<span class="ident">sql</span>, <span class="ident">NO_PARAMS</span>);
             <span class="kw">match</span> <span class="ident">r</span> {
-                <span class="prelude-val">Ok</span>(<span class="kw">_</span>) <span class="op">=</span><span class="op">&gt;</span> {}
+                <span class="prelude-val">Ok</span>(<span class="kw">_</span>) <span class="op">=&gt;</span> {}
                 <span class="comment">// Ignore ExecuteReturnedResults error because they&#39;re pointless</span>
                 <span class="comment">// and annoying.</span>
-                <span class="prelude-val">Err</span>(<span class="ident">rusqlite</span>::<span class="ident">Error</span>::<span class="ident">ExecuteReturnedResults</span>) <span class="op">=</span><span class="op">&gt;</span> {}
-                <span class="prelude-val">Err</span>(<span class="ident">e</span>) <span class="op">=</span><span class="op">&gt;</span> <span class="kw">return</span> <span class="prelude-val">Err</span>(<span class="ident">e</span>),
+                <span class="prelude-val">Err</span>(<span class="ident">rusqlite</span>::<span class="ident">Error</span>::<span class="ident">ExecuteReturnedResults</span>) <span class="op">=&gt;</span> {}
+                <span class="prelude-val">Err</span>(<span class="ident">e</span>) <span class="op">=&gt;</span> <span class="kw">return</span> <span class="prelude-val">Err</span>(<span class="ident">e</span>),
             }
         }
         <span class="prelude-val">Ok</span>(())
@@ -441,7 +442,7 @@
 
     <span class="doccomment">/// Equivalent to `Connection::execute_named` but caches the statement so that subsequent</span>
     <span class="doccomment">/// calls to `execute_cached` will have improved performance.</span>
-    <span class="kw">fn</span> <span class="ident">execute_cached</span><span class="op">&lt;</span><span class="ident">P</span><span class="op">&gt;</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">sql</span>: <span class="kw-2">&amp;</span><span class="ident">str</span>, <span class="ident">params</span>: <span class="ident">P</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">SqlResult</span><span class="op">&lt;</span><span class="ident">usize</span><span class="op">&gt;</span>
+    <span class="kw">fn</span> <span class="ident">execute_cached</span><span class="op">&lt;</span><span class="ident">P</span><span class="op">&gt;</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">sql</span>: <span class="kw-2">&amp;</span><span class="ident">str</span>, <span class="ident">params</span>: <span class="ident">P</span>) <span class="op">-&gt;</span> <span class="ident">SqlResult</span><span class="op">&lt;</span><span class="ident">usize</span><span class="op">&gt;</span>
     <span class="kw">where</span>
         <span class="ident">P</span>: <span class="ident">IntoIterator</span>,
         <span class="ident">P</span>::<span class="ident">Item</span>: <span class="ident">ToSql</span>,
@@ -452,14 +453,14 @@
 
     <span class="doccomment">/// Equivalent to `Connection::execute_named` but caches the statement so that subsequent</span>
     <span class="doccomment">/// calls to `execute_named_cached` will have imprroved performance.</span>
-    <span class="kw">fn</span> <span class="ident">execute_named_cached</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">sql</span>: <span class="kw-2">&amp;</span><span class="ident">str</span>, <span class="ident">params</span>: <span class="kw-2">&amp;</span>[(<span class="kw-2">&amp;</span><span class="ident">str</span>, <span class="kw-2">&amp;</span><span class="kw">dyn</span> <span class="ident">ToSql</span>)]) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">SqlResult</span><span class="op">&lt;</span><span class="ident">usize</span><span class="op">&gt;</span> {
+    <span class="kw">fn</span> <span class="ident">execute_named_cached</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">sql</span>: <span class="kw-2">&amp;</span><span class="ident">str</span>, <span class="ident">params</span>: <span class="kw-2">&amp;</span>[(<span class="kw-2">&amp;</span><span class="ident">str</span>, <span class="kw-2">&amp;</span><span class="kw">dyn</span> <span class="ident">ToSql</span>)]) <span class="op">-&gt;</span> <span class="ident">SqlResult</span><span class="op">&lt;</span><span class="ident">usize</span><span class="op">&gt;</span> {
         <span class="kw">crate</span>::<span class="ident">maybe_log_plan</span>(<span class="self">self</span>.<span class="ident">conn</span>(), <span class="ident">sql</span>, <span class="ident">params</span>);
         <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">stmt</span> <span class="op">=</span> <span class="self">self</span>.<span class="ident">conn</span>().<span class="ident">prepare_cached</span>(<span class="ident">sql</span>)<span class="question-mark">?</span>;
         <span class="ident">stmt</span>.<span class="ident">execute_named</span>(<span class="ident">params</span>)
     }
 
     <span class="doccomment">/// Execute a query that returns a single result column, and return that result.</span>
-    <span class="kw">fn</span> <span class="ident">query_one</span><span class="op">&lt;</span><span class="ident">T</span>: <span class="ident">FromSql</span><span class="op">&gt;</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">sql</span>: <span class="kw-2">&amp;</span><span class="ident">str</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">SqlResult</span><span class="op">&lt;</span><span class="ident">T</span><span class="op">&gt;</span> {
+    <span class="kw">fn</span> <span class="ident">query_one</span><span class="op">&lt;</span><span class="ident">T</span>: <span class="ident">FromSql</span><span class="op">&gt;</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">sql</span>: <span class="kw-2">&amp;</span><span class="ident">str</span>) <span class="op">-&gt;</span> <span class="ident">SqlResult</span><span class="op">&lt;</span><span class="ident">T</span><span class="op">&gt;</span> {
         <span class="kw">crate</span>::<span class="ident">maybe_log_plan</span>(<span class="self">self</span>.<span class="ident">conn</span>(), <span class="ident">sql</span>, <span class="kw-2">&amp;</span>[]);
         <span class="kw">let</span> <span class="ident">res</span>: <span class="ident">T</span> <span class="op">=</span> <span class="self">self</span>
             .<span class="ident">conn</span>()
@@ -474,7 +475,7 @@
         <span class="ident">sql</span>: <span class="kw-2">&amp;</span><span class="ident">str</span>,
         <span class="ident">params</span>: <span class="kw-2">&amp;</span>[(<span class="kw-2">&amp;</span><span class="ident">str</span>, <span class="kw-2">&amp;</span><span class="kw">dyn</span> <span class="ident">ToSql</span>)],
         <span class="ident">cache</span>: <span class="ident">bool</span>,
-    ) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">SqlResult</span><span class="op">&lt;</span><span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">T</span><span class="op">&gt;</span><span class="op">&gt;</span>
+    ) <span class="op">-&gt;</span> <span class="ident">SqlResult</span><span class="op">&lt;</span><span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">T</span><span class="op">&gt;&gt;</span>
     <span class="kw">where</span>
         <span class="self">Self</span>: <span class="ident">Sized</span>,
     {
@@ -482,7 +483,7 @@
         <span class="kw">use</span> <span class="ident">rusqlite</span>::<span class="ident">OptionalExtension</span>;
         <span class="comment">// The outer option is if we got rows, the inner option is</span>
         <span class="comment">// if the first row was null.</span>
-        <span class="kw">let</span> <span class="ident">res</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">T</span><span class="op">&gt;</span><span class="op">&gt;</span> <span class="op">=</span> <span class="self">self</span>
+        <span class="kw">let</span> <span class="ident">res</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">T</span><span class="op">&gt;&gt;</span> <span class="op">=</span> <span class="self">self</span>
             .<span class="ident">conn</span>()
             .<span class="ident">query_row_and_then_named</span>(<span class="ident">sql</span>, <span class="ident">params</span>, <span class="op">|</span><span class="ident">row</span><span class="op">|</span> <span class="ident">row</span>.<span class="ident">get</span>(<span class="number">0</span>), <span class="ident">cache</span>)
             .<span class="ident">optional</span>()<span class="question-mark">?</span>;
@@ -498,11 +499,11 @@
         <span class="ident">params</span>: <span class="kw-2">&amp;</span>[(<span class="kw-2">&amp;</span><span class="ident">str</span>, <span class="kw-2">&amp;</span><span class="kw">dyn</span> <span class="ident">ToSql</span>)],
         <span class="ident">mapper</span>: <span class="ident">F</span>,
         <span class="ident">cache</span>: <span class="ident">bool</span>,
-    ) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">T</span>, <span class="ident">E</span><span class="op">&gt;</span>
+    ) <span class="op">-&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">T</span>, <span class="ident">E</span><span class="op">&gt;</span>
     <span class="kw">where</span>
         <span class="self">Self</span>: <span class="ident">Sized</span>,
         <span class="ident">E</span>: <span class="ident">From</span><span class="op">&lt;</span><span class="ident">rusqlite</span>::<span class="ident">Error</span><span class="op">&gt;</span>,
-        <span class="ident">F</span>: <span class="ident">FnOnce</span>(<span class="kw-2">&amp;</span><span class="ident">Row</span><span class="op">&lt;</span><span class="lifetime">&#39;_</span><span class="op">&gt;</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">T</span>, <span class="ident">E</span><span class="op">&gt;</span>,
+        <span class="ident">F</span>: <span class="ident">FnOnce</span>(<span class="kw-2">&amp;</span><span class="ident">Row</span><span class="op">&lt;</span><span class="lifetime">&#39;_</span><span class="op">&gt;</span>) <span class="op">-&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">T</span>, <span class="ident">E</span><span class="op">&gt;</span>,
     {
         <span class="kw">crate</span>::<span class="ident">maybe_log_plan</span>(<span class="self">self</span>.<span class="ident">conn</span>(), <span class="ident">sql</span>, <span class="ident">params</span>);
         <span class="prelude-val">Ok</span>(<span class="self">self</span>
@@ -518,11 +519,11 @@
         <span class="ident">sql</span>: <span class="kw-2">&amp;</span><span class="ident">str</span>,
         <span class="ident">params</span>: <span class="kw-2">&amp;</span>[(<span class="kw-2">&amp;</span><span class="ident">str</span>, <span class="kw-2">&amp;</span><span class="kw">dyn</span> <span class="ident">ToSql</span>)],
         <span class="ident">mapper</span>: <span class="ident">F</span>,
-    ) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">Vec</span><span class="op">&lt;</span><span class="ident">T</span><span class="op">&gt;</span>, <span class="ident">E</span><span class="op">&gt;</span>
+    ) <span class="op">-&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">Vec</span><span class="op">&lt;</span><span class="ident">T</span><span class="op">&gt;</span>, <span class="ident">E</span><span class="op">&gt;</span>
     <span class="kw">where</span>
         <span class="self">Self</span>: <span class="ident">Sized</span>,
         <span class="ident">E</span>: <span class="ident">From</span><span class="op">&lt;</span><span class="ident">rusqlite</span>::<span class="ident">Error</span><span class="op">&gt;</span>,
-        <span class="ident">F</span>: <span class="ident">FnMut</span>(<span class="kw-2">&amp;</span><span class="ident">Row</span><span class="op">&lt;</span><span class="lifetime">&#39;_</span><span class="op">&gt;</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">T</span>, <span class="ident">E</span><span class="op">&gt;</span>,
+        <span class="ident">F</span>: <span class="ident">FnMut</span>(<span class="kw-2">&amp;</span><span class="ident">Row</span><span class="op">&lt;</span><span class="lifetime">&#39;_</span><span class="op">&gt;</span>) <span class="op">-&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">T</span>, <span class="ident">E</span><span class="op">&gt;</span>,
     {
         <span class="kw">crate</span>::<span class="ident">maybe_log_plan</span>(<span class="self">self</span>.<span class="ident">conn</span>(), <span class="ident">sql</span>, <span class="ident">params</span>);
         <span class="ident">query_rows_and_then_named</span>(<span class="self">self</span>.<span class="ident">conn</span>(), <span class="ident">sql</span>, <span class="ident">params</span>, <span class="ident">mapper</span>, <span class="bool-val">false</span>)
@@ -535,11 +536,11 @@
         <span class="ident">sql</span>: <span class="kw-2">&amp;</span><span class="ident">str</span>,
         <span class="ident">params</span>: <span class="kw-2">&amp;</span>[(<span class="kw-2">&amp;</span><span class="ident">str</span>, <span class="kw-2">&amp;</span><span class="kw">dyn</span> <span class="ident">ToSql</span>)],
         <span class="ident">mapper</span>: <span class="ident">F</span>,
-    ) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">Vec</span><span class="op">&lt;</span><span class="ident">T</span><span class="op">&gt;</span>, <span class="ident">E</span><span class="op">&gt;</span>
+    ) <span class="op">-&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">Vec</span><span class="op">&lt;</span><span class="ident">T</span><span class="op">&gt;</span>, <span class="ident">E</span><span class="op">&gt;</span>
     <span class="kw">where</span>
         <span class="self">Self</span>: <span class="ident">Sized</span>,
         <span class="ident">E</span>: <span class="ident">From</span><span class="op">&lt;</span><span class="ident">rusqlite</span>::<span class="ident">Error</span><span class="op">&gt;</span>,
-        <span class="ident">F</span>: <span class="ident">FnMut</span>(<span class="kw-2">&amp;</span><span class="ident">Row</span><span class="op">&lt;</span><span class="lifetime">&#39;_</span><span class="op">&gt;</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">T</span>, <span class="ident">E</span><span class="op">&gt;</span>,
+        <span class="ident">F</span>: <span class="ident">FnMut</span>(<span class="kw-2">&amp;</span><span class="ident">Row</span><span class="op">&lt;</span><span class="lifetime">&#39;_</span><span class="op">&gt;</span>) <span class="op">-&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">T</span>, <span class="ident">E</span><span class="op">&gt;</span>,
     {
         <span class="kw">crate</span>::<span class="ident">maybe_log_plan</span>(<span class="self">self</span>.<span class="ident">conn</span>(), <span class="ident">sql</span>, <span class="ident">params</span>);
         <span class="ident">query_rows_and_then_named</span>(<span class="self">self</span>.<span class="ident">conn</span>(), <span class="ident">sql</span>, <span class="ident">params</span>, <span class="ident">mapper</span>, <span class="bool-val">true</span>)
@@ -566,11 +567,11 @@
         <span class="ident">sql</span>: <span class="kw-2">&amp;</span><span class="ident">str</span>,
         <span class="ident">params</span>: <span class="kw-2">&amp;</span>[(<span class="kw-2">&amp;</span><span class="ident">str</span>, <span class="kw-2">&amp;</span><span class="kw">dyn</span> <span class="ident">ToSql</span>)],
         <span class="ident">mapper</span>: <span class="ident">F</span>,
-    ) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">Coll</span>, <span class="ident">E</span><span class="op">&gt;</span>
+    ) <span class="op">-&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">Coll</span>, <span class="ident">E</span><span class="op">&gt;</span>
     <span class="kw">where</span>
         <span class="self">Self</span>: <span class="ident">Sized</span>,
         <span class="ident">E</span>: <span class="ident">From</span><span class="op">&lt;</span><span class="ident">rusqlite</span>::<span class="ident">Error</span><span class="op">&gt;</span>,
-        <span class="ident">F</span>: <span class="ident">FnMut</span>(<span class="kw-2">&amp;</span><span class="ident">Row</span><span class="op">&lt;</span><span class="lifetime">&#39;_</span><span class="op">&gt;</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">T</span>, <span class="ident">E</span><span class="op">&gt;</span>,
+        <span class="ident">F</span>: <span class="ident">FnMut</span>(<span class="kw-2">&amp;</span><span class="ident">Row</span><span class="op">&lt;</span><span class="lifetime">&#39;_</span><span class="op">&gt;</span>) <span class="op">-&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">T</span>, <span class="ident">E</span><span class="op">&gt;</span>,
         <span class="ident">Coll</span>: <span class="ident">FromIterator</span><span class="op">&lt;</span><span class="ident">T</span><span class="op">&gt;</span>,
     {
         <span class="kw">crate</span>::<span class="ident">maybe_log_plan</span>(<span class="self">self</span>.<span class="ident">conn</span>(), <span class="ident">sql</span>, <span class="ident">params</span>);
@@ -583,11 +584,11 @@
         <span class="ident">sql</span>: <span class="kw-2">&amp;</span><span class="ident">str</span>,
         <span class="ident">params</span>: <span class="kw-2">&amp;</span>[(<span class="kw-2">&amp;</span><span class="ident">str</span>, <span class="kw-2">&amp;</span><span class="kw">dyn</span> <span class="ident">ToSql</span>)],
         <span class="ident">mapper</span>: <span class="ident">F</span>,
-    ) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">Coll</span>, <span class="ident">E</span><span class="op">&gt;</span>
+    ) <span class="op">-&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">Coll</span>, <span class="ident">E</span><span class="op">&gt;</span>
     <span class="kw">where</span>
         <span class="self">Self</span>: <span class="ident">Sized</span>,
         <span class="ident">E</span>: <span class="ident">From</span><span class="op">&lt;</span><span class="ident">rusqlite</span>::<span class="ident">Error</span><span class="op">&gt;</span>,
-        <span class="ident">F</span>: <span class="ident">FnMut</span>(<span class="kw-2">&amp;</span><span class="ident">Row</span><span class="op">&lt;</span><span class="lifetime">&#39;_</span><span class="op">&gt;</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">T</span>, <span class="ident">E</span><span class="op">&gt;</span>,
+        <span class="ident">F</span>: <span class="ident">FnMut</span>(<span class="kw-2">&amp;</span><span class="ident">Row</span><span class="op">&lt;</span><span class="lifetime">&#39;_</span><span class="op">&gt;</span>) <span class="op">-&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">T</span>, <span class="ident">E</span><span class="op">&gt;</span>,
         <span class="ident">Coll</span>: <span class="ident">FromIterator</span><span class="op">&lt;</span><span class="ident">T</span><span class="op">&gt;</span>,
     {
         <span class="kw">crate</span>::<span class="ident">maybe_log_plan</span>(<span class="self">self</span>.<span class="ident">conn</span>(), <span class="ident">sql</span>, <span class="ident">params</span>);
@@ -602,11 +603,11 @@
         <span class="ident">params</span>: <span class="kw-2">&amp;</span>[(<span class="kw-2">&amp;</span><span class="ident">str</span>, <span class="kw-2">&amp;</span><span class="kw">dyn</span> <span class="ident">ToSql</span>)],
         <span class="ident">mapper</span>: <span class="ident">F</span>,
         <span class="ident">cache</span>: <span class="ident">bool</span>,
-    ) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">T</span><span class="op">&gt;</span>, <span class="ident">E</span><span class="op">&gt;</span>
+    ) <span class="op">-&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">T</span><span class="op">&gt;</span>, <span class="ident">E</span><span class="op">&gt;</span>
     <span class="kw">where</span>
         <span class="self">Self</span>: <span class="ident">Sized</span>,
         <span class="ident">E</span>: <span class="ident">From</span><span class="op">&lt;</span><span class="ident">rusqlite</span>::<span class="ident">Error</span><span class="op">&gt;</span>,
-        <span class="ident">F</span>: <span class="ident">FnOnce</span>(<span class="kw-2">&amp;</span><span class="ident">Row</span><span class="op">&lt;</span><span class="lifetime">&#39;_</span><span class="op">&gt;</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">T</span>, <span class="ident">E</span><span class="op">&gt;</span>,
+        <span class="ident">F</span>: <span class="ident">FnOnce</span>(<span class="kw-2">&amp;</span><span class="ident">Row</span><span class="op">&lt;</span><span class="lifetime">&#39;_</span><span class="op">&gt;</span>) <span class="op">-&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">T</span>, <span class="ident">E</span><span class="op">&gt;</span>,
     {
         <span class="kw">crate</span>::<span class="ident">maybe_log_plan</span>(<span class="self">self</span>.<span class="ident">conn</span>(), <span class="ident">sql</span>, <span class="ident">params</span>);
         <span class="kw">let</span> <span class="ident">conn</span> <span class="op">=</span> <span class="self">self</span>.<span class="ident">conn</span>();
@@ -615,35 +616,35 @@
         <span class="ident">rows</span>.<span class="ident">next</span>()<span class="question-mark">?</span>.<span class="ident">map</span>(<span class="ident">mapper</span>).<span class="ident">transpose</span>()
     }
 
-    <span class="kw">fn</span> <span class="ident">unchecked_transaction</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">SqlResult</span><span class="op">&lt;</span><span class="ident">UncheckedTransaction</span><span class="op">&lt;</span><span class="lifetime">&#39;_</span><span class="op">&gt;</span><span class="op">&gt;</span> {
+    <span class="kw">fn</span> <span class="ident">unchecked_transaction</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-&gt;</span> <span class="ident">SqlResult</span><span class="op">&lt;</span><span class="ident">UncheckedTransaction</span><span class="op">&lt;</span><span class="lifetime">&#39;_</span><span class="op">&gt;&gt;</span> {
         <span class="ident">UncheckedTransaction</span>::<span class="ident">new</span>(<span class="self">self</span>.<span class="ident">conn</span>(), <span class="ident">TransactionBehavior</span>::<span class="ident">Deferred</span>)
     }
 
     <span class="doccomment">/// Begin `unchecked_transaction` with `TransactionBehavior::Immediate`. Use</span>
     <span class="doccomment">/// when the first operation will be a read operation, that further writes</span>
     <span class="doccomment">/// depend on for correctness.</span>
-    <span class="kw">fn</span> <span class="ident">unchecked_transaction_imm</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">SqlResult</span><span class="op">&lt;</span><span class="ident">UncheckedTransaction</span><span class="op">&lt;</span><span class="lifetime">&#39;_</span><span class="op">&gt;</span><span class="op">&gt;</span> {
+    <span class="kw">fn</span> <span class="ident">unchecked_transaction_imm</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-&gt;</span> <span class="ident">SqlResult</span><span class="op">&lt;</span><span class="ident">UncheckedTransaction</span><span class="op">&lt;</span><span class="lifetime">&#39;_</span><span class="op">&gt;&gt;</span> {
         <span class="ident">UncheckedTransaction</span>::<span class="ident">new</span>(<span class="self">self</span>.<span class="ident">conn</span>(), <span class="ident">TransactionBehavior</span>::<span class="ident">Immediate</span>)
     }
 }
 
 <span class="kw">impl</span> <span class="ident">ConnExt</span> <span class="kw">for</span> <span class="ident">Connection</span> {
     <span class="attribute">#[<span class="ident">inline</span>]</span>
-    <span class="kw">fn</span> <span class="ident">conn</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="kw-2">&amp;</span><span class="ident">Connection</span> {
+    <span class="kw">fn</span> <span class="ident">conn</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-&gt;</span> <span class="kw-2">&amp;</span><span class="ident">Connection</span> {
         <span class="self">self</span>
     }
 }
 
 <span class="kw">impl</span><span class="op">&lt;</span><span class="lifetime">&#39;conn</span><span class="op">&gt;</span> <span class="ident">ConnExt</span> <span class="kw">for</span> <span class="ident">Transaction</span><span class="op">&lt;</span><span class="lifetime">&#39;conn</span><span class="op">&gt;</span> {
     <span class="attribute">#[<span class="ident">inline</span>]</span>
-    <span class="kw">fn</span> <span class="ident">conn</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="kw-2">&amp;</span><span class="ident">Connection</span> {
+    <span class="kw">fn</span> <span class="ident">conn</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-&gt;</span> <span class="kw-2">&amp;</span><span class="ident">Connection</span> {
         <span class="kw-2">&amp;</span><span class="kw-2">*</span><span class="self">self</span>
     }
 }
 
 <span class="kw">impl</span><span class="op">&lt;</span><span class="lifetime">&#39;conn</span><span class="op">&gt;</span> <span class="ident">ConnExt</span> <span class="kw">for</span> <span class="ident">Savepoint</span><span class="op">&lt;</span><span class="lifetime">&#39;conn</span><span class="op">&gt;</span> {
     <span class="attribute">#[<span class="ident">inline</span>]</span>
-    <span class="kw">fn</span> <span class="ident">conn</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="kw-2">&amp;</span><span class="ident">Connection</span> {
+    <span class="kw">fn</span> <span class="ident">conn</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-&gt;</span> <span class="kw-2">&amp;</span><span class="ident">Connection</span> {
         <span class="kw-2">&amp;</span><span class="kw-2">*</span><span class="self">self</span>
     }
 }
@@ -668,12 +669,12 @@
     <span class="doccomment">/// Begin a new unchecked transaction. Cannot be nested, but this is not</span>
     <span class="doccomment">/// enforced by Rust (hence &#39;unchecked&#39;) - however, it is enforced by</span>
     <span class="doccomment">/// SQLite; use a rusqlite `savepoint` for nested transactions.</span>
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">new</span>(<span class="ident">conn</span>: <span class="kw-2">&amp;</span><span class="lifetime">&#39;conn</span> <span class="ident">Connection</span>, <span class="ident">behavior</span>: <span class="ident">TransactionBehavior</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">SqlResult</span><span class="op">&lt;</span><span class="self">Self</span><span class="op">&gt;</span> {
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">new</span>(<span class="ident">conn</span>: <span class="kw-2">&amp;</span><span class="lifetime">&#39;conn</span> <span class="ident">Connection</span>, <span class="ident">behavior</span>: <span class="ident">TransactionBehavior</span>) <span class="op">-&gt;</span> <span class="ident">SqlResult</span><span class="op">&lt;</span><span class="self">Self</span><span class="op">&gt;</span> {
         <span class="kw">let</span> <span class="ident">query</span> <span class="op">=</span> <span class="kw">match</span> <span class="ident">behavior</span> {
-            <span class="ident">TransactionBehavior</span>::<span class="ident">Deferred</span> <span class="op">=</span><span class="op">&gt;</span> <span class="string">&quot;BEGIN DEFERRED&quot;</span>,
-            <span class="ident">TransactionBehavior</span>::<span class="ident">Immediate</span> <span class="op">=</span><span class="op">&gt;</span> <span class="string">&quot;BEGIN IMMEDIATE&quot;</span>,
-            <span class="ident">TransactionBehavior</span>::<span class="ident">Exclusive</span> <span class="op">=</span><span class="op">&gt;</span> <span class="string">&quot;BEGIN EXCLUSIVE&quot;</span>,
-            <span class="kw">_</span> <span class="op">=</span><span class="op">&gt;</span> <span class="macro">unreachable</span><span class="macro">!</span>(),
+            <span class="ident">TransactionBehavior</span>::<span class="ident">Deferred</span> <span class="op">=&gt;</span> <span class="string">&quot;BEGIN DEFERRED&quot;</span>,
+            <span class="ident">TransactionBehavior</span>::<span class="ident">Immediate</span> <span class="op">=&gt;</span> <span class="string">&quot;BEGIN IMMEDIATE&quot;</span>,
+            <span class="ident">TransactionBehavior</span>::<span class="ident">Exclusive</span> <span class="op">=&gt;</span> <span class="string">&quot;BEGIN EXCLUSIVE&quot;</span>,
+            <span class="kw">_</span> <span class="op">=&gt;</span> <span class="macro">unreachable</span><span class="macro">!</span>(),
         };
         <span class="ident">conn</span>.<span class="ident">execute_batch</span>(<span class="ident">query</span>)
             .<span class="ident">map</span>(<span class="kw">move</span> <span class="op">|</span><span class="kw">_</span><span class="op">|</span> <span class="ident">UncheckedTransaction</span> {
@@ -684,7 +685,7 @@
     }
 
     <span class="doccomment">/// Consumes and commits an unchecked transaction.</span>
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">commit</span>(<span class="kw-2">mut</span> <span class="self">self</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">SqlResult</span><span class="op">&lt;</span>()<span class="op">&gt;</span> {
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">commit</span>(<span class="kw-2">mut</span> <span class="self">self</span>) <span class="op">-&gt;</span> <span class="ident">SqlResult</span><span class="op">&lt;</span>()<span class="op">&gt;</span> {
         <span class="kw">if</span> <span class="self">self</span>.<span class="ident">finished</span> {
             <span class="ident">log</span>::<span class="macro">warn</span><span class="macro">!</span>(<span class="string">&quot;ignoring request to commit an already finished transaction&quot;</span>);
             <span class="kw">return</span> <span class="prelude-val">Ok</span>(());
@@ -696,7 +697,7 @@
     }
 
     <span class="doccomment">/// Consumes and rolls back an unchecked transaction.</span>
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">rollback</span>(<span class="kw-2">mut</span> <span class="self">self</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">SqlResult</span><span class="op">&lt;</span>()<span class="op">&gt;</span> {
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">rollback</span>(<span class="kw-2">mut</span> <span class="self">self</span>) <span class="op">-&gt;</span> <span class="ident">SqlResult</span><span class="op">&lt;</span>()<span class="op">&gt;</span> {
         <span class="kw">if</span> <span class="self">self</span>.<span class="ident">finished</span> {
             <span class="ident">log</span>::<span class="macro">warn</span><span class="macro">!</span>(<span class="string">&quot;ignoring request to rollback an already finished transaction&quot;</span>);
             <span class="kw">return</span> <span class="prelude-val">Ok</span>(());
@@ -704,14 +705,14 @@
         <span class="self">self</span>.<span class="ident">rollback_</span>()
     }
 
-    <span class="kw">fn</span> <span class="ident">rollback_</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">SqlResult</span><span class="op">&lt;</span>()<span class="op">&gt;</span> {
+    <span class="kw">fn</span> <span class="ident">rollback_</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>) <span class="op">-&gt;</span> <span class="ident">SqlResult</span><span class="op">&lt;</span>()<span class="op">&gt;</span> {
         <span class="self">self</span>.<span class="ident">finished</span> <span class="op">=</span> <span class="bool-val">true</span>;
         <span class="self">self</span>.<span class="ident">conn</span>.<span class="ident">execute_batch</span>(<span class="string">&quot;ROLLBACK&quot;</span>)<span class="question-mark">?</span>;
         <span class="prelude-val">Ok</span>(())
     }
 
-    <span class="kw">fn</span> <span class="ident">finish_</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">SqlResult</span><span class="op">&lt;</span>()<span class="op">&gt;</span> {
-        <span class="kw">if</span> <span class="self">self</span>.<span class="ident">finished</span> <span class="op">|</span><span class="op">|</span> <span class="self">self</span>.<span class="ident">conn</span>.<span class="ident">is_autocommit</span>() {
+    <span class="kw">fn</span> <span class="ident">finish_</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>) <span class="op">-&gt;</span> <span class="ident">SqlResult</span><span class="op">&lt;</span>()<span class="op">&gt;</span> {
+        <span class="kw">if</span> <span class="self">self</span>.<span class="ident">finished</span> <span class="op">||</span> <span class="self">self</span>.<span class="ident">conn</span>.<span class="ident">is_autocommit</span>() {
             <span class="kw">return</span> <span class="prelude-val">Ok</span>(());
         }
         <span class="self">self</span>.<span class="ident">rollback_</span>()<span class="question-mark">?</span>;
@@ -723,7 +724,7 @@
     <span class="kw">type</span> <span class="ident">Target</span> <span class="op">=</span> <span class="ident">Connection</span>;
 
     <span class="attribute">#[<span class="ident">inline</span>]</span>
-    <span class="kw">fn</span> <span class="ident">deref</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="kw-2">&amp;</span><span class="ident">Connection</span> {
+    <span class="kw">fn</span> <span class="ident">deref</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-&gt;</span> <span class="kw-2">&amp;</span><span class="ident">Connection</span> {
         <span class="self">self</span>.<span class="ident">conn</span>
     }
 }
@@ -738,7 +739,7 @@
 
 <span class="kw">impl</span><span class="op">&lt;</span><span class="lifetime">&#39;conn</span><span class="op">&gt;</span> <span class="ident">ConnExt</span> <span class="kw">for</span> <span class="ident">UncheckedTransaction</span><span class="op">&lt;</span><span class="lifetime">&#39;conn</span><span class="op">&gt;</span> {
     <span class="attribute">#[<span class="ident">inline</span>]</span>
-    <span class="kw">fn</span> <span class="ident">conn</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="kw-2">&amp;</span><span class="ident">Connection</span> {
+    <span class="kw">fn</span> <span class="ident">conn</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-&gt;</span> <span class="kw-2">&amp;</span><span class="ident">Connection</span> {
         <span class="kw-2">&amp;</span><span class="kw-2">*</span><span class="self">self</span>
     }
 }
@@ -749,15 +750,15 @@
     <span class="ident">params</span>: <span class="kw-2">&amp;</span>[(<span class="kw-2">&amp;</span><span class="ident">str</span>, <span class="kw-2">&amp;</span><span class="kw">dyn</span> <span class="ident">ToSql</span>)],
     <span class="ident">mapper</span>: <span class="ident">F</span>,
     <span class="ident">cache</span>: <span class="ident">bool</span>,
-) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">Coll</span>, <span class="ident">E</span><span class="op">&gt;</span>
+) <span class="op">-&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">Coll</span>, <span class="ident">E</span><span class="op">&gt;</span>
 <span class="kw">where</span>
     <span class="ident">E</span>: <span class="ident">From</span><span class="op">&lt;</span><span class="ident">rusqlite</span>::<span class="ident">Error</span><span class="op">&gt;</span>,
-    <span class="ident">F</span>: <span class="ident">FnMut</span>(<span class="kw-2">&amp;</span><span class="ident">Row</span><span class="op">&lt;</span><span class="lifetime">&#39;_</span><span class="op">&gt;</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">T</span>, <span class="ident">E</span><span class="op">&gt;</span>,
+    <span class="ident">F</span>: <span class="ident">FnMut</span>(<span class="kw-2">&amp;</span><span class="ident">Row</span><span class="op">&lt;</span><span class="lifetime">&#39;_</span><span class="op">&gt;</span>) <span class="op">-&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">T</span>, <span class="ident">E</span><span class="op">&gt;</span>,
     <span class="ident">Coll</span>: <span class="ident">FromIterator</span><span class="op">&lt;</span><span class="ident">T</span><span class="op">&gt;</span>,
 {
     <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">stmt</span> <span class="op">=</span> <span class="ident">conn</span>.<span class="ident">prepare_maybe_cached</span>(<span class="ident">sql</span>, <span class="ident">cache</span>)<span class="question-mark">?</span>;
     <span class="kw">let</span> <span class="ident">iter</span> <span class="op">=</span> <span class="ident">stmt</span>.<span class="ident">query_and_then_named</span>(<span class="ident">params</span>, <span class="ident">mapper</span>)<span class="question-mark">?</span>;
-    <span class="prelude-val">Ok</span>(<span class="ident">iter</span>.<span class="ident">collect</span>::<span class="op">&lt;</span><span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">Coll</span>, <span class="ident">E</span><span class="op">&gt;</span><span class="op">&gt;</span>()<span class="question-mark">?</span>)
+    <span class="prelude-val">Ok</span>(<span class="ident">iter</span>.<span class="ident">collect</span>::<span class="op">&lt;</span><span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">Coll</span>, <span class="ident">E</span><span class="op">&gt;&gt;</span>()<span class="question-mark">?</span>)
 }
 </pre></div>
 </section><section id="search" class="content hidden"></section><section class="footer"></section><script>window.rootPath = "../../";window.currentCrate = "sql_support";</script><script src="../../main.js"></script><script src="../../source-script.js"></script><script src="../../source-files.js"></script><script defer src="../../search-index.js"></script></body></html>

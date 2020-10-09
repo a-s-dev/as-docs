@@ -1,4 +1,5 @@
-<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source to the Rust file `components/rc_log/src/lib.rs`."><meta name="keywords" content="rust, rustlang, rust-lang"><title>lib.rs.html -- source</title><link rel="stylesheet" type="text/css" href="../../normalize.css"><link rel="stylesheet" type="text/css" href="../../rustdoc.css" id="mainThemeStyle"><link rel="stylesheet" type="text/css" href="../../dark.css"><link rel="stylesheet" type="text/css" href="../../light.css" id="themeStyle"><script src="../../storage.js"></script><noscript><link rel="stylesheet" href="../../noscript.css"></noscript><link rel="shortcut icon" href="../../favicon.ico"><style type="text/css">#crate-search{background-image:url("../../down-arrow.svg");}</style></head><body class="rustdoc source"><!--[if lte IE 8]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="sidebar"><div class="sidebar-menu">&#9776;</div><a href='../../rc_log_ffi/index.html'><div class='logo-container'><img src='../../rust-logo.png' alt='logo'></div></a></nav><div class="theme-picker"><button id="theme-picker" aria-label="Pick another theme!"><img src="../../brush.svg" width="18" alt="Pick another theme!"></button><div id="theme-choices"></div></div><script src="../../theme.js"></script><nav class="sub"><form class="search-form"><div class="search-container"><div><select id="crate-search"><option value="All crates">All crates</option></select><input class="search-input" name="search" disabled autocomplete="off" spellcheck="false" placeholder="Click or press ‘S’ to search, ‘?’ for more options…" type="search"></div><a id="settings-menu" href="../../settings.html"><img src="../../wheel.svg" width="18" alt="Change settings"></a></div></form></nav><section id="main" class="content"><pre class="line-numbers"><span id="1">  1</span>
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source to the Rust file `components/rc_log/src/lib.rs`."><meta name="keywords" content="rust, rustlang, rust-lang"><title>lib.rs.html -- source</title><link rel="stylesheet" type="text/css" href="../../normalize.css"><link rel="stylesheet" type="text/css" href="../../rustdoc.css" id="mainThemeStyle"><link rel="stylesheet" type="text/css" href="../../light.css"  id="themeStyle"><link rel="stylesheet" type="text/css" href="../../dark.css" disabled ><link rel="stylesheet" type="text/css" href="../../ayu.css" disabled ><script src="../../storage.js"></script><noscript><link rel="stylesheet" href="../../noscript.css"></noscript><link rel="shortcut icon" href="../../favicon.ico"><style type="text/css">#crate-search{background-image:url("../../down-arrow.svg");}</style></head><body class="rustdoc source"><!--[if lte IE 8]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="sidebar"><div class="sidebar-menu">&#9776;</div><a href='../../rc_log_ffi/index.html'><div class='logo-container rust-logo'><img src='../../rust-logo.png' alt='logo'></div></a></nav><div class="theme-picker"><button id="theme-picker" aria-label="Pick another theme!"><img src="../../brush.svg" width="18" alt="Pick another theme!"></button><div id="theme-choices"></div></div><script src="../../theme.js"></script><nav class="sub"><form class="search-form"><div class="search-container"><div><select id="crate-search"><option value="All crates">All crates</option></select><input class="search-input" name="search" disabled autocomplete="off" spellcheck="false" placeholder="Click or press ‘S’ to search, ‘?’ for more options…" type="search"></div><span class="help-button">?</span>
+                <a id="settings-menu" href="../../settings.html"><img src="../../wheel.svg" width="18" alt="Change settings"></a></div></form></nav><section id="main" class="content"><pre class="line-numbers"><span id="1">  1</span>
 <span id="2">  2</span>
 <span id="3">  3</span>
 <span id="4">  4</span>
@@ -212,10 +213,10 @@
     }
 }
 
-<span class="kw">pub</span>(<span class="kw">crate</span>) <span class="kw">fn</span> <span class="ident">string_to_cstring_lossy</span>(<span class="ident">s</span>: <span class="ident">String</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">CString</span> {
+<span class="kw">pub</span>(<span class="kw">crate</span>) <span class="kw">fn</span> <span class="ident">string_to_cstring_lossy</span>(<span class="ident">s</span>: <span class="ident">String</span>) <span class="op">-&gt;</span> <span class="ident">CString</span> {
     <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">bytes</span> <span class="op">=</span> <span class="ident">s</span>.<span class="ident">into_bytes</span>();
     <span class="kw">for</span> <span class="ident">byte</span> <span class="kw">in</span> <span class="ident">bytes</span>.<span class="ident">iter_mut</span>() {
-        <span class="kw">if</span> <span class="kw-2">*</span><span class="ident">byte</span> <span class="op">=</span><span class="op">=</span> <span class="number">0</span> {
+        <span class="kw">if</span> <span class="kw-2">*</span><span class="ident">byte</span> <span class="op">==</span> <span class="number">0</span> {
             <span class="kw-2">*</span><span class="ident">byte</span> <span class="op">=</span> <span class="string">b&#39;?&#39;</span>;
         }
     }
@@ -236,8 +237,8 @@
 <span class="kw">impl</span> <span class="ident">LogLevel</span> {
     <span class="doccomment">/// Equivalent to the `into()` conversion but avoids reporting network</span>
     <span class="doccomment">/// errors as errors, and downgrades them into warnings.</span>
-    <span class="kw">pub</span>(<span class="kw">crate</span>) <span class="kw">fn</span> <span class="ident">from_level_and_message</span>(<span class="kw-2">mut</span> <span class="ident">level</span>: <span class="ident">log</span>::<span class="ident">Level</span>, <span class="ident">msg</span>: <span class="kw-2">&amp;</span><span class="ident">str</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="self">Self</span> {
-        <span class="kw">if</span> <span class="ident">level</span> <span class="op">=</span><span class="op">=</span> <span class="ident">log</span>::<span class="ident">Level</span>::<span class="ident">Error</span> <span class="kw-2">&amp;</span><span class="op">&amp;</span> <span class="ident">msg</span>.<span class="ident">contains</span>(<span class="string">&quot;[no-sentry]&quot;</span>) {
+    <span class="kw">pub</span>(<span class="kw">crate</span>) <span class="kw">fn</span> <span class="ident">from_level_and_message</span>(<span class="kw-2">mut</span> <span class="ident">level</span>: <span class="ident">log</span>::<span class="ident">Level</span>, <span class="ident">msg</span>: <span class="kw-2">&amp;</span><span class="ident">str</span>) <span class="op">-&gt;</span> <span class="self">Self</span> {
+        <span class="kw">if</span> <span class="ident">level</span> <span class="op">==</span> <span class="ident">log</span>::<span class="ident">Level</span>::<span class="ident">Error</span> <span class="op">&amp;&amp;</span> <span class="ident">msg</span>.<span class="ident">contains</span>(<span class="string">&quot;[no-sentry]&quot;</span>) {
             <span class="ident">level</span> <span class="op">=</span> <span class="ident">log</span>::<span class="ident">Level</span>::<span class="ident">Warn</span>;
         }
         <span class="ident">level</span>.<span class="ident">into</span>()
@@ -245,13 +246,13 @@
 }
 
 <span class="kw">impl</span> <span class="ident">From</span><span class="op">&lt;</span><span class="ident">log</span>::<span class="ident">Level</span><span class="op">&gt;</span> <span class="kw">for</span> <span class="ident">LogLevel</span> {
-    <span class="kw">fn</span> <span class="ident">from</span>(<span class="ident">l</span>: <span class="ident">log</span>::<span class="ident">Level</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="self">Self</span> {
+    <span class="kw">fn</span> <span class="ident">from</span>(<span class="ident">l</span>: <span class="ident">log</span>::<span class="ident">Level</span>) <span class="op">-&gt;</span> <span class="self">Self</span> {
         <span class="kw">match</span> <span class="ident">l</span> {
-            <span class="ident">log</span>::<span class="ident">Level</span>::<span class="ident">Trace</span> <span class="op">=</span><span class="op">&gt;</span> <span class="ident">LogLevel</span>::<span class="ident">VERBOSE</span>,
-            <span class="ident">log</span>::<span class="ident">Level</span>::<span class="ident">Debug</span> <span class="op">=</span><span class="op">&gt;</span> <span class="ident">LogLevel</span>::<span class="ident">DEBUG</span>,
-            <span class="ident">log</span>::<span class="ident">Level</span>::<span class="ident">Info</span> <span class="op">=</span><span class="op">&gt;</span> <span class="ident">LogLevel</span>::<span class="ident">INFO</span>,
-            <span class="ident">log</span>::<span class="ident">Level</span>::<span class="ident">Warn</span> <span class="op">=</span><span class="op">&gt;</span> <span class="ident">LogLevel</span>::<span class="ident">WARN</span>,
-            <span class="ident">log</span>::<span class="ident">Level</span>::<span class="ident">Error</span> <span class="op">=</span><span class="op">&gt;</span> <span class="ident">LogLevel</span>::<span class="ident">ERROR</span>,
+            <span class="ident">log</span>::<span class="ident">Level</span>::<span class="ident">Trace</span> <span class="op">=&gt;</span> <span class="ident">LogLevel</span>::<span class="ident">VERBOSE</span>,
+            <span class="ident">log</span>::<span class="ident">Level</span>::<span class="ident">Debug</span> <span class="op">=&gt;</span> <span class="ident">LogLevel</span>::<span class="ident">DEBUG</span>,
+            <span class="ident">log</span>::<span class="ident">Level</span>::<span class="ident">Info</span> <span class="op">=&gt;</span> <span class="ident">LogLevel</span>::<span class="ident">INFO</span>,
+            <span class="ident">log</span>::<span class="ident">Level</span>::<span class="ident">Warn</span> <span class="op">=&gt;</span> <span class="ident">LogLevel</span>::<span class="ident">WARN</span>,
+            <span class="ident">log</span>::<span class="ident">Level</span>::<span class="ident">Error</span> <span class="op">=&gt;</span> <span class="ident">LogLevel</span>::<span class="ident">ERROR</span>,
         }
     }
 }
@@ -260,27 +261,27 @@
 <span class="kw">pub</span> <span class="kw">extern</span> <span class="string">&quot;C&quot;</span> <span class="kw">fn</span> <span class="ident">rc_log_adapter_create</span>(
     <span class="ident">callback</span>: <span class="ident">imp</span>::<span class="ident">LogCallback</span>,
     <span class="ident">out_err</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">ffi_support</span>::<span class="ident">ExternError</span>,
-) <span class="op">-</span><span class="op">&gt;</span> <span class="kw-2">*</span><span class="kw-2">mut</span> <span class="ident">imp</span>::<span class="ident">LogAdapterState</span> {
-    <span class="ident">ffi_support</span>::<span class="ident">call_with_output</span>(<span class="ident">out_err</span>, <span class="op">|</span><span class="op">|</span> <span class="ident">imp</span>::<span class="ident">LogAdapterState</span>::<span class="ident">init</span>(<span class="ident">callback</span>))
+) <span class="op">-&gt;</span> <span class="kw-2">*</span><span class="kw-2">mut</span> <span class="ident">imp</span>::<span class="ident">LogAdapterState</span> {
+    <span class="ident">ffi_support</span>::<span class="ident">call_with_output</span>(<span class="ident">out_err</span>, <span class="op">||</span> <span class="ident">imp</span>::<span class="ident">LogAdapterState</span>::<span class="ident">init</span>(<span class="ident">callback</span>))
 }
 
 <span class="comment">// Note: keep in sync with LogLevelFilter in kotlin.</span>
-<span class="kw">fn</span> <span class="ident">level_filter_from_i32</span>(<span class="ident">level_arg</span>: <span class="ident">i32</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">log</span>::<span class="ident">LevelFilter</span> {
+<span class="kw">fn</span> <span class="ident">level_filter_from_i32</span>(<span class="ident">level_arg</span>: <span class="ident">i32</span>) <span class="op">-&gt;</span> <span class="ident">log</span>::<span class="ident">LevelFilter</span> {
     <span class="kw">match</span> <span class="ident">level_arg</span> {
-        <span class="number">4</span> <span class="op">=</span><span class="op">&gt;</span> <span class="ident">log</span>::<span class="ident">LevelFilter</span>::<span class="ident">Debug</span>,
-        <span class="number">3</span> <span class="op">=</span><span class="op">&gt;</span> <span class="ident">log</span>::<span class="ident">LevelFilter</span>::<span class="ident">Info</span>,
-        <span class="number">2</span> <span class="op">=</span><span class="op">&gt;</span> <span class="ident">log</span>::<span class="ident">LevelFilter</span>::<span class="ident">Warn</span>,
-        <span class="number">1</span> <span class="op">=</span><span class="op">&gt;</span> <span class="ident">log</span>::<span class="ident">LevelFilter</span>::<span class="ident">Error</span>,
+        <span class="number">4</span> <span class="op">=&gt;</span> <span class="ident">log</span>::<span class="ident">LevelFilter</span>::<span class="ident">Debug</span>,
+        <span class="number">3</span> <span class="op">=&gt;</span> <span class="ident">log</span>::<span class="ident">LevelFilter</span>::<span class="ident">Info</span>,
+        <span class="number">2</span> <span class="op">=&gt;</span> <span class="ident">log</span>::<span class="ident">LevelFilter</span>::<span class="ident">Warn</span>,
+        <span class="number">1</span> <span class="op">=&gt;</span> <span class="ident">log</span>::<span class="ident">LevelFilter</span>::<span class="ident">Error</span>,
         <span class="comment">// We clamp out of bounds level values.</span>
-        <span class="ident">n</span> <span class="kw">if</span> <span class="ident">n</span> <span class="op">&lt;</span><span class="op">=</span> <span class="number">0</span> <span class="op">=</span><span class="op">&gt;</span> <span class="ident">log</span>::<span class="ident">LevelFilter</span>::<span class="ident">Off</span>,
-        <span class="ident">n</span> <span class="kw">if</span> <span class="ident">n</span> <span class="op">&gt;</span><span class="op">=</span> <span class="number">5</span> <span class="op">=</span><span class="op">&gt;</span> <span class="ident">log</span>::<span class="ident">LevelFilter</span>::<span class="ident">Trace</span>,
-        <span class="kw">_</span> <span class="op">=</span><span class="op">&gt;</span> <span class="macro">unreachable</span><span class="macro">!</span>(<span class="string">&quot;This is actually exhaustive&quot;</span>),
+        <span class="ident">n</span> <span class="kw">if</span> <span class="ident">n</span> <span class="op">&lt;=</span> <span class="number">0</span> <span class="op">=&gt;</span> <span class="ident">log</span>::<span class="ident">LevelFilter</span>::<span class="ident">Off</span>,
+        <span class="ident">n</span> <span class="kw">if</span> <span class="ident">n</span> <span class="op">&gt;=</span> <span class="number">5</span> <span class="op">=&gt;</span> <span class="ident">log</span>::<span class="ident">LevelFilter</span>::<span class="ident">Trace</span>,
+        <span class="kw">_</span> <span class="op">=&gt;</span> <span class="macro">unreachable</span><span class="macro">!</span>(<span class="string">&quot;This is actually exhaustive&quot;</span>),
     }
 }
 
 <span class="attribute">#[<span class="ident">no_mangle</span>]</span>
 <span class="kw">pub</span> <span class="kw">extern</span> <span class="string">&quot;C&quot;</span> <span class="kw">fn</span> <span class="ident">rc_log_adapter_set_max_level</span>(<span class="ident">level</span>: <span class="ident">i32</span>, <span class="ident">out_err</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">ffi_support</span>::<span class="ident">ExternError</span>) {
-    <span class="ident">ffi_support</span>::<span class="ident">call_with_output</span>(<span class="ident">out_err</span>, <span class="op">|</span><span class="op">|</span> <span class="ident">log</span>::<span class="ident">set_max_level</span>(<span class="ident">level_filter_from_i32</span>(<span class="ident">level</span>)))
+    <span class="ident">ffi_support</span>::<span class="ident">call_with_output</span>(<span class="ident">out_err</span>, <span class="op">||</span> <span class="ident">log</span>::<span class="ident">set_max_level</span>(<span class="ident">level_filter_from_i32</span>(<span class="ident">level</span>)))
 }
 
 <span class="comment">// Can&#39;t use define_box_destructor because this can panic. TODO: Maybe we should</span>
@@ -290,7 +291,7 @@
 <span class="doccomment">/// Unsafe because it frees it&#39;s argument.</span>
 <span class="attribute">#[<span class="ident">no_mangle</span>]</span>
 <span class="kw">pub</span> <span class="kw">unsafe</span> <span class="kw">extern</span> <span class="string">&quot;C&quot;</span> <span class="kw">fn</span> <span class="ident">rc_log_adapter_destroy</span>(<span class="ident">to_destroy</span>: <span class="kw-2">*</span><span class="kw-2">mut</span> <span class="ident">imp</span>::<span class="ident">LogAdapterState</span>) {
-    <span class="ident">ffi_support</span>::<span class="ident">abort_on_panic</span>::<span class="ident">call_with_output</span>(<span class="kw">move</span> <span class="op">|</span><span class="op">|</span> {
+    <span class="ident">ffi_support</span>::<span class="ident">abort_on_panic</span>::<span class="ident">call_with_output</span>(<span class="kw">move</span> <span class="op">||</span> {
         <span class="ident">log</span>::<span class="ident">set_max_level</span>(<span class="ident">log</span>::<span class="ident">LevelFilter</span>::<span class="ident">Off</span>);
         <span class="ident">drop</span>(<span class="ident">Box</span>::<span class="ident">from_raw</span>(<span class="ident">to_destroy</span>));
         <span class="ident">settable_log</span>::<span class="ident">unset_logger</span>();
@@ -300,7 +301,7 @@
 <span class="comment">// Used just to allow tests to produce logs.</span>
 <span class="attribute">#[<span class="ident">no_mangle</span>]</span>
 <span class="kw">pub</span> <span class="kw">extern</span> <span class="string">&quot;C&quot;</span> <span class="kw">fn</span> <span class="ident">rc_log_adapter_test__log_msg</span>(<span class="ident">msg</span>: <span class="ident">ffi_support</span>::<span class="ident">FfiStr</span><span class="op">&lt;</span><span class="lifetime">&#39;_</span><span class="op">&gt;</span>) {
-    <span class="ident">ffi_support</span>::<span class="ident">abort_on_panic</span>::<span class="ident">call_with_output</span>(<span class="op">|</span><span class="op">|</span> {
+    <span class="ident">ffi_support</span>::<span class="ident">abort_on_panic</span>::<span class="ident">call_with_output</span>(<span class="op">||</span> {
         <span class="ident">log</span>::<span class="macro">info</span><span class="macro">!</span>(<span class="string">&quot;testing: {}&quot;</span>, <span class="ident">msg</span>.<span class="ident">as_str</span>());
     });
 }

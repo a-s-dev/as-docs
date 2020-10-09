@@ -1,3 +1,3 @@
 (function() {var implementors = {};
-implementors["places"] = [{"text":"impl <a class=\"trait\" href=\"https://doc.rust-lang.org/nightly/core/iter/traits/iterator/trait.Iterator.html\" title=\"trait core::iter::traits::iterator::Iterator\">Iterator</a> for <a class=\"struct\" href=\"places/types/visit_transition_set/struct.VisitTransitionSetIter.html\" title=\"struct places::types::visit_transition_set::VisitTransitionSetIter\">VisitTransitionSetIter</a>","synthetic":false,"types":["places::types::visit_transition_set::VisitTransitionSetIter"]}];
+implementors["places"] = [{"text":"impl Iterator for VisitTransitionSetIter","synthetic":false,"types":[]}];
 if (window.register_implementors) {window.register_implementors(implementors);} else {window.pending_implementors = implementors;}})()

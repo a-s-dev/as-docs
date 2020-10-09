@@ -1,4 +1,5 @@
-<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source to the Rust file `components/places/src/bookmark_sync/record.rs`."><meta name="keywords" content="rust, rustlang, rust-lang"><title>record.rs.html -- source</title><link rel="stylesheet" type="text/css" href="../../../normalize.css"><link rel="stylesheet" type="text/css" href="../../../rustdoc.css" id="mainThemeStyle"><link rel="stylesheet" type="text/css" href="../../../dark.css"><link rel="stylesheet" type="text/css" href="../../../light.css" id="themeStyle"><script src="../../../storage.js"></script><noscript><link rel="stylesheet" href="../../../noscript.css"></noscript><link rel="shortcut icon" href="../../../favicon.ico"><style type="text/css">#crate-search{background-image:url("../../../down-arrow.svg");}</style></head><body class="rustdoc source"><!--[if lte IE 8]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="sidebar"><div class="sidebar-menu">&#9776;</div><a href='../../../places/index.html'><div class='logo-container'><img src='../../../rust-logo.png' alt='logo'></div></a></nav><div class="theme-picker"><button id="theme-picker" aria-label="Pick another theme!"><img src="../../../brush.svg" width="18" alt="Pick another theme!"></button><div id="theme-choices"></div></div><script src="../../../theme.js"></script><nav class="sub"><form class="search-form"><div class="search-container"><div><select id="crate-search"><option value="All crates">All crates</option></select><input class="search-input" name="search" disabled autocomplete="off" spellcheck="false" placeholder="Click or press ‘S’ to search, ‘?’ for more options…" type="search"></div><a id="settings-menu" href="../../../settings.html"><img src="../../../wheel.svg" width="18" alt="Change settings"></a></div></form></nav><section id="main" class="content"><pre class="line-numbers"><span id="1">  1</span>
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source to the Rust file `components/places/src/bookmark_sync/record.rs`."><meta name="keywords" content="rust, rustlang, rust-lang"><title>record.rs.html -- source</title><link rel="stylesheet" type="text/css" href="../../../normalize.css"><link rel="stylesheet" type="text/css" href="../../../rustdoc.css" id="mainThemeStyle"><link rel="stylesheet" type="text/css" href="../../../light.css"  id="themeStyle"><link rel="stylesheet" type="text/css" href="../../../dark.css" disabled ><link rel="stylesheet" type="text/css" href="../../../ayu.css" disabled ><script src="../../../storage.js"></script><noscript><link rel="stylesheet" href="../../../noscript.css"></noscript><link rel="shortcut icon" href="../../../favicon.ico"><style type="text/css">#crate-search{background-image:url("../../../down-arrow.svg");}</style></head><body class="rustdoc source"><!--[if lte IE 8]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="sidebar"><div class="sidebar-menu">&#9776;</div><a href='../../../places/index.html'><div class='logo-container rust-logo'><img src='../../../rust-logo.png' alt='logo'></div></a></nav><div class="theme-picker"><button id="theme-picker" aria-label="Pick another theme!"><img src="../../../brush.svg" width="18" alt="Pick another theme!"></button><div id="theme-choices"></div></div><script src="../../../theme.js"></script><nav class="sub"><form class="search-form"><div class="search-container"><div><select id="crate-search"><option value="All crates">All crates</option></select><input class="search-input" name="search" disabled autocomplete="off" spellcheck="false" placeholder="Click or press ‘S’ to search, ‘?’ for more options…" type="search"></div><span class="help-button">?</span>
+                <a id="settings-menu" href="../../../settings.html"><img src="../../../wheel.svg" width="18" alt="Change settings"></a></div></form></nav><section id="main" class="content"><pre class="line-numbers"><span id="1">  1</span>
 <span id="2">  2</span>
 <span id="3">  3</span>
 <span id="4">  4</span>
@@ -601,48 +602,48 @@
 
 <span class="kw">impl</span> <span class="ident">BookmarkRecordId</span> {
     <span class="doccomment">/// Creates a bookmark record ID from a Sync record payload ID.</span>
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">from_payload_id</span>(<span class="ident">payload_id</span>: <span class="ident">SyncGuid</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">BookmarkRecordId</span> {
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">from_payload_id</span>(<span class="ident">payload_id</span>: <span class="ident">SyncGuid</span>) <span class="op">-&gt;</span> <span class="ident">BookmarkRecordId</span> {
         <span class="ident">BookmarkRecordId</span>(<span class="kw">match</span> <span class="ident">payload_id</span>.<span class="ident">as_str</span>() {
-            <span class="string">&quot;places&quot;</span> <span class="op">=</span><span class="op">&gt;</span> <span class="ident">BookmarkRootGuid</span>::<span class="ident">Root</span>.<span class="ident">as_guid</span>(),
-            <span class="string">&quot;menu&quot;</span> <span class="op">=</span><span class="op">&gt;</span> <span class="ident">BookmarkRootGuid</span>::<span class="ident">Menu</span>.<span class="ident">as_guid</span>(),
-            <span class="string">&quot;toolbar&quot;</span> <span class="op">=</span><span class="op">&gt;</span> <span class="ident">BookmarkRootGuid</span>::<span class="ident">Toolbar</span>.<span class="ident">as_guid</span>(),
-            <span class="string">&quot;unfiled&quot;</span> <span class="op">=</span><span class="op">&gt;</span> <span class="ident">BookmarkRootGuid</span>::<span class="ident">Unfiled</span>.<span class="ident">as_guid</span>(),
-            <span class="string">&quot;mobile&quot;</span> <span class="op">=</span><span class="op">&gt;</span> <span class="ident">BookmarkRootGuid</span>::<span class="ident">Mobile</span>.<span class="ident">as_guid</span>(),
-            <span class="kw">_</span> <span class="op">=</span><span class="op">&gt;</span> <span class="ident">payload_id</span>,
+            <span class="string">&quot;places&quot;</span> <span class="op">=&gt;</span> <span class="ident">BookmarkRootGuid</span>::<span class="ident">Root</span>.<span class="ident">as_guid</span>(),
+            <span class="string">&quot;menu&quot;</span> <span class="op">=&gt;</span> <span class="ident">BookmarkRootGuid</span>::<span class="ident">Menu</span>.<span class="ident">as_guid</span>(),
+            <span class="string">&quot;toolbar&quot;</span> <span class="op">=&gt;</span> <span class="ident">BookmarkRootGuid</span>::<span class="ident">Toolbar</span>.<span class="ident">as_guid</span>(),
+            <span class="string">&quot;unfiled&quot;</span> <span class="op">=&gt;</span> <span class="ident">BookmarkRootGuid</span>::<span class="ident">Unfiled</span>.<span class="ident">as_guid</span>(),
+            <span class="string">&quot;mobile&quot;</span> <span class="op">=&gt;</span> <span class="ident">BookmarkRootGuid</span>::<span class="ident">Mobile</span>.<span class="ident">as_guid</span>(),
+            <span class="kw">_</span> <span class="op">=&gt;</span> <span class="ident">payload_id</span>,
         })
     }
 
     <span class="doccomment">/// Returns a reference to the record payload ID. This is the borrowed</span>
     <span class="doccomment">/// version of `into_payload_id`, and used for serialization.</span>
     <span class="attribute">#[<span class="ident">inline</span>]</span>
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">as_payload_id</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="kw-2">&amp;</span><span class="ident">str</span> {
-        <span class="self">self</span>.<span class="ident">root_payload_id</span>().<span class="ident">unwrap_or_else</span>(<span class="op">|</span><span class="op">|</span> <span class="self">self</span>.<span class="number">0</span>.<span class="ident">as_ref</span>())
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">as_payload_id</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-&gt;</span> <span class="kw-2">&amp;</span><span class="ident">str</span> {
+        <span class="self">self</span>.<span class="ident">root_payload_id</span>().<span class="ident">unwrap_or_else</span>(<span class="op">||</span> <span class="self">self</span>.<span class="number">0</span>.<span class="ident">as_ref</span>())
     }
 
     <span class="doccomment">/// Returns the record payload ID. This is the owned version of</span>
     <span class="doccomment">/// `as_payload_id`, and exists to avoid copying strings when uploading</span>
     <span class="doccomment">/// tombstones.</span>
     <span class="attribute">#[<span class="ident">inline</span>]</span>
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">into_payload_id</span>(<span class="self">self</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">String</span> {
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">into_payload_id</span>(<span class="self">self</span>) <span class="op">-&gt;</span> <span class="ident">String</span> {
         <span class="self">self</span>.<span class="ident">root_payload_id</span>()
             .<span class="ident">map</span>(<span class="ident">Into</span>::<span class="ident">into</span>)
-            .<span class="ident">unwrap_or_else</span>(<span class="op">|</span><span class="op">|</span> (<span class="self">self</span>.<span class="number">0</span>).<span class="ident">into_string</span>())
+            .<span class="ident">unwrap_or_else</span>(<span class="op">||</span> (<span class="self">self</span>.<span class="number">0</span>).<span class="ident">into_string</span>())
     }
 
     <span class="doccomment">/// Returns a reference to the GUID for this record ID.</span>
     <span class="attribute">#[<span class="ident">inline</span>]</span>
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">as_guid</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="kw-2">&amp;</span><span class="ident">SyncGuid</span> {
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">as_guid</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-&gt;</span> <span class="kw-2">&amp;</span><span class="ident">SyncGuid</span> {
         <span class="kw-2">&amp;</span><span class="self">self</span>.<span class="number">0</span>
     }
 
-    <span class="kw">fn</span> <span class="ident">root_payload_id</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="kw-2">&amp;</span><span class="ident">str</span><span class="op">&gt;</span> {
+    <span class="kw">fn</span> <span class="ident">root_payload_id</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-&gt;</span> <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="kw-2">&amp;</span><span class="ident">str</span><span class="op">&gt;</span> {
         <span class="prelude-val">Some</span>(<span class="kw">match</span> <span class="ident">BookmarkRootGuid</span>::<span class="ident">from_guid</span>(<span class="self">self</span>.<span class="ident">as_guid</span>()) {
-            <span class="prelude-val">Some</span>(<span class="ident">BookmarkRootGuid</span>::<span class="ident">Root</span>) <span class="op">=</span><span class="op">&gt;</span> <span class="string">&quot;places&quot;</span>,
-            <span class="prelude-val">Some</span>(<span class="ident">BookmarkRootGuid</span>::<span class="ident">Menu</span>) <span class="op">=</span><span class="op">&gt;</span> <span class="string">&quot;menu&quot;</span>,
-            <span class="prelude-val">Some</span>(<span class="ident">BookmarkRootGuid</span>::<span class="ident">Toolbar</span>) <span class="op">=</span><span class="op">&gt;</span> <span class="string">&quot;toolbar&quot;</span>,
-            <span class="prelude-val">Some</span>(<span class="ident">BookmarkRootGuid</span>::<span class="ident">Unfiled</span>) <span class="op">=</span><span class="op">&gt;</span> <span class="string">&quot;unfiled&quot;</span>,
-            <span class="prelude-val">Some</span>(<span class="ident">BookmarkRootGuid</span>::<span class="ident">Mobile</span>) <span class="op">=</span><span class="op">&gt;</span> <span class="string">&quot;mobile&quot;</span>,
-            <span class="prelude-val">None</span> <span class="op">=</span><span class="op">&gt;</span> <span class="kw">return</span> <span class="prelude-val">None</span>,
+            <span class="prelude-val">Some</span>(<span class="ident">BookmarkRootGuid</span>::<span class="ident">Root</span>) <span class="op">=&gt;</span> <span class="string">&quot;places&quot;</span>,
+            <span class="prelude-val">Some</span>(<span class="ident">BookmarkRootGuid</span>::<span class="ident">Menu</span>) <span class="op">=&gt;</span> <span class="string">&quot;menu&quot;</span>,
+            <span class="prelude-val">Some</span>(<span class="ident">BookmarkRootGuid</span>::<span class="ident">Toolbar</span>) <span class="op">=&gt;</span> <span class="string">&quot;toolbar&quot;</span>,
+            <span class="prelude-val">Some</span>(<span class="ident">BookmarkRootGuid</span>::<span class="ident">Unfiled</span>) <span class="op">=&gt;</span> <span class="string">&quot;unfiled&quot;</span>,
+            <span class="prelude-val">Some</span>(<span class="ident">BookmarkRootGuid</span>::<span class="ident">Mobile</span>) <span class="op">=&gt;</span> <span class="string">&quot;mobile&quot;</span>,
+            <span class="prelude-val">None</span> <span class="op">=&gt;</span> <span class="kw">return</span> <span class="prelude-val">None</span>,
         })
     }
 }
@@ -650,7 +651,7 @@
 <span class="doccomment">/// Converts a Places GUID into a bookmark record ID.</span>
 <span class="kw">impl</span> <span class="ident">From</span><span class="op">&lt;</span><span class="ident">SyncGuid</span><span class="op">&gt;</span> <span class="kw">for</span> <span class="ident">BookmarkRecordId</span> {
     <span class="attribute">#[<span class="ident">inline</span>]</span>
-    <span class="kw">fn</span> <span class="ident">from</span>(<span class="ident">guid</span>: <span class="ident">SyncGuid</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">BookmarkRecordId</span> {
+    <span class="kw">fn</span> <span class="ident">from</span>(<span class="ident">guid</span>: <span class="ident">SyncGuid</span>) <span class="op">-&gt;</span> <span class="ident">BookmarkRecordId</span> {
         <span class="ident">BookmarkRecordId</span>(<span class="ident">guid</span>)
     }
 }
@@ -658,26 +659,26 @@
 <span class="doccomment">/// Converts a bookmark record ID into a Places GUID.</span>
 <span class="kw">impl</span> <span class="ident">From</span><span class="op">&lt;</span><span class="ident">BookmarkRecordId</span><span class="op">&gt;</span> <span class="kw">for</span> <span class="ident">SyncGuid</span> {
     <span class="attribute">#[<span class="ident">inline</span>]</span>
-    <span class="kw">fn</span> <span class="ident">from</span>(<span class="ident">record_id</span>: <span class="ident">BookmarkRecordId</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">SyncGuid</span> {
+    <span class="kw">fn</span> <span class="ident">from</span>(<span class="ident">record_id</span>: <span class="ident">BookmarkRecordId</span>) <span class="op">-&gt;</span> <span class="ident">SyncGuid</span> {
         <span class="ident">record_id</span>.<span class="number">0</span>
     }
 }
 
 <span class="kw">impl</span> <span class="ident">Serialize</span> <span class="kw">for</span> <span class="ident">BookmarkRecordId</span> {
     <span class="attribute">#[<span class="ident">inline</span>]</span>
-    <span class="kw">fn</span> <span class="ident">serialize</span><span class="op">&lt;</span><span class="ident">S</span>: <span class="ident">Serializer</span><span class="op">&gt;</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">serializer</span>: <span class="ident">S</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">std</span>::<span class="ident">result</span>::<span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">S</span>::<span class="prelude-val">Ok</span>, <span class="ident">S</span>::<span class="ident">Error</span><span class="op">&gt;</span> {
+    <span class="kw">fn</span> <span class="ident">serialize</span><span class="op">&lt;</span><span class="ident">S</span>: <span class="ident">Serializer</span><span class="op">&gt;</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">serializer</span>: <span class="ident">S</span>) <span class="op">-&gt;</span> <span class="ident">std</span>::<span class="ident">result</span>::<span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">S</span>::<span class="prelude-val">Ok</span>, <span class="ident">S</span>::<span class="ident">Error</span><span class="op">&gt;</span> {
         <span class="ident">serializer</span>.<span class="ident">serialize_str</span>(<span class="self">self</span>.<span class="ident">as_payload_id</span>())
     }
 }
 
 <span class="kw">impl</span><span class="op">&lt;</span><span class="lifetime">&#39;de</span><span class="op">&gt;</span> <span class="ident">Deserialize</span><span class="op">&lt;</span><span class="lifetime">&#39;de</span><span class="op">&gt;</span> <span class="kw">for</span> <span class="ident">BookmarkRecordId</span> {
-    <span class="kw">fn</span> <span class="ident">deserialize</span><span class="op">&lt;</span><span class="ident">D</span>: <span class="ident">Deserializer</span><span class="op">&lt;</span><span class="lifetime">&#39;de</span><span class="op">&gt;</span><span class="op">&gt;</span>(<span class="ident">deserializer</span>: <span class="ident">D</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">std</span>::<span class="ident">result</span>::<span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="self">Self</span>, <span class="ident">D</span>::<span class="ident">Error</span><span class="op">&gt;</span> {
+    <span class="kw">fn</span> <span class="ident">deserialize</span><span class="op">&lt;</span><span class="ident">D</span>: <span class="ident">Deserializer</span><span class="op">&lt;</span><span class="lifetime">&#39;de</span><span class="op">&gt;&gt;</span>(<span class="ident">deserializer</span>: <span class="ident">D</span>) <span class="op">-&gt;</span> <span class="ident">std</span>::<span class="ident">result</span>::<span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="self">Self</span>, <span class="ident">D</span>::<span class="ident">Error</span><span class="op">&gt;</span> {
         <span class="kw">struct</span> <span class="ident">V</span>;
 
         <span class="kw">impl</span><span class="op">&lt;</span><span class="lifetime">&#39;de</span><span class="op">&gt;</span> <span class="ident">Visitor</span><span class="op">&lt;</span><span class="lifetime">&#39;de</span><span class="op">&gt;</span> <span class="kw">for</span> <span class="ident">V</span> {
             <span class="kw">type</span> <span class="ident">Value</span> <span class="op">=</span> <span class="ident">BookmarkRecordId</span>;
 
-            <span class="kw">fn</span> <span class="ident">expecting</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">f</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">fmt</span>::<span class="ident">Formatter</span><span class="op">&lt;</span><span class="lifetime">&#39;_</span><span class="op">&gt;</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">fmt</span>::<span class="prelude-ty">Result</span> {
+            <span class="kw">fn</span> <span class="ident">expecting</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">f</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">fmt</span>::<span class="ident">Formatter</span><span class="op">&lt;</span><span class="lifetime">&#39;_</span><span class="op">&gt;</span>) <span class="op">-&gt;</span> <span class="ident">fmt</span>::<span class="prelude-ty">Result</span> {
                 <span class="ident">f</span>.<span class="ident">write_str</span>(<span class="string">&quot;a bookmark record ID&quot;</span>)
             }
 
@@ -685,7 +686,7 @@
             <span class="kw">fn</span> <span class="ident">visit_string</span><span class="op">&lt;</span><span class="ident">E</span>: <span class="ident">serde</span>::<span class="ident">de</span>::<span class="ident">Error</span><span class="op">&gt;</span>(
                 <span class="self">self</span>,
                 <span class="ident">payload_id</span>: <span class="ident">String</span>,
-            ) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">std</span>::<span class="ident">result</span>::<span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">BookmarkRecordId</span>, <span class="ident">E</span><span class="op">&gt;</span> {
+            ) <span class="op">-&gt;</span> <span class="ident">std</span>::<span class="ident">result</span>::<span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">BookmarkRecordId</span>, <span class="ident">E</span><span class="op">&gt;</span> {
                 <span class="comment">// The JSON deserializer passes owned strings, so we can avoid</span>
                 <span class="comment">// cloning the payload ID in the common case...</span>
                 <span class="prelude-val">Ok</span>(<span class="ident">BookmarkRecordId</span>::<span class="ident">from_payload_id</span>(<span class="ident">payload_id</span>.<span class="ident">into</span>()))
@@ -695,7 +696,7 @@
             <span class="kw">fn</span> <span class="ident">visit_str</span><span class="op">&lt;</span><span class="ident">E</span>: <span class="ident">serde</span>::<span class="ident">de</span>::<span class="ident">Error</span><span class="op">&gt;</span>(
                 <span class="self">self</span>,
                 <span class="ident">payload_id</span>: <span class="kw-2">&amp;</span><span class="ident">str</span>,
-            ) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">std</span>::<span class="ident">result</span>::<span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">BookmarkRecordId</span>, <span class="ident">E</span><span class="op">&gt;</span> {
+            ) <span class="op">-&gt;</span> <span class="ident">std</span>::<span class="ident">result</span>::<span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">BookmarkRecordId</span>, <span class="ident">E</span><span class="op">&gt;</span> {
                 <span class="comment">// ...However, the Serde docs say we must implement</span>
                 <span class="comment">// `visit_str` if we implement `visit_string`, so we also</span>
                 <span class="comment">// provide an implementation that clones the ID.</span>
@@ -743,7 +744,7 @@
 
 <span class="kw">impl</span> <span class="ident">From</span><span class="op">&lt;</span><span class="ident">BookmarkRecord</span><span class="op">&gt;</span> <span class="kw">for</span> <span class="ident">BookmarkItemRecord</span> {
     <span class="attribute">#[<span class="ident">inline</span>]</span>
-    <span class="kw">fn</span> <span class="ident">from</span>(<span class="ident">b</span>: <span class="ident">BookmarkRecord</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">BookmarkItemRecord</span> {
+    <span class="kw">fn</span> <span class="ident">from</span>(<span class="ident">b</span>: <span class="ident">BookmarkRecord</span>) <span class="op">-&gt;</span> <span class="ident">BookmarkItemRecord</span> {
         <span class="ident">BookmarkItemRecord</span>::<span class="ident">Bookmark</span>(<span class="ident">b</span>)
     }
 }
@@ -779,7 +780,7 @@
 
 <span class="kw">impl</span> <span class="ident">From</span><span class="op">&lt;</span><span class="ident">QueryRecord</span><span class="op">&gt;</span> <span class="kw">for</span> <span class="ident">BookmarkItemRecord</span> {
     <span class="attribute">#[<span class="ident">inline</span>]</span>
-    <span class="kw">fn</span> <span class="ident">from</span>(<span class="ident">q</span>: <span class="ident">QueryRecord</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">BookmarkItemRecord</span> {
+    <span class="kw">fn</span> <span class="ident">from</span>(<span class="ident">q</span>: <span class="ident">QueryRecord</span>) <span class="op">-&gt;</span> <span class="ident">BookmarkItemRecord</span> {
         <span class="ident">BookmarkItemRecord</span>::<span class="ident">Query</span>(<span class="ident">q</span>)
     }
 }
@@ -812,7 +813,7 @@
 
 <span class="kw">impl</span> <span class="ident">From</span><span class="op">&lt;</span><span class="ident">FolderRecord</span><span class="op">&gt;</span> <span class="kw">for</span> <span class="ident">BookmarkItemRecord</span> {
     <span class="attribute">#[<span class="ident">inline</span>]</span>
-    <span class="kw">fn</span> <span class="ident">from</span>(<span class="ident">f</span>: <span class="ident">FolderRecord</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">BookmarkItemRecord</span> {
+    <span class="kw">fn</span> <span class="ident">from</span>(<span class="ident">f</span>: <span class="ident">FolderRecord</span>) <span class="op">-&gt;</span> <span class="ident">BookmarkItemRecord</span> {
         <span class="ident">BookmarkItemRecord</span>::<span class="ident">Folder</span>(<span class="ident">f</span>)
     }
 }
@@ -848,7 +849,7 @@
 
 <span class="kw">impl</span> <span class="ident">From</span><span class="op">&lt;</span><span class="ident">LivemarkRecord</span><span class="op">&gt;</span> <span class="kw">for</span> <span class="ident">BookmarkItemRecord</span> {
     <span class="attribute">#[<span class="ident">inline</span>]</span>
-    <span class="kw">fn</span> <span class="ident">from</span>(<span class="ident">l</span>: <span class="ident">LivemarkRecord</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">BookmarkItemRecord</span> {
+    <span class="kw">fn</span> <span class="ident">from</span>(<span class="ident">l</span>: <span class="ident">LivemarkRecord</span>) <span class="op">-&gt;</span> <span class="ident">BookmarkItemRecord</span> {
         <span class="ident">BookmarkItemRecord</span>::<span class="ident">Livemark</span>(<span class="ident">l</span>)
     }
 }
@@ -880,7 +881,7 @@
 
 <span class="kw">impl</span> <span class="ident">From</span><span class="op">&lt;</span><span class="ident">SeparatorRecord</span><span class="op">&gt;</span> <span class="kw">for</span> <span class="ident">BookmarkItemRecord</span> {
     <span class="attribute">#[<span class="ident">inline</span>]</span>
-    <span class="kw">fn</span> <span class="ident">from</span>(<span class="ident">s</span>: <span class="ident">SeparatorRecord</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">BookmarkItemRecord</span> {
+    <span class="kw">fn</span> <span class="ident">from</span>(<span class="ident">s</span>: <span class="ident">SeparatorRecord</span>) <span class="op">-&gt;</span> <span class="ident">BookmarkItemRecord</span> {
         <span class="ident">BookmarkItemRecord</span>::<span class="ident">Separator</span>(<span class="ident">s</span>)
     }
 }
@@ -898,38 +899,38 @@
 <span class="comment">// dateAdded on a bookmark might be a string! See #1148.</span>
 <span class="kw">fn</span> <span class="ident">de_maybe_stringified_timestamp</span><span class="op">&lt;</span><span class="lifetime">&#39;de</span>, <span class="ident">D</span><span class="op">&gt;</span>(
     <span class="ident">deserializer</span>: <span class="ident">D</span>,
-) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">std</span>::<span class="ident">result</span>::<span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">i64</span><span class="op">&gt;</span>, <span class="ident">D</span>::<span class="ident">Error</span><span class="op">&gt;</span>
+) <span class="op">-&gt;</span> <span class="ident">std</span>::<span class="ident">result</span>::<span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">i64</span><span class="op">&gt;</span>, <span class="ident">D</span>::<span class="ident">Error</span><span class="op">&gt;</span>
 <span class="kw">where</span>
     <span class="ident">D</span>: <span class="ident">serde</span>::<span class="ident">de</span>::<span class="ident">Deserializer</span><span class="op">&lt;</span><span class="lifetime">&#39;de</span><span class="op">&gt;</span>,
 {
     <span class="kw">use</span> <span class="ident">std</span>::<span class="ident">marker</span>::<span class="ident">PhantomData</span>;
 
-    <span class="kw">struct</span> <span class="ident">StringOrInt</span>(<span class="ident">PhantomData</span><span class="op">&lt;</span><span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">i64</span><span class="op">&gt;</span><span class="op">&gt;</span>);
+    <span class="kw">struct</span> <span class="ident">StringOrInt</span>(<span class="ident">PhantomData</span><span class="op">&lt;</span><span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">i64</span><span class="op">&gt;&gt;</span>);
 
     <span class="kw">impl</span><span class="op">&lt;</span><span class="lifetime">&#39;de</span><span class="op">&gt;</span> <span class="ident">Visitor</span><span class="op">&lt;</span><span class="lifetime">&#39;de</span><span class="op">&gt;</span> <span class="kw">for</span> <span class="ident">StringOrInt</span> {
         <span class="kw">type</span> <span class="ident">Value</span> <span class="op">=</span> <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">i64</span><span class="op">&gt;</span>;
 
-        <span class="kw">fn</span> <span class="ident">expecting</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">formatter</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">fmt</span>::<span class="ident">Formatter</span><span class="op">&lt;</span><span class="lifetime">&#39;_</span><span class="op">&gt;</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">fmt</span>::<span class="prelude-ty">Result</span> {
+        <span class="kw">fn</span> <span class="ident">expecting</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">formatter</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">fmt</span>::<span class="ident">Formatter</span><span class="op">&lt;</span><span class="lifetime">&#39;_</span><span class="op">&gt;</span>) <span class="op">-&gt;</span> <span class="ident">fmt</span>::<span class="prelude-ty">Result</span> {
             <span class="ident">formatter</span>.<span class="ident">write_str</span>(<span class="string">&quot;string or int&quot;</span>)
         }
 
-        <span class="kw">fn</span> <span class="ident">visit_str</span><span class="op">&lt;</span><span class="ident">E</span><span class="op">&gt;</span>(<span class="self">self</span>, <span class="ident">value</span>: <span class="kw-2">&amp;</span><span class="ident">str</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">i64</span><span class="op">&gt;</span>, <span class="ident">E</span><span class="op">&gt;</span>
+        <span class="kw">fn</span> <span class="ident">visit_str</span><span class="op">&lt;</span><span class="ident">E</span><span class="op">&gt;</span>(<span class="self">self</span>, <span class="ident">value</span>: <span class="kw-2">&amp;</span><span class="ident">str</span>) <span class="op">-&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">i64</span><span class="op">&gt;</span>, <span class="ident">E</span><span class="op">&gt;</span>
         <span class="kw">where</span>
             <span class="ident">E</span>: <span class="ident">serde</span>::<span class="ident">de</span>::<span class="ident">Error</span>,
         {
             <span class="kw">match</span> <span class="ident">value</span>.<span class="ident">parse</span>::<span class="op">&lt;</span><span class="ident">i64</span><span class="op">&gt;</span>() {
-                <span class="prelude-val">Ok</span>(<span class="ident">v</span>) <span class="op">=</span><span class="op">&gt;</span> <span class="prelude-val">Ok</span>(<span class="prelude-val">Some</span>(<span class="ident">v</span>)),
-                <span class="prelude-val">Err</span>(<span class="kw">_</span>) <span class="op">=</span><span class="op">&gt;</span> <span class="prelude-val">Err</span>(<span class="ident">E</span>::<span class="ident">custom</span>(<span class="string">&quot;invalid string literal&quot;</span>)),
+                <span class="prelude-val">Ok</span>(<span class="ident">v</span>) <span class="op">=&gt;</span> <span class="prelude-val">Ok</span>(<span class="prelude-val">Some</span>(<span class="ident">v</span>)),
+                <span class="prelude-val">Err</span>(<span class="kw">_</span>) <span class="op">=&gt;</span> <span class="prelude-val">Err</span>(<span class="ident">E</span>::<span class="ident">custom</span>(<span class="string">&quot;invalid string literal&quot;</span>)),
             }
         }
 
         <span class="comment">// all positive int literals</span>
-        <span class="kw">fn</span> <span class="ident">visit_i64</span><span class="op">&lt;</span><span class="ident">E</span>: <span class="ident">serde</span>::<span class="ident">de</span>::<span class="ident">Error</span><span class="op">&gt;</span>(<span class="self">self</span>, <span class="ident">value</span>: <span class="ident">i64</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">i64</span><span class="op">&gt;</span>, <span class="ident">E</span><span class="op">&gt;</span> {
+        <span class="kw">fn</span> <span class="ident">visit_i64</span><span class="op">&lt;</span><span class="ident">E</span>: <span class="ident">serde</span>::<span class="ident">de</span>::<span class="ident">Error</span><span class="op">&gt;</span>(<span class="self">self</span>, <span class="ident">value</span>: <span class="ident">i64</span>) <span class="op">-&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">i64</span><span class="op">&gt;</span>, <span class="ident">E</span><span class="op">&gt;</span> {
             <span class="prelude-val">Ok</span>(<span class="prelude-val">Some</span>(<span class="ident">value</span>.<span class="ident">max</span>(<span class="number">0</span>)))
         }
 
         <span class="comment">// all negative int literals</span>
-        <span class="kw">fn</span> <span class="ident">visit_u64</span><span class="op">&lt;</span><span class="ident">E</span>: <span class="ident">serde</span>::<span class="ident">de</span>::<span class="ident">Error</span><span class="op">&gt;</span>(<span class="self">self</span>, <span class="ident">value</span>: <span class="ident">u64</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">i64</span><span class="op">&gt;</span>, <span class="ident">E</span><span class="op">&gt;</span> {
+        <span class="kw">fn</span> <span class="ident">visit_u64</span><span class="op">&lt;</span><span class="ident">E</span>: <span class="ident">serde</span>::<span class="ident">de</span>::<span class="ident">Error</span><span class="op">&gt;</span>(<span class="self">self</span>, <span class="ident">value</span>: <span class="ident">u64</span>) <span class="op">-&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">i64</span><span class="op">&gt;</span>, <span class="ident">E</span><span class="op">&gt;</span> {
             <span class="prelude-val">Ok</span>(<span class="prelude-val">Some</span>((<span class="ident">value</span> <span class="kw">as</span> <span class="ident">i64</span>).<span class="ident">max</span>(<span class="number">0</span>)))
         }
     }
@@ -956,14 +957,14 @@
         <span class="kw">let</span> <span class="ident">j</span> <span class="op">=</span> <span class="macro">json</span><span class="macro">!</span>({<span class="string">&quot;id&quot;</span>: <span class="string">&quot;unfiled&quot;</span>, <span class="string">&quot;parentid&quot;</span>: <span class="string">&quot;menu&quot;</span>, <span class="string">&quot;type&quot;</span>: <span class="string">&quot;bookmark&quot;</span>});
         <span class="kw">let</span> <span class="ident">r</span>: <span class="ident">BookmarkItemRecord</span> <span class="op">=</span> <span class="ident">serde_json</span>::<span class="ident">from_value</span>(<span class="ident">j</span>).<span class="ident">expect</span>(<span class="string">&quot;should deserialize&quot;</span>);
         <span class="kw">match</span> <span class="kw-2">&amp;</span><span class="ident">r</span> {
-            <span class="ident">BookmarkItemRecord</span>::<span class="ident">Bookmark</span>(<span class="ident">b</span>) <span class="op">=</span><span class="op">&gt;</span> {
+            <span class="ident">BookmarkItemRecord</span>::<span class="ident">Bookmark</span>(<span class="ident">b</span>) <span class="op">=&gt;</span> {
                 <span class="macro">assert_eq</span><span class="macro">!</span>(<span class="ident">b</span>.<span class="ident">record_id</span>.<span class="ident">as_guid</span>(), <span class="ident">BookmarkRootGuid</span>::<span class="ident">Unfiled</span>);
                 <span class="macro">assert_eq</span><span class="macro">!</span>(
                     <span class="ident">b</span>.<span class="ident">parent_record_id</span>.<span class="ident">as_ref</span>().<span class="ident">map</span>(<span class="ident">BookmarkRecordId</span>::<span class="ident">as_guid</span>),
                     <span class="prelude-val">Some</span>(<span class="kw-2">&amp;</span><span class="ident">BookmarkRootGuid</span>::<span class="ident">Menu</span>.<span class="ident">as_guid</span>())
                 );
             }
-            <span class="kw">_</span> <span class="op">=</span><span class="op">&gt;</span> <span class="macro">panic</span><span class="macro">!</span>(<span class="string">&quot;unexpected record type&quot;</span>),
+            <span class="kw">_</span> <span class="op">=&gt;</span> <span class="macro">panic</span><span class="macro">!</span>(<span class="string">&quot;unexpected record type&quot;</span>),
         };
         <span class="kw">let</span> <span class="ident">v</span> <span class="op">=</span> <span class="ident">serde_json</span>::<span class="ident">to_value</span>(<span class="ident">r</span>).<span class="ident">expect</span>(<span class="string">&quot;should serialize&quot;</span>);
         <span class="macro">assert_eq</span><span class="macro">!</span>(
@@ -979,14 +980,14 @@
         <span class="kw">let</span> <span class="ident">j</span> <span class="op">=</span> <span class="macro">json</span><span class="macro">!</span>({<span class="string">&quot;id&quot;</span>: <span class="string">&quot;unfiled&quot;</span>, <span class="string">&quot;parentid&quot;</span>: <span class="string">&quot;menu&quot;</span>, <span class="string">&quot;type&quot;</span>: <span class="string">&quot;query&quot;</span>});
         <span class="kw">let</span> <span class="ident">r</span>: <span class="ident">BookmarkItemRecord</span> <span class="op">=</span> <span class="ident">serde_json</span>::<span class="ident">from_value</span>(<span class="ident">j</span>).<span class="ident">expect</span>(<span class="string">&quot;should deserialize&quot;</span>);
         <span class="kw">match</span> <span class="kw-2">&amp;</span><span class="ident">r</span> {
-            <span class="ident">BookmarkItemRecord</span>::<span class="ident">Query</span>(<span class="ident">q</span>) <span class="op">=</span><span class="op">&gt;</span> {
+            <span class="ident">BookmarkItemRecord</span>::<span class="ident">Query</span>(<span class="ident">q</span>) <span class="op">=&gt;</span> {
                 <span class="macro">assert_eq</span><span class="macro">!</span>(<span class="ident">q</span>.<span class="ident">record_id</span>.<span class="ident">as_guid</span>(), <span class="ident">BookmarkRootGuid</span>::<span class="ident">Unfiled</span>);
                 <span class="macro">assert_eq</span><span class="macro">!</span>(
                     <span class="ident">q</span>.<span class="ident">parent_record_id</span>.<span class="ident">as_ref</span>().<span class="ident">map</span>(<span class="ident">BookmarkRecordId</span>::<span class="ident">as_guid</span>),
                     <span class="prelude-val">Some</span>(<span class="kw-2">&amp;</span><span class="ident">BookmarkRootGuid</span>::<span class="ident">Menu</span>.<span class="ident">as_guid</span>())
                 );
             }
-            <span class="kw">_</span> <span class="op">=</span><span class="op">&gt;</span> <span class="macro">panic</span><span class="macro">!</span>(<span class="string">&quot;unexpected record type&quot;</span>),
+            <span class="kw">_</span> <span class="op">=&gt;</span> <span class="macro">panic</span><span class="macro">!</span>(<span class="string">&quot;unexpected record type&quot;</span>),
         };
         <span class="kw">let</span> <span class="ident">v</span> <span class="op">=</span> <span class="ident">serde_json</span>::<span class="ident">to_value</span>(<span class="ident">r</span>).<span class="ident">expect</span>(<span class="string">&quot;should serialize&quot;</span>);
         <span class="macro">assert_eq</span><span class="macro">!</span>(
@@ -1002,14 +1003,14 @@
         <span class="kw">let</span> <span class="ident">j</span> <span class="op">=</span> <span class="macro">json</span><span class="macro">!</span>({<span class="string">&quot;id&quot;</span>: <span class="string">&quot;unfiled&quot;</span>, <span class="string">&quot;parentid&quot;</span>: <span class="string">&quot;menu&quot;</span>, <span class="string">&quot;type&quot;</span>: <span class="string">&quot;folder&quot;</span>});
         <span class="kw">let</span> <span class="ident">r</span>: <span class="ident">BookmarkItemRecord</span> <span class="op">=</span> <span class="ident">serde_json</span>::<span class="ident">from_value</span>(<span class="ident">j</span>).<span class="ident">expect</span>(<span class="string">&quot;should deserialize&quot;</span>);
         <span class="kw">match</span> <span class="kw-2">&amp;</span><span class="ident">r</span> {
-            <span class="ident">BookmarkItemRecord</span>::<span class="ident">Folder</span>(<span class="ident">f</span>) <span class="op">=</span><span class="op">&gt;</span> {
+            <span class="ident">BookmarkItemRecord</span>::<span class="ident">Folder</span>(<span class="ident">f</span>) <span class="op">=&gt;</span> {
                 <span class="macro">assert_eq</span><span class="macro">!</span>(<span class="ident">f</span>.<span class="ident">record_id</span>.<span class="ident">as_guid</span>(), <span class="ident">BookmarkRootGuid</span>::<span class="ident">Unfiled</span>);
                 <span class="macro">assert_eq</span><span class="macro">!</span>(
                     <span class="ident">f</span>.<span class="ident">parent_record_id</span>.<span class="ident">as_ref</span>().<span class="ident">map</span>(<span class="ident">BookmarkRecordId</span>::<span class="ident">as_guid</span>),
                     <span class="prelude-val">Some</span>(<span class="kw-2">&amp;</span><span class="ident">BookmarkRootGuid</span>::<span class="ident">Menu</span>.<span class="ident">as_guid</span>())
                 );
             }
-            <span class="kw">_</span> <span class="op">=</span><span class="op">&gt;</span> <span class="macro">panic</span><span class="macro">!</span>(<span class="string">&quot;unexpected record type&quot;</span>),
+            <span class="kw">_</span> <span class="op">=&gt;</span> <span class="macro">panic</span><span class="macro">!</span>(<span class="string">&quot;unexpected record type&quot;</span>),
         };
         <span class="kw">let</span> <span class="ident">v</span> <span class="op">=</span> <span class="ident">serde_json</span>::<span class="ident">to_value</span>(<span class="ident">r</span>).<span class="ident">expect</span>(<span class="string">&quot;should serialize&quot;</span>);
         <span class="macro">assert_eq</span><span class="macro">!</span>(
@@ -1026,14 +1027,14 @@
         <span class="kw">let</span> <span class="ident">j</span> <span class="op">=</span> <span class="macro">json</span><span class="macro">!</span>({<span class="string">&quot;id&quot;</span>: <span class="string">&quot;unfiled&quot;</span>, <span class="string">&quot;parentid&quot;</span>: <span class="string">&quot;menu&quot;</span>, <span class="string">&quot;type&quot;</span>: <span class="string">&quot;livemark&quot;</span>});
         <span class="kw">let</span> <span class="ident">r</span>: <span class="ident">BookmarkItemRecord</span> <span class="op">=</span> <span class="ident">serde_json</span>::<span class="ident">from_value</span>(<span class="ident">j</span>).<span class="ident">expect</span>(<span class="string">&quot;should deserialize&quot;</span>);
         <span class="kw">match</span> <span class="kw-2">&amp;</span><span class="ident">r</span> {
-            <span class="ident">BookmarkItemRecord</span>::<span class="ident">Livemark</span>(<span class="ident">l</span>) <span class="op">=</span><span class="op">&gt;</span> {
+            <span class="ident">BookmarkItemRecord</span>::<span class="ident">Livemark</span>(<span class="ident">l</span>) <span class="op">=&gt;</span> {
                 <span class="macro">assert_eq</span><span class="macro">!</span>(<span class="ident">l</span>.<span class="ident">record_id</span>.<span class="ident">as_guid</span>(), <span class="ident">BookmarkRootGuid</span>::<span class="ident">Unfiled</span>);
                 <span class="macro">assert_eq</span><span class="macro">!</span>(
                     <span class="ident">l</span>.<span class="ident">parent_record_id</span>.<span class="ident">as_ref</span>().<span class="ident">map</span>(<span class="ident">BookmarkRecordId</span>::<span class="ident">as_guid</span>),
                     <span class="prelude-val">Some</span>(<span class="kw-2">&amp;</span><span class="ident">BookmarkRootGuid</span>::<span class="ident">Menu</span>.<span class="ident">as_guid</span>())
                 );
             }
-            <span class="kw">_</span> <span class="op">=</span><span class="op">&gt;</span> <span class="macro">panic</span><span class="macro">!</span>(<span class="string">&quot;unexpected record type&quot;</span>),
+            <span class="kw">_</span> <span class="op">=&gt;</span> <span class="macro">panic</span><span class="macro">!</span>(<span class="string">&quot;unexpected record type&quot;</span>),
         };
         <span class="kw">let</span> <span class="ident">v</span> <span class="op">=</span> <span class="ident">serde_json</span>::<span class="ident">to_value</span>(<span class="ident">r</span>).<span class="ident">expect</span>(<span class="string">&quot;should serialize&quot;</span>);
         <span class="macro">assert_eq</span><span class="macro">!</span>(
@@ -1049,14 +1050,14 @@
         <span class="kw">let</span> <span class="ident">j</span> <span class="op">=</span> <span class="macro">json</span><span class="macro">!</span>({<span class="string">&quot;id&quot;</span>: <span class="string">&quot;unfiled&quot;</span>, <span class="string">&quot;parentid&quot;</span>: <span class="string">&quot;menu&quot;</span>, <span class="string">&quot;type&quot;</span>: <span class="string">&quot;separator&quot;</span>});
         <span class="kw">let</span> <span class="ident">r</span>: <span class="ident">BookmarkItemRecord</span> <span class="op">=</span> <span class="ident">serde_json</span>::<span class="ident">from_value</span>(<span class="ident">j</span>).<span class="ident">expect</span>(<span class="string">&quot;should deserialize&quot;</span>);
         <span class="kw">match</span> <span class="kw-2">&amp;</span><span class="ident">r</span> {
-            <span class="ident">BookmarkItemRecord</span>::<span class="ident">Separator</span>(<span class="ident">s</span>) <span class="op">=</span><span class="op">&gt;</span> {
+            <span class="ident">BookmarkItemRecord</span>::<span class="ident">Separator</span>(<span class="ident">s</span>) <span class="op">=&gt;</span> {
                 <span class="macro">assert_eq</span><span class="macro">!</span>(<span class="ident">s</span>.<span class="ident">record_id</span>.<span class="ident">as_guid</span>(), <span class="ident">BookmarkRootGuid</span>::<span class="ident">Unfiled</span>);
                 <span class="macro">assert_eq</span><span class="macro">!</span>(
                     <span class="ident">s</span>.<span class="ident">parent_record_id</span>.<span class="ident">as_ref</span>().<span class="ident">map</span>(<span class="ident">BookmarkRecordId</span>::<span class="ident">as_guid</span>),
                     <span class="prelude-val">Some</span>(<span class="kw-2">&amp;</span><span class="ident">BookmarkRootGuid</span>::<span class="ident">Menu</span>.<span class="ident">as_guid</span>())
                 );
             }
-            <span class="kw">_</span> <span class="op">=</span><span class="op">&gt;</span> <span class="macro">panic</span><span class="macro">!</span>(<span class="string">&quot;unexpected record type&quot;</span>),
+            <span class="kw">_</span> <span class="op">=&gt;</span> <span class="macro">panic</span><span class="macro">!</span>(<span class="string">&quot;unexpected record type&quot;</span>),
         };
         <span class="kw">let</span> <span class="ident">v</span> <span class="op">=</span> <span class="ident">serde_json</span>::<span class="ident">to_value</span>(<span class="ident">r</span>).<span class="ident">expect</span>(<span class="string">&quot;should serialize&quot;</span>);
         <span class="macro">assert_eq</span><span class="macro">!</span>(
@@ -1078,8 +1079,8 @@
     <span class="kw">fn</span> <span class="ident">check_date_added</span>(<span class="ident">j</span>: <span class="ident">serde_json</span>::<span class="ident">Value</span>, <span class="ident">expected</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">i64</span><span class="op">&gt;</span>) {
         <span class="kw">let</span> <span class="ident">r</span>: <span class="ident">BookmarkItemRecord</span> <span class="op">=</span> <span class="ident">serde_json</span>::<span class="ident">from_value</span>(<span class="ident">j</span>).<span class="ident">expect</span>(<span class="string">&quot;should deserialize&quot;</span>);
         <span class="kw">match</span> <span class="kw-2">&amp;</span><span class="ident">r</span> {
-            <span class="ident">BookmarkItemRecord</span>::<span class="ident">Bookmark</span>(<span class="ident">b</span>) <span class="op">=</span><span class="op">&gt;</span> <span class="macro">assert_eq</span><span class="macro">!</span>(<span class="ident">b</span>.<span class="ident">date_added</span>, <span class="ident">expected</span>),
-            <span class="kw">_</span> <span class="op">=</span><span class="op">&gt;</span> <span class="macro">panic</span><span class="macro">!</span>(<span class="string">&quot;unexpected record type&quot;</span>),
+            <span class="ident">BookmarkItemRecord</span>::<span class="ident">Bookmark</span>(<span class="ident">b</span>) <span class="op">=&gt;</span> <span class="macro">assert_eq</span><span class="macro">!</span>(<span class="ident">b</span>.<span class="ident">date_added</span>, <span class="ident">expected</span>),
+            <span class="kw">_</span> <span class="op">=&gt;</span> <span class="macro">panic</span><span class="macro">!</span>(<span class="string">&quot;unexpected record type&quot;</span>),
         };
     }
 

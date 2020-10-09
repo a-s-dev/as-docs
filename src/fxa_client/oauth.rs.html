@@ -1,4 +1,5 @@
-<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source to the Rust file `components/fxa-client/src/oauth.rs`."><meta name="keywords" content="rust, rustlang, rust-lang"><title>oauth.rs.html -- source</title><link rel="stylesheet" type="text/css" href="../../normalize.css"><link rel="stylesheet" type="text/css" href="../../rustdoc.css" id="mainThemeStyle"><link rel="stylesheet" type="text/css" href="../../dark.css"><link rel="stylesheet" type="text/css" href="../../light.css" id="themeStyle"><script src="../../storage.js"></script><noscript><link rel="stylesheet" href="../../noscript.css"></noscript><link rel="shortcut icon" href="../../favicon.ico"><style type="text/css">#crate-search{background-image:url("../../down-arrow.svg");}</style></head><body class="rustdoc source"><!--[if lte IE 8]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="sidebar"><div class="sidebar-menu">&#9776;</div><a href='../../fxa_client/index.html'><div class='logo-container'><img src='../../rust-logo.png' alt='logo'></div></a></nav><div class="theme-picker"><button id="theme-picker" aria-label="Pick another theme!"><img src="../../brush.svg" width="18" alt="Pick another theme!"></button><div id="theme-choices"></div></div><script src="../../theme.js"></script><nav class="sub"><form class="search-form"><div class="search-container"><div><select id="crate-search"><option value="All crates">All crates</option></select><input class="search-input" name="search" disabled autocomplete="off" spellcheck="false" placeholder="Click or press ‘S’ to search, ‘?’ for more options…" type="search"></div><a id="settings-menu" href="../../settings.html"><img src="../../wheel.svg" width="18" alt="Change settings"></a></div></form></nav><section id="main" class="content"><pre class="line-numbers"><span id="1">   1</span>
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source to the Rust file `components/fxa-client/src/oauth.rs`."><meta name="keywords" content="rust, rustlang, rust-lang"><title>oauth.rs.html -- source</title><link rel="stylesheet" type="text/css" href="../../normalize.css"><link rel="stylesheet" type="text/css" href="../../rustdoc.css" id="mainThemeStyle"><link rel="stylesheet" type="text/css" href="../../light.css"  id="themeStyle"><link rel="stylesheet" type="text/css" href="../../dark.css" disabled ><link rel="stylesheet" type="text/css" href="../../ayu.css" disabled ><script src="../../storage.js"></script><noscript><link rel="stylesheet" href="../../noscript.css"></noscript><link rel="shortcut icon" href="../../favicon.ico"><style type="text/css">#crate-search{background-image:url("../../down-arrow.svg");}</style></head><body class="rustdoc source"><!--[if lte IE 8]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="sidebar"><div class="sidebar-menu">&#9776;</div><a href='../../fxa_client/index.html'><div class='logo-container rust-logo'><img src='../../rust-logo.png' alt='logo'></div></a></nav><div class="theme-picker"><button id="theme-picker" aria-label="Pick another theme!"><img src="../../brush.svg" width="18" alt="Pick another theme!"></button><div id="theme-choices"></div></div><script src="../../theme.js"></script><nav class="sub"><form class="search-form"><div class="search-container"><div><select id="crate-search"><option value="All crates">All crates</option></select><input class="search-input" name="search" disabled autocomplete="off" spellcheck="false" placeholder="Click or press ‘S’ to search, ‘?’ for more options…" type="search"></div><span class="help-button">?</span>
+                <a id="settings-menu" href="../../settings.html"><img src="../../wheel.svg" width="18" alt="Change settings"></a></div></form></nav><section id="main" class="content"><pre class="line-numbers"><span id="1">   1</span>
 <span id="2">   2</span>
 <span id="3">   3</span>
 <span id="4">   4</span>
@@ -1184,7 +1185,7 @@
     <span class="doccomment">/// * `ttl` - the ttl in seconds of the token requested from the server.</span>
     <span class="doccomment">///</span>
     <span class="doccomment">/// **💾 This method may alter the persisted account state.**</span>
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">get_access_token</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>, <span class="ident">scope</span>: <span class="kw-2">&amp;</span><span class="ident">str</span>, <span class="ident">ttl</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">u64</span><span class="op">&gt;</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">AccessTokenInfo</span><span class="op">&gt;</span> {
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">get_access_token</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>, <span class="ident">scope</span>: <span class="kw-2">&amp;</span><span class="ident">str</span>, <span class="ident">ttl</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">u64</span><span class="op">&gt;</span>) <span class="op">-&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">AccessTokenInfo</span><span class="op">&gt;</span> {
         <span class="kw">if</span> <span class="ident">scope</span>.<span class="ident">contains</span>(<span class="string">&#39; &#39;</span>) {
             <span class="kw">return</span> <span class="prelude-val">Err</span>(<span class="ident">ErrorKind</span>::<span class="ident">MultipleScopesRequested</span>.<span class="ident">into</span>());
         }
@@ -1194,7 +1195,7 @@
             }
         }
         <span class="kw">let</span> <span class="ident">resp</span> <span class="op">=</span> <span class="kw">match</span> <span class="self">self</span>.<span class="ident">state</span>.<span class="ident">refresh_token</span> {
-            <span class="prelude-val">Some</span>(<span class="kw-2">ref</span> <span class="ident">refresh_token</span>) <span class="op">=</span><span class="op">&gt;</span> {
+            <span class="prelude-val">Some</span>(<span class="kw-2">ref</span> <span class="ident">refresh_token</span>) <span class="op">=&gt;</span> {
                 <span class="kw">if</span> <span class="ident">refresh_token</span>.<span class="ident">scopes</span>.<span class="ident">contains</span>(<span class="ident">scope</span>) {
                     <span class="self">self</span>.<span class="ident">client</span>.<span class="ident">access_token_with_refresh_token</span>(
                         <span class="kw-2">&amp;</span><span class="self">self</span>.<span class="ident">state</span>.<span class="ident">config</span>,
@@ -1206,13 +1207,13 @@
                     <span class="kw">return</span> <span class="prelude-val">Err</span>(<span class="ident">ErrorKind</span>::<span class="ident">NoCachedToken</span>(<span class="ident">scope</span>.<span class="ident">to_string</span>()).<span class="ident">into</span>());
                 }
             }
-            <span class="prelude-val">None</span> <span class="op">=</span><span class="op">&gt;</span> <span class="kw">match</span> <span class="self">self</span>.<span class="ident">state</span>.<span class="ident">session_token</span> {
-                <span class="prelude-val">Some</span>(<span class="kw-2">ref</span> <span class="ident">session_token</span>) <span class="op">=</span><span class="op">&gt;</span> <span class="self">self</span>.<span class="ident">client</span>.<span class="ident">access_token_with_session_token</span>(
+            <span class="prelude-val">None</span> <span class="op">=&gt;</span> <span class="kw">match</span> <span class="self">self</span>.<span class="ident">state</span>.<span class="ident">session_token</span> {
+                <span class="prelude-val">Some</span>(<span class="kw-2">ref</span> <span class="ident">session_token</span>) <span class="op">=&gt;</span> <span class="self">self</span>.<span class="ident">client</span>.<span class="ident">access_token_with_session_token</span>(
                     <span class="kw-2">&amp;</span><span class="self">self</span>.<span class="ident">state</span>.<span class="ident">config</span>,
                     <span class="kw-2">&amp;</span><span class="ident">session_token</span>,
                     <span class="kw-2">&amp;</span>[<span class="ident">scope</span>],
                 )<span class="question-mark">?</span>,
-                <span class="prelude-val">None</span> <span class="op">=</span><span class="op">&gt;</span> <span class="kw">return</span> <span class="prelude-val">Err</span>(<span class="ident">ErrorKind</span>::<span class="ident">NoCachedToken</span>(<span class="ident">scope</span>.<span class="ident">to_string</span>()).<span class="ident">into</span>()),
+                <span class="prelude-val">None</span> <span class="op">=&gt;</span> <span class="kw">return</span> <span class="prelude-val">Err</span>(<span class="ident">ErrorKind</span>::<span class="ident">NoCachedToken</span>(<span class="ident">scope</span>.<span class="ident">to_string</span>()).<span class="ident">into</span>()),
             },
         };
         <span class="kw">let</span> <span class="ident">since_epoch</span> <span class="op">=</span> <span class="ident">SystemTime</span>::<span class="ident">now</span>()
@@ -1232,22 +1233,22 @@
     }
 
     <span class="doccomment">/// Retrieve the current session token from state</span>
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">get_session_token</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">String</span><span class="op">&gt;</span> {
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">get_session_token</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">String</span><span class="op">&gt;</span> {
         <span class="kw">match</span> <span class="self">self</span>.<span class="ident">state</span>.<span class="ident">session_token</span> {
-            <span class="prelude-val">Some</span>(<span class="kw-2">ref</span> <span class="ident">session_token</span>) <span class="op">=</span><span class="op">&gt;</span> <span class="prelude-val">Ok</span>(<span class="ident">session_token</span>.<span class="ident">to_string</span>()),
-            <span class="prelude-val">None</span> <span class="op">=</span><span class="op">&gt;</span> <span class="prelude-val">Err</span>(<span class="ident">ErrorKind</span>::<span class="ident">NoSessionToken</span>.<span class="ident">into</span>()),
+            <span class="prelude-val">Some</span>(<span class="kw-2">ref</span> <span class="ident">session_token</span>) <span class="op">=&gt;</span> <span class="prelude-val">Ok</span>(<span class="ident">session_token</span>.<span class="ident">to_string</span>()),
+            <span class="prelude-val">None</span> <span class="op">=&gt;</span> <span class="prelude-val">Err</span>(<span class="ident">ErrorKind</span>::<span class="ident">NoSessionToken</span>.<span class="ident">into</span>()),
         }
     }
 
     <span class="doccomment">/// Check whether user is authorized using our refresh token.</span>
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">check_authorization_status</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">IntrospectInfo</span><span class="op">&gt;</span> {
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">check_authorization_status</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>) <span class="op">-&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">IntrospectInfo</span><span class="op">&gt;</span> {
         <span class="kw">let</span> <span class="ident">resp</span> <span class="op">=</span> <span class="kw">match</span> <span class="self">self</span>.<span class="ident">state</span>.<span class="ident">refresh_token</span> {
-            <span class="prelude-val">Some</span>(<span class="kw-2">ref</span> <span class="ident">refresh_token</span>) <span class="op">=</span><span class="op">&gt;</span> {
+            <span class="prelude-val">Some</span>(<span class="kw-2">ref</span> <span class="ident">refresh_token</span>) <span class="op">=&gt;</span> {
                 <span class="self">self</span>.<span class="ident">auth_circuit_breaker</span>.<span class="ident">check</span>()<span class="question-mark">?</span>;
                 <span class="self">self</span>.<span class="ident">client</span>
                     .<span class="ident">oauth_introspect_refresh_token</span>(<span class="kw-2">&amp;</span><span class="self">self</span>.<span class="ident">state</span>.<span class="ident">config</span>, <span class="kw-2">&amp;</span><span class="ident">refresh_token</span>.<span class="ident">token</span>)<span class="question-mark">?</span>
             }
-            <span class="prelude-val">None</span> <span class="op">=</span><span class="op">&gt;</span> <span class="kw">return</span> <span class="prelude-val">Err</span>(<span class="ident">ErrorKind</span>::<span class="ident">NoRefreshToken</span>.<span class="ident">into</span>()),
+            <span class="prelude-val">None</span> <span class="op">=&gt;</span> <span class="kw">return</span> <span class="prelude-val">Err</span>(<span class="ident">ErrorKind</span>::<span class="ident">NoRefreshToken</span>.<span class="ident">into</span>()),
         };
         <span class="prelude-val">Ok</span>(<span class="ident">IntrospectInfo</span> {
             <span class="ident">active</span>: <span class="ident">resp</span>.<span class="ident">active</span>,
@@ -1267,14 +1268,14 @@
         <span class="ident">scopes</span>: <span class="kw-2">&amp;</span>[<span class="kw-2">&amp;</span><span class="ident">str</span>],
         <span class="ident">entrypoint</span>: <span class="kw-2">&amp;</span><span class="ident">str</span>,
         <span class="ident">metrics</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">MetricsParams</span><span class="op">&gt;</span>,
-    ) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">String</span><span class="op">&gt;</span> {
+    ) <span class="op">-&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">String</span><span class="op">&gt;</span> {
         <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">url</span> <span class="op">=</span> <span class="self">self</span>.<span class="ident">state</span>.<span class="ident">config</span>.<span class="ident">pair_supp_url</span>()<span class="question-mark">?</span>;
         <span class="ident">url</span>.<span class="ident">query_pairs_mut</span>().<span class="ident">append_pair</span>(<span class="string">&quot;entrypoint&quot;</span>, <span class="ident">entrypoint</span>);
         <span class="kw">if</span> <span class="kw">let</span> <span class="prelude-val">Some</span>(<span class="ident">metrics</span>) <span class="op">=</span> <span class="ident">metrics</span> {
             <span class="ident">metrics</span>.<span class="ident">append_params_to_url</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">url</span>);
         }
         <span class="kw">let</span> <span class="ident">pairing_url</span> <span class="op">=</span> <span class="ident">Url</span>::<span class="ident">parse</span>(<span class="ident">pairing_url</span>)<span class="question-mark">?</span>;
-        <span class="kw">if</span> <span class="ident">url</span>.<span class="ident">host_str</span>() <span class="op">!</span><span class="op">=</span> <span class="ident">pairing_url</span>.<span class="ident">host_str</span>() {
+        <span class="kw">if</span> <span class="ident">url</span>.<span class="ident">host_str</span>() <span class="op">!=</span> <span class="ident">pairing_url</span>.<span class="ident">host_str</span>() {
             <span class="kw">return</span> <span class="prelude-val">Err</span>(<span class="ident">ErrorKind</span>::<span class="ident">OriginMismatch</span>.<span class="ident">into</span>());
         }
         <span class="ident">url</span>.<span class="ident">set_fragment</span>(<span class="ident">pairing_url</span>.<span class="ident">fragment</span>());
@@ -1291,7 +1292,7 @@
         <span class="ident">scopes</span>: <span class="kw-2">&amp;</span>[<span class="kw-2">&amp;</span><span class="ident">str</span>],
         <span class="ident">entrypoint</span>: <span class="kw-2">&amp;</span><span class="ident">str</span>,
         <span class="ident">metrics</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">MetricsParams</span><span class="op">&gt;</span>,
-    ) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">String</span><span class="op">&gt;</span> {
+    ) <span class="op">-&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">String</span><span class="op">&gt;</span> {
         <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">url</span> <span class="op">=</span> <span class="kw">if</span> <span class="self">self</span>.<span class="ident">state</span>.<span class="ident">last_seen_profile</span>.<span class="ident">is_some</span>() {
             <span class="self">self</span>.<span class="ident">state</span>.<span class="ident">config</span>.<span class="ident">oauth_force_auth_url</span>()<span class="question-mark">?</span>
         } <span class="kw">else</span> {
@@ -1312,7 +1313,7 @@
         }
 
         <span class="kw">let</span> <span class="ident">scopes</span>: <span class="ident">Vec</span><span class="op">&lt;</span><span class="ident">String</span><span class="op">&gt;</span> <span class="op">=</span> <span class="kw">match</span> <span class="self">self</span>.<span class="ident">state</span>.<span class="ident">refresh_token</span> {
-            <span class="prelude-val">Some</span>(<span class="kw-2">ref</span> <span class="ident">refresh_token</span>) <span class="op">=</span><span class="op">&gt;</span> {
+            <span class="prelude-val">Some</span>(<span class="kw-2">ref</span> <span class="ident">refresh_token</span>) <span class="op">=&gt;</span> {
                 <span class="comment">// Union of the already held scopes and the one requested.</span>
                 <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">all_scopes</span>: <span class="ident">Vec</span><span class="op">&lt;</span><span class="ident">String</span><span class="op">&gt;</span> <span class="op">=</span> <span class="macro">vec</span><span class="macro">!</span>[];
                 <span class="ident">all_scopes</span>.<span class="ident">extend</span>(<span class="ident">scopes</span>.<span class="ident">iter</span>().<span class="ident">map</span>(<span class="ident">ToString</span>::<span class="ident">to_string</span>));
@@ -1322,7 +1323,7 @@
                     .<span class="ident">into_iter</span>()
                     .<span class="ident">collect</span>()
             }
-            <span class="prelude-val">None</span> <span class="op">=</span><span class="op">&gt;</span> <span class="ident">scopes</span>.<span class="ident">iter</span>().<span class="ident">map</span>(<span class="ident">ToString</span>::<span class="ident">to_string</span>).<span class="ident">collect</span>(),
+            <span class="prelude-val">None</span> <span class="op">=&gt;</span> <span class="ident">scopes</span>.<span class="ident">iter</span>().<span class="ident">map</span>(<span class="ident">ToString</span>::<span class="ident">to_string</span>).<span class="ident">collect</span>(),
         };
         <span class="kw">let</span> <span class="ident">scopes</span>: <span class="ident">Vec</span><span class="op">&lt;</span><span class="kw-2">&amp;</span><span class="ident">str</span><span class="op">&gt;</span> <span class="op">=</span> <span class="ident">scopes</span>.<span class="ident">iter</span>().<span class="ident">map</span>(<span class="op">&lt;</span><span class="kw">_</span><span class="op">&gt;</span>::<span class="ident">as_ref</span>).<span class="ident">collect</span>();
         <span class="self">self</span>.<span class="ident">oauth_flow</span>(<span class="ident">url</span>, <span class="kw-2">&amp;</span><span class="ident">scopes</span>)
@@ -1340,7 +1341,7 @@
     <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">authorize_code_using_session_token</span>(
         <span class="kw-2">&amp;</span><span class="self">self</span>,
         <span class="ident">auth_params</span>: <span class="ident">AuthorizationParameters</span>,
-    ) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">String</span><span class="op">&gt;</span> {
+    ) <span class="op">-&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">String</span><span class="op">&gt;</span> {
         <span class="kw">let</span> <span class="ident">session_token</span> <span class="op">=</span> <span class="self">self</span>.<span class="ident">get_session_token</span>()<span class="question-mark">?</span>;
 
         <span class="comment">// Validate request to ensure that the client is actually allowed to request</span>
@@ -1368,13 +1369,13 @@
             <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">scoped_keys</span> <span class="op">=</span> <span class="ident">HashMap</span>::<span class="ident">new</span>();
             <span class="ident">allowed_scopes</span>
                 .<span class="ident">iter</span>()
-                .<span class="ident">try_for_each</span>(<span class="op">|</span>(<span class="ident">scope</span>, <span class="kw">_</span>)<span class="op">|</span> <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span>()<span class="op">&gt;</span> {
+                .<span class="ident">try_for_each</span>(<span class="op">|</span>(<span class="ident">scope</span>, <span class="kw">_</span>)<span class="op">|</span> <span class="op">-&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span>()<span class="op">&gt;</span> {
                     <span class="ident">scoped_keys</span>.<span class="ident">insert</span>(
                         <span class="ident">scope</span>,
                         <span class="self">self</span>.<span class="ident">state</span>
                             .<span class="ident">scoped_keys</span>
                             .<span class="ident">get</span>(<span class="ident">scope</span>)
-                            .<span class="ident">ok_or_else</span>(<span class="op">|</span><span class="op">|</span> <span class="ident">ErrorKind</span>::<span class="ident">NoScopedKey</span>(<span class="ident">scope</span>.<span class="ident">clone</span>()))<span class="question-mark">?</span>,
+                            .<span class="ident">ok_or_else</span>(<span class="op">||</span> <span class="ident">ErrorKind</span>::<span class="ident">NoScopedKey</span>(<span class="ident">scope</span>.<span class="ident">clone</span>()))<span class="question-mark">?</span>,
                     );
                     <span class="prelude-val">Ok</span>(())
                 })<span class="question-mark">?</span>;
@@ -1415,7 +1416,7 @@
         <span class="prelude-val">Ok</span>(<span class="ident">resp</span>.<span class="ident">code</span>)
     }
 
-    <span class="kw">fn</span> <span class="ident">oauth_flow</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>, <span class="kw-2">mut</span> <span class="ident">url</span>: <span class="ident">Url</span>, <span class="ident">scopes</span>: <span class="kw-2">&amp;</span>[<span class="kw-2">&amp;</span><span class="ident">str</span>]) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">String</span><span class="op">&gt;</span> {
+    <span class="kw">fn</span> <span class="ident">oauth_flow</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>, <span class="kw-2">mut</span> <span class="ident">url</span>: <span class="ident">Url</span>, <span class="ident">scopes</span>: <span class="kw-2">&amp;</span>[<span class="kw-2">&amp;</span><span class="ident">str</span>]) <span class="op">-&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">String</span><span class="op">&gt;</span> {
         <span class="self">self</span>.<span class="ident">clear_access_token_cache</span>();
         <span class="kw">let</span> <span class="ident">state</span> <span class="op">=</span> <span class="ident">util</span>::<span class="ident">random_base64_url_string</span>(<span class="number">16</span>)<span class="question-mark">?</span>;
         <span class="kw">let</span> <span class="ident">code_verifier</span> <span class="op">=</span> <span class="ident">util</span>::<span class="ident">random_base64_url_string</span>(<span class="number">43</span>)<span class="question-mark">?</span>;
@@ -1434,7 +1435,7 @@
             .<span class="ident">append_pair</span>(<span class="string">&quot;access_type&quot;</span>, <span class="string">&quot;offline&quot;</span>)
             .<span class="ident">append_pair</span>(<span class="string">&quot;keys_jwk&quot;</span>, <span class="kw-2">&amp;</span><span class="ident">keys_jwk</span>);
 
-        <span class="kw">if</span> <span class="self">self</span>.<span class="ident">state</span>.<span class="ident">config</span>.<span class="ident">redirect_uri</span> <span class="op">=</span><span class="op">=</span> <span class="ident">OAUTH_WEBCHANNEL_REDIRECT</span> {
+        <span class="kw">if</span> <span class="self">self</span>.<span class="ident">state</span>.<span class="ident">config</span>.<span class="ident">redirect_uri</span> <span class="op">==</span> <span class="ident">OAUTH_WEBCHANNEL_REDIRECT</span> {
             <span class="ident">url</span>.<span class="ident">query_pairs_mut</span>()
                 .<span class="ident">append_pair</span>(<span class="string">&quot;context&quot;</span>, <span class="string">&quot;oauth_webchannel_v1&quot;</span>);
         } <span class="kw">else</span> {
@@ -1457,11 +1458,11 @@
     <span class="doccomment">/// redirect URL after a successful login.</span>
     <span class="doccomment">///</span>
     <span class="doccomment">/// **💾 This method alters the persisted account state.**</span>
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">complete_oauth_flow</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>, <span class="ident">code</span>: <span class="kw-2">&amp;</span><span class="ident">str</span>, <span class="ident">state</span>: <span class="kw-2">&amp;</span><span class="ident">str</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span>()<span class="op">&gt;</span> {
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">complete_oauth_flow</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>, <span class="ident">code</span>: <span class="kw-2">&amp;</span><span class="ident">str</span>, <span class="ident">state</span>: <span class="kw-2">&amp;</span><span class="ident">str</span>) <span class="op">-&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span>()<span class="op">&gt;</span> {
         <span class="self">self</span>.<span class="ident">clear_access_token_cache</span>();
         <span class="kw">let</span> <span class="ident">oauth_flow</span> <span class="op">=</span> <span class="kw">match</span> <span class="self">self</span>.<span class="ident">flow_store</span>.<span class="ident">remove</span>(<span class="ident">state</span>) {
-            <span class="prelude-val">Some</span>(<span class="ident">oauth_flow</span>) <span class="op">=</span><span class="op">&gt;</span> <span class="ident">oauth_flow</span>,
-            <span class="prelude-val">None</span> <span class="op">=</span><span class="op">&gt;</span> <span class="kw">return</span> <span class="prelude-val">Err</span>(<span class="ident">ErrorKind</span>::<span class="ident">UnknownOAuthState</span>.<span class="ident">into</span>()),
+            <span class="prelude-val">Some</span>(<span class="ident">oauth_flow</span>) <span class="op">=&gt;</span> <span class="ident">oauth_flow</span>,
+            <span class="prelude-val">None</span> <span class="op">=&gt;</span> <span class="kw">return</span> <span class="prelude-val">Err</span>(<span class="ident">ErrorKind</span>::<span class="ident">UnknownOAuthState</span>.<span class="ident">into</span>()),
         };
         <span class="kw">let</span> <span class="ident">resp</span> <span class="op">=</span> <span class="self">self</span>.<span class="ident">client</span>.<span class="ident">refresh_token_with_code</span>(
             <span class="kw-2">&amp;</span><span class="self">self</span>.<span class="ident">state</span>.<span class="ident">config</span>,
@@ -1475,9 +1476,9 @@
         <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>,
         <span class="ident">resp</span>: <span class="ident">OAuthTokenResponse</span>,
         <span class="ident">scoped_keys_flow</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">ScopedKeysFlow</span><span class="op">&gt;</span>,
-    ) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span>()<span class="op">&gt;</span> {
+    ) <span class="op">-&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span>()<span class="op">&gt;</span> {
         <span class="kw">if</span> <span class="kw">let</span> <span class="prelude-val">Some</span>(<span class="kw-2">ref</span> <span class="ident">jwe</span>) <span class="op">=</span> <span class="ident">resp</span>.<span class="ident">keys_jwe</span> {
-            <span class="kw">let</span> <span class="ident">scoped_keys_flow</span> <span class="op">=</span> <span class="ident">scoped_keys_flow</span>.<span class="ident">ok_or_else</span>(<span class="op">|</span><span class="op">|</span> {
+            <span class="kw">let</span> <span class="ident">scoped_keys_flow</span> <span class="op">=</span> <span class="ident">scoped_keys_flow</span>.<span class="ident">ok_or_else</span>(<span class="op">||</span> {
                 <span class="ident">ErrorKind</span>::<span class="ident">UnrecoverableServerError</span>(<span class="string">&quot;Got a JWE but have no JWK to decrypt it.&quot;</span>)
             })<span class="question-mark">?</span>;
             <span class="kw">let</span> <span class="ident">decrypted_keys</span> <span class="op">=</span> <span class="ident">scoped_keys_flow</span>.<span class="ident">decrypt_keys_jwe</span>(<span class="ident">jwe</span>)<span class="question-mark">?</span>;
@@ -1507,18 +1508,18 @@
         <span class="kw">let</span> <span class="ident">old_refresh_token</span> <span class="op">=</span> <span class="self">self</span>.<span class="ident">state</span>.<span class="ident">refresh_token</span>.<span class="ident">clone</span>();
         <span class="kw">let</span> <span class="ident">new_refresh_token</span> <span class="op">=</span> <span class="ident">resp</span>
             .<span class="ident">refresh_token</span>
-            .<span class="ident">ok_or_else</span>(<span class="op">|</span><span class="op">|</span> <span class="ident">ErrorKind</span>::<span class="ident">UnrecoverableServerError</span>(<span class="string">&quot;No refresh token in response&quot;</span>))<span class="question-mark">?</span>;
+            .<span class="ident">ok_or_else</span>(<span class="op">||</span> <span class="ident">ErrorKind</span>::<span class="ident">UnrecoverableServerError</span>(<span class="string">&quot;No refresh token in response&quot;</span>))<span class="question-mark">?</span>;
         <span class="comment">// Destroying a refresh token also destroys its associated device,</span>
         <span class="comment">// grab the device information for replication later.</span>
         <span class="kw">let</span> <span class="ident">old_device_info</span> <span class="op">=</span> <span class="kw">match</span> <span class="ident">old_refresh_token</span> {
-            <span class="prelude-val">Some</span>(<span class="kw">_</span>) <span class="op">=</span><span class="op">&gt;</span> <span class="kw">match</span> <span class="self">self</span>.<span class="ident">get_current_device</span>() {
-                <span class="prelude-val">Ok</span>(<span class="ident">maybe_device</span>) <span class="op">=</span><span class="op">&gt;</span> <span class="ident">maybe_device</span>,
-                <span class="prelude-val">Err</span>(<span class="ident">err</span>) <span class="op">=</span><span class="op">&gt;</span> {
+            <span class="prelude-val">Some</span>(<span class="kw">_</span>) <span class="op">=&gt;</span> <span class="kw">match</span> <span class="self">self</span>.<span class="ident">get_current_device</span>() {
+                <span class="prelude-val">Ok</span>(<span class="ident">maybe_device</span>) <span class="op">=&gt;</span> <span class="ident">maybe_device</span>,
+                <span class="prelude-val">Err</span>(<span class="ident">err</span>) <span class="op">=&gt;</span> {
                     <span class="ident">log</span>::<span class="macro">warn</span><span class="macro">!</span>(<span class="string">&quot;Error while getting previous device information: {:?}&quot;</span>, <span class="ident">err</span>);
                     <span class="prelude-val">None</span>
                 }
             },
-            <span class="prelude-val">None</span> <span class="op">=</span><span class="op">&gt;</span> <span class="prelude-val">None</span>,
+            <span class="prelude-val">None</span> <span class="op">=&gt;</span> <span class="prelude-val">None</span>,
         };
         <span class="self">self</span>.<span class="ident">state</span>.<span class="ident">refresh_token</span> <span class="op">=</span> <span class="prelude-val">Some</span>(<span class="ident">RefreshToken</span> {
             <span class="ident">token</span>: <span class="ident">new_refresh_token</span>,
@@ -1557,12 +1558,12 @@
     <span class="doccomment">/// done.</span>
     <span class="doccomment">///</span>
     <span class="doccomment">/// **💾 This method alters the persisted account state.**</span>
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">handle_session_token_change</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>, <span class="ident">session_token</span>: <span class="kw-2">&amp;</span><span class="ident">str</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span>()<span class="op">&gt;</span> {
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">handle_session_token_change</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>, <span class="ident">session_token</span>: <span class="kw-2">&amp;</span><span class="ident">str</span>) <span class="op">-&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span>()<span class="op">&gt;</span> {
         <span class="kw">let</span> <span class="ident">old_refresh_token</span> <span class="op">=</span> <span class="self">self</span>
             .<span class="ident">state</span>
             .<span class="ident">refresh_token</span>
             .<span class="ident">as_ref</span>()
-            .<span class="ident">ok_or_else</span>(<span class="op">|</span><span class="op">|</span> <span class="ident">ErrorKind</span>::<span class="ident">NoRefreshToken</span>)<span class="question-mark">?</span>;
+            .<span class="ident">ok_or_else</span>(<span class="op">||</span> <span class="ident">ErrorKind</span>::<span class="ident">NoRefreshToken</span>)<span class="question-mark">?</span>;
         <span class="kw">let</span> <span class="ident">scopes</span>: <span class="ident">Vec</span><span class="op">&lt;</span><span class="kw-2">&amp;</span><span class="ident">str</span><span class="op">&gt;</span> <span class="op">=</span> <span class="ident">old_refresh_token</span>.<span class="ident">scopes</span>.<span class="ident">iter</span>().<span class="ident">map</span>(<span class="ident">AsRef</span>::<span class="ident">as_ref</span>).<span class="ident">collect</span>();
         <span class="kw">let</span> <span class="ident">resp</span> <span class="op">=</span> <span class="self">self</span>.<span class="ident">client</span>.<span class="ident">refresh_token_with_session_token</span>(
             <span class="kw-2">&amp;</span><span class="self">self</span>.<span class="ident">state</span>.<span class="ident">config</span>,
@@ -1571,7 +1572,7 @@
         )<span class="question-mark">?</span>;
         <span class="kw">let</span> <span class="ident">new_refresh_token</span> <span class="op">=</span> <span class="ident">resp</span>
             .<span class="ident">refresh_token</span>
-            .<span class="ident">ok_or_else</span>(<span class="op">|</span><span class="op">|</span> <span class="ident">ErrorKind</span>::<span class="ident">UnrecoverableServerError</span>(<span class="string">&quot;No refresh token in response&quot;</span>))<span class="question-mark">?</span>;
+            .<span class="ident">ok_or_else</span>(<span class="op">||</span> <span class="ident">ErrorKind</span>::<span class="ident">UnrecoverableServerError</span>(<span class="string">&quot;No refresh token in response&quot;</span>))<span class="question-mark">?</span>;
         <span class="self">self</span>.<span class="ident">state</span>.<span class="ident">refresh_token</span> <span class="op">=</span> <span class="prelude-val">Some</span>(<span class="ident">RefreshToken</span> {
             <span class="ident">token</span>: <span class="ident">new_refresh_token</span>,
             <span class="ident">scopes</span>: <span class="ident">HashSet</span>::<span class="ident">from_iter</span>(<span class="ident">resp</span>.<span class="ident">scope</span>.<span class="ident">split</span>(<span class="string">&#39; &#39;</span>).<span class="ident">map</span>(<span class="ident">ToString</span>::<span class="ident">to_string</span>)),
@@ -1595,7 +1596,7 @@
         <span class="ident">config</span>: <span class="kw">crate</span>::<span class="ident">Config</span>,
         <span class="ident">session_token</span>: <span class="kw-2">&amp;</span><span class="ident">str</span>,
         <span class="ident">scoped_keys</span>: <span class="ident">HashMap</span><span class="op">&lt;</span><span class="ident">String</span>, <span class="ident">ScopedKey</span><span class="op">&gt;</span>,
-    ) <span class="op">-</span><span class="op">&gt;</span> <span class="self">Self</span> {
+    ) <span class="op">-&gt;</span> <span class="self">Self</span> {
         <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">fxa</span> <span class="op">=</span> <span class="ident">FirefoxAccount</span>::<span class="ident">with_config</span>(<span class="ident">config</span>);
         <span class="ident">fxa</span>.<span class="ident">state</span>.<span class="ident">session_token</span> <span class="op">=</span> <span class="prelude-val">Some</span>(<span class="ident">session_token</span>.<span class="ident">to_owned</span>());
         <span class="ident">scoped_keys</span>.<span class="ident">iter</span>().<span class="ident">for_each</span>(<span class="op">|</span>(<span class="ident">key</span>, <span class="ident">val</span>)<span class="op">|</span> {
@@ -1617,7 +1618,7 @@
 }
 
 <span class="kw">impl</span> <span class="ident">Default</span> <span class="kw">for</span> <span class="ident">AuthCircuitBreaker</span> {
-    <span class="kw">fn</span> <span class="ident">default</span>() <span class="op">-</span><span class="op">&gt;</span> <span class="self">Self</span> {
+    <span class="kw">fn</span> <span class="ident">default</span>() <span class="op">-&gt;</span> <span class="self">Self</span> {
         <span class="ident">AuthCircuitBreaker</span> {
             <span class="ident">tokens</span>: <span class="ident">AUTH_CIRCUIT_BREAKER_CAPACITY</span>,
             <span class="ident">last_refill</span>: <span class="self">Self</span>::<span class="ident">now</span>(),
@@ -1626,12 +1627,12 @@
 }
 
 <span class="kw">impl</span> <span class="ident">AuthCircuitBreaker</span> {
-    <span class="kw">pub</span>(<span class="kw">crate</span>) <span class="kw">fn</span> <span class="ident">check</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span>()<span class="op">&gt;</span> {
+    <span class="kw">pub</span>(<span class="kw">crate</span>) <span class="kw">fn</span> <span class="ident">check</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>) <span class="op">-&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span>()<span class="op">&gt;</span> {
         <span class="self">self</span>.<span class="ident">refill</span>();
-        <span class="kw">if</span> <span class="self">self</span>.<span class="ident">tokens</span> <span class="op">=</span><span class="op">=</span> <span class="number">0</span> {
+        <span class="kw">if</span> <span class="self">self</span>.<span class="ident">tokens</span> <span class="op">==</span> <span class="number">0</span> {
             <span class="kw">return</span> <span class="prelude-val">Err</span>(<span class="ident">ErrorKind</span>::<span class="ident">AuthCircuitBreakerError</span>.<span class="ident">into</span>());
         }
-        <span class="self">self</span>.<span class="ident">tokens</span> <span class="op">-</span><span class="op">=</span> <span class="number">1</span>;
+        <span class="self">self</span>.<span class="ident">tokens</span> <span class="op">-=</span> <span class="number">1</span>;
         <span class="prelude-val">Ok</span>(())
     }
 
@@ -1650,12 +1651,12 @@
 
     <span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">not</span>(<span class="ident">test</span>))]</span>
     <span class="attribute">#[<span class="ident">inline</span>]</span>
-    <span class="kw">fn</span> <span class="ident">now</span>() <span class="op">-</span><span class="op">&gt;</span> <span class="ident">u64</span> {
+    <span class="kw">fn</span> <span class="ident">now</span>() <span class="op">-&gt;</span> <span class="ident">u64</span> {
         <span class="ident">util</span>::<span class="ident">now</span>()
     }
 
     <span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">test</span>)]</span>
-    <span class="kw">fn</span> <span class="ident">now</span>() <span class="op">-</span><span class="op">&gt;</span> <span class="ident">u64</span> {
+    <span class="kw">fn</span> <span class="ident">now</span>() <span class="op">-&gt;</span> <span class="ident">u64</span> {
         <span class="number">1600000000000</span>
     }
 }
@@ -1679,32 +1680,32 @@
 <span class="kw">impl</span> <span class="ident">TryFrom</span><span class="op">&lt;</span><span class="ident">Url</span><span class="op">&gt;</span> <span class="kw">for</span> <span class="ident">AuthorizationParameters</span> {
     <span class="kw">type</span> <span class="ident">Error</span> <span class="op">=</span> <span class="ident">Error</span>;
 
-    <span class="kw">fn</span> <span class="ident">try_from</span>(<span class="ident">url</span>: <span class="ident">Url</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="self">Self</span><span class="op">&gt;</span> {
+    <span class="kw">fn</span> <span class="ident">try_from</span>(<span class="ident">url</span>: <span class="ident">Url</span>) <span class="op">-&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="self">Self</span><span class="op">&gt;</span> {
         <span class="kw">let</span> <span class="ident">query_map</span>: <span class="ident">HashMap</span><span class="op">&lt;</span><span class="ident">String</span>, <span class="ident">String</span><span class="op">&gt;</span> <span class="op">=</span> <span class="ident">url</span>.<span class="ident">query_pairs</span>().<span class="ident">into_owned</span>().<span class="ident">collect</span>();
         <span class="kw">let</span> <span class="ident">scope</span> <span class="op">=</span> <span class="ident">query_map</span>
             .<span class="ident">get</span>(<span class="string">&quot;scope&quot;</span>)
             .<span class="ident">cloned</span>()
-            .<span class="ident">ok_or_else</span>(<span class="op">|</span><span class="op">|</span> <span class="ident">ErrorKind</span>::<span class="ident">MissingUrlParameter</span>(<span class="string">&quot;scope&quot;</span>))<span class="question-mark">?</span>;
+            .<span class="ident">ok_or_else</span>(<span class="op">||</span> <span class="ident">ErrorKind</span>::<span class="ident">MissingUrlParameter</span>(<span class="string">&quot;scope&quot;</span>))<span class="question-mark">?</span>;
         <span class="kw">let</span> <span class="ident">client_id</span> <span class="op">=</span> <span class="ident">query_map</span>
             .<span class="ident">get</span>(<span class="string">&quot;client_id&quot;</span>)
             .<span class="ident">cloned</span>()
-            .<span class="ident">ok_or_else</span>(<span class="op">|</span><span class="op">|</span> <span class="ident">ErrorKind</span>::<span class="ident">MissingUrlParameter</span>(<span class="string">&quot;client_id&quot;</span>))<span class="question-mark">?</span>;
+            .<span class="ident">ok_or_else</span>(<span class="op">||</span> <span class="ident">ErrorKind</span>::<span class="ident">MissingUrlParameter</span>(<span class="string">&quot;client_id&quot;</span>))<span class="question-mark">?</span>;
         <span class="kw">let</span> <span class="ident">state</span> <span class="op">=</span> <span class="ident">query_map</span>
             .<span class="ident">get</span>(<span class="string">&quot;state&quot;</span>)
             .<span class="ident">cloned</span>()
-            .<span class="ident">ok_or_else</span>(<span class="op">|</span><span class="op">|</span> <span class="ident">ErrorKind</span>::<span class="ident">MissingUrlParameter</span>(<span class="string">&quot;state&quot;</span>))<span class="question-mark">?</span>;
+            .<span class="ident">ok_or_else</span>(<span class="op">||</span> <span class="ident">ErrorKind</span>::<span class="ident">MissingUrlParameter</span>(<span class="string">&quot;state&quot;</span>))<span class="question-mark">?</span>;
         <span class="kw">let</span> <span class="ident">access_type</span> <span class="op">=</span> <span class="ident">query_map</span>
             .<span class="ident">get</span>(<span class="string">&quot;access_type&quot;</span>)
             .<span class="ident">cloned</span>()
-            .<span class="ident">ok_or_else</span>(<span class="op">|</span><span class="op">|</span> <span class="ident">ErrorKind</span>::<span class="ident">MissingUrlParameter</span>(<span class="string">&quot;access_type&quot;</span>))<span class="question-mark">?</span>;
+            .<span class="ident">ok_or_else</span>(<span class="op">||</span> <span class="ident">ErrorKind</span>::<span class="ident">MissingUrlParameter</span>(<span class="string">&quot;access_type&quot;</span>))<span class="question-mark">?</span>;
         <span class="kw">let</span> <span class="ident">code_challenge</span> <span class="op">=</span> <span class="ident">query_map</span>.<span class="ident">get</span>(<span class="string">&quot;code_challenge&quot;</span>).<span class="ident">cloned</span>();
         <span class="kw">let</span> <span class="ident">code_challenge_method</span> <span class="op">=</span> <span class="ident">query_map</span>.<span class="ident">get</span>(<span class="string">&quot;code_challenge_method&quot;</span>).<span class="ident">cloned</span>();
         <span class="kw">let</span> <span class="ident">pkce_params</span> <span class="op">=</span> <span class="kw">match</span> (<span class="ident">code_challenge</span>, <span class="ident">code_challenge_method</span>) {
-            (<span class="prelude-val">Some</span>(<span class="ident">code_challenge</span>), <span class="prelude-val">Some</span>(<span class="ident">code_challenge_method</span>)) <span class="op">=</span><span class="op">&gt;</span> <span class="prelude-val">Some</span>(<span class="ident">AuthorizationPKCEParams</span> {
+            (<span class="prelude-val">Some</span>(<span class="ident">code_challenge</span>), <span class="prelude-val">Some</span>(<span class="ident">code_challenge_method</span>)) <span class="op">=&gt;</span> <span class="prelude-val">Some</span>(<span class="ident">AuthorizationPKCEParams</span> {
                 <span class="ident">code_challenge</span>,
                 <span class="ident">code_challenge_method</span>,
             }),
-            <span class="kw">_</span> <span class="op">=</span><span class="op">&gt;</span> <span class="prelude-val">None</span>,
+            <span class="kw">_</span> <span class="op">=&gt;</span> <span class="prelude-val">None</span>,
         };
         <span class="kw">let</span> <span class="ident">keys_jwk</span> <span class="op">=</span> <span class="ident">query_map</span>.<span class="ident">get</span>(<span class="string">&quot;keys_jwk&quot;</span>).<span class="ident">cloned</span>();
         <span class="prelude-val">Ok</span>(<span class="self">Self</span> {
@@ -1739,7 +1740,7 @@
 }
 
 <span class="kw">impl</span> <span class="ident">std</span>::<span class="ident">fmt</span>::<span class="ident">Debug</span> <span class="kw">for</span> <span class="ident">RefreshToken</span> {
-    <span class="kw">fn</span> <span class="ident">fmt</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">f</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">std</span>::<span class="ident">fmt</span>::<span class="ident">Formatter</span><span class="op">&lt;</span><span class="lifetime">&#39;_</span><span class="op">&gt;</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">std</span>::<span class="ident">fmt</span>::<span class="prelude-ty">Result</span> {
+    <span class="kw">fn</span> <span class="ident">fmt</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">f</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">std</span>::<span class="ident">fmt</span>::<span class="ident">Formatter</span><span class="op">&lt;</span><span class="lifetime">&#39;_</span><span class="op">&gt;</span>) <span class="op">-&gt;</span> <span class="ident">std</span>::<span class="ident">fmt</span>::<span class="prelude-ty">Result</span> {
         <span class="ident">f</span>.<span class="ident">debug_struct</span>(<span class="string">&quot;RefreshToken&quot;</span>)
             .<span class="ident">field</span>(<span class="string">&quot;scopes&quot;</span>, <span class="kw-2">&amp;</span><span class="self">self</span>.<span class="ident">scopes</span>)
             .<span class="ident">finish</span>()
@@ -1760,7 +1761,7 @@
 }
 
 <span class="kw">impl</span> <span class="ident">std</span>::<span class="ident">fmt</span>::<span class="ident">Debug</span> <span class="kw">for</span> <span class="ident">AccessTokenInfo</span> {
-    <span class="kw">fn</span> <span class="ident">fmt</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">f</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">std</span>::<span class="ident">fmt</span>::<span class="ident">Formatter</span><span class="op">&lt;</span><span class="lifetime">&#39;_</span><span class="op">&gt;</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">std</span>::<span class="ident">fmt</span>::<span class="prelude-ty">Result</span> {
+    <span class="kw">fn</span> <span class="ident">fmt</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">f</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">std</span>::<span class="ident">fmt</span>::<span class="ident">Formatter</span><span class="op">&lt;</span><span class="lifetime">&#39;_</span><span class="op">&gt;</span>) <span class="op">-&gt;</span> <span class="ident">std</span>::<span class="ident">fmt</span>::<span class="prelude-ty">Result</span> {
         <span class="ident">f</span>.<span class="ident">debug_struct</span>(<span class="string">&quot;AccessTokenInfo&quot;</span>)
             .<span class="ident">field</span>(<span class="string">&quot;scope&quot;</span>, <span class="kw-2">&amp;</span><span class="self">self</span>.<span class="ident">scope</span>)
             .<span class="ident">field</span>(<span class="string">&quot;key&quot;</span>, <span class="kw-2">&amp;</span><span class="self">self</span>.<span class="ident">key</span>)
@@ -1888,7 +1889,7 @@
         <span class="macro">assert_eq</span><span class="macro">!</span>(<span class="ident">url</span>.<span class="ident">path</span>(), <span class="string">&quot;/oauth/force_auth&quot;</span>);
         <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">pairs</span> <span class="op">=</span> <span class="ident">url</span>.<span class="ident">query_pairs</span>();
         <span class="macro">assert_eq</span><span class="macro">!</span>(
-            <span class="ident">pairs</span>.<span class="ident">find</span>(<span class="op">|</span><span class="ident">e</span><span class="op">|</span> <span class="ident">e</span>.<span class="number">0</span> <span class="op">=</span><span class="op">=</span> <span class="string">&quot;email&quot;</span>),
+            <span class="ident">pairs</span>.<span class="ident">find</span>(<span class="op">|</span><span class="ident">e</span><span class="op">|</span> <span class="ident">e</span>.<span class="number">0</span> <span class="op">==</span> <span class="string">&quot;email&quot;</span>),
             <span class="prelude-val">Some</span>((<span class="ident">Cow</span>::<span class="ident">Borrowed</span>(<span class="string">&quot;email&quot;</span>), <span class="ident">Cow</span>::<span class="ident">Borrowed</span>(<span class="ident">email</span>),))
         );
     }
@@ -2041,12 +2042,12 @@
         <span class="macro">assert</span><span class="macro">!</span>(<span class="ident">url</span>.<span class="ident">is_err</span>());
 
         <span class="kw">match</span> <span class="ident">url</span> {
-            <span class="prelude-val">Ok</span>(<span class="kw">_</span>) <span class="op">=</span><span class="op">&gt;</span> {
+            <span class="prelude-val">Ok</span>(<span class="kw">_</span>) <span class="op">=&gt;</span> {
                 <span class="macro">panic</span><span class="macro">!</span>(<span class="string">&quot;should have error&quot;</span>);
             }
-            <span class="prelude-val">Err</span>(<span class="ident">err</span>) <span class="op">=</span><span class="op">&gt;</span> <span class="kw">match</span> <span class="ident">err</span>.<span class="ident">kind</span>() {
-                <span class="ident">ErrorKind</span>::<span class="ident">OriginMismatch</span> { .. } <span class="op">=</span><span class="op">&gt;</span> {}
-                <span class="kw">_</span> <span class="op">=</span><span class="op">&gt;</span> <span class="macro">panic</span><span class="macro">!</span>(<span class="string">&quot;error not OriginMismatch&quot;</span>),
+            <span class="prelude-val">Err</span>(<span class="ident">err</span>) <span class="op">=&gt;</span> <span class="kw">match</span> <span class="ident">err</span>.<span class="ident">kind</span>() {
+                <span class="ident">ErrorKind</span>::<span class="ident">OriginMismatch</span> { .. } <span class="op">=&gt;</span> {}
+                <span class="kw">_</span> <span class="op">=&gt;</span> <span class="macro">panic</span><span class="macro">!</span>(<span class="string">&quot;error not OriginMismatch&quot;</span>),
             },
         }
     }
@@ -2121,8 +2122,8 @@
             <span class="macro">assert</span><span class="macro">!</span>(<span class="ident">fxa</span>.<span class="ident">check_authorization_status</span>().<span class="ident">is_ok</span>());
         }
         <span class="kw">match</span> <span class="ident">fxa</span>.<span class="ident">check_authorization_status</span>() {
-            <span class="prelude-val">Ok</span>(<span class="kw">_</span>) <span class="op">=</span><span class="op">&gt;</span> <span class="macro">unreachable</span><span class="macro">!</span>(<span class="string">&quot;should not happen&quot;</span>),
-            <span class="prelude-val">Err</span>(<span class="ident">err</span>) <span class="op">=</span><span class="op">&gt;</span> <span class="macro">assert</span><span class="macro">!</span>(<span class="macro">matches</span><span class="macro">!</span>(<span class="ident">err</span>.<span class="ident">kind</span>(), <span class="ident">ErrorKind</span>::<span class="ident">AuthCircuitBreakerError</span>)),
+            <span class="prelude-val">Ok</span>(<span class="kw">_</span>) <span class="op">=&gt;</span> <span class="macro">unreachable</span><span class="macro">!</span>(<span class="string">&quot;should not happen&quot;</span>),
+            <span class="prelude-val">Err</span>(<span class="ident">err</span>) <span class="op">=&gt;</span> <span class="macro">assert</span><span class="macro">!</span>(<span class="macro">matches</span><span class="macro">!</span>(<span class="ident">err</span>.<span class="ident">kind</span>(), <span class="ident">ErrorKind</span>::<span class="ident">AuthCircuitBreakerError</span>)),
         }
     }
 
@@ -2136,7 +2137,7 @@
         }
         <span class="macro">assert</span><span class="macro">!</span>(<span class="ident">breaker</span>.<span class="ident">check</span>().<span class="ident">is_err</span>());
         <span class="comment">// Jump back in time (1 min).</span>
-        <span class="ident">breaker</span>.<span class="ident">last_refill</span> <span class="op">-</span><span class="op">=</span> <span class="number">60</span> <span class="op">*</span> <span class="number">1000</span>;
+        <span class="ident">breaker</span>.<span class="ident">last_refill</span> <span class="op">-=</span> <span class="number">60</span> <span class="op">*</span> <span class="number">1000</span>;
         <span class="kw">let</span> <span class="ident">expected_tokens_before_check</span>: <span class="ident">u8</span> <span class="op">=</span>
             (<span class="ident">AUTH_CIRCUIT_BREAKER_RENEWAL_RATE</span> <span class="op">*</span> <span class="number">60.0</span> <span class="op">*</span> <span class="number">1000.0</span>) <span class="kw">as</span> <span class="ident">u8</span>;
         <span class="macro">assert</span><span class="macro">!</span>(<span class="ident">breaker</span>.<span class="ident">check</span>().<span class="ident">is_ok</span>());

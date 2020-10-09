@@ -1,4 +1,5 @@
-<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source to the Rust file `components/sync15/src/client.rs`."><meta name="keywords" content="rust, rustlang, rust-lang"><title>client.rs.html -- source</title><link rel="stylesheet" type="text/css" href="../../normalize.css"><link rel="stylesheet" type="text/css" href="../../rustdoc.css" id="mainThemeStyle"><link rel="stylesheet" type="text/css" href="../../dark.css"><link rel="stylesheet" type="text/css" href="../../light.css" id="themeStyle"><script src="../../storage.js"></script><noscript><link rel="stylesheet" href="../../noscript.css"></noscript><link rel="shortcut icon" href="../../favicon.ico"><style type="text/css">#crate-search{background-image:url("../../down-arrow.svg");}</style></head><body class="rustdoc source"><!--[if lte IE 8]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="sidebar"><div class="sidebar-menu">&#9776;</div><a href='../../sync15/index.html'><div class='logo-container'><img src='../../rust-logo.png' alt='logo'></div></a></nav><div class="theme-picker"><button id="theme-picker" aria-label="Pick another theme!"><img src="../../brush.svg" width="18" alt="Pick another theme!"></button><div id="theme-choices"></div></div><script src="../../theme.js"></script><nav class="sub"><form class="search-form"><div class="search-container"><div><select id="crate-search"><option value="All crates">All crates</option></select><input class="search-input" name="search" disabled autocomplete="off" spellcheck="false" placeholder="Click or press ‘S’ to search, ‘?’ for more options…" type="search"></div><a id="settings-menu" href="../../settings.html"><img src="../../wheel.svg" width="18" alt="Change settings"></a></div></form></nav><section id="main" class="content"><pre class="line-numbers"><span id="1">  1</span>
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source to the Rust file `components/sync15/src/client.rs`."><meta name="keywords" content="rust, rustlang, rust-lang"><title>client.rs.html -- source</title><link rel="stylesheet" type="text/css" href="../../normalize.css"><link rel="stylesheet" type="text/css" href="../../rustdoc.css" id="mainThemeStyle"><link rel="stylesheet" type="text/css" href="../../light.css"  id="themeStyle"><link rel="stylesheet" type="text/css" href="../../dark.css" disabled ><link rel="stylesheet" type="text/css" href="../../ayu.css" disabled ><script src="../../storage.js"></script><noscript><link rel="stylesheet" href="../../noscript.css"></noscript><link rel="shortcut icon" href="../../favicon.ico"><style type="text/css">#crate-search{background-image:url("../../down-arrow.svg");}</style></head><body class="rustdoc source"><!--[if lte IE 8]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="sidebar"><div class="sidebar-menu">&#9776;</div><a href='../../sync15/index.html'><div class='logo-container rust-logo'><img src='../../rust-logo.png' alt='logo'></div></a></nav><div class="theme-picker"><button id="theme-picker" aria-label="Pick another theme!"><img src="../../brush.svg" width="18" alt="Pick another theme!"></button><div id="theme-choices"></div></div><script src="../../theme.js"></script><nav class="sub"><form class="search-form"><div class="search-container"><div><select id="crate-search"><option value="All crates">All crates</option></select><input class="search-input" name="search" disabled autocomplete="off" spellcheck="false" placeholder="Click or press ‘S’ to search, ‘?’ for more options…" type="search"></div><span class="help-button">?</span>
+                <a id="settings-menu" href="../../settings.html"><img src="../../wheel.svg" width="18" alt="Change settings"></a></div></form></nav><section id="main" class="content"><pre class="line-numbers"><span id="1">  1</span>
 <span id="2">  2</span>
 <span id="3">  3</span>
 <span id="4">  4</span>
@@ -486,10 +487,10 @@
     <span class="ident">Error</span>(<span class="ident">ErrorResponse</span>),
 }
 
-<span class="kw">fn</span> <span class="ident">parse_seconds</span>(<span class="ident">seconds_str</span>: <span class="kw-2">&amp;</span><span class="ident">str</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">u32</span><span class="op">&gt;</span> {
+<span class="kw">fn</span> <span class="ident">parse_seconds</span>(<span class="ident">seconds_str</span>: <span class="kw-2">&amp;</span><span class="ident">str</span>) <span class="op">-&gt;</span> <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">u32</span><span class="op">&gt;</span> {
     <span class="kw">let</span> <span class="ident">secs</span> <span class="op">=</span> <span class="ident">seconds_str</span>.<span class="ident">parse</span>::<span class="op">&lt;</span><span class="ident">f64</span><span class="op">&gt;</span>().<span class="ident">ok</span>()<span class="question-mark">?</span>.<span class="ident">ceil</span>();
     <span class="comment">// Note: u32 doesn&#39;t impl TryFrom&lt;f64&gt; :(</span>
-    <span class="kw">if</span> <span class="op">!</span><span class="ident">secs</span>.<span class="ident">is_finite</span>() <span class="op">|</span><span class="op">|</span> <span class="ident">secs</span> <span class="op">&lt;</span> <span class="number">0.0</span> <span class="op">|</span><span class="op">|</span> <span class="ident">secs</span> <span class="op">&gt;</span><span class="op">=</span> <span class="ident">f64</span>::<span class="ident">from</span>(<span class="ident">u32</span>::<span class="ident">max_value</span>()) {
+    <span class="kw">if</span> <span class="op">!</span><span class="ident">secs</span>.<span class="ident">is_finite</span>() <span class="op">||</span> <span class="ident">secs</span> <span class="op">&lt;</span> <span class="number">0.0</span> <span class="op">||</span> <span class="ident">secs</span> <span class="op">&gt;=</span> <span class="ident">f64</span>::<span class="ident">from</span>(<span class="ident">u32</span>::<span class="ident">max_value</span>()) {
         <span class="prelude-val">Some</span>(<span class="ident">secs</span> <span class="kw">as</span> <span class="ident">u32</span>)
     } <span class="kw">else</span> {
         <span class="ident">log</span>::<span class="macro">warn</span><span class="macro">!</span>(<span class="string">&quot;invalid backoff value: {}&quot;</span>, <span class="ident">secs</span>);
@@ -498,7 +499,7 @@
 }
 
 <span class="kw">impl</span><span class="op">&lt;</span><span class="ident">T</span><span class="op">&gt;</span> <span class="ident">Sync15ClientResponse</span><span class="op">&lt;</span><span class="ident">T</span><span class="op">&gt;</span> {
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">from_response</span>(<span class="ident">resp</span>: <span class="ident">Response</span>, <span class="ident">backoff_listener</span>: <span class="kw-2">&amp;</span><span class="ident">BackoffListener</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">error</span>::<span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="self">Self</span><span class="op">&gt;</span>
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">from_response</span>(<span class="ident">resp</span>: <span class="ident">Response</span>, <span class="ident">backoff_listener</span>: <span class="kw-2">&amp;</span><span class="ident">BackoffListener</span>) <span class="op">-&gt;</span> <span class="ident">error</span>::<span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="self">Self</span><span class="op">&gt;</span>
     <span class="kw">where</span>
         <span class="kw">for</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span><span class="op">&gt;</span> <span class="ident">T</span>: <span class="ident">serde</span>::<span class="ident">de</span>::<span class="ident">Deserialize</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span><span class="op">&gt;</span>,
     {
@@ -529,7 +530,7 @@
                 .<span class="ident">headers</span>
                 .<span class="ident">get</span>(<span class="ident">header_names</span>::<span class="ident">X_LAST_MODIFIED</span>)
                 .<span class="ident">and_then</span>(<span class="op">|</span><span class="ident">s</span><span class="op">|</span> <span class="ident">ServerTimestamp</span>::<span class="ident">from_str</span>(<span class="ident">s</span>).<span class="ident">ok</span>())
-                .<span class="ident">ok_or_else</span>(<span class="op">|</span><span class="op">|</span> <span class="ident">ErrorKind</span>::<span class="ident">MissingServerTimestamp</span>)<span class="question-mark">?</span>;
+                .<span class="ident">ok_or_else</span>(<span class="op">||</span> <span class="ident">ErrorKind</span>::<span class="ident">MissingServerTimestamp</span>)<span class="question-mark">?</span>;
             <span class="ident">log</span>::<span class="macro">info</span><span class="macro">!</span>(
                 <span class="string">&quot;Successful request to \&quot;{}\&quot;, incoming x-last-modified={:?}&quot;</span>,
                 <span class="ident">route</span>,
@@ -546,27 +547,27 @@
             <span class="kw">let</span> <span class="ident">status</span> <span class="op">=</span> <span class="ident">resp</span>.<span class="ident">status</span>;
             <span class="ident">log</span>::<span class="macro">info</span><span class="macro">!</span>(<span class="string">&quot;Request \&quot;{}\&quot; was an error (status={})&quot;</span>, <span class="ident">route</span>, <span class="ident">status</span>);
             <span class="kw">match</span> <span class="ident">status</span> {
-                <span class="number">404</span> <span class="op">=</span><span class="op">&gt;</span> <span class="ident">Sync15ClientResponse</span>::<span class="ident">Error</span>(<span class="ident">ErrorResponse</span>::<span class="ident">NotFound</span> { <span class="ident">route</span> }),
-                <span class="number">401</span> <span class="op">=</span><span class="op">&gt;</span> <span class="ident">Sync15ClientResponse</span>::<span class="ident">Error</span>(<span class="ident">ErrorResponse</span>::<span class="ident">Unauthorized</span> { <span class="ident">route</span> }),
-                <span class="number">412</span> <span class="op">=</span><span class="op">&gt;</span> <span class="ident">Sync15ClientResponse</span>::<span class="ident">Error</span>(<span class="ident">ErrorResponse</span>::<span class="ident">PreconditionFailed</span> { <span class="ident">route</span> }),
-                <span class="number">500</span>..<span class="op">=</span><span class="number">600</span> <span class="op">=</span><span class="op">&gt;</span> {
+                <span class="number">404</span> <span class="op">=&gt;</span> <span class="ident">Sync15ClientResponse</span>::<span class="ident">Error</span>(<span class="ident">ErrorResponse</span>::<span class="ident">NotFound</span> { <span class="ident">route</span> }),
+                <span class="number">401</span> <span class="op">=&gt;</span> <span class="ident">Sync15ClientResponse</span>::<span class="ident">Error</span>(<span class="ident">ErrorResponse</span>::<span class="ident">Unauthorized</span> { <span class="ident">route</span> }),
+                <span class="number">412</span> <span class="op">=&gt;</span> <span class="ident">Sync15ClientResponse</span>::<span class="ident">Error</span>(<span class="ident">ErrorResponse</span>::<span class="ident">PreconditionFailed</span> { <span class="ident">route</span> }),
+                <span class="number">500</span>..<span class="op">=</span><span class="number">600</span> <span class="op">=&gt;</span> {
                     <span class="ident">Sync15ClientResponse</span>::<span class="ident">Error</span>(<span class="ident">ErrorResponse</span>::<span class="ident">ServerError</span> { <span class="ident">route</span>, <span class="ident">status</span> })
                 }
-                <span class="kw">_</span> <span class="op">=</span><span class="op">&gt;</span> <span class="ident">Sync15ClientResponse</span>::<span class="ident">Error</span>(<span class="ident">ErrorResponse</span>::<span class="ident">RequestFailed</span> { <span class="ident">route</span>, <span class="ident">status</span> }),
+                <span class="kw">_</span> <span class="op">=&gt;</span> <span class="ident">Sync15ClientResponse</span>::<span class="ident">Error</span>(<span class="ident">ErrorResponse</span>::<span class="ident">RequestFailed</span> { <span class="ident">route</span>, <span class="ident">status</span> }),
             }
         })
     }
 
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">create_storage_error</span>(<span class="self">self</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">ErrorKind</span> {
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">create_storage_error</span>(<span class="self">self</span>) <span class="op">-&gt;</span> <span class="ident">ErrorKind</span> {
         <span class="kw">let</span> <span class="ident">inner</span> <span class="op">=</span> <span class="kw">match</span> <span class="self">self</span> {
-            <span class="ident">Sync15ClientResponse</span>::<span class="ident">Success</span> { <span class="ident">status</span>, <span class="ident">route</span>, .. } <span class="op">=</span><span class="op">&gt;</span> {
+            <span class="ident">Sync15ClientResponse</span>::<span class="ident">Success</span> { <span class="ident">status</span>, <span class="ident">route</span>, .. } <span class="op">=&gt;</span> {
                 <span class="comment">// This should never happen as callers are expected to have</span>
                 <span class="comment">// already special-cased this response, so warn if it does.</span>
                 <span class="comment">// (or maybe we could panic?)</span>
                 <span class="ident">log</span>::<span class="macro">warn</span><span class="macro">!</span>(<span class="string">&quot;Converting success response into an error&quot;</span>);
                 <span class="ident">ErrorResponse</span>::<span class="ident">RequestFailed</span> { <span class="ident">status</span>, <span class="ident">route</span> }
             }
-            <span class="ident">Sync15ClientResponse</span>::<span class="ident">Error</span>(<span class="ident">e</span>) <span class="op">=</span><span class="op">&gt;</span> <span class="ident">e</span>,
+            <span class="ident">Sync15ClientResponse</span>::<span class="ident">Error</span>(<span class="ident">e</span>) <span class="op">=&gt;</span> <span class="ident">e</span>,
         };
         <span class="ident">ErrorKind</span>::<span class="ident">StorageHttpError</span>(<span class="ident">inner</span>)
     }
@@ -583,18 +584,18 @@
 <span class="doccomment">/// machine. This is factored out into a separate trait to make mocking</span>
 <span class="doccomment">/// easier.</span>
 <span class="kw">pub</span> <span class="kw">trait</span> <span class="ident">SetupStorageClient</span> {
-    <span class="kw">fn</span> <span class="ident">fetch_info_configuration</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">error</span>::<span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">Sync15ClientResponse</span><span class="op">&lt;</span><span class="ident">InfoConfiguration</span><span class="op">&gt;</span><span class="op">&gt;</span>;
-    <span class="kw">fn</span> <span class="ident">fetch_info_collections</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">error</span>::<span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">Sync15ClientResponse</span><span class="op">&lt;</span><span class="ident">InfoCollections</span><span class="op">&gt;</span><span class="op">&gt;</span>;
-    <span class="kw">fn</span> <span class="ident">fetch_meta_global</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">error</span>::<span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">Sync15ClientResponse</span><span class="op">&lt;</span><span class="ident">MetaGlobalRecord</span><span class="op">&gt;</span><span class="op">&gt;</span>;
-    <span class="kw">fn</span> <span class="ident">fetch_crypto_keys</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">error</span>::<span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">Sync15ClientResponse</span><span class="op">&lt;</span><span class="ident">EncryptedBso</span><span class="op">&gt;</span><span class="op">&gt;</span>;
+    <span class="kw">fn</span> <span class="ident">fetch_info_configuration</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-&gt;</span> <span class="ident">error</span>::<span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">Sync15ClientResponse</span><span class="op">&lt;</span><span class="ident">InfoConfiguration</span><span class="op">&gt;&gt;</span>;
+    <span class="kw">fn</span> <span class="ident">fetch_info_collections</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-&gt;</span> <span class="ident">error</span>::<span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">Sync15ClientResponse</span><span class="op">&lt;</span><span class="ident">InfoCollections</span><span class="op">&gt;&gt;</span>;
+    <span class="kw">fn</span> <span class="ident">fetch_meta_global</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-&gt;</span> <span class="ident">error</span>::<span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">Sync15ClientResponse</span><span class="op">&lt;</span><span class="ident">MetaGlobalRecord</span><span class="op">&gt;&gt;</span>;
+    <span class="kw">fn</span> <span class="ident">fetch_crypto_keys</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-&gt;</span> <span class="ident">error</span>::<span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">Sync15ClientResponse</span><span class="op">&lt;</span><span class="ident">EncryptedBso</span><span class="op">&gt;&gt;</span>;
 
     <span class="kw">fn</span> <span class="ident">put_meta_global</span>(
         <span class="kw-2">&amp;</span><span class="self">self</span>,
         <span class="ident">xius</span>: <span class="ident">ServerTimestamp</span>,
         <span class="ident">global</span>: <span class="kw-2">&amp;</span><span class="ident">MetaGlobalRecord</span>,
-    ) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">error</span>::<span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">ServerTimestamp</span><span class="op">&gt;</span>;
-    <span class="kw">fn</span> <span class="ident">put_crypto_keys</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">xius</span>: <span class="ident">ServerTimestamp</span>, <span class="ident">keys</span>: <span class="kw-2">&amp;</span><span class="ident">EncryptedBso</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">error</span>::<span class="prelude-ty">Result</span><span class="op">&lt;</span>()<span class="op">&gt;</span>;
-    <span class="kw">fn</span> <span class="ident">wipe_all_remote</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">error</span>::<span class="prelude-ty">Result</span><span class="op">&lt;</span>()<span class="op">&gt;</span>;
+    ) <span class="op">-&gt;</span> <span class="ident">error</span>::<span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">ServerTimestamp</span><span class="op">&gt;</span>;
+    <span class="kw">fn</span> <span class="ident">put_crypto_keys</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">xius</span>: <span class="ident">ServerTimestamp</span>, <span class="ident">keys</span>: <span class="kw-2">&amp;</span><span class="ident">EncryptedBso</span>) <span class="op">-&gt;</span> <span class="ident">error</span>::<span class="prelude-ty">Result</span><span class="op">&lt;</span>()<span class="op">&gt;</span>;
+    <span class="kw">fn</span> <span class="ident">wipe_all_remote</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-&gt;</span> <span class="ident">error</span>::<span class="prelude-ty">Result</span><span class="op">&lt;</span>()<span class="op">&gt;</span>;
 }
 
 <span class="attribute">#[<span class="ident">derive</span>(<span class="ident">Debug</span>, <span class="ident">Default</span>)]</span>
@@ -605,7 +606,7 @@
 
 <span class="kw">pub</span>(<span class="kw">crate</span>) <span class="kw">type</span> <span class="ident">BackoffListener</span> <span class="op">=</span> <span class="ident">std</span>::<span class="ident">sync</span>::<span class="ident">Arc</span><span class="op">&lt;</span><span class="ident">BackoffState</span><span class="op">&gt;</span>;
 
-<span class="kw">pub</span>(<span class="kw">crate</span>) <span class="kw">fn</span> <span class="ident">new_backoff_listener</span>() <span class="op">-</span><span class="op">&gt;</span> <span class="ident">BackoffListener</span> {
+<span class="kw">pub</span>(<span class="kw">crate</span>) <span class="kw">fn</span> <span class="ident">new_backoff_listener</span>() <span class="op">-&gt;</span> <span class="ident">BackoffListener</span> {
     <span class="ident">std</span>::<span class="ident">sync</span>::<span class="ident">Arc</span>::<span class="ident">new</span>(<span class="ident">BackoffState</span>::<span class="ident">default</span>())
 }
 
@@ -618,15 +619,15 @@
         <span class="kw">crate</span>::<span class="ident">util</span>::<span class="ident">atomic_update_max</span>(<span class="kw-2">&amp;</span><span class="self">self</span>.<span class="ident">retry_after_secs</span>, <span class="ident">noted</span>)
     }
 
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">get_backoff_secs</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">u32</span> {
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">get_backoff_secs</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-&gt;</span> <span class="ident">u32</span> {
         <span class="self">self</span>.<span class="ident">backoff_secs</span>.<span class="ident">load</span>(<span class="ident">Ordering</span>::<span class="ident">SeqCst</span>)
     }
 
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">get_retry_after_secs</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">u32</span> {
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">get_retry_after_secs</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-&gt;</span> <span class="ident">u32</span> {
         <span class="self">self</span>.<span class="ident">retry_after_secs</span>.<span class="ident">load</span>(<span class="ident">Ordering</span>::<span class="ident">SeqCst</span>)
     }
 
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">get_required_wait</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">ignore_soft_backoff</span>: <span class="ident">bool</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">std</span>::<span class="ident">time</span>::<span class="ident">Duration</span><span class="op">&gt;</span> {
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">get_required_wait</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">ignore_soft_backoff</span>: <span class="ident">bool</span>) <span class="op">-&gt;</span> <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">std</span>::<span class="ident">time</span>::<span class="ident">Duration</span><span class="op">&gt;</span> {
         <span class="kw">let</span> <span class="ident">bo</span> <span class="op">=</span> <span class="self">self</span>.<span class="ident">get_backoff_secs</span>();
         <span class="kw">let</span> <span class="ident">ra</span> <span class="op">=</span> <span class="self">self</span>.<span class="ident">get_retry_after_secs</span>();
         <span class="kw">let</span> <span class="ident">secs</span> <span class="op">=</span> <span class="ident">u64</span>::<span class="ident">from</span>(<span class="kw">if</span> <span class="ident">ignore_soft_backoff</span> { <span class="ident">ra</span> } <span class="kw">else</span> { <span class="ident">bo</span>.<span class="ident">max</span>(<span class="ident">ra</span>) });
@@ -650,17 +651,17 @@
 }
 
 <span class="kw">impl</span> <span class="ident">SetupStorageClient</span> <span class="kw">for</span> <span class="ident">Sync15StorageClient</span> {
-    <span class="kw">fn</span> <span class="ident">fetch_info_configuration</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">error</span>::<span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">Sync15ClientResponse</span><span class="op">&lt;</span><span class="ident">InfoConfiguration</span><span class="op">&gt;</span><span class="op">&gt;</span> {
+    <span class="kw">fn</span> <span class="ident">fetch_info_configuration</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-&gt;</span> <span class="ident">error</span>::<span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">Sync15ClientResponse</span><span class="op">&lt;</span><span class="ident">InfoConfiguration</span><span class="op">&gt;&gt;</span> {
         <span class="self">self</span>.<span class="ident">relative_storage_request</span>(<span class="ident">Method</span>::<span class="ident">Get</span>, <span class="string">&quot;info/configuration&quot;</span>)
     }
 
-    <span class="kw">fn</span> <span class="ident">fetch_info_collections</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">error</span>::<span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">Sync15ClientResponse</span><span class="op">&lt;</span><span class="ident">InfoCollections</span><span class="op">&gt;</span><span class="op">&gt;</span> {
+    <span class="kw">fn</span> <span class="ident">fetch_info_collections</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-&gt;</span> <span class="ident">error</span>::<span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">Sync15ClientResponse</span><span class="op">&lt;</span><span class="ident">InfoCollections</span><span class="op">&gt;&gt;</span> {
         <span class="self">self</span>.<span class="ident">relative_storage_request</span>(<span class="ident">Method</span>::<span class="ident">Get</span>, <span class="string">&quot;info/collections&quot;</span>)
     }
 
-    <span class="kw">fn</span> <span class="ident">fetch_meta_global</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">error</span>::<span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">Sync15ClientResponse</span><span class="op">&lt;</span><span class="ident">MetaGlobalRecord</span><span class="op">&gt;</span><span class="op">&gt;</span> {
+    <span class="kw">fn</span> <span class="ident">fetch_meta_global</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-&gt;</span> <span class="ident">error</span>::<span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">Sync15ClientResponse</span><span class="op">&lt;</span><span class="ident">MetaGlobalRecord</span><span class="op">&gt;&gt;</span> {
         <span class="comment">// meta/global is a Bso, so there&#39;s an extra dance to do.</span>
-        <span class="kw">let</span> <span class="ident">got</span>: <span class="ident">Sync15ClientResponse</span><span class="op">&lt;</span><span class="ident">BsoRecord</span><span class="op">&lt;</span><span class="ident">MetaGlobalRecord</span><span class="op">&gt;</span><span class="op">&gt;</span> <span class="op">=</span>
+        <span class="kw">let</span> <span class="ident">got</span>: <span class="ident">Sync15ClientResponse</span><span class="op">&lt;</span><span class="ident">BsoRecord</span><span class="op">&lt;</span><span class="ident">MetaGlobalRecord</span><span class="op">&gt;&gt;</span> <span class="op">=</span>
             <span class="self">self</span>.<span class="ident">relative_storage_request</span>(<span class="ident">Method</span>::<span class="ident">Get</span>, <span class="string">&quot;storage/meta/global&quot;</span>)<span class="question-mark">?</span>;
         <span class="prelude-val">Ok</span>(<span class="kw">match</span> <span class="ident">got</span> {
             <span class="ident">Sync15ClientResponse</span>::<span class="ident">Success</span> {
@@ -668,7 +669,7 @@
                 <span class="ident">last_modified</span>,
                 <span class="ident">route</span>,
                 <span class="ident">status</span>,
-            } <span class="op">=</span><span class="op">&gt;</span> {
+            } <span class="op">=&gt;</span> {
                 <span class="ident">log</span>::<span class="macro">debug</span><span class="macro">!</span>(
                     <span class="string">&quot;Got meta global with modified = {}; last-modified = {}&quot;</span>,
                     <span class="ident">record</span>.<span class="ident">modified</span>,
@@ -681,11 +682,11 @@
                     <span class="ident">status</span>,
                 }
             }
-            <span class="ident">Sync15ClientResponse</span>::<span class="ident">Error</span>(<span class="ident">e</span>) <span class="op">=</span><span class="op">&gt;</span> <span class="ident">Sync15ClientResponse</span>::<span class="ident">Error</span>(<span class="ident">e</span>),
+            <span class="ident">Sync15ClientResponse</span>::<span class="ident">Error</span>(<span class="ident">e</span>) <span class="op">=&gt;</span> <span class="ident">Sync15ClientResponse</span>::<span class="ident">Error</span>(<span class="ident">e</span>),
         })
     }
 
-    <span class="kw">fn</span> <span class="ident">fetch_crypto_keys</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">error</span>::<span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">Sync15ClientResponse</span><span class="op">&lt;</span><span class="ident">EncryptedBso</span><span class="op">&gt;</span><span class="op">&gt;</span> {
+    <span class="kw">fn</span> <span class="ident">fetch_crypto_keys</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-&gt;</span> <span class="ident">error</span>::<span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">Sync15ClientResponse</span><span class="op">&lt;</span><span class="ident">EncryptedBso</span><span class="op">&gt;&gt;</span> {
         <span class="self">self</span>.<span class="ident">relative_storage_request</span>(<span class="ident">Method</span>::<span class="ident">Get</span>, <span class="string">&quot;storage/crypto/keys&quot;</span>)
     }
 
@@ -693,32 +694,32 @@
         <span class="kw-2">&amp;</span><span class="self">self</span>,
         <span class="ident">xius</span>: <span class="ident">ServerTimestamp</span>,
         <span class="ident">global</span>: <span class="kw-2">&amp;</span><span class="ident">MetaGlobalRecord</span>,
-    ) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">error</span>::<span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">ServerTimestamp</span><span class="op">&gt;</span> {
+    ) <span class="op">-&gt;</span> <span class="ident">error</span>::<span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">ServerTimestamp</span><span class="op">&gt;</span> {
         <span class="kw">let</span> <span class="ident">bso</span> <span class="op">=</span> <span class="ident">BsoRecord</span>::<span class="ident">new_record</span>(<span class="string">&quot;global&quot;</span>.<span class="ident">into</span>(), <span class="string">&quot;meta&quot;</span>.<span class="ident">into</span>(), <span class="ident">global</span>);
         <span class="self">self</span>.<span class="ident">put</span>(<span class="string">&quot;storage/meta/global&quot;</span>, <span class="ident">xius</span>, <span class="kw-2">&amp;</span><span class="ident">bso</span>)
     }
 
-    <span class="kw">fn</span> <span class="ident">put_crypto_keys</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">xius</span>: <span class="ident">ServerTimestamp</span>, <span class="ident">keys</span>: <span class="kw-2">&amp;</span><span class="ident">EncryptedBso</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">error</span>::<span class="prelude-ty">Result</span><span class="op">&lt;</span>()<span class="op">&gt;</span> {
+    <span class="kw">fn</span> <span class="ident">put_crypto_keys</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">xius</span>: <span class="ident">ServerTimestamp</span>, <span class="ident">keys</span>: <span class="kw-2">&amp;</span><span class="ident">EncryptedBso</span>) <span class="op">-&gt;</span> <span class="ident">error</span>::<span class="prelude-ty">Result</span><span class="op">&lt;</span>()<span class="op">&gt;</span> {
         <span class="self">self</span>.<span class="ident">put</span>(<span class="string">&quot;storage/crypto/keys&quot;</span>, <span class="ident">xius</span>, <span class="ident">keys</span>)<span class="question-mark">?</span>;
         <span class="prelude-val">Ok</span>(())
     }
 
-    <span class="kw">fn</span> <span class="ident">wipe_all_remote</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">error</span>::<span class="prelude-ty">Result</span><span class="op">&lt;</span>()<span class="op">&gt;</span> {
+    <span class="kw">fn</span> <span class="ident">wipe_all_remote</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-&gt;</span> <span class="ident">error</span>::<span class="prelude-ty">Result</span><span class="op">&lt;</span>()<span class="op">&gt;</span> {
         <span class="kw">let</span> <span class="ident">s</span> <span class="op">=</span> <span class="self">self</span>.<span class="ident">tsc</span>.<span class="ident">api_endpoint</span>()<span class="question-mark">?</span>;
         <span class="kw">let</span> <span class="ident">url</span> <span class="op">=</span> <span class="ident">Url</span>::<span class="ident">parse</span>(<span class="kw-2">&amp;</span><span class="ident">s</span>)<span class="question-mark">?</span>;
 
         <span class="kw">let</span> <span class="ident">req</span> <span class="op">=</span> <span class="self">self</span>.<span class="ident">build_request</span>(<span class="ident">Method</span>::<span class="ident">Delete</span>, <span class="ident">url</span>)<span class="question-mark">?</span>;
         <span class="kw">match</span> <span class="self">self</span>.<span class="ident">exec_request</span>::<span class="op">&lt;</span><span class="ident">Value</span><span class="op">&gt;</span>(<span class="ident">req</span>, <span class="bool-val">false</span>) {
             <span class="prelude-val">Ok</span>(<span class="ident">Sync15ClientResponse</span>::<span class="ident">Error</span>(<span class="ident">ErrorResponse</span>::<span class="ident">NotFound</span> { .. }))
-            <span class="op">|</span> <span class="prelude-val">Ok</span>(<span class="ident">Sync15ClientResponse</span>::<span class="ident">Success</span> { .. }) <span class="op">=</span><span class="op">&gt;</span> <span class="prelude-val">Ok</span>(()),
-            <span class="prelude-val">Ok</span>(<span class="ident">resp</span>) <span class="op">=</span><span class="op">&gt;</span> <span class="prelude-val">Err</span>(<span class="ident">resp</span>.<span class="ident">create_storage_error</span>().<span class="ident">into</span>()),
-            <span class="prelude-val">Err</span>(<span class="ident">e</span>) <span class="op">=</span><span class="op">&gt;</span> <span class="prelude-val">Err</span>(<span class="ident">e</span>),
+            <span class="op">|</span> <span class="prelude-val">Ok</span>(<span class="ident">Sync15ClientResponse</span>::<span class="ident">Success</span> { .. }) <span class="op">=&gt;</span> <span class="prelude-val">Ok</span>(()),
+            <span class="prelude-val">Ok</span>(<span class="ident">resp</span>) <span class="op">=&gt;</span> <span class="prelude-val">Err</span>(<span class="ident">resp</span>.<span class="ident">create_storage_error</span>().<span class="ident">into</span>()),
+            <span class="prelude-val">Err</span>(<span class="ident">e</span>) <span class="op">=&gt;</span> <span class="prelude-val">Err</span>(<span class="ident">e</span>),
         }
     }
 }
 
 <span class="kw">impl</span> <span class="ident">Sync15StorageClient</span> {
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">new</span>(<span class="ident">init_params</span>: <span class="ident">Sync15StorageClientInit</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">error</span>::<span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">Sync15StorageClient</span><span class="op">&gt;</span> {
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">new</span>(<span class="ident">init_params</span>: <span class="ident">Sync15StorageClientInit</span>) <span class="op">-&gt;</span> <span class="ident">error</span>::<span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">Sync15StorageClient</span><span class="op">&gt;</span> {
         <span class="ident">rc_crypto</span>::<span class="ident">ensure_initialized</span>();
         <span class="kw">let</span> <span class="ident">tsc</span> <span class="op">=</span> <span class="ident">token</span>::<span class="ident">TokenProvider</span>::<span class="ident">new</span>(
             <span class="ident">init_params</span>.<span class="ident">tokenserver_url</span>,
@@ -734,19 +735,19 @@
     <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">get_encrypted_records</span>(
         <span class="kw-2">&amp;</span><span class="self">self</span>,
         <span class="ident">collection_request</span>: <span class="kw-2">&amp;</span><span class="ident">CollectionRequest</span>,
-    ) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">error</span>::<span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">Sync15ClientResponse</span><span class="op">&lt;</span><span class="ident">Vec</span><span class="op">&lt;</span><span class="ident">EncryptedBso</span><span class="op">&gt;</span><span class="op">&gt;</span><span class="op">&gt;</span> {
+    ) <span class="op">-&gt;</span> <span class="ident">error</span>::<span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">Sync15ClientResponse</span><span class="op">&lt;</span><span class="ident">Vec</span><span class="op">&lt;</span><span class="ident">EncryptedBso</span><span class="op">&gt;&gt;</span><span class="op">&gt;</span> {
         <span class="self">self</span>.<span class="ident">collection_request</span>(<span class="ident">Method</span>::<span class="ident">Get</span>, <span class="ident">collection_request</span>)
     }
 
     <span class="attribute">#[<span class="ident">inline</span>]</span>
-    <span class="kw">fn</span> <span class="ident">authorized</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">req</span>: <span class="ident">Request</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">error</span>::<span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">Request</span><span class="op">&gt;</span> {
+    <span class="kw">fn</span> <span class="ident">authorized</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">req</span>: <span class="ident">Request</span>) <span class="op">-&gt;</span> <span class="ident">error</span>::<span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">Request</span><span class="op">&gt;</span> {
         <span class="kw">let</span> <span class="ident">hawk_header_value</span> <span class="op">=</span> <span class="self">self</span>.<span class="ident">tsc</span>.<span class="ident">authorization</span>(<span class="kw-2">&amp;</span><span class="ident">req</span>)<span class="question-mark">?</span>;
         <span class="prelude-val">Ok</span>(<span class="ident">req</span>.<span class="ident">header</span>(<span class="ident">AUTHORIZATION</span>, <span class="ident">hawk_header_value</span>)<span class="question-mark">?</span>)
     }
 
     <span class="comment">// TODO: probably want a builder-like API to do collection requests (e.g. something</span>
     <span class="comment">// that occupies roughly the same conceptual role as the Collection class in desktop)</span>
-    <span class="kw">fn</span> <span class="ident">build_request</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">method</span>: <span class="ident">Method</span>, <span class="ident">url</span>: <span class="ident">Url</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">error</span>::<span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">Request</span><span class="op">&gt;</span> {
+    <span class="kw">fn</span> <span class="ident">build_request</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">method</span>: <span class="ident">Method</span>, <span class="ident">url</span>: <span class="ident">Url</span>) <span class="op">-&gt;</span> <span class="ident">error</span>::<span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">Request</span><span class="op">&gt;</span> {
         <span class="self">self</span>.<span class="ident">authorized</span>(<span class="ident">Request</span>::<span class="ident">new</span>(<span class="ident">method</span>, <span class="ident">url</span>).<span class="ident">header</span>(<span class="ident">header_names</span>::<span class="ident">ACCEPT</span>, <span class="string">&quot;application/json&quot;</span>)<span class="question-mark">?</span>)
     }
 
@@ -754,7 +755,7 @@
         <span class="kw-2">&amp;</span><span class="self">self</span>,
         <span class="ident">method</span>: <span class="ident">Method</span>,
         <span class="ident">relative_path</span>: <span class="ident">P</span>,
-    ) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">error</span>::<span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">Sync15ClientResponse</span><span class="op">&lt;</span><span class="ident">T</span><span class="op">&gt;</span><span class="op">&gt;</span>
+    ) <span class="op">-&gt;</span> <span class="ident">error</span>::<span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">Sync15ClientResponse</span><span class="op">&lt;</span><span class="ident">T</span><span class="op">&gt;&gt;</span>
     <span class="kw">where</span>
         <span class="ident">P</span>: <span class="ident">AsRef</span><span class="op">&lt;</span><span class="ident">str</span><span class="op">&gt;</span>,
         <span class="kw">for</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span><span class="op">&gt;</span> <span class="ident">T</span>: <span class="ident">serde</span>::<span class="ident">de</span>::<span class="ident">Deserialize</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span><span class="op">&gt;</span>,
@@ -768,7 +769,7 @@
         <span class="kw-2">&amp;</span><span class="self">self</span>,
         <span class="ident">req</span>: <span class="ident">Request</span>,
         <span class="ident">require_success</span>: <span class="ident">bool</span>,
-    ) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">error</span>::<span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">Sync15ClientResponse</span><span class="op">&lt;</span><span class="ident">T</span><span class="op">&gt;</span><span class="op">&gt;</span>
+    ) <span class="op">-&gt;</span> <span class="ident">error</span>::<span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">Sync15ClientResponse</span><span class="op">&lt;</span><span class="ident">T</span><span class="op">&gt;&gt;</span>
     <span class="kw">where</span>
         <span class="kw">for</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span><span class="op">&gt;</span> <span class="ident">T</span>: <span class="ident">serde</span>::<span class="ident">de</span>::<span class="ident">Deserialize</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span><span class="op">&gt;</span>,
     {
@@ -782,8 +783,8 @@
 
         <span class="kw">let</span> <span class="ident">result</span> <span class="op">=</span> <span class="ident">Sync15ClientResponse</span>::<span class="ident">from_response</span>(<span class="ident">resp</span>, <span class="kw-2">&amp;</span><span class="self">self</span>.<span class="ident">backoff</span>)<span class="question-mark">?</span>;
         <span class="kw">match</span> <span class="ident">result</span> {
-            <span class="ident">Sync15ClientResponse</span>::<span class="ident">Success</span> { .. } <span class="op">=</span><span class="op">&gt;</span> <span class="prelude-val">Ok</span>(<span class="ident">result</span>),
-            <span class="kw">_</span> <span class="op">=</span><span class="op">&gt;</span> {
+            <span class="ident">Sync15ClientResponse</span>::<span class="ident">Success</span> { .. } <span class="op">=&gt;</span> <span class="prelude-val">Ok</span>(<span class="ident">result</span>),
+            <span class="kw">_</span> <span class="op">=&gt;</span> {
                 <span class="kw">if</span> <span class="ident">require_success</span> {
                     <span class="prelude-val">Err</span>(<span class="ident">result</span>.<span class="ident">create_storage_error</span>().<span class="ident">into</span>())
                 } <span class="kw">else</span> {
@@ -797,7 +798,7 @@
         <span class="kw-2">&amp;</span><span class="self">self</span>,
         <span class="ident">method</span>: <span class="ident">Method</span>,
         <span class="ident">r</span>: <span class="kw-2">&amp;</span><span class="ident">CollectionRequest</span>,
-    ) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">error</span>::<span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">Sync15ClientResponse</span><span class="op">&lt;</span><span class="ident">T</span><span class="op">&gt;</span><span class="op">&gt;</span>
+    ) <span class="op">-&gt;</span> <span class="ident">error</span>::<span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">Sync15ClientResponse</span><span class="op">&lt;</span><span class="ident">T</span><span class="op">&gt;&gt;</span>
     <span class="kw">where</span>
         <span class="kw">for</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span><span class="op">&gt;</span> <span class="ident">T</span>: <span class="ident">serde</span>::<span class="ident">de</span>::<span class="ident">Deserialize</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span><span class="op">&gt;</span>,
     {
@@ -811,7 +812,7 @@
         <span class="ident">config</span>: <span class="kw-2">&amp;</span><span class="ident">InfoConfiguration</span>,
         <span class="ident">ts</span>: <span class="ident">ServerTimestamp</span>,
         <span class="ident">on_response</span>: <span class="ident">F</span>,
-    ) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">error</span>::<span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">PostQueue</span><span class="op">&lt;</span><span class="ident">PostWrapper</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span><span class="op">&gt;</span>, <span class="ident">F</span><span class="op">&gt;</span><span class="op">&gt;</span> {
+    ) <span class="op">-&gt;</span> <span class="ident">error</span>::<span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">PostQueue</span><span class="op">&lt;</span><span class="ident">PostWrapper</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span><span class="op">&gt;</span>, <span class="ident">F</span><span class="op">&gt;&gt;</span> {
         <span class="kw">let</span> <span class="ident">pw</span> <span class="op">=</span> <span class="ident">PostWrapper</span> {
             <span class="ident">client</span>: <span class="self">self</span>,
             <span class="ident">coll</span>: <span class="ident">coll</span>.<span class="ident">into</span>(),
@@ -824,7 +825,7 @@
         <span class="ident">relative_path</span>: <span class="ident">P</span>,
         <span class="ident">xius</span>: <span class="ident">ServerTimestamp</span>,
         <span class="ident">body</span>: <span class="kw-2">&amp;</span><span class="ident">B</span>,
-    ) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">error</span>::<span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">ServerTimestamp</span><span class="op">&gt;</span>
+    ) <span class="op">-&gt;</span> <span class="ident">error</span>::<span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">ServerTimestamp</span><span class="op">&gt;</span>
     <span class="kw">where</span>
         <span class="ident">P</span>: <span class="ident">AsRef</span><span class="op">&lt;</span><span class="ident">str</span><span class="op">&gt;</span>,
         <span class="ident">B</span>: <span class="ident">serde</span>::<span class="ident">ser</span>::<span class="ident">Serialize</span>,
@@ -846,20 +847,20 @@
         }
     }
 
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">hashed_uid</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">error</span>::<span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">String</span><span class="op">&gt;</span> {
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">hashed_uid</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-&gt;</span> <span class="ident">error</span>::<span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">String</span><span class="op">&gt;</span> {
         <span class="self">self</span>.<span class="ident">tsc</span>.<span class="ident">hashed_uid</span>()
     }
 
-    <span class="kw">pub</span>(<span class="kw">crate</span>) <span class="kw">fn</span> <span class="ident">wipe_remote_engine</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">engine</span>: <span class="kw-2">&amp;</span><span class="ident">str</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">error</span>::<span class="prelude-ty">Result</span><span class="op">&lt;</span>()<span class="op">&gt;</span> {
+    <span class="kw">pub</span>(<span class="kw">crate</span>) <span class="kw">fn</span> <span class="ident">wipe_remote_engine</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">engine</span>: <span class="kw-2">&amp;</span><span class="ident">str</span>) <span class="op">-&gt;</span> <span class="ident">error</span>::<span class="prelude-ty">Result</span><span class="op">&lt;</span>()<span class="op">&gt;</span> {
         <span class="kw">let</span> <span class="ident">s</span> <span class="op">=</span> <span class="self">self</span>.<span class="ident">tsc</span>.<span class="ident">api_endpoint</span>()<span class="question-mark">?</span> <span class="op">+</span> <span class="string">&quot;/&quot;</span>;
         <span class="kw">let</span> <span class="ident">url</span> <span class="op">=</span> <span class="ident">Url</span>::<span class="ident">parse</span>(<span class="kw-2">&amp;</span><span class="ident">s</span>)<span class="question-mark">?</span>.<span class="ident">join</span>(<span class="kw-2">&amp;</span><span class="macro">format</span><span class="macro">!</span>(<span class="string">&quot;storage/{}&quot;</span>, <span class="ident">engine</span>))<span class="question-mark">?</span>;
         <span class="ident">log</span>::<span class="macro">debug</span><span class="macro">!</span>(<span class="string">&quot;Wiping: {:?}&quot;</span>, <span class="ident">url</span>);
         <span class="kw">let</span> <span class="ident">req</span> <span class="op">=</span> <span class="self">self</span>.<span class="ident">build_request</span>(<span class="ident">Method</span>::<span class="ident">Delete</span>, <span class="ident">url</span>)<span class="question-mark">?</span>;
         <span class="kw">match</span> <span class="self">self</span>.<span class="ident">exec_request</span>::<span class="op">&lt;</span><span class="ident">Value</span><span class="op">&gt;</span>(<span class="ident">req</span>, <span class="bool-val">false</span>) {
             <span class="prelude-val">Ok</span>(<span class="ident">Sync15ClientResponse</span>::<span class="ident">Error</span>(<span class="ident">ErrorResponse</span>::<span class="ident">NotFound</span> { .. }))
-            <span class="op">|</span> <span class="prelude-val">Ok</span>(<span class="ident">Sync15ClientResponse</span>::<span class="ident">Success</span> { .. }) <span class="op">=</span><span class="op">&gt;</span> <span class="prelude-val">Ok</span>(()),
-            <span class="prelude-val">Ok</span>(<span class="ident">resp</span>) <span class="op">=</span><span class="op">&gt;</span> <span class="prelude-val">Err</span>(<span class="ident">resp</span>.<span class="ident">create_storage_error</span>().<span class="ident">into</span>()),
-            <span class="prelude-val">Err</span>(<span class="ident">e</span>) <span class="op">=</span><span class="op">&gt;</span> <span class="prelude-val">Err</span>(<span class="ident">e</span>),
+            <span class="op">|</span> <span class="prelude-val">Ok</span>(<span class="ident">Sync15ClientResponse</span>::<span class="ident">Success</span> { .. }) <span class="op">=&gt;</span> <span class="prelude-val">Ok</span>(()),
+            <span class="prelude-val">Ok</span>(<span class="ident">resp</span>) <span class="op">=&gt;</span> <span class="prelude-val">Err</span>(<span class="ident">resp</span>.<span class="ident">create_storage_error</span>().<span class="ident">into</span>()),
+            <span class="prelude-val">Err</span>(<span class="ident">e</span>) <span class="op">=&gt;</span> <span class="prelude-val">Err</span>(<span class="ident">e</span>),
         }
     }
 }
@@ -877,7 +878,7 @@
         <span class="ident">batch</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">String</span><span class="op">&gt;</span>,
         <span class="ident">commit</span>: <span class="ident">bool</span>,
         <span class="kw">_</span>: <span class="kw-2">&amp;</span><span class="ident">PostQueue</span><span class="op">&lt;</span><span class="ident">T</span>, <span class="ident">O</span><span class="op">&gt;</span>,
-    ) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">error</span>::<span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">PostResponse</span><span class="op">&gt;</span> {
+    ) <span class="op">-&gt;</span> <span class="ident">error</span>::<span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">PostResponse</span><span class="op">&gt;</span> {
         <span class="kw">let</span> <span class="ident">url</span> <span class="op">=</span> <span class="ident">CollectionRequest</span>::<span class="ident">new</span>(<span class="self">self</span>.<span class="ident">coll</span>.<span class="ident">clone</span>())
             .<span class="ident">batch</span>(<span class="ident">batch</span>)
             .<span class="ident">commit</span>(<span class="ident">commit</span>)

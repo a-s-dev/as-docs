@@ -1,4 +1,5 @@
-<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source to the Rust file `components/support/sync15-traits/src/request.rs`."><meta name="keywords" content="rust, rustlang, rust-lang"><title>request.rs.html -- source</title><link rel="stylesheet" type="text/css" href="../../normalize.css"><link rel="stylesheet" type="text/css" href="../../rustdoc.css" id="mainThemeStyle"><link rel="stylesheet" type="text/css" href="../../dark.css"><link rel="stylesheet" type="text/css" href="../../light.css" id="themeStyle"><script src="../../storage.js"></script><noscript><link rel="stylesheet" href="../../noscript.css"></noscript><link rel="shortcut icon" href="../../favicon.ico"><style type="text/css">#crate-search{background-image:url("../../down-arrow.svg");}</style></head><body class="rustdoc source"><!--[if lte IE 8]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="sidebar"><div class="sidebar-menu">&#9776;</div><a href='../../sync15_traits/index.html'><div class='logo-container'><img src='../../rust-logo.png' alt='logo'></div></a></nav><div class="theme-picker"><button id="theme-picker" aria-label="Pick another theme!"><img src="../../brush.svg" width="18" alt="Pick another theme!"></button><div id="theme-choices"></div></div><script src="../../theme.js"></script><nav class="sub"><form class="search-form"><div class="search-container"><div><select id="crate-search"><option value="All crates">All crates</option></select><input class="search-input" name="search" disabled autocomplete="off" spellcheck="false" placeholder="Click or press ‘S’ to search, ‘?’ for more options…" type="search"></div><a id="settings-menu" href="../../settings.html"><img src="../../wheel.svg" width="18" alt="Change settings"></a></div></form></nav><section id="main" class="content"><pre class="line-numbers"><span id="1">  1</span>
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source to the Rust file `components/support/sync15-traits/src/request.rs`."><meta name="keywords" content="rust, rustlang, rust-lang"><title>request.rs.html -- source</title><link rel="stylesheet" type="text/css" href="../../normalize.css"><link rel="stylesheet" type="text/css" href="../../rustdoc.css" id="mainThemeStyle"><link rel="stylesheet" type="text/css" href="../../light.css"  id="themeStyle"><link rel="stylesheet" type="text/css" href="../../dark.css" disabled ><link rel="stylesheet" type="text/css" href="../../ayu.css" disabled ><script src="../../storage.js"></script><noscript><link rel="stylesheet" href="../../noscript.css"></noscript><link rel="shortcut icon" href="../../favicon.ico"><style type="text/css">#crate-search{background-image:url("../../down-arrow.svg");}</style></head><body class="rustdoc source"><!--[if lte IE 8]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="sidebar"><div class="sidebar-menu">&#9776;</div><a href='../../sync15_traits/index.html'><div class='logo-container rust-logo'><img src='../../rust-logo.png' alt='logo'></div></a></nav><div class="theme-picker"><button id="theme-picker" aria-label="Pick another theme!"><img src="../../brush.svg" width="18" alt="Pick another theme!"></button><div id="theme-choices"></div></div><script src="../../theme.js"></script><nav class="sub"><form class="search-form"><div class="search-container"><div><select id="crate-search"><option value="All crates">All crates</option></select><input class="search-input" name="search" disabled autocomplete="off" spellcheck="false" placeholder="Click or press ‘S’ to search, ‘?’ for more options…" type="search"></div><span class="help-button">?</span>
+                <a id="settings-menu" href="../../settings.html"><img src="../../wheel.svg" width="18" alt="Change settings"></a></div></form></nav><section id="main" class="content"><pre class="line-numbers"><span id="1">  1</span>
 <span id="2">  2</span>
 <span id="3">  3</span>
 <span id="4">  4</span>
@@ -184,7 +185,7 @@
 <span class="kw">pub</span> <span class="kw">struct</span> <span class="ident">CollectionRequest</span> {
     <span class="kw">pub</span> <span class="ident">collection</span>: <span class="ident">Cow</span><span class="op">&lt;</span><span class="lifetime">&#39;static</span>, <span class="ident">str</span><span class="op">&gt;</span>,
     <span class="kw">pub</span> <span class="ident">full</span>: <span class="ident">bool</span>,
-    <span class="kw">pub</span> <span class="ident">ids</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">Vec</span><span class="op">&lt;</span><span class="ident">Guid</span><span class="op">&gt;</span><span class="op">&gt;</span>,
+    <span class="kw">pub</span> <span class="ident">ids</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">Vec</span><span class="op">&lt;</span><span class="ident">Guid</span><span class="op">&gt;&gt;</span>,
     <span class="kw">pub</span> <span class="ident">limit</span>: <span class="ident">usize</span>,
     <span class="kw">pub</span> <span class="ident">older</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">ServerTimestamp</span><span class="op">&gt;</span>,
     <span class="kw">pub</span> <span class="ident">newer</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">ServerTimestamp</span><span class="op">&gt;</span>,
@@ -195,9 +196,9 @@
 
 <span class="kw">impl</span> <span class="ident">CollectionRequest</span> {
     <span class="attribute">#[<span class="ident">inline</span>]</span>
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">new</span><span class="op">&lt;</span><span class="ident">S</span><span class="op">&gt;</span>(<span class="ident">collection</span>: <span class="ident">S</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">CollectionRequest</span>
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">new</span><span class="op">&lt;</span><span class="ident">S</span><span class="op">&gt;</span>(<span class="ident">collection</span>: <span class="ident">S</span>) <span class="op">-&gt;</span> <span class="ident">CollectionRequest</span>
     <span class="kw">where</span>
-        <span class="ident">S</span>: <span class="ident">Into</span><span class="op">&lt;</span><span class="ident">Cow</span><span class="op">&lt;</span><span class="lifetime">&#39;static</span>, <span class="ident">str</span><span class="op">&gt;</span><span class="op">&gt;</span>,
+        <span class="ident">S</span>: <span class="ident">Into</span><span class="op">&lt;</span><span class="ident">Cow</span><span class="op">&lt;</span><span class="lifetime">&#39;static</span>, <span class="ident">str</span><span class="op">&gt;&gt;</span>,
     {
         <span class="ident">CollectionRequest</span> {
             <span class="ident">collection</span>: <span class="ident">collection</span>.<span class="ident">into</span>(),
@@ -213,7 +214,7 @@
     }
 
     <span class="attribute">#[<span class="ident">inline</span>]</span>
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">ids</span><span class="op">&lt;</span><span class="ident">V</span><span class="op">&gt;</span>(<span class="kw-2">mut</span> <span class="self">self</span>, <span class="ident">v</span>: <span class="ident">V</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">CollectionRequest</span>
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">ids</span><span class="op">&lt;</span><span class="ident">V</span><span class="op">&gt;</span>(<span class="kw-2">mut</span> <span class="self">self</span>, <span class="ident">v</span>: <span class="ident">V</span>) <span class="op">-&gt;</span> <span class="ident">CollectionRequest</span>
     <span class="kw">where</span>
         <span class="ident">V</span>: <span class="ident">IntoIterator</span>,
         <span class="ident">V</span>::<span class="ident">Item</span>: <span class="ident">Into</span><span class="op">&lt;</span><span class="ident">Guid</span><span class="op">&gt;</span>,
@@ -223,48 +224,48 @@
     }
 
     <span class="attribute">#[<span class="ident">inline</span>]</span>
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">full</span>(<span class="kw-2">mut</span> <span class="self">self</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">CollectionRequest</span> {
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">full</span>(<span class="kw-2">mut</span> <span class="self">self</span>) <span class="op">-&gt;</span> <span class="ident">CollectionRequest</span> {
         <span class="self">self</span>.<span class="ident">full</span> <span class="op">=</span> <span class="bool-val">true</span>;
         <span class="self">self</span>
     }
 
     <span class="attribute">#[<span class="ident">inline</span>]</span>
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">older_than</span>(<span class="kw-2">mut</span> <span class="self">self</span>, <span class="ident">ts</span>: <span class="ident">ServerTimestamp</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">CollectionRequest</span> {
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">older_than</span>(<span class="kw-2">mut</span> <span class="self">self</span>, <span class="ident">ts</span>: <span class="ident">ServerTimestamp</span>) <span class="op">-&gt;</span> <span class="ident">CollectionRequest</span> {
         <span class="self">self</span>.<span class="ident">older</span> <span class="op">=</span> <span class="prelude-val">Some</span>(<span class="ident">ts</span>);
         <span class="self">self</span>
     }
 
     <span class="attribute">#[<span class="ident">inline</span>]</span>
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">newer_than</span>(<span class="kw-2">mut</span> <span class="self">self</span>, <span class="ident">ts</span>: <span class="ident">ServerTimestamp</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">CollectionRequest</span> {
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">newer_than</span>(<span class="kw-2">mut</span> <span class="self">self</span>, <span class="ident">ts</span>: <span class="ident">ServerTimestamp</span>) <span class="op">-&gt;</span> <span class="ident">CollectionRequest</span> {
         <span class="self">self</span>.<span class="ident">newer</span> <span class="op">=</span> <span class="prelude-val">Some</span>(<span class="ident">ts</span>);
         <span class="self">self</span>
     }
 
     <span class="attribute">#[<span class="ident">inline</span>]</span>
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">sort_by</span>(<span class="kw-2">mut</span> <span class="self">self</span>, <span class="ident">order</span>: <span class="ident">RequestOrder</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">CollectionRequest</span> {
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">sort_by</span>(<span class="kw-2">mut</span> <span class="self">self</span>, <span class="ident">order</span>: <span class="ident">RequestOrder</span>) <span class="op">-&gt;</span> <span class="ident">CollectionRequest</span> {
         <span class="self">self</span>.<span class="ident">order</span> <span class="op">=</span> <span class="prelude-val">Some</span>(<span class="ident">order</span>);
         <span class="self">self</span>
     }
 
     <span class="attribute">#[<span class="ident">inline</span>]</span>
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">limit</span>(<span class="kw-2">mut</span> <span class="self">self</span>, <span class="ident">num</span>: <span class="ident">usize</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">CollectionRequest</span> {
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">limit</span>(<span class="kw-2">mut</span> <span class="self">self</span>, <span class="ident">num</span>: <span class="ident">usize</span>) <span class="op">-&gt;</span> <span class="ident">CollectionRequest</span> {
         <span class="self">self</span>.<span class="ident">limit</span> <span class="op">=</span> <span class="ident">num</span>;
         <span class="self">self</span>
     }
 
     <span class="attribute">#[<span class="ident">inline</span>]</span>
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">batch</span>(<span class="kw-2">mut</span> <span class="self">self</span>, <span class="ident">batch</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">String</span><span class="op">&gt;</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">CollectionRequest</span> {
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">batch</span>(<span class="kw-2">mut</span> <span class="self">self</span>, <span class="ident">batch</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">String</span><span class="op">&gt;</span>) <span class="op">-&gt;</span> <span class="ident">CollectionRequest</span> {
         <span class="self">self</span>.<span class="ident">batch</span> <span class="op">=</span> <span class="ident">batch</span>;
         <span class="self">self</span>
     }
 
     <span class="attribute">#[<span class="ident">inline</span>]</span>
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">commit</span>(<span class="kw-2">mut</span> <span class="self">self</span>, <span class="ident">v</span>: <span class="ident">bool</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">CollectionRequest</span> {
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">commit</span>(<span class="kw-2">mut</span> <span class="self">self</span>, <span class="ident">v</span>: <span class="ident">bool</span>) <span class="op">-&gt;</span> <span class="ident">CollectionRequest</span> {
         <span class="self">self</span>.<span class="ident">commit</span> <span class="op">=</span> <span class="ident">v</span>;
         <span class="self">self</span>
     }
 
-    <span class="kw">fn</span> <span class="ident">build_query</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">pairs</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">form</span>::<span class="ident">Serializer</span><span class="op">&lt;</span><span class="lifetime">&#39;_</span>, <span class="ident">UrlQuery</span><span class="op">&lt;</span><span class="lifetime">&#39;_</span><span class="op">&gt;</span><span class="op">&gt;</span>) {
+    <span class="kw">fn</span> <span class="ident">build_query</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">pairs</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">form</span>::<span class="ident">Serializer</span><span class="op">&lt;</span><span class="lifetime">&#39;_</span>, <span class="ident">UrlQuery</span><span class="op">&lt;</span><span class="lifetime">&#39;_</span><span class="op">&gt;&gt;</span>) {
         <span class="kw">if</span> <span class="self">self</span>.<span class="ident">full</span> {
             <span class="ident">pairs</span>.<span class="ident">append_pair</span>(<span class="string">&quot;full&quot;</span>, <span class="string">&quot;1&quot;</span>);
         }
@@ -300,7 +301,7 @@
         <span class="ident">pairs</span>.<span class="ident">finish</span>();
     }
 
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">build_url</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="kw-2">mut</span> <span class="ident">base_url</span>: <span class="ident">Url</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">Url</span>, <span class="ident">UnacceptableBaseUrl</span><span class="op">&gt;</span> {
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">build_url</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="kw-2">mut</span> <span class="ident">base_url</span>: <span class="ident">Url</span>) <span class="op">-&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">Url</span>, <span class="ident">UnacceptableBaseUrl</span><span class="op">&gt;</span> {
         <span class="ident">base_url</span>
             .<span class="ident">path_segments_mut</span>()
             .<span class="ident">map_err</span>(<span class="op">|</span><span class="kw">_</span><span class="op">|</span> <span class="ident">UnacceptableBaseUrl</span>(()))<span class="question-mark">?</span>
@@ -310,7 +311,7 @@
         <span class="comment">// a trailing question mark on your url. I don&#39;t think anything bad</span>
         <span class="comment">// would happen here, but I don&#39;t know, and also, it looks dumb so</span>
         <span class="comment">// I&#39;d rather not have it.</span>
-        <span class="kw">if</span> <span class="ident">base_url</span>.<span class="ident">query</span>() <span class="op">=</span><span class="op">=</span> <span class="prelude-val">Some</span>(<span class="string">&quot;&quot;</span>) {
+        <span class="kw">if</span> <span class="ident">base_url</span>.<span class="ident">query</span>() <span class="op">==</span> <span class="prelude-val">Some</span>(<span class="string">&quot;&quot;</span>) {
             <span class="ident">base_url</span>.<span class="ident">set_query</span>(<span class="prelude-val">None</span>);
         }
         <span class="prelude-val">Ok</span>(<span class="ident">base_url</span>)
@@ -320,7 +321,7 @@
 <span class="kw">pub</span> <span class="kw">struct</span> <span class="ident">UnacceptableBaseUrl</span>(());
 
 <span class="kw">impl</span> <span class="ident">std</span>::<span class="ident">fmt</span>::<span class="ident">Display</span> <span class="kw">for</span> <span class="ident">UnacceptableBaseUrl</span> {
-    <span class="kw">fn</span> <span class="ident">fmt</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">f</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">std</span>::<span class="ident">fmt</span>::<span class="ident">Formatter</span><span class="op">&lt;</span><span class="lifetime">&#39;_</span><span class="op">&gt;</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">std</span>::<span class="ident">fmt</span>::<span class="prelude-ty">Result</span> {
+    <span class="kw">fn</span> <span class="ident">fmt</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">f</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">std</span>::<span class="ident">fmt</span>::<span class="ident">Formatter</span><span class="op">&lt;</span><span class="lifetime">&#39;_</span><span class="op">&gt;</span>) <span class="op">-&gt;</span> <span class="ident">std</span>::<span class="ident">fmt</span>::<span class="prelude-ty">Result</span> {
         <span class="ident">f</span>.<span class="ident">write_str</span>(<span class="string">&quot;Storage server URL is not a base&quot;</span>)
     }
 }
@@ -335,17 +336,17 @@
 
 <span class="kw">impl</span> <span class="ident">RequestOrder</span> {
     <span class="attribute">#[<span class="ident">inline</span>]</span>
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">as_str</span>(<span class="self">self</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="kw-2">&amp;</span><span class="lifetime">&#39;static</span> <span class="ident">str</span> {
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">as_str</span>(<span class="self">self</span>) <span class="op">-&gt;</span> <span class="kw-2">&amp;</span><span class="lifetime">&#39;static</span> <span class="ident">str</span> {
         <span class="kw">match</span> <span class="self">self</span> {
-            <span class="ident">RequestOrder</span>::<span class="ident">Oldest</span> <span class="op">=</span><span class="op">&gt;</span> <span class="string">&quot;oldest&quot;</span>,
-            <span class="ident">RequestOrder</span>::<span class="ident">Newest</span> <span class="op">=</span><span class="op">&gt;</span> <span class="string">&quot;newest&quot;</span>,
-            <span class="ident">RequestOrder</span>::<span class="ident">Index</span> <span class="op">=</span><span class="op">&gt;</span> <span class="string">&quot;index&quot;</span>,
+            <span class="ident">RequestOrder</span>::<span class="ident">Oldest</span> <span class="op">=&gt;</span> <span class="string">&quot;oldest&quot;</span>,
+            <span class="ident">RequestOrder</span>::<span class="ident">Newest</span> <span class="op">=&gt;</span> <span class="string">&quot;newest&quot;</span>,
+            <span class="ident">RequestOrder</span>::<span class="ident">Index</span> <span class="op">=&gt;</span> <span class="string">&quot;index&quot;</span>,
         }
     }
 }
 
 <span class="kw">impl</span> <span class="ident">std</span>::<span class="ident">fmt</span>::<span class="ident">Display</span> <span class="kw">for</span> <span class="ident">RequestOrder</span> {
-    <span class="kw">fn</span> <span class="ident">fmt</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">f</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">std</span>::<span class="ident">fmt</span>::<span class="ident">Formatter</span><span class="op">&lt;</span><span class="lifetime">&#39;_</span><span class="op">&gt;</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">std</span>::<span class="ident">fmt</span>::<span class="prelude-ty">Result</span> {
+    <span class="kw">fn</span> <span class="ident">fmt</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">f</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">std</span>::<span class="ident">fmt</span>::<span class="ident">Formatter</span><span class="op">&lt;</span><span class="lifetime">&#39;_</span><span class="op">&gt;</span>) <span class="op">-&gt;</span> <span class="ident">std</span>::<span class="ident">fmt</span>::<span class="prelude-ty">Result</span> {
         <span class="ident">f</span>.<span class="ident">write_str</span>(<span class="self">self</span>.<span class="ident">as_str</span>())
     }
 }

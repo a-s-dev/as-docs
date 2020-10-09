@@ -1,4 +1,5 @@
-<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source to the Rust file `components/logins/ffi/src/lib.rs`."><meta name="keywords" content="rust, rustlang, rust-lang"><title>lib.rs.html -- source</title><link rel="stylesheet" type="text/css" href="../../normalize.css"><link rel="stylesheet" type="text/css" href="../../rustdoc.css" id="mainThemeStyle"><link rel="stylesheet" type="text/css" href="../../dark.css"><link rel="stylesheet" type="text/css" href="../../light.css" id="themeStyle"><script src="../../storage.js"></script><noscript><link rel="stylesheet" href="../../noscript.css"></noscript><link rel="shortcut icon" href="../../favicon.ico"><style type="text/css">#crate-search{background-image:url("../../down-arrow.svg");}</style></head><body class="rustdoc source"><!--[if lte IE 8]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="sidebar"><div class="sidebar-menu">&#9776;</div><a href='../../logins_ffi/index.html'><div class='logo-container'><img src='../../rust-logo.png' alt='logo'></div></a></nav><div class="theme-picker"><button id="theme-picker" aria-label="Pick another theme!"><img src="../../brush.svg" width="18" alt="Pick another theme!"></button><div id="theme-choices"></div></div><script src="../../theme.js"></script><nav class="sub"><form class="search-form"><div class="search-container"><div><select id="crate-search"><option value="All crates">All crates</option></select><input class="search-input" name="search" disabled autocomplete="off" spellcheck="false" placeholder="Click or press ‘S’ to search, ‘?’ for more options…" type="search"></div><a id="settings-menu" href="../../settings.html"><img src="../../wheel.svg" width="18" alt="Change settings"></a></div></form></nav><section id="main" class="content"><pre class="line-numbers"><span id="1">  1</span>
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source to the Rust file `components/logins/ffi/src/lib.rs`."><meta name="keywords" content="rust, rustlang, rust-lang"><title>lib.rs.html -- source</title><link rel="stylesheet" type="text/css" href="../../normalize.css"><link rel="stylesheet" type="text/css" href="../../rustdoc.css" id="mainThemeStyle"><link rel="stylesheet" type="text/css" href="../../light.css"  id="themeStyle"><link rel="stylesheet" type="text/css" href="../../dark.css" disabled ><link rel="stylesheet" type="text/css" href="../../ayu.css" disabled ><script src="../../storage.js"></script><noscript><link rel="stylesheet" href="../../noscript.css"></noscript><link rel="shortcut icon" href="../../favicon.ico"><style type="text/css">#crate-search{background-image:url("../../down-arrow.svg");}</style></head><body class="rustdoc source"><!--[if lte IE 8]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="sidebar"><div class="sidebar-menu">&#9776;</div><a href='../../logins_ffi/index.html'><div class='logo-container rust-logo'><img src='../../rust-logo.png' alt='logo'></div></a></nav><div class="theme-picker"><button id="theme-picker" aria-label="Pick another theme!"><img src="../../brush.svg" width="18" alt="Pick another theme!"></button><div id="theme-choices"></div></div><script src="../../theme.js"></script><nav class="sub"><form class="search-form"><div class="search-container"><div><select id="crate-search"><option value="All crates">All crates</option></select><input class="search-input" name="search" disabled autocomplete="off" spellcheck="false" placeholder="Click or press ‘S’ to search, ‘?’ for more options…" type="search"></div><span class="help-button">?</span>
+                <a id="settings-menu" href="../../settings.html"><img src="../../wheel.svg" width="18" alt="Change settings"></a></div></form></nav><section id="main" class="content"><pre class="line-numbers"><span id="1">  1</span>
 <span id="2">  2</span>
 <span id="3">  3</span>
 <span id="4">  4</span>
@@ -463,7 +464,7 @@
     <span class="comment">// TODO: this is basically a RwLock&lt;HandleMap&lt;Mutex&lt;Arc&lt;Mutex&lt;...&gt;&gt;&gt;&gt;.</span>
     <span class="comment">// but could just be a `RwLock&lt;HandleMap&lt;Arc&lt;Mutex&lt;...&gt;&gt;&gt;&gt;`.</span>
     <span class="comment">// Find a way to express this cleanly in ffi_support?</span>
-    <span class="kw">pub</span> <span class="kw">static</span> <span class="kw-2">ref</span> <span class="ident">ENGINES</span>: <span class="ident">ConcurrentHandleMap</span><span class="op">&lt;</span><span class="ident">Arc</span><span class="op">&lt;</span><span class="ident">Mutex</span><span class="op">&lt;</span><span class="ident">PasswordEngine</span><span class="op">&gt;</span><span class="op">&gt;</span><span class="op">&gt;</span> <span class="op">=</span> <span class="ident">ConcurrentHandleMap</span>::<span class="ident">new</span>();
+    <span class="kw">pub</span> <span class="kw">static</span> <span class="kw-2">ref</span> <span class="ident">ENGINES</span>: <span class="ident">ConcurrentHandleMap</span><span class="op">&lt;</span><span class="ident">Arc</span><span class="op">&lt;</span><span class="ident">Mutex</span><span class="op">&lt;</span><span class="ident">PasswordEngine</span><span class="op">&gt;&gt;</span><span class="op">&gt;</span> <span class="op">=</span> <span class="ident">ConcurrentHandleMap</span>::<span class="ident">new</span>();
 }
 
 <span class="attribute">#[<span class="ident">no_mangle</span>]</span>
@@ -471,9 +472,9 @@
     <span class="ident">db_path</span>: <span class="ident">FfiStr</span><span class="op">&lt;</span><span class="lifetime">&#39;_</span><span class="op">&gt;</span>,
     <span class="ident">encryption_key</span>: <span class="ident">FfiStr</span><span class="op">&lt;</span><span class="lifetime">&#39;_</span><span class="op">&gt;</span>,
     <span class="ident">error</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">ExternError</span>,
-) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">u64</span> {
+) <span class="op">-&gt;</span> <span class="ident">u64</span> {
     <span class="ident">log</span>::<span class="macro">debug</span><span class="macro">!</span>(<span class="string">&quot;sync15_passwords_state_new&quot;</span>);
-    <span class="ident">ENGINES</span>.<span class="ident">insert_with_result</span>(<span class="ident">error</span>, <span class="op">|</span><span class="op">|</span> <span class="op">-</span><span class="op">&gt;</span> <span class="ident">logins</span>::<span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="kw">_</span><span class="op">&gt;</span> {
+    <span class="ident">ENGINES</span>.<span class="ident">insert_with_result</span>(<span class="ident">error</span>, <span class="op">||</span> <span class="op">-&gt;</span> <span class="ident">logins</span>::<span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="kw">_</span><span class="op">&gt;</span> {
         <span class="kw">let</span> <span class="ident">path</span> <span class="op">=</span> <span class="ident">db_path</span>.<span class="ident">as_str</span>();
         <span class="kw">let</span> <span class="ident">key</span> <span class="op">=</span> <span class="ident">encryption_key</span>.<span class="ident">as_str</span>();
         <span class="prelude-val">Ok</span>(<span class="ident">Arc</span>::<span class="ident">new</span>(<span class="ident">Mutex</span>::<span class="ident">new</span>(<span class="ident">PasswordEngine</span>::<span class="ident">new</span>(<span class="ident">path</span>, <span class="prelude-val">Some</span>(<span class="ident">key</span>))<span class="question-mark">?</span>)))
@@ -486,9 +487,9 @@
     <span class="ident">encryption_key</span>: <span class="ident">FfiStr</span><span class="op">&lt;</span><span class="lifetime">&#39;_</span><span class="op">&gt;</span>,
     <span class="ident">salt</span>: <span class="ident">FfiStr</span><span class="op">&lt;</span><span class="lifetime">&#39;_</span><span class="op">&gt;</span>,
     <span class="ident">error</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">ExternError</span>,
-) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">u64</span> {
+) <span class="op">-&gt;</span> <span class="ident">u64</span> {
     <span class="ident">log</span>::<span class="macro">debug</span><span class="macro">!</span>(<span class="string">&quot;sync15_passwords_state_new_with_salt&quot;</span>);
-    <span class="ident">ENGINES</span>.<span class="ident">insert_with_result</span>(<span class="ident">error</span>, <span class="op">|</span><span class="op">|</span> <span class="op">-</span><span class="op">&gt;</span> <span class="ident">logins</span>::<span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="kw">_</span><span class="op">&gt;</span> {
+    <span class="ident">ENGINES</span>.<span class="ident">insert_with_result</span>(<span class="ident">error</span>, <span class="op">||</span> <span class="op">-&gt;</span> <span class="ident">logins</span>::<span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="kw">_</span><span class="op">&gt;</span> {
         <span class="kw">let</span> <span class="ident">path</span> <span class="op">=</span> <span class="ident">db_path</span>.<span class="ident">as_str</span>();
         <span class="kw">let</span> <span class="ident">key</span> <span class="op">=</span> <span class="ident">encryption_key</span>.<span class="ident">as_str</span>();
         <span class="kw">let</span> <span class="ident">salt</span> <span class="op">=</span> <span class="ident">salt</span>.<span class="ident">as_str</span>();
@@ -499,12 +500,12 @@
 }
 
 <span class="attribute">#[<span class="ident">no_mangle</span>]</span>
-<span class="kw">pub</span> <span class="kw">extern</span> <span class="string">&quot;C&quot;</span> <span class="kw">fn</span> <span class="ident">sync15_passwords_num_open_connections</span>(<span class="ident">error</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">ExternError</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">u64</span> {
-    <span class="ident">ffi_support</span>::<span class="ident">call_with_output</span>(<span class="ident">error</span>, <span class="op">|</span><span class="op">|</span> <span class="ident">ENGINES</span>.<span class="ident">len</span>() <span class="kw">as</span> <span class="ident">u64</span>)
+<span class="kw">pub</span> <span class="kw">extern</span> <span class="string">&quot;C&quot;</span> <span class="kw">fn</span> <span class="ident">sync15_passwords_num_open_connections</span>(<span class="ident">error</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">ExternError</span>) <span class="op">-&gt;</span> <span class="ident">u64</span> {
+    <span class="ident">ffi_support</span>::<span class="ident">call_with_output</span>(<span class="ident">error</span>, <span class="op">||</span> <span class="ident">ENGINES</span>.<span class="ident">len</span>() <span class="kw">as</span> <span class="ident">u64</span>)
 }
 
-<span class="kw">unsafe</span> <span class="kw">fn</span> <span class="ident">bytes_to_key_string</span>(<span class="ident">key_bytes</span>: <span class="kw-2">*</span><span class="kw">const</span> <span class="ident">u8</span>, <span class="ident">len</span>: <span class="ident">usize</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">String</span><span class="op">&gt;</span> {
-    <span class="kw">if</span> <span class="ident">len</span> <span class="op">=</span><span class="op">=</span> <span class="number">0</span> {
+<span class="kw">unsafe</span> <span class="kw">fn</span> <span class="ident">bytes_to_key_string</span>(<span class="ident">key_bytes</span>: <span class="kw-2">*</span><span class="kw">const</span> <span class="ident">u8</span>, <span class="ident">len</span>: <span class="ident">usize</span>) <span class="op">-&gt;</span> <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">String</span><span class="op">&gt;</span> {
+    <span class="kw">if</span> <span class="ident">len</span> <span class="op">==</span> <span class="number">0</span> {
         <span class="ident">log</span>::<span class="macro">info</span><span class="macro">!</span>(<span class="string">&quot;Opening/Creating unencrypted database!&quot;</span>);
         <span class="kw">return</span> <span class="prelude-val">None</span>;
     } <span class="kw">else</span> {
@@ -532,9 +533,9 @@
     <span class="ident">encryption_key</span>: <span class="kw-2">*</span><span class="kw">const</span> <span class="ident">u8</span>,
     <span class="ident">encryption_key_len</span>: <span class="ident">u32</span>,
     <span class="ident">error</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">ExternError</span>,
-) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">u64</span> {
+) <span class="op">-&gt;</span> <span class="ident">u64</span> {
     <span class="ident">log</span>::<span class="macro">debug</span><span class="macro">!</span>(<span class="string">&quot;sync15_passwords_state_new_with_hex_key&quot;</span>);
-    <span class="ident">ENGINES</span>.<span class="ident">insert_with_result</span>(<span class="ident">error</span>, <span class="op">|</span><span class="op">|</span> <span class="op">-</span><span class="op">&gt;</span> <span class="ident">logins</span>::<span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="kw">_</span><span class="op">&gt;</span> {
+    <span class="ident">ENGINES</span>.<span class="ident">insert_with_result</span>(<span class="ident">error</span>, <span class="op">||</span> <span class="op">-&gt;</span> <span class="ident">logins</span>::<span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="kw">_</span><span class="op">&gt;</span> {
         <span class="kw">let</span> <span class="ident">path</span> <span class="op">=</span> <span class="ident">db_path</span>.<span class="ident">as_str</span>();
         <span class="kw">let</span> <span class="ident">key</span> <span class="op">=</span> <span class="ident">bytes_to_key_string</span>(<span class="ident">encryption_key</span>, <span class="ident">encryption_key_len</span> <span class="kw">as</span> <span class="ident">usize</span>);
         <span class="comment">// We have a Option&lt;String&gt;, but need an Option&lt;&amp;str&gt;...</span>
@@ -556,11 +557,11 @@
     <span class="ident">db_path</span>: <span class="ident">FfiStr</span><span class="op">&lt;</span><span class="lifetime">&#39;_</span><span class="op">&gt;</span>,
     <span class="ident">encryption_key</span>: <span class="ident">FfiStr</span><span class="op">&lt;</span><span class="lifetime">&#39;_</span><span class="op">&gt;</span>,
     <span class="ident">error</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">ExternError</span>,
-) <span class="op">-</span><span class="op">&gt;</span> <span class="kw-2">*</span><span class="kw-2">mut</span> <span class="ident">c_char</span> {
+) <span class="op">-&gt;</span> <span class="kw-2">*</span><span class="kw-2">mut</span> <span class="ident">c_char</span> {
     <span class="ident">log</span>::<span class="macro">debug</span><span class="macro">!</span>(<span class="string">&quot;sync15_passwords_get_db_salt&quot;</span>);
     <span class="kw">let</span> <span class="ident">path</span> <span class="op">=</span> <span class="ident">db_path</span>.<span class="ident">as_str</span>();
     <span class="kw">let</span> <span class="ident">key</span> <span class="op">=</span> <span class="ident">encryption_key</span>.<span class="ident">as_str</span>();
-    <span class="ident">ffi_support</span>::<span class="ident">call_with_result</span>(<span class="ident">error</span>, <span class="op">|</span><span class="op">|</span> <span class="ident">LoginDb</span>::<span class="ident">open_and_get_salt</span>(<span class="ident">path</span>, <span class="ident">key</span>))
+    <span class="ident">ffi_support</span>::<span class="ident">call_with_result</span>(<span class="ident">error</span>, <span class="op">||</span> <span class="ident">LoginDb</span>::<span class="ident">open_and_get_salt</span>(<span class="ident">path</span>, <span class="ident">key</span>))
 }
 
 <span class="doccomment">/// Opens an existing database that stores its salt in the header bytes and migrates it</span>
@@ -580,20 +581,20 @@
     <span class="kw">let</span> <span class="ident">path</span> <span class="op">=</span> <span class="ident">db_path</span>.<span class="ident">as_str</span>();
     <span class="kw">let</span> <span class="ident">key</span> <span class="op">=</span> <span class="ident">encryption_key</span>.<span class="ident">as_str</span>();
     <span class="kw">let</span> <span class="ident">salt</span> <span class="op">=</span> <span class="ident">salt</span>.<span class="ident">as_str</span>();
-    <span class="ident">ffi_support</span>::<span class="ident">call_with_result</span>(<span class="ident">error</span>, <span class="op">|</span><span class="op">|</span> {
+    <span class="ident">ffi_support</span>::<span class="ident">call_with_result</span>(<span class="ident">error</span>, <span class="op">||</span> {
         <span class="ident">LoginDb</span>::<span class="ident">open_and_migrate_to_plaintext_header</span>(<span class="ident">path</span>, <span class="ident">key</span>, <span class="ident">salt</span>)
     })
 }
 
 <span class="comment">// indirection to help `?` figure out the target error type</span>
-<span class="kw">fn</span> <span class="ident">parse_url</span>(<span class="ident">url</span>: <span class="kw-2">&amp;</span><span class="ident">str</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">sync15</span>::<span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">url</span>::<span class="ident">Url</span><span class="op">&gt;</span> {
+<span class="kw">fn</span> <span class="ident">parse_url</span>(<span class="ident">url</span>: <span class="kw-2">&amp;</span><span class="ident">str</span>) <span class="op">-&gt;</span> <span class="ident">sync15</span>::<span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">url</span>::<span class="ident">Url</span><span class="op">&gt;</span> {
     <span class="prelude-val">Ok</span>(<span class="ident">url</span>::<span class="ident">Url</span>::<span class="ident">parse</span>(<span class="ident">url</span>)<span class="question-mark">?</span>)
 }
 
 <span class="attribute">#[<span class="ident">no_mangle</span>]</span>
 <span class="kw">pub</span> <span class="kw">extern</span> <span class="string">&quot;C&quot;</span> <span class="kw">fn</span> <span class="ident">sync15_passwords_disable_mem_security</span>(<span class="ident">handle</span>: <span class="ident">u64</span>, <span class="ident">error</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">ExternError</span>) {
     <span class="ident">log</span>::<span class="macro">debug</span><span class="macro">!</span>(<span class="string">&quot;sync15_passwords_disable_mem_security&quot;</span>);
-    <span class="ident">ENGINES</span>.<span class="ident">call_with_result</span>(<span class="ident">error</span>, <span class="ident">handle</span>, <span class="op">|</span><span class="ident">state</span><span class="op">|</span> <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span>()<span class="op">&gt;</span> {
+    <span class="ident">ENGINES</span>.<span class="ident">call_with_result</span>(<span class="ident">error</span>, <span class="ident">handle</span>, <span class="op">|</span><span class="ident">state</span><span class="op">|</span> <span class="op">-&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span>()<span class="op">&gt;</span> {
         <span class="ident">state</span>.<span class="ident">lock</span>().<span class="ident">unwrap</span>().<span class="ident">disable_mem_security</span>()
     })
 }
@@ -606,7 +607,7 @@
 ) {
     <span class="ident">log</span>::<span class="macro">debug</span><span class="macro">!</span>(<span class="string">&quot;sync15_passwords_rekey_database&quot;</span>);
     <span class="kw">let</span> <span class="ident">new_key</span> <span class="op">=</span> <span class="ident">new_encryption_key</span>.<span class="ident">as_str</span>();
-    <span class="ident">ENGINES</span>.<span class="ident">call_with_result</span>(<span class="ident">error</span>, <span class="ident">handle</span>, <span class="op">|</span><span class="ident">state</span><span class="op">|</span> <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span>()<span class="op">&gt;</span> {
+    <span class="ident">ENGINES</span>.<span class="ident">call_with_result</span>(<span class="ident">error</span>, <span class="ident">handle</span>, <span class="op">|</span><span class="ident">state</span><span class="op">|</span> <span class="op">-&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span>()<span class="op">&gt;</span> {
         <span class="ident">state</span>.<span class="ident">lock</span>().<span class="ident">unwrap</span>().<span class="ident">rekey_database</span>(<span class="ident">new_key</span>)
     })
 }
@@ -628,7 +629,7 @@
     <span class="ident">error</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">ExternError</span>,
 ) {
     <span class="ident">log</span>::<span class="macro">debug</span><span class="macro">!</span>(<span class="string">&quot;sync15_passwords_rekey_database_with_hex_key&quot;</span>);
-    <span class="ident">ENGINES</span>.<span class="ident">call_with_result</span>(<span class="ident">error</span>, <span class="ident">handle</span>, <span class="op">|</span><span class="ident">state</span><span class="op">|</span> <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span>()<span class="op">&gt;</span> {
+    <span class="ident">ENGINES</span>.<span class="ident">call_with_result</span>(<span class="ident">error</span>, <span class="ident">handle</span>, <span class="op">|</span><span class="ident">state</span><span class="op">|</span> <span class="op">-&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span>()<span class="op">&gt;</span> {
         <span class="kw">let</span> <span class="ident">new_key</span> <span class="op">=</span>
             <span class="ident">bytes_to_key_string</span>(<span class="ident">new_encryption_key</span>, <span class="ident">new_encryption_key_len</span> <span class="kw">as</span> <span class="ident">usize</span>).<span class="ident">unwrap</span>();
         <span class="ident">state</span>.<span class="ident">lock</span>().<span class="ident">unwrap</span>().<span class="ident">rekey_database</span>(<span class="kw-2">&amp;</span><span class="ident">new_key</span>)
@@ -643,9 +644,9 @@
     <span class="ident">sync_key</span>: <span class="ident">FfiStr</span><span class="op">&lt;</span><span class="lifetime">&#39;_</span><span class="op">&gt;</span>,
     <span class="ident">tokenserver_url</span>: <span class="ident">FfiStr</span><span class="op">&lt;</span><span class="lifetime">&#39;_</span><span class="op">&gt;</span>,
     <span class="ident">error</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">ExternError</span>,
-) <span class="op">-</span><span class="op">&gt;</span> <span class="kw-2">*</span><span class="kw-2">mut</span> <span class="ident">c_char</span> {
+) <span class="op">-&gt;</span> <span class="kw-2">*</span><span class="kw-2">mut</span> <span class="ident">c_char</span> {
     <span class="ident">log</span>::<span class="macro">debug</span><span class="macro">!</span>(<span class="string">&quot;sync15_passwords_sync&quot;</span>);
-    <span class="ident">ENGINES</span>.<span class="ident">call_with_result</span>(<span class="ident">error</span>, <span class="ident">handle</span>, <span class="op">|</span><span class="ident">state</span><span class="op">|</span> <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="kw">_</span><span class="op">&gt;</span> {
+    <span class="ident">ENGINES</span>.<span class="ident">call_with_result</span>(<span class="ident">error</span>, <span class="ident">handle</span>, <span class="op">|</span><span class="ident">state</span><span class="op">|</span> <span class="op">-&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="kw">_</span><span class="op">&gt;</span> {
         <span class="kw">let</span> <span class="ident">ping</span> <span class="op">=</span> <span class="ident">state</span>.<span class="ident">lock</span>().<span class="ident">unwrap</span>().<span class="ident">sync</span>(
             <span class="kw-2">&amp;</span><span class="ident">sync15</span>::<span class="ident">Sync15StorageClientInit</span> {
                 <span class="ident">key_id</span>: <span class="ident">key_id</span>.<span class="ident">into_string</span>(),
@@ -667,9 +668,9 @@
 }
 
 <span class="comment">// Should we put this function in ffi_support as a `unsafe pub fn`?</span>
-<span class="kw">unsafe</span> <span class="kw">fn</span> <span class="ident">get_buffer</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span><span class="op">&gt;</span>(<span class="ident">data</span>: <span class="kw-2">*</span><span class="kw">const</span> <span class="ident">u8</span>, <span class="ident">len</span>: <span class="ident">i32</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="kw-2">&amp;</span><span class="lifetime">&#39;a</span> [<span class="ident">u8</span>] {
-    <span class="macro">assert</span><span class="macro">!</span>(<span class="ident">len</span> <span class="op">&gt;</span><span class="op">=</span> <span class="number">0</span>, <span class="string">&quot;Bad buffer len: {}&quot;</span>, <span class="ident">len</span>);
-    <span class="kw">if</span> <span class="ident">len</span> <span class="op">=</span><span class="op">=</span> <span class="number">0</span> {
+<span class="kw">unsafe</span> <span class="kw">fn</span> <span class="ident">get_buffer</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span><span class="op">&gt;</span>(<span class="ident">data</span>: <span class="kw-2">*</span><span class="kw">const</span> <span class="ident">u8</span>, <span class="ident">len</span>: <span class="ident">i32</span>) <span class="op">-&gt;</span> <span class="kw-2">&amp;</span><span class="lifetime">&#39;a</span> [<span class="ident">u8</span>] {
+    <span class="macro">assert</span><span class="macro">!</span>(<span class="ident">len</span> <span class="op">&gt;=</span> <span class="number">0</span>, <span class="string">&quot;Bad buffer len: {}&quot;</span>, <span class="ident">len</span>);
+    <span class="kw">if</span> <span class="ident">len</span> <span class="op">==</span> <span class="number">0</span> {
         <span class="comment">// This will still fail, but as a bad protobuf format.</span>
         <span class="kw-2">&amp;</span>[]
     } <span class="kw">else</span> {
@@ -703,7 +704,7 @@
     <span class="ident">handle</span>: <span class="ident">u64</span>,
     <span class="ident">id</span>: <span class="ident">FfiStr</span><span class="op">&lt;</span><span class="lifetime">&#39;_</span><span class="op">&gt;</span>,
     <span class="ident">error</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">ExternError</span>,
-) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">u8</span> {
+) <span class="op">-&gt;</span> <span class="ident">u8</span> {
     <span class="ident">log</span>::<span class="macro">debug</span><span class="macro">!</span>(<span class="string">&quot;sync15_passwords_delete&quot;</span>);
     <span class="ident">ENGINES</span>.<span class="ident">call_with_result</span>(<span class="ident">error</span>, <span class="ident">handle</span>, <span class="op">|</span><span class="ident">state</span><span class="op">|</span> {
         <span class="ident">state</span>.<span class="ident">lock</span>().<span class="ident">unwrap</span>().<span class="ident">delete</span>(<span class="ident">id</span>.<span class="ident">as_str</span>())
@@ -732,7 +733,7 @@
 <span class="kw">pub</span> <span class="kw">extern</span> <span class="string">&quot;C&quot;</span> <span class="kw">fn</span> <span class="ident">sync15_passwords_new_interrupt_handle</span>(
     <span class="ident">handle</span>: <span class="ident">u64</span>,
     <span class="ident">error</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">ExternError</span>,
-) <span class="op">-</span><span class="op">&gt;</span> <span class="kw-2">*</span><span class="kw-2">mut</span> <span class="ident">sql_support</span>::<span class="ident">SqlInterruptHandle</span> {
+) <span class="op">-&gt;</span> <span class="kw-2">*</span><span class="kw-2">mut</span> <span class="ident">sql_support</span>::<span class="ident">SqlInterruptHandle</span> {
     <span class="ident">log</span>::<span class="macro">debug</span><span class="macro">!</span>(<span class="string">&quot;sync15_passwords_new_interrupt_handle&quot;</span>);
     <span class="ident">ENGINES</span>.<span class="ident">call_with_output</span>(<span class="ident">error</span>, <span class="ident">handle</span>, <span class="op">|</span><span class="ident">state</span><span class="op">|</span> {
         <span class="ident">state</span>.<span class="ident">lock</span>().<span class="ident">unwrap</span>().<span class="ident">new_interrupt_handle</span>()
@@ -745,13 +746,13 @@
     <span class="ident">error</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">ExternError</span>,
 ) {
     <span class="ident">log</span>::<span class="macro">debug</span><span class="macro">!</span>(<span class="string">&quot;sync15_passwords_interrupt&quot;</span>);
-    <span class="ident">ffi_support</span>::<span class="ident">call_with_output</span>(<span class="ident">error</span>, <span class="op">|</span><span class="op">|</span> <span class="ident">handle</span>.<span class="ident">interrupt</span>())
+    <span class="ident">ffi_support</span>::<span class="ident">call_with_output</span>(<span class="ident">error</span>, <span class="op">||</span> <span class="ident">handle</span>.<span class="ident">interrupt</span>())
 }
 
 <span class="attribute">#[<span class="ident">no_mangle</span>]</span>
-<span class="kw">pub</span> <span class="kw">extern</span> <span class="string">&quot;C&quot;</span> <span class="kw">fn</span> <span class="ident">sync15_passwords_get_all</span>(<span class="ident">handle</span>: <span class="ident">u64</span>, <span class="ident">error</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">ExternError</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">ByteBuffer</span> {
+<span class="kw">pub</span> <span class="kw">extern</span> <span class="string">&quot;C&quot;</span> <span class="kw">fn</span> <span class="ident">sync15_passwords_get_all</span>(<span class="ident">handle</span>: <span class="ident">u64</span>, <span class="ident">error</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">ExternError</span>) <span class="op">-&gt;</span> <span class="ident">ByteBuffer</span> {
     <span class="ident">log</span>::<span class="macro">debug</span><span class="macro">!</span>(<span class="string">&quot;sync15_passwords_get_all&quot;</span>);
-    <span class="ident">ENGINES</span>.<span class="ident">call_with_result</span>(<span class="ident">error</span>, <span class="ident">handle</span>, <span class="op">|</span><span class="ident">state</span><span class="op">|</span> <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="kw">_</span><span class="op">&gt;</span> {
+    <span class="ident">ENGINES</span>.<span class="ident">call_with_result</span>(<span class="ident">error</span>, <span class="ident">handle</span>, <span class="op">|</span><span class="ident">state</span><span class="op">|</span> <span class="op">-&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="kw">_</span><span class="op">&gt;</span> {
         <span class="kw">let</span> <span class="ident">infos</span> <span class="op">=</span> <span class="ident">state</span>
             .<span class="ident">lock</span>()
             .<span class="ident">unwrap</span>()
@@ -768,9 +769,9 @@
     <span class="ident">handle</span>: <span class="ident">u64</span>,
     <span class="ident">base_domain</span>: <span class="ident">FfiStr</span><span class="op">&lt;</span><span class="lifetime">&#39;_</span><span class="op">&gt;</span>,
     <span class="ident">error</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">ExternError</span>,
-) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">ByteBuffer</span> {
+) <span class="op">-&gt;</span> <span class="ident">ByteBuffer</span> {
     <span class="ident">log</span>::<span class="macro">debug</span><span class="macro">!</span>(<span class="string">&quot;sync15_passwords_get_by_base_domain&quot;</span>);
-    <span class="ident">ENGINES</span>.<span class="ident">call_with_result</span>(<span class="ident">error</span>, <span class="ident">handle</span>, <span class="op">|</span><span class="ident">state</span><span class="op">|</span> <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="kw">_</span><span class="op">&gt;</span> {
+    <span class="ident">ENGINES</span>.<span class="ident">call_with_result</span>(<span class="ident">error</span>, <span class="ident">handle</span>, <span class="op">|</span><span class="ident">state</span><span class="op">|</span> <span class="op">-&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="kw">_</span><span class="op">&gt;</span> {
         <span class="kw">let</span> <span class="ident">infos</span> <span class="op">=</span> <span class="ident">state</span>
             .<span class="ident">lock</span>()
             .<span class="ident">unwrap</span>()
@@ -790,9 +791,9 @@
     <span class="ident">data</span>: <span class="kw-2">*</span><span class="kw">const</span> <span class="ident">u8</span>,
     <span class="ident">len</span>: <span class="ident">i32</span>,
     <span class="ident">error</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">ExternError</span>,
-) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">ByteBuffer</span> {
+) <span class="op">-&gt;</span> <span class="ident">ByteBuffer</span> {
     <span class="ident">log</span>::<span class="macro">debug</span><span class="macro">!</span>(<span class="string">&quot;sync15_passwords_potential_dupes_ignoring_username&quot;</span>);
-    <span class="ident">ENGINES</span>.<span class="ident">call_with_result</span>(<span class="ident">error</span>, <span class="ident">handle</span>, <span class="op">|</span><span class="ident">state</span><span class="op">|</span> <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">PasswordInfos</span><span class="op">&gt;</span> {
+    <span class="ident">ENGINES</span>.<span class="ident">call_with_result</span>(<span class="ident">error</span>, <span class="ident">handle</span>, <span class="op">|</span><span class="ident">state</span><span class="op">|</span> <span class="op">-&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">PasswordInfos</span><span class="op">&gt;</span> {
         <span class="kw">let</span> <span class="ident">buffer</span> <span class="op">=</span> <span class="ident">get_buffer</span>(<span class="ident">data</span>, <span class="ident">len</span>);
         <span class="kw">let</span> <span class="ident">login</span>: <span class="ident">PasswordInfo</span> <span class="op">=</span> <span class="ident">prost</span>::<span class="ident">Message</span>::<span class="ident">decode</span>(<span class="ident">buffer</span>)<span class="question-mark">?</span>;
         <span class="kw">let</span> <span class="ident">infos</span> <span class="op">=</span> <span class="ident">state</span>
@@ -811,9 +812,9 @@
     <span class="ident">handle</span>: <span class="ident">u64</span>,
     <span class="ident">id</span>: <span class="ident">FfiStr</span><span class="op">&lt;</span><span class="lifetime">&#39;_</span><span class="op">&gt;</span>,
     <span class="ident">error</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">ExternError</span>,
-) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">ByteBuffer</span> {
+) <span class="op">-&gt;</span> <span class="ident">ByteBuffer</span> {
     <span class="ident">log</span>::<span class="macro">debug</span><span class="macro">!</span>(<span class="string">&quot;sync15_passwords_get_by_id&quot;</span>);
-    <span class="ident">ENGINES</span>.<span class="ident">call_with_result</span>(<span class="ident">error</span>, <span class="ident">handle</span>, <span class="op">|</span><span class="ident">state</span><span class="op">|</span> <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">PasswordInfo</span><span class="op">&gt;</span><span class="op">&gt;</span> {
+    <span class="ident">ENGINES</span>.<span class="ident">call_with_result</span>(<span class="ident">error</span>, <span class="ident">handle</span>, <span class="op">|</span><span class="ident">state</span><span class="op">|</span> <span class="op">-&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">PasswordInfo</span><span class="op">&gt;&gt;</span> {
         <span class="prelude-val">Ok</span>(<span class="ident">state</span>.<span class="ident">lock</span>().<span class="ident">unwrap</span>().<span class="ident">get</span>(<span class="ident">id</span>.<span class="ident">as_str</span>())<span class="question-mark">?</span>.<span class="ident">map</span>(<span class="ident">Login</span>::<span class="ident">into</span>))
     })
 }
@@ -826,7 +827,7 @@
     <span class="ident">data</span>: <span class="kw-2">*</span><span class="kw">const</span> <span class="ident">u8</span>,
     <span class="ident">len</span>: <span class="ident">i32</span>,
     <span class="ident">error</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">ExternError</span>,
-) <span class="op">-</span><span class="op">&gt;</span> <span class="kw-2">*</span><span class="kw-2">mut</span> <span class="ident">c_char</span> {
+) <span class="op">-&gt;</span> <span class="kw-2">*</span><span class="kw-2">mut</span> <span class="ident">c_char</span> {
     <span class="ident">log</span>::<span class="macro">debug</span><span class="macro">!</span>(<span class="string">&quot;sync15_passwords_add&quot;</span>);
     <span class="ident">ENGINES</span>.<span class="ident">call_with_result</span>(<span class="ident">error</span>, <span class="ident">handle</span>, <span class="op">|</span><span class="ident">state</span><span class="op">|</span> {
         <span class="kw">let</span> <span class="ident">buffer</span> <span class="op">=</span> <span class="ident">get_buffer</span>(<span class="ident">data</span>, <span class="ident">len</span>);
@@ -843,9 +844,9 @@
     <span class="ident">data</span>: <span class="kw-2">*</span><span class="kw">const</span> <span class="ident">u8</span>,
     <span class="ident">len</span>: <span class="ident">i32</span>,
     <span class="ident">error</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">ExternError</span>,
-) <span class="op">-</span><span class="op">&gt;</span> <span class="kw-2">*</span><span class="kw-2">mut</span> <span class="ident">c_char</span> {
+) <span class="op">-&gt;</span> <span class="kw-2">*</span><span class="kw-2">mut</span> <span class="ident">c_char</span> {
     <span class="ident">log</span>::<span class="macro">debug</span><span class="macro">!</span>(<span class="string">&quot;sync15_passwords_import&quot;</span>);
-    <span class="ident">ENGINES</span>.<span class="ident">call_with_result</span>(<span class="ident">error</span>, <span class="ident">handle</span>, <span class="op">|</span><span class="ident">state</span><span class="op">|</span> <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">String</span><span class="op">&gt;</span> {
+    <span class="ident">ENGINES</span>.<span class="ident">call_with_result</span>(<span class="ident">error</span>, <span class="ident">handle</span>, <span class="op">|</span><span class="ident">state</span><span class="op">|</span> <span class="op">-&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">String</span><span class="op">&gt;</span> {
         <span class="kw">let</span> <span class="ident">buffer</span> <span class="op">=</span> <span class="ident">get_buffer</span>(<span class="ident">data</span>, <span class="ident">len</span>);
         <span class="kw">let</span> <span class="ident">messages</span>: <span class="ident">PasswordInfos</span> <span class="op">=</span> <span class="ident">prost</span>::<span class="ident">Message</span>::<span class="ident">decode</span>(<span class="ident">buffer</span>)<span class="question-mark">?</span>;
         <span class="kw">let</span> <span class="ident">logins</span>: <span class="ident">Vec</span><span class="op">&lt;</span><span class="ident">Login</span><span class="op">&gt;</span> <span class="op">=</span> <span class="ident">messages</span>.<span class="ident">infos</span>.<span class="ident">into_iter</span>().<span class="ident">map</span>(<span class="ident">PasswordInfo</span>::<span class="ident">into</span>).<span class="ident">collect</span>();

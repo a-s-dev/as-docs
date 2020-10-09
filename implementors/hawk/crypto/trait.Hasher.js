@@ -1,3 +1,3 @@
 (function() {var implementors = {};
-implementors["rc_crypto"] = [{"text":"impl Hasher for <a class=\"struct\" href=\"rc_crypto/hawk_crypto/struct.NssHasher.html\" title=\"struct rc_crypto::hawk_crypto::NssHasher\">NssHasher</a>","synthetic":false,"types":["rc_crypto::hawk_crypto::NssHasher"]}];
+implementors["rc_crypto"] = [{"text":"impl Hasher for NssHasher","synthetic":false,"types":[]}];
 if (window.register_implementors) {window.register_implementors(implementors);} else {window.pending_implementors = implementors;}})()

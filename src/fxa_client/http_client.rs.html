@@ -1,4 +1,5 @@
-<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source to the Rust file `components/fxa-client/src/http_client.rs`."><meta name="keywords" content="rust, rustlang, rust-lang"><title>http_client.rs.html -- source</title><link rel="stylesheet" type="text/css" href="../../normalize.css"><link rel="stylesheet" type="text/css" href="../../rustdoc.css" id="mainThemeStyle"><link rel="stylesheet" type="text/css" href="../../dark.css"><link rel="stylesheet" type="text/css" href="../../light.css" id="themeStyle"><script src="../../storage.js"></script><noscript><link rel="stylesheet" href="../../noscript.css"></noscript><link rel="shortcut icon" href="../../favicon.ico"><style type="text/css">#crate-search{background-image:url("../../down-arrow.svg");}</style></head><body class="rustdoc source"><!--[if lte IE 8]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="sidebar"><div class="sidebar-menu">&#9776;</div><a href='../../fxa_client/index.html'><div class='logo-container'><img src='../../rust-logo.png' alt='logo'></div></a></nav><div class="theme-picker"><button id="theme-picker" aria-label="Pick another theme!"><img src="../../brush.svg" width="18" alt="Pick another theme!"></button><div id="theme-choices"></div></div><script src="../../theme.js"></script><nav class="sub"><form class="search-form"><div class="search-container"><div><select id="crate-search"><option value="All crates">All crates</option></select><input class="search-input" name="search" disabled autocomplete="off" spellcheck="false" placeholder="Click or press ‘S’ to search, ‘?’ for more options…" type="search"></div><a id="settings-menu" href="../../settings.html"><img src="../../wheel.svg" width="18" alt="Change settings"></a></div></form></nav><section id="main" class="content"><pre class="line-numbers"><span id="1">   1</span>
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source to the Rust file `components/fxa-client/src/http_client.rs`."><meta name="keywords" content="rust, rustlang, rust-lang"><title>http_client.rs.html -- source</title><link rel="stylesheet" type="text/css" href="../../normalize.css"><link rel="stylesheet" type="text/css" href="../../rustdoc.css" id="mainThemeStyle"><link rel="stylesheet" type="text/css" href="../../light.css"  id="themeStyle"><link rel="stylesheet" type="text/css" href="../../dark.css" disabled ><link rel="stylesheet" type="text/css" href="../../ayu.css" disabled ><script src="../../storage.js"></script><noscript><link rel="stylesheet" href="../../noscript.css"></noscript><link rel="shortcut icon" href="../../favicon.ico"><style type="text/css">#crate-search{background-image:url("../../down-arrow.svg");}</style></head><body class="rustdoc source"><!--[if lte IE 8]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="sidebar"><div class="sidebar-menu">&#9776;</div><a href='../../fxa_client/index.html'><div class='logo-container rust-logo'><img src='../../rust-logo.png' alt='logo'></div></a></nav><div class="theme-picker"><button id="theme-picker" aria-label="Pick another theme!"><img src="../../brush.svg" width="18" alt="Pick another theme!"></button><div id="theme-choices"></div></div><script src="../../theme.js"></script><nav class="sub"><form class="search-form"><div class="search-container"><div><select id="crate-search"><option value="All crates">All crates</option></select><input class="search-input" name="search" disabled autocomplete="off" spellcheck="false" placeholder="Click or press ‘S’ to search, ‘?’ for more options…" type="search"></div><span class="help-button">?</span>
+                <a id="settings-menu" href="../../settings.html"><img src="../../wheel.svg" width="18" alt="Change settings"></a></div></form></nav><section id="main" class="content"><pre class="line-numbers"><span id="1">   1</span>
 <span id="2">   2</span>
 <span id="3">   3</span>
 <span id="4">   4</span>
@@ -1193,63 +1194,63 @@
         <span class="ident">config</span>: <span class="kw-2">&amp;</span><span class="ident">Config</span>,
         <span class="ident">code</span>: <span class="kw-2">&amp;</span><span class="ident">str</span>,
         <span class="ident">code_verifier</span>: <span class="kw-2">&amp;</span><span class="ident">str</span>,
-    ) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">OAuthTokenResponse</span><span class="op">&gt;</span>;
+    ) <span class="op">-&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">OAuthTokenResponse</span><span class="op">&gt;</span>;
     <span class="kw">fn</span> <span class="ident">refresh_token_with_session_token</span>(
         <span class="kw-2">&amp;</span><span class="self">self</span>,
         <span class="ident">config</span>: <span class="kw-2">&amp;</span><span class="ident">Config</span>,
         <span class="ident">session_token</span>: <span class="kw-2">&amp;</span><span class="ident">str</span>,
         <span class="ident">scopes</span>: <span class="kw-2">&amp;</span>[<span class="kw-2">&amp;</span><span class="ident">str</span>],
-    ) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">OAuthTokenResponse</span><span class="op">&gt;</span>;
+    ) <span class="op">-&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">OAuthTokenResponse</span><span class="op">&gt;</span>;
     <span class="kw">fn</span> <span class="ident">oauth_introspect_refresh_token</span>(
         <span class="kw-2">&amp;</span><span class="self">self</span>,
         <span class="ident">config</span>: <span class="kw-2">&amp;</span><span class="ident">Config</span>,
         <span class="ident">refresh_token</span>: <span class="kw-2">&amp;</span><span class="ident">str</span>,
-    ) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">IntrospectResponse</span><span class="op">&gt;</span>;
+    ) <span class="op">-&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">IntrospectResponse</span><span class="op">&gt;</span>;
     <span class="kw">fn</span> <span class="ident">access_token_with_refresh_token</span>(
         <span class="kw-2">&amp;</span><span class="self">self</span>,
         <span class="ident">config</span>: <span class="kw-2">&amp;</span><span class="ident">Config</span>,
         <span class="ident">refresh_token</span>: <span class="kw-2">&amp;</span><span class="ident">str</span>,
         <span class="ident">ttl</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">u64</span><span class="op">&gt;</span>,
         <span class="ident">scopes</span>: <span class="kw-2">&amp;</span>[<span class="kw-2">&amp;</span><span class="ident">str</span>],
-    ) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">OAuthTokenResponse</span><span class="op">&gt;</span>;
+    ) <span class="op">-&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">OAuthTokenResponse</span><span class="op">&gt;</span>;
     <span class="kw">fn</span> <span class="ident">access_token_with_session_token</span>(
         <span class="kw-2">&amp;</span><span class="self">self</span>,
         <span class="ident">config</span>: <span class="kw-2">&amp;</span><span class="ident">Config</span>,
         <span class="ident">session_token</span>: <span class="kw-2">&amp;</span><span class="ident">str</span>,
         <span class="ident">scopes</span>: <span class="kw-2">&amp;</span>[<span class="kw-2">&amp;</span><span class="ident">str</span>],
-    ) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">OAuthTokenResponse</span><span class="op">&gt;</span>;
+    ) <span class="op">-&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">OAuthTokenResponse</span><span class="op">&gt;</span>;
     <span class="kw">fn</span> <span class="ident">authorization_code_using_session_token</span>(
         <span class="kw-2">&amp;</span><span class="self">self</span>,
         <span class="ident">config</span>: <span class="kw-2">&amp;</span><span class="ident">Config</span>,
         <span class="ident">session_token</span>: <span class="kw-2">&amp;</span><span class="ident">str</span>,
         <span class="ident">auth_params</span>: <span class="ident">AuthorizationRequestParameters</span>,
-    ) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">OAuthAuthResponse</span><span class="op">&gt;</span>;
+    ) <span class="op">-&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">OAuthAuthResponse</span><span class="op">&gt;</span>;
     <span class="kw">fn</span> <span class="ident">duplicate_session</span>(
         <span class="kw-2">&amp;</span><span class="self">self</span>,
         <span class="ident">config</span>: <span class="kw-2">&amp;</span><span class="ident">Config</span>,
         <span class="ident">session_token</span>: <span class="kw-2">&amp;</span><span class="ident">str</span>,
-    ) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">DuplicateTokenResponse</span><span class="op">&gt;</span>;
-    <span class="kw">fn</span> <span class="ident">destroy_access_token</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">config</span>: <span class="kw-2">&amp;</span><span class="ident">Config</span>, <span class="ident">token</span>: <span class="kw-2">&amp;</span><span class="ident">str</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span>()<span class="op">&gt;</span>;
-    <span class="kw">fn</span> <span class="ident">destroy_refresh_token</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">config</span>: <span class="kw-2">&amp;</span><span class="ident">Config</span>, <span class="ident">token</span>: <span class="kw-2">&amp;</span><span class="ident">str</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span>()<span class="op">&gt;</span>;
+    ) <span class="op">-&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">DuplicateTokenResponse</span><span class="op">&gt;</span>;
+    <span class="kw">fn</span> <span class="ident">destroy_access_token</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">config</span>: <span class="kw-2">&amp;</span><span class="ident">Config</span>, <span class="ident">token</span>: <span class="kw-2">&amp;</span><span class="ident">str</span>) <span class="op">-&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span>()<span class="op">&gt;</span>;
+    <span class="kw">fn</span> <span class="ident">destroy_refresh_token</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">config</span>: <span class="kw-2">&amp;</span><span class="ident">Config</span>, <span class="ident">token</span>: <span class="kw-2">&amp;</span><span class="ident">str</span>) <span class="op">-&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span>()<span class="op">&gt;</span>;
     <span class="kw">fn</span> <span class="ident">profile</span>(
         <span class="kw-2">&amp;</span><span class="self">self</span>,
         <span class="ident">config</span>: <span class="kw-2">&amp;</span><span class="ident">Config</span>,
         <span class="ident">profile_access_token</span>: <span class="kw-2">&amp;</span><span class="ident">str</span>,
         <span class="ident">etag</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">String</span><span class="op">&gt;</span>,
-    ) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">ResponseAndETag</span><span class="op">&lt;</span><span class="ident">ProfileResponse</span><span class="op">&gt;</span><span class="op">&gt;</span><span class="op">&gt;</span>;
+    ) <span class="op">-&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">ResponseAndETag</span><span class="op">&lt;</span><span class="ident">ProfileResponse</span><span class="op">&gt;&gt;</span><span class="op">&gt;</span>;
     <span class="kw">fn</span> <span class="ident">set_ecosystem_anon_id</span>(
         <span class="kw-2">&amp;</span><span class="self">self</span>,
         <span class="ident">config</span>: <span class="kw-2">&amp;</span><span class="ident">Config</span>,
         <span class="ident">access_token</span>: <span class="kw-2">&amp;</span><span class="ident">str</span>,
         <span class="ident">ecosystem_anon_id</span>: <span class="kw-2">&amp;</span><span class="ident">str</span>,
-    ) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span>()<span class="op">&gt;</span>;
+    ) <span class="op">-&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span>()<span class="op">&gt;</span>;
     <span class="kw">fn</span> <span class="ident">pending_commands</span>(
         <span class="kw-2">&amp;</span><span class="self">self</span>,
         <span class="ident">config</span>: <span class="kw-2">&amp;</span><span class="ident">Config</span>,
         <span class="ident">refresh_token</span>: <span class="kw-2">&amp;</span><span class="ident">str</span>,
         <span class="ident">index</span>: <span class="ident">u64</span>,
         <span class="ident">limit</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">u64</span><span class="op">&gt;</span>,
-    ) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">PendingCommandsResponse</span><span class="op">&gt;</span>;
+    ) <span class="op">-&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">PendingCommandsResponse</span><span class="op">&gt;</span>;
     <span class="kw">fn</span> <span class="ident">invoke_command</span>(
         <span class="kw-2">&amp;</span><span class="self">self</span>,
         <span class="ident">config</span>: <span class="kw-2">&amp;</span><span class="ident">Config</span>,
@@ -1257,29 +1258,29 @@
         <span class="ident">command</span>: <span class="kw-2">&amp;</span><span class="ident">str</span>,
         <span class="ident">target</span>: <span class="kw-2">&amp;</span><span class="ident">str</span>,
         <span class="ident">payload</span>: <span class="kw-2">&amp;</span><span class="ident">serde_json</span>::<span class="ident">Value</span>,
-    ) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span>()<span class="op">&gt;</span>;
-    <span class="kw">fn</span> <span class="ident">devices</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">config</span>: <span class="kw-2">&amp;</span><span class="ident">Config</span>, <span class="ident">refresh_token</span>: <span class="kw-2">&amp;</span><span class="ident">str</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">Vec</span><span class="op">&lt;</span><span class="ident">GetDeviceResponse</span><span class="op">&gt;</span><span class="op">&gt;</span>;
+    ) <span class="op">-&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span>()<span class="op">&gt;</span>;
+    <span class="kw">fn</span> <span class="ident">devices</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">config</span>: <span class="kw-2">&amp;</span><span class="ident">Config</span>, <span class="ident">refresh_token</span>: <span class="kw-2">&amp;</span><span class="ident">str</span>) <span class="op">-&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">Vec</span><span class="op">&lt;</span><span class="ident">GetDeviceResponse</span><span class="op">&gt;&gt;</span>;
     <span class="kw">fn</span> <span class="ident">update_device</span>(
         <span class="kw-2">&amp;</span><span class="self">self</span>,
         <span class="ident">config</span>: <span class="kw-2">&amp;</span><span class="ident">Config</span>,
         <span class="ident">refresh_token</span>: <span class="kw-2">&amp;</span><span class="ident">str</span>,
         <span class="ident">update</span>: <span class="ident">DeviceUpdateRequest</span><span class="op">&lt;</span><span class="lifetime">&#39;_</span><span class="op">&gt;</span>,
-    ) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">UpdateDeviceResponse</span><span class="op">&gt;</span>;
-    <span class="kw">fn</span> <span class="ident">destroy_device</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">config</span>: <span class="kw-2">&amp;</span><span class="ident">Config</span>, <span class="ident">refresh_token</span>: <span class="kw-2">&amp;</span><span class="ident">str</span>, <span class="ident">id</span>: <span class="kw-2">&amp;</span><span class="ident">str</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span>()<span class="op">&gt;</span>;
+    ) <span class="op">-&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">UpdateDeviceResponse</span><span class="op">&gt;</span>;
+    <span class="kw">fn</span> <span class="ident">destroy_device</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">config</span>: <span class="kw-2">&amp;</span><span class="ident">Config</span>, <span class="ident">refresh_token</span>: <span class="kw-2">&amp;</span><span class="ident">str</span>, <span class="ident">id</span>: <span class="kw-2">&amp;</span><span class="ident">str</span>) <span class="op">-&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span>()<span class="op">&gt;</span>;
     <span class="kw">fn</span> <span class="ident">attached_clients</span>(
         <span class="kw-2">&amp;</span><span class="self">self</span>,
         <span class="ident">config</span>: <span class="kw-2">&amp;</span><span class="ident">Config</span>,
         <span class="ident">session_token</span>: <span class="kw-2">&amp;</span><span class="ident">str</span>,
-    ) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">Vec</span><span class="op">&lt;</span><span class="ident">GetAttachedClientResponse</span><span class="op">&gt;</span><span class="op">&gt;</span>;
+    ) <span class="op">-&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">Vec</span><span class="op">&lt;</span><span class="ident">GetAttachedClientResponse</span><span class="op">&gt;&gt;</span>;
     <span class="kw">fn</span> <span class="ident">scoped_key_data</span>(
         <span class="kw-2">&amp;</span><span class="self">self</span>,
         <span class="ident">config</span>: <span class="kw-2">&amp;</span><span class="ident">Config</span>,
         <span class="ident">session_token</span>: <span class="kw-2">&amp;</span><span class="ident">str</span>,
         <span class="ident">client_id</span>: <span class="kw-2">&amp;</span><span class="ident">str</span>,
         <span class="ident">scope</span>: <span class="kw-2">&amp;</span><span class="ident">str</span>,
-    ) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">HashMap</span><span class="op">&lt;</span><span class="ident">String</span>, <span class="ident">ScopedKeyDataResponse</span><span class="op">&gt;</span><span class="op">&gt;</span>;
-    <span class="kw">fn</span> <span class="ident">fxa_client_configuration</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">config</span>: <span class="kw-2">&amp;</span><span class="ident">Config</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">ClientConfigurationResponse</span><span class="op">&gt;</span>;
-    <span class="kw">fn</span> <span class="ident">openid_configuration</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">config</span>: <span class="kw-2">&amp;</span><span class="ident">Config</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">OpenIdConfigurationResponse</span><span class="op">&gt;</span>;
+    ) <span class="op">-&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">HashMap</span><span class="op">&lt;</span><span class="ident">String</span>, <span class="ident">ScopedKeyDataResponse</span><span class="op">&gt;&gt;</span>;
+    <span class="kw">fn</span> <span class="ident">fxa_client_configuration</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">config</span>: <span class="kw-2">&amp;</span><span class="ident">Config</span>) <span class="op">-&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">ClientConfigurationResponse</span><span class="op">&gt;</span>;
+    <span class="kw">fn</span> <span class="ident">openid_configuration</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">config</span>: <span class="kw-2">&amp;</span><span class="ident">Config</span>) <span class="op">-&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">OpenIdConfigurationResponse</span><span class="op">&gt;</span>;
 }
 
 <span class="kw">enum</span> <span class="ident">HttpClientState</span> {
@@ -1291,16 +1292,16 @@
 }
 
 <span class="kw">pub</span> <span class="kw">struct</span> <span class="ident">Client</span> {
-    <span class="ident">state</span>: <span class="ident">Mutex</span><span class="op">&lt;</span><span class="ident">HashMap</span><span class="op">&lt;</span><span class="ident">String</span>, <span class="ident">HttpClientState</span><span class="op">&gt;</span><span class="op">&gt;</span>,
+    <span class="ident">state</span>: <span class="ident">Mutex</span><span class="op">&lt;</span><span class="ident">HashMap</span><span class="op">&lt;</span><span class="ident">String</span>, <span class="ident">HttpClientState</span><span class="op">&gt;&gt;</span>,
 }
 <span class="kw">impl</span> <span class="ident">FxAClient</span> <span class="kw">for</span> <span class="ident">Client</span> {
-    <span class="kw">fn</span> <span class="ident">fxa_client_configuration</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">config</span>: <span class="kw-2">&amp;</span><span class="ident">Config</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">ClientConfigurationResponse</span><span class="op">&gt;</span> {
+    <span class="kw">fn</span> <span class="ident">fxa_client_configuration</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">config</span>: <span class="kw-2">&amp;</span><span class="ident">Config</span>) <span class="op">-&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">ClientConfigurationResponse</span><span class="op">&gt;</span> {
         <span class="comment">// Why go through two-levels of indirection? It looks kinda dumb.</span>
         <span class="comment">// Well, `config:Config` also needs to fetch the config, but does not have access</span>
         <span class="comment">// to an instance of `http_client`, so it calls the helper function directly.</span>
         <span class="ident">fxa_client_configuration</span>(<span class="ident">config</span>.<span class="ident">client_config_url</span>()<span class="question-mark">?</span>)
     }
-    <span class="kw">fn</span> <span class="ident">openid_configuration</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">config</span>: <span class="kw-2">&amp;</span><span class="ident">Config</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">OpenIdConfigurationResponse</span><span class="op">&gt;</span> {
+    <span class="kw">fn</span> <span class="ident">openid_configuration</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">config</span>: <span class="kw-2">&amp;</span><span class="ident">Config</span>) <span class="op">-&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">OpenIdConfigurationResponse</span><span class="op">&gt;</span> {
         <span class="ident">openid_configuration</span>(<span class="ident">config</span>.<span class="ident">openid_config_url</span>()<span class="question-mark">?</span>)
     }
 
@@ -1309,7 +1310,7 @@
         <span class="ident">config</span>: <span class="kw-2">&amp;</span><span class="ident">Config</span>,
         <span class="ident">access_token</span>: <span class="kw-2">&amp;</span><span class="ident">str</span>,
         <span class="ident">etag</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">String</span><span class="op">&gt;</span>,
-    ) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">ResponseAndETag</span><span class="op">&lt;</span><span class="ident">ProfileResponse</span><span class="op">&gt;</span><span class="op">&gt;</span><span class="op">&gt;</span> {
+    ) <span class="op">-&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">ResponseAndETag</span><span class="op">&lt;</span><span class="ident">ProfileResponse</span><span class="op">&gt;&gt;</span><span class="op">&gt;</span> {
         <span class="kw">let</span> <span class="ident">url</span> <span class="op">=</span> <span class="ident">config</span>.<span class="ident">userinfo_endpoint</span>()<span class="question-mark">?</span>;
         <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">request</span> <span class="op">=</span>
             <span class="ident">Request</span>::<span class="ident">get</span>(<span class="ident">url</span>).<span class="ident">header</span>(<span class="ident">header_names</span>::<span class="ident">AUTHORIZATION</span>, <span class="ident">bearer_token</span>(<span class="ident">access_token</span>))<span class="question-mark">?</span>;
@@ -1317,7 +1318,7 @@
             <span class="ident">request</span> <span class="op">=</span> <span class="ident">request</span>.<span class="ident">header</span>(<span class="ident">header_names</span>::<span class="ident">IF_NONE_MATCH</span>, <span class="macro">format</span><span class="macro">!</span>(<span class="string">&quot;\&quot;{}\&quot;&quot;</span>, <span class="ident">etag</span>))<span class="question-mark">?</span>;
         }
         <span class="kw">let</span> <span class="ident">resp</span> <span class="op">=</span> <span class="self">self</span>.<span class="ident">make_request</span>(<span class="ident">request</span>)<span class="question-mark">?</span>;
-        <span class="kw">if</span> <span class="ident">resp</span>.<span class="ident">status</span> <span class="op">=</span><span class="op">=</span> <span class="ident">status_codes</span>::<span class="ident">NOT_MODIFIED</span> {
+        <span class="kw">if</span> <span class="ident">resp</span>.<span class="ident">status</span> <span class="op">==</span> <span class="ident">status_codes</span>::<span class="ident">NOT_MODIFIED</span> {
             <span class="kw">return</span> <span class="prelude-val">Ok</span>(<span class="prelude-val">None</span>);
         }
         <span class="kw">let</span> <span class="ident">etag</span> <span class="op">=</span> <span class="ident">resp</span>
@@ -1335,7 +1336,7 @@
         <span class="ident">config</span>: <span class="kw-2">&amp;</span><span class="ident">Config</span>,
         <span class="ident">access_token</span>: <span class="kw-2">&amp;</span><span class="ident">str</span>,
         <span class="ident">ecosystem_anon_id</span>: <span class="kw-2">&amp;</span><span class="ident">str</span>,
-    ) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span>()<span class="op">&gt;</span> {
+    ) <span class="op">-&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span>()<span class="op">&gt;</span> {
         <span class="kw">let</span> <span class="ident">url</span> <span class="op">=</span> <span class="ident">config</span>.<span class="ident">profile_url_path</span>(<span class="string">&quot;v1/ecosystem_anon_id&quot;</span>)<span class="question-mark">?</span>;
         <span class="kw">let</span> <span class="ident">body</span> <span class="op">=</span> <span class="macro">json</span><span class="macro">!</span>({
             <span class="string">&quot;ecosystemAnonId&quot;</span>: <span class="ident">ecosystem_anon_id</span>,
@@ -1355,7 +1356,7 @@
         <span class="ident">config</span>: <span class="kw-2">&amp;</span><span class="ident">Config</span>,
         <span class="ident">code</span>: <span class="kw-2">&amp;</span><span class="ident">str</span>,
         <span class="ident">code_verifier</span>: <span class="kw-2">&amp;</span><span class="ident">str</span>,
-    ) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">OAuthTokenResponse</span><span class="op">&gt;</span> {
+    ) <span class="op">-&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">OAuthTokenResponse</span><span class="op">&gt;</span> {
         <span class="kw">let</span> <span class="ident">req_body</span> <span class="op">=</span> <span class="ident">OAauthTokenRequest</span>::<span class="ident">UsingCode</span> {
             <span class="ident">code</span>: <span class="ident">code</span>.<span class="ident">to_string</span>(),
             <span class="ident">client_id</span>: <span class="ident">config</span>.<span class="ident">client_id</span>.<span class="ident">to_string</span>(),
@@ -1370,7 +1371,7 @@
         <span class="ident">config</span>: <span class="kw-2">&amp;</span><span class="ident">Config</span>,
         <span class="ident">session_token</span>: <span class="kw-2">&amp;</span><span class="ident">str</span>,
         <span class="ident">scopes</span>: <span class="kw-2">&amp;</span>[<span class="kw-2">&amp;</span><span class="ident">str</span>],
-    ) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">OAuthTokenResponse</span><span class="op">&gt;</span> {
+    ) <span class="op">-&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">OAuthTokenResponse</span><span class="op">&gt;</span> {
         <span class="kw">let</span> <span class="ident">url</span> <span class="op">=</span> <span class="ident">config</span>.<span class="ident">token_endpoint</span>()<span class="question-mark">?</span>;
         <span class="kw">let</span> <span class="ident">key</span> <span class="op">=</span> <span class="ident">derive_auth_key_from_session_token</span>(<span class="kw-2">&amp;</span><span class="ident">session_token</span>)<span class="question-mark">?</span>;
         <span class="kw">let</span> <span class="ident">body</span> <span class="op">=</span> <span class="macro">json</span><span class="macro">!</span>({
@@ -1393,7 +1394,7 @@
         <span class="ident">refresh_token</span>: <span class="kw-2">&amp;</span><span class="ident">str</span>,
         <span class="ident">ttl</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">u64</span><span class="op">&gt;</span>,
         <span class="ident">scopes</span>: <span class="kw-2">&amp;</span>[<span class="kw-2">&amp;</span><span class="ident">str</span>],
-    ) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">OAuthTokenResponse</span><span class="op">&gt;</span> {
+    ) <span class="op">-&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">OAuthTokenResponse</span><span class="op">&gt;</span> {
         <span class="kw">let</span> <span class="ident">req</span> <span class="op">=</span> <span class="ident">OAauthTokenRequest</span>::<span class="ident">UsingRefreshToken</span> {
             <span class="ident">client_id</span>: <span class="ident">config</span>.<span class="ident">client_id</span>.<span class="ident">clone</span>(),
             <span class="ident">refresh_token</span>: <span class="ident">refresh_token</span>.<span class="ident">to_string</span>(),
@@ -1408,7 +1409,7 @@
         <span class="ident">config</span>: <span class="kw-2">&amp;</span><span class="ident">Config</span>,
         <span class="ident">session_token</span>: <span class="kw-2">&amp;</span><span class="ident">str</span>,
         <span class="ident">scopes</span>: <span class="kw-2">&amp;</span>[<span class="kw-2">&amp;</span><span class="ident">str</span>],
-    ) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">OAuthTokenResponse</span><span class="op">&gt;</span> {
+    ) <span class="op">-&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">OAuthTokenResponse</span><span class="op">&gt;</span> {
         <span class="kw">let</span> <span class="ident">parameters</span> <span class="op">=</span> <span class="macro">json</span><span class="macro">!</span>({
             <span class="string">&quot;client_id&quot;</span>: <span class="ident">config</span>.<span class="ident">client_id</span>,
             <span class="string">&quot;grant_type&quot;</span>: <span class="string">&quot;fxa-credentials&quot;</span>,
@@ -1427,7 +1428,7 @@
         <span class="ident">config</span>: <span class="kw-2">&amp;</span><span class="ident">Config</span>,
         <span class="ident">session_token</span>: <span class="kw-2">&amp;</span><span class="ident">str</span>,
         <span class="ident">auth_params</span>: <span class="ident">AuthorizationRequestParameters</span>,
-    ) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">OAuthAuthResponse</span><span class="op">&gt;</span> {
+    ) <span class="op">-&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">OAuthAuthResponse</span><span class="op">&gt;</span> {
         <span class="kw">let</span> <span class="ident">parameters</span> <span class="op">=</span> <span class="ident">serde_json</span>::<span class="ident">to_value</span>(<span class="kw-2">&amp;</span><span class="ident">auth_params</span>)<span class="question-mark">?</span>;
         <span class="kw">let</span> <span class="ident">key</span> <span class="op">=</span> <span class="ident">derive_auth_key_from_session_token</span>(<span class="ident">session_token</span>)<span class="question-mark">?</span>;
         <span class="kw">let</span> <span class="ident">url</span> <span class="op">=</span> <span class="ident">config</span>.<span class="ident">auth_url_path</span>(<span class="string">&quot;v1/oauth/authorization&quot;</span>)<span class="question-mark">?</span>;
@@ -1442,7 +1443,7 @@
         <span class="kw-2">&amp;</span><span class="self">self</span>,
         <span class="ident">config</span>: <span class="kw-2">&amp;</span><span class="ident">Config</span>,
         <span class="ident">refresh_token</span>: <span class="kw-2">&amp;</span><span class="ident">str</span>,
-    ) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">IntrospectResponse</span><span class="op">&gt;</span> {
+    ) <span class="op">-&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">IntrospectResponse</span><span class="op">&gt;</span> {
         <span class="kw">let</span> <span class="ident">body</span> <span class="op">=</span> <span class="macro">json</span><span class="macro">!</span>({
             <span class="string">&quot;token_type_hint&quot;</span>: <span class="string">&quot;refresh_token&quot;</span>,
             <span class="string">&quot;token&quot;</span>: <span class="ident">refresh_token</span>,
@@ -1455,7 +1456,7 @@
         <span class="kw-2">&amp;</span><span class="self">self</span>,
         <span class="ident">config</span>: <span class="kw-2">&amp;</span><span class="ident">Config</span>,
         <span class="ident">session_token</span>: <span class="kw-2">&amp;</span><span class="ident">str</span>,
-    ) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">DuplicateTokenResponse</span><span class="op">&gt;</span> {
+    ) <span class="op">-&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">DuplicateTokenResponse</span><span class="op">&gt;</span> {
         <span class="kw">let</span> <span class="ident">url</span> <span class="op">=</span> <span class="ident">config</span>.<span class="ident">auth_url_path</span>(<span class="string">&quot;v1/session/duplicate&quot;</span>)<span class="question-mark">?</span>;
         <span class="kw">let</span> <span class="ident">key</span> <span class="op">=</span> <span class="ident">derive_auth_key_from_session_token</span>(<span class="kw-2">&amp;</span><span class="ident">session_token</span>)<span class="question-mark">?</span>;
         <span class="kw">let</span> <span class="ident">duplicate_body</span> <span class="op">=</span> <span class="macro">json</span><span class="macro">!</span>({
@@ -1468,14 +1469,14 @@
         <span class="prelude-val">Ok</span>(<span class="self">self</span>.<span class="ident">make_request</span>(<span class="ident">request</span>)<span class="question-mark">?</span>.<span class="ident">json</span>()<span class="question-mark">?</span>)
     }
 
-    <span class="kw">fn</span> <span class="ident">destroy_access_token</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">config</span>: <span class="kw-2">&amp;</span><span class="ident">Config</span>, <span class="ident">access_token</span>: <span class="kw-2">&amp;</span><span class="ident">str</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span>()<span class="op">&gt;</span> {
+    <span class="kw">fn</span> <span class="ident">destroy_access_token</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">config</span>: <span class="kw-2">&amp;</span><span class="ident">Config</span>, <span class="ident">access_token</span>: <span class="kw-2">&amp;</span><span class="ident">str</span>) <span class="op">-&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span>()<span class="op">&gt;</span> {
         <span class="kw">let</span> <span class="ident">body</span> <span class="op">=</span> <span class="macro">json</span><span class="macro">!</span>({
             <span class="string">&quot;token&quot;</span>: <span class="ident">access_token</span>,
         });
         <span class="self">self</span>.<span class="ident">destroy_token_helper</span>(<span class="ident">config</span>, <span class="kw-2">&amp;</span><span class="ident">body</span>)
     }
 
-    <span class="kw">fn</span> <span class="ident">destroy_refresh_token</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">config</span>: <span class="kw-2">&amp;</span><span class="ident">Config</span>, <span class="ident">refresh_token</span>: <span class="kw-2">&amp;</span><span class="ident">str</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span>()<span class="op">&gt;</span> {
+    <span class="kw">fn</span> <span class="ident">destroy_refresh_token</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">config</span>: <span class="kw-2">&amp;</span><span class="ident">Config</span>, <span class="ident">refresh_token</span>: <span class="kw-2">&amp;</span><span class="ident">str</span>) <span class="op">-&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span>()<span class="op">&gt;</span> {
         <span class="kw">let</span> <span class="ident">body</span> <span class="op">=</span> <span class="macro">json</span><span class="macro">!</span>({
             <span class="string">&quot;refresh_token&quot;</span>: <span class="ident">refresh_token</span>,
         });
@@ -1488,7 +1489,7 @@
         <span class="ident">refresh_token</span>: <span class="kw-2">&amp;</span><span class="ident">str</span>,
         <span class="ident">index</span>: <span class="ident">u64</span>,
         <span class="ident">limit</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">u64</span><span class="op">&gt;</span>,
-    ) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">PendingCommandsResponse</span><span class="op">&gt;</span> {
+    ) <span class="op">-&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">PendingCommandsResponse</span><span class="op">&gt;</span> {
         <span class="kw">let</span> <span class="ident">url</span> <span class="op">=</span> <span class="ident">config</span>.<span class="ident">auth_url_path</span>(<span class="string">&quot;v1/account/device/commands&quot;</span>)<span class="question-mark">?</span>;
         <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">request</span> <span class="op">=</span> <span class="ident">Request</span>::<span class="ident">get</span>(<span class="ident">url</span>)
             .<span class="ident">header</span>(<span class="ident">header_names</span>::<span class="ident">AUTHORIZATION</span>, <span class="ident">bearer_token</span>(<span class="ident">refresh_token</span>))<span class="question-mark">?</span>
@@ -1506,7 +1507,7 @@
         <span class="ident">command</span>: <span class="kw-2">&amp;</span><span class="ident">str</span>,
         <span class="ident">target</span>: <span class="kw-2">&amp;</span><span class="ident">str</span>,
         <span class="ident">payload</span>: <span class="kw-2">&amp;</span><span class="ident">serde_json</span>::<span class="ident">Value</span>,
-    ) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span>()<span class="op">&gt;</span> {
+    ) <span class="op">-&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span>()<span class="op">&gt;</span> {
         <span class="kw">let</span> <span class="ident">body</span> <span class="op">=</span> <span class="macro">json</span><span class="macro">!</span>({
             <span class="string">&quot;command&quot;</span>: <span class="ident">command</span>,
             <span class="string">&quot;target&quot;</span>: <span class="ident">target</span>,
@@ -1521,7 +1522,7 @@
         <span class="prelude-val">Ok</span>(())
     }
 
-    <span class="kw">fn</span> <span class="ident">devices</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">config</span>: <span class="kw-2">&amp;</span><span class="ident">Config</span>, <span class="ident">refresh_token</span>: <span class="kw-2">&amp;</span><span class="ident">str</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">Vec</span><span class="op">&lt;</span><span class="ident">GetDeviceResponse</span><span class="op">&gt;</span><span class="op">&gt;</span> {
+    <span class="kw">fn</span> <span class="ident">devices</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">config</span>: <span class="kw-2">&amp;</span><span class="ident">Config</span>, <span class="ident">refresh_token</span>: <span class="kw-2">&amp;</span><span class="ident">str</span>) <span class="op">-&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">Vec</span><span class="op">&lt;</span><span class="ident">GetDeviceResponse</span><span class="op">&gt;&gt;</span> {
         <span class="kw">let</span> <span class="ident">url</span> <span class="op">=</span> <span class="ident">config</span>.<span class="ident">auth_url_path</span>(<span class="string">&quot;v1/account/devices&quot;</span>)<span class="question-mark">?</span>;
         <span class="kw">let</span> <span class="ident">request</span> <span class="op">=</span>
             <span class="ident">Request</span>::<span class="ident">get</span>(<span class="ident">url</span>).<span class="ident">header</span>(<span class="ident">header_names</span>::<span class="ident">AUTHORIZATION</span>, <span class="ident">bearer_token</span>(<span class="ident">refresh_token</span>))<span class="question-mark">?</span>;
@@ -1533,7 +1534,7 @@
         <span class="ident">config</span>: <span class="kw-2">&amp;</span><span class="ident">Config</span>,
         <span class="ident">refresh_token</span>: <span class="kw-2">&amp;</span><span class="ident">str</span>,
         <span class="ident">update</span>: <span class="ident">DeviceUpdateRequest</span><span class="op">&lt;</span><span class="lifetime">&#39;_</span><span class="op">&gt;</span>,
-    ) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">UpdateDeviceResponse</span><span class="op">&gt;</span> {
+    ) <span class="op">-&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">UpdateDeviceResponse</span><span class="op">&gt;</span> {
         <span class="kw">let</span> <span class="ident">url</span> <span class="op">=</span> <span class="ident">config</span>.<span class="ident">auth_url_path</span>(<span class="string">&quot;v1/account/device&quot;</span>)<span class="question-mark">?</span>;
         <span class="kw">let</span> <span class="ident">request</span> <span class="op">=</span> <span class="ident">Request</span>::<span class="ident">post</span>(<span class="ident">url</span>)
             .<span class="ident">header</span>(<span class="ident">header_names</span>::<span class="ident">AUTHORIZATION</span>, <span class="ident">bearer_token</span>(<span class="ident">refresh_token</span>))<span class="question-mark">?</span>
@@ -1542,7 +1543,7 @@
         <span class="prelude-val">Ok</span>(<span class="self">self</span>.<span class="ident">make_request</span>(<span class="ident">request</span>)<span class="question-mark">?</span>.<span class="ident">json</span>()<span class="question-mark">?</span>)
     }
 
-    <span class="kw">fn</span> <span class="ident">destroy_device</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">config</span>: <span class="kw-2">&amp;</span><span class="ident">Config</span>, <span class="ident">refresh_token</span>: <span class="kw-2">&amp;</span><span class="ident">str</span>, <span class="ident">id</span>: <span class="kw-2">&amp;</span><span class="ident">str</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span>()<span class="op">&gt;</span> {
+    <span class="kw">fn</span> <span class="ident">destroy_device</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">config</span>: <span class="kw-2">&amp;</span><span class="ident">Config</span>, <span class="ident">refresh_token</span>: <span class="kw-2">&amp;</span><span class="ident">str</span>, <span class="ident">id</span>: <span class="kw-2">&amp;</span><span class="ident">str</span>) <span class="op">-&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span>()<span class="op">&gt;</span> {
         <span class="kw">let</span> <span class="ident">body</span> <span class="op">=</span> <span class="macro">json</span><span class="macro">!</span>({
             <span class="string">&quot;id&quot;</span>: <span class="ident">id</span>,
         });
@@ -1560,7 +1561,7 @@
         <span class="kw-2">&amp;</span><span class="self">self</span>,
         <span class="ident">config</span>: <span class="kw-2">&amp;</span><span class="ident">Config</span>,
         <span class="ident">session_token</span>: <span class="kw-2">&amp;</span><span class="ident">str</span>,
-    ) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">Vec</span><span class="op">&lt;</span><span class="ident">GetAttachedClientResponse</span><span class="op">&gt;</span><span class="op">&gt;</span> {
+    ) <span class="op">-&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">Vec</span><span class="op">&lt;</span><span class="ident">GetAttachedClientResponse</span><span class="op">&gt;&gt;</span> {
         <span class="kw">let</span> <span class="ident">url</span> <span class="op">=</span> <span class="ident">config</span>.<span class="ident">auth_url_path</span>(<span class="string">&quot;v1/account/attached_clients&quot;</span>)<span class="question-mark">?</span>;
         <span class="kw">let</span> <span class="ident">key</span> <span class="op">=</span> <span class="ident">derive_auth_key_from_session_token</span>(<span class="ident">session_token</span>)<span class="question-mark">?</span>;
         <span class="kw">let</span> <span class="ident">request</span> <span class="op">=</span> <span class="ident">HawkRequestBuilder</span>::<span class="ident">new</span>(<span class="ident">Method</span>::<span class="ident">Get</span>, <span class="ident">url</span>, <span class="kw-2">&amp;</span><span class="ident">key</span>).<span class="ident">build</span>()<span class="question-mark">?</span>;
@@ -1573,7 +1574,7 @@
         <span class="ident">session_token</span>: <span class="kw-2">&amp;</span><span class="ident">str</span>,
         <span class="ident">client_id</span>: <span class="kw-2">&amp;</span><span class="ident">str</span>,
         <span class="ident">scope</span>: <span class="kw-2">&amp;</span><span class="ident">str</span>,
-    ) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">HashMap</span><span class="op">&lt;</span><span class="ident">String</span>, <span class="ident">ScopedKeyDataResponse</span><span class="op">&gt;</span><span class="op">&gt;</span> {
+    ) <span class="op">-&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">HashMap</span><span class="op">&lt;</span><span class="ident">String</span>, <span class="ident">ScopedKeyDataResponse</span><span class="op">&gt;&gt;</span> {
         <span class="kw">let</span> <span class="ident">body</span> <span class="op">=</span> <span class="macro">json</span><span class="macro">!</span>({
             <span class="string">&quot;client_id&quot;</span>: <span class="ident">client_id</span>,
             <span class="string">&quot;scope&quot;</span>: <span class="ident">scope</span>,
@@ -1588,7 +1589,7 @@
 }
 
 <span class="macro">macro_rules</span><span class="macro">!</span> <span class="ident">fetch</span> {
-    (<span class="macro-nonterminal">$</span><span class="macro-nonterminal">url</span>:<span class="ident">expr</span>) <span class="op">=</span><span class="op">&gt;</span> {
+    (<span class="macro-nonterminal">$</span><span class="macro-nonterminal">url</span>:<span class="ident">expr</span>) <span class="op">=&gt;</span> {
         <span class="ident">viaduct</span>::<span class="ident">Request</span>::<span class="ident">get</span>(<span class="macro-nonterminal">$</span><span class="macro-nonterminal">url</span>)
             .<span class="ident">send</span>()<span class="question-mark">?</span>
             .<span class="ident">require_success</span>()<span class="question-mark">?</span>
@@ -1597,22 +1598,22 @@
 }
 
 <span class="attribute">#[<span class="ident">inline</span>]</span>
-<span class="kw">pub</span>(<span class="kw">crate</span>) <span class="kw">fn</span> <span class="ident">fxa_client_configuration</span>(<span class="ident">url</span>: <span class="ident">Url</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">ClientConfigurationResponse</span><span class="op">&gt;</span> {
+<span class="kw">pub</span>(<span class="kw">crate</span>) <span class="kw">fn</span> <span class="ident">fxa_client_configuration</span>(<span class="ident">url</span>: <span class="ident">Url</span>) <span class="op">-&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">ClientConfigurationResponse</span><span class="op">&gt;</span> {
     <span class="prelude-val">Ok</span>(<span class="macro">fetch</span><span class="macro">!</span>(<span class="ident">url</span>))
 }
 <span class="attribute">#[<span class="ident">inline</span>]</span>
-<span class="kw">pub</span>(<span class="kw">crate</span>) <span class="kw">fn</span> <span class="ident">openid_configuration</span>(<span class="ident">url</span>: <span class="ident">Url</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">OpenIdConfigurationResponse</span><span class="op">&gt;</span> {
+<span class="kw">pub</span>(<span class="kw">crate</span>) <span class="kw">fn</span> <span class="ident">openid_configuration</span>(<span class="ident">url</span>: <span class="ident">Url</span>) <span class="op">-&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">OpenIdConfigurationResponse</span><span class="op">&gt;</span> {
     <span class="prelude-val">Ok</span>(<span class="macro">fetch</span><span class="macro">!</span>(<span class="ident">url</span>))
 }
 
 <span class="kw">impl</span> <span class="ident">Client</span> {
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">new</span>() <span class="op">-</span><span class="op">&gt;</span> <span class="self">Self</span> {
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">new</span>() <span class="op">-&gt;</span> <span class="self">Self</span> {
         <span class="self">Self</span> {
             <span class="ident">state</span>: <span class="ident">Mutex</span>::<span class="ident">new</span>(<span class="ident">HashMap</span>::<span class="ident">new</span>()),
         }
     }
 
-    <span class="kw">fn</span> <span class="ident">destroy_token_helper</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">config</span>: <span class="kw-2">&amp;</span><span class="ident">Config</span>, <span class="ident">body</span>: <span class="kw-2">&amp;</span><span class="ident">serde_json</span>::<span class="ident">Value</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span>()<span class="op">&gt;</span> {
+    <span class="kw">fn</span> <span class="ident">destroy_token_helper</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">config</span>: <span class="kw-2">&amp;</span><span class="ident">Config</span>, <span class="ident">body</span>: <span class="kw-2">&amp;</span><span class="ident">serde_json</span>::<span class="ident">Value</span>) <span class="op">-&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span>()<span class="op">&gt;</span> {
         <span class="kw">let</span> <span class="ident">url</span> <span class="op">=</span> <span class="ident">config</span>.<span class="ident">oauth_url_path</span>(<span class="string">&quot;v1/destroy&quot;</span>)<span class="question-mark">?</span>;
         <span class="self">self</span>.<span class="ident">make_request</span>(<span class="ident">Request</span>::<span class="ident">post</span>(<span class="ident">url</span>).<span class="ident">json</span>(<span class="ident">body</span>))<span class="question-mark">?</span>;
         <span class="prelude-val">Ok</span>(())
@@ -1622,12 +1623,12 @@
         <span class="kw-2">&amp;</span><span class="self">self</span>,
         <span class="ident">config</span>: <span class="kw-2">&amp;</span><span class="ident">Config</span>,
         <span class="ident">body</span>: <span class="ident">serde_json</span>::<span class="ident">Value</span>,
-    ) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">OAuthTokenResponse</span><span class="op">&gt;</span> {
+    ) <span class="op">-&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">OAuthTokenResponse</span><span class="op">&gt;</span> {
         <span class="kw">let</span> <span class="ident">url</span> <span class="op">=</span> <span class="ident">config</span>.<span class="ident">token_endpoint</span>()<span class="question-mark">?</span>;
         <span class="prelude-val">Ok</span>(<span class="self">self</span>.<span class="ident">make_request</span>(<span class="ident">Request</span>::<span class="ident">post</span>(<span class="ident">url</span>).<span class="ident">json</span>(<span class="kw-2">&amp;</span><span class="ident">body</span>))<span class="question-mark">?</span>.<span class="ident">json</span>()<span class="question-mark">?</span>)
     }
 
-    <span class="kw">fn</span> <span class="ident">handle_too_many_requests</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">resp</span>: <span class="ident">Response</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">Response</span><span class="op">&gt;</span> {
+    <span class="kw">fn</span> <span class="ident">handle_too_many_requests</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">resp</span>: <span class="ident">Response</span>) <span class="op">-&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">Response</span><span class="op">&gt;</span> {
         <span class="kw">let</span> <span class="ident">path</span> <span class="op">=</span> <span class="ident">resp</span>.<span class="ident">url</span>.<span class="ident">path</span>().<span class="ident">to_string</span>();
         <span class="kw">if</span> <span class="kw">let</span> <span class="prelude-val">Some</span>(<span class="ident">retry_after</span>) <span class="op">=</span> <span class="ident">resp</span>.<span class="ident">headers</span>.<span class="ident">get_as</span>::<span class="op">&lt;</span><span class="ident">u64</span>, <span class="kw">_</span><span class="op">&gt;</span>(<span class="ident">header_names</span>::<span class="ident">RETRY_AFTER</span>) {
             <span class="kw">let</span> <span class="ident">retry_after</span> <span class="op">=</span> <span class="ident">retry_after</span>.<span class="ident">unwrap_or</span>(<span class="ident">RETRY_AFTER_DEFAULT_SECONDS</span>);
@@ -1641,10 +1642,10 @@
         <span class="self">Self</span>::<span class="ident">default_handle_response_error</span>(<span class="ident">resp</span>)
     }
 
-    <span class="kw">fn</span> <span class="ident">default_handle_response_error</span>(<span class="ident">resp</span>: <span class="ident">Response</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">Response</span><span class="op">&gt;</span> {
+    <span class="kw">fn</span> <span class="ident">default_handle_response_error</span>(<span class="ident">resp</span>: <span class="ident">Response</span>) <span class="op">-&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">Response</span><span class="op">&gt;</span> {
         <span class="kw">let</span> <span class="ident">json</span>: <span class="ident">std</span>::<span class="ident">result</span>::<span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">serde_json</span>::<span class="ident">Value</span>, <span class="kw">_</span><span class="op">&gt;</span> <span class="op">=</span> <span class="ident">resp</span>.<span class="ident">json</span>();
         <span class="kw">match</span> <span class="ident">json</span> {
-            <span class="prelude-val">Ok</span>(<span class="ident">json</span>) <span class="op">=</span><span class="op">&gt;</span> <span class="prelude-val">Err</span>(<span class="ident">ErrorKind</span>::<span class="ident">RemoteError</span> {
+            <span class="prelude-val">Ok</span>(<span class="ident">json</span>) <span class="op">=&gt;</span> <span class="prelude-val">Err</span>(<span class="ident">ErrorKind</span>::<span class="ident">RemoteError</span> {
                 <span class="ident">code</span>: <span class="ident">json</span>[<span class="string">&quot;code&quot;</span>].<span class="ident">as_u64</span>().<span class="ident">unwrap_or</span>(<span class="number">0</span>),
                 <span class="ident">errno</span>: <span class="ident">json</span>[<span class="string">&quot;errno&quot;</span>].<span class="ident">as_u64</span>().<span class="ident">unwrap_or</span>(<span class="number">0</span>),
                 <span class="ident">error</span>: <span class="ident">json</span>[<span class="string">&quot;error&quot;</span>].<span class="ident">as_str</span>().<span class="ident">unwrap_or</span>(<span class="string">&quot;&quot;</span>).<span class="ident">to_string</span>(),
@@ -1652,11 +1653,11 @@
                 <span class="ident">info</span>: <span class="ident">json</span>[<span class="string">&quot;info&quot;</span>].<span class="ident">as_str</span>().<span class="ident">unwrap_or</span>(<span class="string">&quot;&quot;</span>).<span class="ident">to_string</span>(),
             }
             .<span class="ident">into</span>()),
-            <span class="prelude-val">Err</span>(<span class="kw">_</span>) <span class="op">=</span><span class="op">&gt;</span> <span class="prelude-val">Err</span>(<span class="ident">resp</span>.<span class="ident">require_success</span>().<span class="ident">unwrap_err</span>().<span class="ident">into</span>()),
+            <span class="prelude-val">Err</span>(<span class="kw">_</span>) <span class="op">=&gt;</span> <span class="prelude-val">Err</span>(<span class="ident">resp</span>.<span class="ident">require_success</span>().<span class="ident">unwrap_err</span>().<span class="ident">into</span>()),
         }
     }
 
-    <span class="kw">fn</span> <span class="ident">make_request</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">request</span>: <span class="ident">Request</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">Response</span><span class="op">&gt;</span> {
+    <span class="kw">fn</span> <span class="ident">make_request</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">request</span>: <span class="ident">Request</span>) <span class="op">-&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">Response</span><span class="op">&gt;</span> {
         <span class="kw">let</span> <span class="ident">url</span> <span class="op">=</span> <span class="ident">request</span>.<span class="ident">url</span>.<span class="ident">path</span>().<span class="ident">to_string</span>();
         <span class="kw">if</span> <span class="kw">let</span> <span class="ident">HttpClientState</span>::<span class="ident">Backoff</span> {
             <span class="ident">backoff_end_duration</span>,
@@ -1676,28 +1677,28 @@
         }
         <span class="self">self</span>.<span class="ident">state</span>.<span class="ident">lock</span>().<span class="ident">unwrap</span>().<span class="ident">insert</span>(<span class="ident">url</span>, <span class="ident">HttpClientState</span>::<span class="prelude-val">Ok</span>);
         <span class="kw">let</span> <span class="ident">resp</span> <span class="op">=</span> <span class="ident">request</span>.<span class="ident">send</span>()<span class="question-mark">?</span>;
-        <span class="kw">if</span> <span class="ident">resp</span>.<span class="ident">is_success</span>() <span class="op">|</span><span class="op">|</span> <span class="ident">resp</span>.<span class="ident">status</span> <span class="op">=</span><span class="op">=</span> <span class="ident">status_codes</span>::<span class="ident">NOT_MODIFIED</span> {
+        <span class="kw">if</span> <span class="ident">resp</span>.<span class="ident">is_success</span>() <span class="op">||</span> <span class="ident">resp</span>.<span class="ident">status</span> <span class="op">==</span> <span class="ident">status_codes</span>::<span class="ident">NOT_MODIFIED</span> {
             <span class="prelude-val">Ok</span>(<span class="ident">resp</span>)
         } <span class="kw">else</span> {
             <span class="kw">match</span> <span class="ident">resp</span>.<span class="ident">status</span> {
-                <span class="ident">status_codes</span>::<span class="ident">TOO_MANY_REQUESTS</span> <span class="op">=</span><span class="op">&gt;</span> <span class="self">self</span>.<span class="ident">handle_too_many_requests</span>(<span class="ident">resp</span>),
-                <span class="kw">_</span> <span class="op">=</span><span class="op">&gt;</span> <span class="self">Self</span>::<span class="ident">default_handle_response_error</span>(<span class="ident">resp</span>),
+                <span class="ident">status_codes</span>::<span class="ident">TOO_MANY_REQUESTS</span> <span class="op">=&gt;</span> <span class="self">self</span>.<span class="ident">handle_too_many_requests</span>(<span class="ident">resp</span>),
+                <span class="kw">_</span> <span class="op">=&gt;</span> <span class="self">Self</span>::<span class="ident">default_handle_response_error</span>(<span class="ident">resp</span>),
             }
         }
     }
 }
 
-<span class="kw">fn</span> <span class="ident">bearer_token</span>(<span class="ident">token</span>: <span class="kw-2">&amp;</span><span class="ident">str</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">String</span> {
+<span class="kw">fn</span> <span class="ident">bearer_token</span>(<span class="ident">token</span>: <span class="kw-2">&amp;</span><span class="ident">str</span>) <span class="op">-&gt;</span> <span class="ident">String</span> {
     <span class="macro">format</span><span class="macro">!</span>(<span class="string">&quot;Bearer {}&quot;</span>, <span class="ident">token</span>)
 }
 
-<span class="kw">fn</span> <span class="ident">kw</span>(<span class="ident">name</span>: <span class="kw-2">&amp;</span><span class="ident">str</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">Vec</span><span class="op">&lt;</span><span class="ident">u8</span><span class="op">&gt;</span> {
+<span class="kw">fn</span> <span class="ident">kw</span>(<span class="ident">name</span>: <span class="kw-2">&amp;</span><span class="ident">str</span>) <span class="op">-&gt;</span> <span class="ident">Vec</span><span class="op">&lt;</span><span class="ident">u8</span><span class="op">&gt;</span> {
     <span class="macro">format</span><span class="macro">!</span>(<span class="string">&quot;identity.mozilla.com/picl/v1/{}&quot;</span>, <span class="ident">name</span>)
         .<span class="ident">as_bytes</span>()
         .<span class="ident">to_vec</span>()
 }
 
-<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">derive_auth_key_from_session_token</span>(<span class="ident">session_token</span>: <span class="kw-2">&amp;</span><span class="ident">str</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">Vec</span><span class="op">&lt;</span><span class="ident">u8</span><span class="op">&gt;</span><span class="op">&gt;</span> {
+<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">derive_auth_key_from_session_token</span>(<span class="ident">session_token</span>: <span class="kw-2">&amp;</span><span class="ident">str</span>) <span class="op">-&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">Vec</span><span class="op">&lt;</span><span class="ident">u8</span><span class="op">&gt;&gt;</span> {
     <span class="kw">let</span> <span class="ident">session_token_bytes</span> <span class="op">=</span> <span class="ident">hex</span>::<span class="ident">decode</span>(<span class="ident">session_token</span>)<span class="question-mark">?</span>;
     <span class="kw">let</span> <span class="ident">context_info</span> <span class="op">=</span> <span class="ident">kw</span>(<span class="string">&quot;sessionToken&quot;</span>);
     <span class="kw">let</span> <span class="ident">salt</span> <span class="op">=</span> <span class="ident">hmac</span>::<span class="ident">SigningKey</span>::<span class="ident">new</span>(<span class="kw-2">&amp;</span><span class="ident">digest</span>::<span class="ident">SHA256</span>, <span class="kw-2">&amp;</span><span class="ident">HAWK_HKDF_SALT</span>);
@@ -1726,7 +1727,7 @@
     <span class="ident">config</span>: <span class="kw-2">&amp;</span><span class="ident">Config</span>,
     <span class="ident">auth_params</span>: <span class="ident">AuthorizationRequestParameters</span>,
     <span class="ident">auth_key</span>: <span class="kw-2">&amp;</span>[<span class="ident">u8</span>],
-) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">anyhow</span>::<span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">String</span><span class="op">&gt;</span> {
+) <span class="op">-&gt;</span> <span class="ident">anyhow</span>::<span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">String</span><span class="op">&gt;</span> {
     <span class="kw">let</span> <span class="ident">auth_endpoint</span> <span class="op">=</span> <span class="ident">config</span>.<span class="ident">auth_url_path</span>(<span class="string">&quot;v1/oauth/authorization&quot;</span>)<span class="question-mark">?</span>;
     <span class="kw">let</span> <span class="ident">req</span> <span class="op">=</span> <span class="ident">HawkRequestBuilder</span>::<span class="ident">new</span>(<span class="ident">Method</span>::<span class="ident">Post</span>, <span class="ident">auth_endpoint</span>, <span class="ident">auth_key</span>)
         .<span class="ident">body</span>(<span class="ident">serde_json</span>::<span class="ident">to_value</span>(<span class="kw-2">&amp;</span><span class="ident">auth_params</span>)<span class="question-mark">?</span>)
@@ -1735,9 +1736,9 @@
     <span class="kw">let</span> <span class="ident">resp</span>: <span class="ident">serde_json</span>::<span class="ident">Value</span> <span class="op">=</span> <span class="ident">client</span>.<span class="ident">make_request</span>(<span class="ident">req</span>)<span class="question-mark">?</span>.<span class="ident">json</span>()<span class="question-mark">?</span>;
     <span class="prelude-val">Ok</span>(<span class="ident">resp</span>
         .<span class="ident">get</span>(<span class="string">&quot;redirect&quot;</span>)
-        .<span class="ident">ok_or_else</span>(<span class="op">|</span><span class="op">|</span> <span class="ident">anyhow</span>::<span class="ident">Error</span>::<span class="ident">msg</span>(<span class="string">&quot;No redirect uri&quot;</span>))<span class="question-mark">?</span>
+        .<span class="ident">ok_or_else</span>(<span class="op">||</span> <span class="ident">anyhow</span>::<span class="ident">Error</span>::<span class="ident">msg</span>(<span class="string">&quot;No redirect uri&quot;</span>))<span class="question-mark">?</span>
         .<span class="ident">as_str</span>()
-        .<span class="ident">ok_or_else</span>(<span class="op">|</span><span class="op">|</span> <span class="ident">anyhow</span>::<span class="ident">Error</span>::<span class="ident">msg</span>(<span class="string">&quot;redirect URI is not a string&quot;</span>))<span class="question-mark">?</span>
+        .<span class="ident">ok_or_else</span>(<span class="op">||</span> <span class="ident">anyhow</span>::<span class="ident">Error</span>::<span class="ident">msg</span>(<span class="string">&quot;redirect URI is not a string&quot;</span>))<span class="question-mark">?</span>
         .<span class="ident">to_string</span>())
 }
 
@@ -1747,7 +1748,7 @@
     <span class="ident">client_id</span>: <span class="kw-2">&amp;</span><span class="ident">str</span>,
     <span class="ident">auth_key</span>: <span class="kw-2">&amp;</span>[<span class="ident">u8</span>],
     <span class="ident">config</span>: <span class="kw-2">&amp;</span><span class="ident">Config</span>,
-) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">serde_json</span>::<span class="ident">Value</span><span class="op">&gt;</span> {
+) <span class="op">-&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">serde_json</span>::<span class="ident">Value</span><span class="op">&gt;</span> {
     <span class="kw">let</span> <span class="ident">scoped_endpoint</span> <span class="op">=</span> <span class="ident">config</span>.<span class="ident">auth_url_path</span>(<span class="string">&quot;v1/account/scoped-key-data&quot;</span>)<span class="question-mark">?</span>;
     <span class="kw">let</span> <span class="ident">body</span> <span class="op">=</span> <span class="macro">json</span><span class="macro">!</span>({
         <span class="string">&quot;client_id&quot;</span>: <span class="ident">client_id</span>,
@@ -1762,7 +1763,7 @@
 }
 
 <span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;integration_test&quot;</span>)]</span>
-<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">get_keys_bundle</span>(<span class="ident">config</span>: <span class="kw-2">&amp;</span><span class="ident">Config</span>, <span class="ident">hkdf_sha256_key</span>: <span class="kw-2">&amp;</span>[<span class="ident">u8</span>]) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">Vec</span><span class="op">&lt;</span><span class="ident">u8</span><span class="op">&gt;</span><span class="op">&gt;</span> {
+<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">get_keys_bundle</span>(<span class="ident">config</span>: <span class="kw-2">&amp;</span><span class="ident">Config</span>, <span class="ident">hkdf_sha256_key</span>: <span class="kw-2">&amp;</span>[<span class="ident">u8</span>]) <span class="op">-&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">Vec</span><span class="op">&lt;</span><span class="ident">u8</span><span class="op">&gt;&gt;</span> {
     <span class="kw">let</span> <span class="ident">keys_url</span> <span class="op">=</span> <span class="ident">config</span>.<span class="ident">auth_url_path</span>(<span class="string">&quot;v1/account/keys&quot;</span>).<span class="ident">unwrap</span>();
     <span class="kw">let</span> <span class="ident">req</span> <span class="op">=</span> <span class="ident">HawkRequestBuilder</span>::<span class="ident">new</span>(<span class="ident">Method</span>::<span class="ident">Get</span>, <span class="ident">keys_url</span>, <span class="ident">hkdf_sha256_key</span>).<span class="ident">build</span>()<span class="question-mark">?</span>;
     <span class="kw">let</span> <span class="ident">client</span> <span class="op">=</span> <span class="ident">Client</span>::<span class="ident">new</span>();
@@ -1770,13 +1771,13 @@
     <span class="kw">let</span> <span class="ident">bundle</span> <span class="op">=</span> <span class="ident">hex</span>::<span class="ident">decode</span>(
         <span class="kw-2">&amp;</span><span class="ident">resp</span>[<span class="string">&quot;bundle&quot;</span>]
             .<span class="ident">as_str</span>()
-            .<span class="ident">ok_or_else</span>(<span class="op">|</span><span class="op">|</span> <span class="ident">ErrorKind</span>::<span class="ident">UnrecoverableServerError</span>(<span class="string">&quot;bundle not present&quot;</span>))<span class="question-mark">?</span>,
+            .<span class="ident">ok_or_else</span>(<span class="op">||</span> <span class="ident">ErrorKind</span>::<span class="ident">UnrecoverableServerError</span>(<span class="string">&quot;bundle not present&quot;</span>))<span class="question-mark">?</span>,
     )<span class="question-mark">?</span>;
     <span class="prelude-val">Ok</span>(<span class="ident">bundle</span>)
 }
 
 <span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;integration_test&quot;</span>)]</span>
-<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">send_verification</span>(<span class="ident">config</span>: <span class="kw-2">&amp;</span><span class="ident">Config</span>, <span class="ident">body</span>: <span class="ident">serde_json</span>::<span class="ident">Value</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">Response</span><span class="op">&gt;</span> {
+<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">send_verification</span>(<span class="ident">config</span>: <span class="kw-2">&amp;</span><span class="ident">Config</span>, <span class="ident">body</span>: <span class="ident">serde_json</span>::<span class="ident">Value</span>) <span class="op">-&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">Response</span><span class="op">&gt;</span> {
     <span class="kw">let</span> <span class="ident">verify_endpoint</span> <span class="op">=</span> <span class="ident">config</span>
         .<span class="ident">auth_url_path</span>(<span class="string">&quot;v1/recovery_email/verify_code&quot;</span>)
         .<span class="ident">unwrap</span>();
@@ -1792,7 +1793,7 @@
 }
 
 <span class="kw">impl</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span><span class="op">&gt;</span> <span class="ident">HawkRequestBuilder</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span><span class="op">&gt;</span> {
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">new</span>(<span class="ident">method</span>: <span class="ident">Method</span>, <span class="ident">url</span>: <span class="ident">Url</span>, <span class="ident">hkdf_sha256_key</span>: <span class="kw-2">&amp;</span><span class="lifetime">&#39;a</span> [<span class="ident">u8</span>]) <span class="op">-</span><span class="op">&gt;</span> <span class="self">Self</span> {
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">new</span>(<span class="ident">method</span>: <span class="ident">Method</span>, <span class="ident">url</span>: <span class="ident">Url</span>, <span class="ident">hkdf_sha256_key</span>: <span class="kw-2">&amp;</span><span class="lifetime">&#39;a</span> [<span class="ident">u8</span>]) <span class="op">-&gt;</span> <span class="self">Self</span> {
         <span class="ident">rc_crypto</span>::<span class="ident">ensure_initialized</span>();
         <span class="ident">HawkRequestBuilder</span> {
             <span class="ident">url</span>,
@@ -1804,12 +1805,12 @@
 
     <span class="comment">// This class assumes that the content being sent it always of the type</span>
     <span class="comment">// application/json.</span>
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">body</span>(<span class="kw-2">mut</span> <span class="self">self</span>, <span class="ident">body</span>: <span class="ident">serde_json</span>::<span class="ident">Value</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="self">Self</span> {
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">body</span>(<span class="kw-2">mut</span> <span class="self">self</span>, <span class="ident">body</span>: <span class="ident">serde_json</span>::<span class="ident">Value</span>) <span class="op">-&gt;</span> <span class="self">Self</span> {
         <span class="self">self</span>.<span class="ident">body</span> <span class="op">=</span> <span class="prelude-val">Some</span>(<span class="ident">body</span>.<span class="ident">to_string</span>());
         <span class="self">self</span>
     }
 
-    <span class="kw">fn</span> <span class="ident">make_hawk_header</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">String</span><span class="op">&gt;</span> {
+    <span class="kw">fn</span> <span class="ident">make_hawk_header</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">String</span><span class="op">&gt;</span> {
         <span class="comment">// Make sure we de-allocate the hash after hawk_request_builder.</span>
         <span class="kw">let</span> <span class="ident">hash</span>;
         <span class="kw">let</span> <span class="ident">method</span> <span class="op">=</span> <span class="macro">format</span><span class="macro">!</span>(<span class="string">&quot;{}&quot;</span>, <span class="self">self</span>.<span class="ident">method</span>);
@@ -1829,7 +1830,7 @@
         <span class="prelude-val">Ok</span>(<span class="macro">format</span><span class="macro">!</span>(<span class="string">&quot;Hawk {}&quot;</span>, <span class="ident">header</span>))
     }
 
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">build</span>(<span class="self">self</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">Request</span><span class="op">&gt;</span> {
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">build</span>(<span class="self">self</span>) <span class="op">-&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">Request</span><span class="op">&gt;</span> {
         <span class="kw">let</span> <span class="ident">hawk_header</span> <span class="op">=</span> <span class="self">self</span>.<span class="ident">make_hawk_header</span>()<span class="question-mark">?</span>;
         <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">request</span> <span class="op">=</span>
             <span class="ident">Request</span>::<span class="ident">new</span>(<span class="self">self</span>.<span class="ident">method</span>, <span class="self">self</span>.<span class="ident">url</span>).<span class="ident">header</span>(<span class="ident">header_names</span>::<span class="ident">AUTHORIZATION</span>, <span class="ident">hawk_header</span>)<span class="question-mark">?</span>;
@@ -1849,7 +1850,7 @@
     <span class="kw">pub</span>(<span class="kw">crate</span>) <span class="ident">profile_server_base_url</span>: <span class="ident">String</span>,
     <span class="kw">pub</span>(<span class="kw">crate</span>) <span class="ident">sync_tokenserver_base_url</span>: <span class="ident">String</span>,
     <span class="comment">// XXX: Remove Option once all prod servers have this field.</span>
-    <span class="kw">pub</span>(<span class="kw">crate</span>) <span class="ident">ecosystem_anon_id_keys</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">Vec</span><span class="op">&lt;</span><span class="ident">Jwk</span><span class="op">&gt;</span><span class="op">&gt;</span>,
+    <span class="kw">pub</span>(<span class="kw">crate</span>) <span class="ident">ecosystem_anon_id_keys</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">Vec</span><span class="op">&lt;</span><span class="ident">Jwk</span><span class="op">&gt;&gt;</span>,
 }
 
 <span class="attribute">#[<span class="ident">derive</span>(<span class="ident">Deserialize</span>)]</span>
@@ -1911,15 +1912,15 @@
 <span class="kw">pub</span> <span class="kw">struct</span> <span class="ident">DeviceUpdateRequest</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span><span class="op">&gt;</span> {
     <span class="attribute">#[<span class="ident">serde</span>(<span class="ident">skip_serializing_if</span> <span class="op">=</span> <span class="string">&quot;Option::is_none&quot;</span>)]</span>
     <span class="attribute">#[<span class="ident">serde</span>(<span class="ident">rename</span> <span class="op">=</span> <span class="string">&quot;name&quot;</span>)]</span>
-    <span class="ident">display_name</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="kw-2">&amp;</span><span class="lifetime">&#39;a</span> <span class="ident">str</span><span class="op">&gt;</span><span class="op">&gt;</span>,
+    <span class="ident">display_name</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="kw-2">&amp;</span><span class="lifetime">&#39;a</span> <span class="ident">str</span><span class="op">&gt;&gt;</span>,
     <span class="attribute">#[<span class="ident">serde</span>(<span class="ident">skip_serializing_if</span> <span class="op">=</span> <span class="string">&quot;Option::is_none&quot;</span>)]</span>
     <span class="attribute">#[<span class="ident">serde</span>(<span class="ident">rename</span> <span class="op">=</span> <span class="string">&quot;type&quot;</span>)]</span>
-    <span class="ident">device_type</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="kw-2">&amp;</span><span class="lifetime">&#39;a</span> <span class="ident">DeviceType</span><span class="op">&gt;</span><span class="op">&gt;</span>,
+    <span class="ident">device_type</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="kw-2">&amp;</span><span class="lifetime">&#39;a</span> <span class="ident">DeviceType</span><span class="op">&gt;&gt;</span>,
     <span class="attribute">#[<span class="ident">serde</span>(<span class="ident">flatten</span>)]</span>
     <span class="ident">push_subscription</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="kw-2">&amp;</span><span class="lifetime">&#39;a</span> <span class="ident">PushSubscription</span><span class="op">&gt;</span>,
     <span class="attribute">#[<span class="ident">serde</span>(<span class="ident">skip_serializing_if</span> <span class="op">=</span> <span class="string">&quot;Option::is_none&quot;</span>)]</span>
     <span class="attribute">#[<span class="ident">serde</span>(<span class="ident">rename</span> <span class="op">=</span> <span class="string">&quot;availableCommands&quot;</span>)]</span>
-    <span class="ident">available_commands</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="kw-2">&amp;</span><span class="lifetime">&#39;a</span> <span class="ident">HashMap</span><span class="op">&lt;</span><span class="ident">String</span>, <span class="ident">String</span><span class="op">&gt;</span><span class="op">&gt;</span><span class="op">&gt;</span>,
+    <span class="ident">available_commands</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="kw-2">&amp;</span><span class="lifetime">&#39;a</span> <span class="ident">HashMap</span><span class="op">&lt;</span><span class="ident">String</span>, <span class="ident">String</span><span class="op">&gt;&gt;</span><span class="op">&gt;</span>,
 }
 
 <span class="attribute">#[<span class="ident">derive</span>(<span class="ident">Clone</span>, <span class="ident">Debug</span>, <span class="ident">Serialize</span>, <span class="ident">Deserialize</span>)]</span>
@@ -1941,14 +1942,14 @@
 
 <span class="attribute">#[<span class="ident">allow</span>(<span class="ident">clippy</span>::<span class="ident">option_option</span>)]</span>
 <span class="kw">pub</span> <span class="kw">struct</span> <span class="ident">DeviceUpdateRequestBuilder</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span><span class="op">&gt;</span> {
-    <span class="ident">device_type</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="kw-2">&amp;</span><span class="lifetime">&#39;a</span> <span class="ident">DeviceType</span><span class="op">&gt;</span><span class="op">&gt;</span>,
-    <span class="ident">display_name</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="kw-2">&amp;</span><span class="lifetime">&#39;a</span> <span class="ident">str</span><span class="op">&gt;</span><span class="op">&gt;</span>,
+    <span class="ident">device_type</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="kw-2">&amp;</span><span class="lifetime">&#39;a</span> <span class="ident">DeviceType</span><span class="op">&gt;&gt;</span>,
+    <span class="ident">display_name</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="kw-2">&amp;</span><span class="lifetime">&#39;a</span> <span class="ident">str</span><span class="op">&gt;&gt;</span>,
     <span class="ident">push_subscription</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="kw-2">&amp;</span><span class="lifetime">&#39;a</span> <span class="ident">PushSubscription</span><span class="op">&gt;</span>,
-    <span class="ident">available_commands</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="kw-2">&amp;</span><span class="lifetime">&#39;a</span> <span class="ident">HashMap</span><span class="op">&lt;</span><span class="ident">String</span>, <span class="ident">String</span><span class="op">&gt;</span><span class="op">&gt;</span><span class="op">&gt;</span>,
+    <span class="ident">available_commands</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="kw-2">&amp;</span><span class="lifetime">&#39;a</span> <span class="ident">HashMap</span><span class="op">&lt;</span><span class="ident">String</span>, <span class="ident">String</span><span class="op">&gt;&gt;</span><span class="op">&gt;</span>,
 }
 
 <span class="kw">impl</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span><span class="op">&gt;</span> <span class="ident">DeviceUpdateRequestBuilder</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span><span class="op">&gt;</span> {
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">new</span>() <span class="op">-</span><span class="op">&gt;</span> <span class="self">Self</span> {
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">new</span>() <span class="op">-&gt;</span> <span class="self">Self</span> {
         <span class="self">Self</span> {
             <span class="ident">device_type</span>: <span class="prelude-val">None</span>,
             <span class="ident">display_name</span>: <span class="prelude-val">None</span>,
@@ -1957,38 +1958,38 @@
         }
     }
 
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">push_subscription</span>(<span class="kw-2">mut</span> <span class="self">self</span>, <span class="ident">push_subscription</span>: <span class="kw-2">&amp;</span><span class="lifetime">&#39;a</span> <span class="ident">PushSubscription</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="self">Self</span> {
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">push_subscription</span>(<span class="kw-2">mut</span> <span class="self">self</span>, <span class="ident">push_subscription</span>: <span class="kw-2">&amp;</span><span class="lifetime">&#39;a</span> <span class="ident">PushSubscription</span>) <span class="op">-&gt;</span> <span class="self">Self</span> {
         <span class="self">self</span>.<span class="ident">push_subscription</span> <span class="op">=</span> <span class="prelude-val">Some</span>(<span class="ident">push_subscription</span>);
         <span class="self">self</span>
     }
 
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">available_commands</span>(<span class="kw-2">mut</span> <span class="self">self</span>, <span class="ident">available_commands</span>: <span class="kw-2">&amp;</span><span class="lifetime">&#39;a</span> <span class="ident">HashMap</span><span class="op">&lt;</span><span class="ident">String</span>, <span class="ident">String</span><span class="op">&gt;</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="self">Self</span> {
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">available_commands</span>(<span class="kw-2">mut</span> <span class="self">self</span>, <span class="ident">available_commands</span>: <span class="kw-2">&amp;</span><span class="lifetime">&#39;a</span> <span class="ident">HashMap</span><span class="op">&lt;</span><span class="ident">String</span>, <span class="ident">String</span><span class="op">&gt;</span>) <span class="op">-&gt;</span> <span class="self">Self</span> {
         <span class="self">self</span>.<span class="ident">available_commands</span> <span class="op">=</span> <span class="prelude-val">Some</span>(<span class="prelude-val">Some</span>(<span class="ident">available_commands</span>));
         <span class="self">self</span>
     }
 
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">clear_available_commands</span>(<span class="kw-2">mut</span> <span class="self">self</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="self">Self</span> {
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">clear_available_commands</span>(<span class="kw-2">mut</span> <span class="self">self</span>) <span class="op">-&gt;</span> <span class="self">Self</span> {
         <span class="self">self</span>.<span class="ident">available_commands</span> <span class="op">=</span> <span class="prelude-val">Some</span>(<span class="prelude-val">None</span>);
         <span class="self">self</span>
     }
 
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">display_name</span>(<span class="kw-2">mut</span> <span class="self">self</span>, <span class="ident">display_name</span>: <span class="kw-2">&amp;</span><span class="lifetime">&#39;a</span> <span class="ident">str</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="self">Self</span> {
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">display_name</span>(<span class="kw-2">mut</span> <span class="self">self</span>, <span class="ident">display_name</span>: <span class="kw-2">&amp;</span><span class="lifetime">&#39;a</span> <span class="ident">str</span>) <span class="op">-&gt;</span> <span class="self">Self</span> {
         <span class="self">self</span>.<span class="ident">display_name</span> <span class="op">=</span> <span class="prelude-val">Some</span>(<span class="prelude-val">Some</span>(<span class="ident">display_name</span>));
         <span class="self">self</span>
     }
 
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">clear_display_name</span>(<span class="kw-2">mut</span> <span class="self">self</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="self">Self</span> {
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">clear_display_name</span>(<span class="kw-2">mut</span> <span class="self">self</span>) <span class="op">-&gt;</span> <span class="self">Self</span> {
         <span class="self">self</span>.<span class="ident">display_name</span> <span class="op">=</span> <span class="prelude-val">Some</span>(<span class="prelude-val">None</span>);
         <span class="self">self</span>
     }
 
     <span class="attribute">#[<span class="ident">allow</span>(<span class="ident">dead_code</span>)]</span>
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">device_type</span>(<span class="kw-2">mut</span> <span class="self">self</span>, <span class="ident">device_type</span>: <span class="kw-2">&amp;</span><span class="lifetime">&#39;a</span> <span class="ident">DeviceType</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="self">Self</span> {
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">device_type</span>(<span class="kw-2">mut</span> <span class="self">self</span>, <span class="ident">device_type</span>: <span class="kw-2">&amp;</span><span class="lifetime">&#39;a</span> <span class="ident">DeviceType</span>) <span class="op">-&gt;</span> <span class="self">Self</span> {
         <span class="self">self</span>.<span class="ident">device_type</span> <span class="op">=</span> <span class="prelude-val">Some</span>(<span class="prelude-val">Some</span>(<span class="ident">device_type</span>));
         <span class="self">self</span>
     }
 
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">build</span>(<span class="self">self</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">DeviceUpdateRequest</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span><span class="op">&gt;</span> {
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">build</span>(<span class="self">self</span>) <span class="op">-&gt;</span> <span class="ident">DeviceUpdateRequest</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span><span class="op">&gt;</span> {
         <span class="ident">DeviceUpdateRequest</span> {
             <span class="ident">display_name</span>: <span class="self">self</span>.<span class="ident">display_name</span>,
             <span class="ident">device_type</span>: <span class="self">self</span>.<span class="ident">device_type</span>,
@@ -2020,7 +2021,7 @@
 
 <span class="kw">impl</span> <span class="ident">std</span>::<span class="ident">ops</span>::<span class="ident">Deref</span> <span class="kw">for</span> <span class="ident">GetDeviceResponse</span> {
     <span class="kw">type</span> <span class="ident">Target</span> <span class="op">=</span> <span class="ident">DeviceResponseCommon</span>;
-    <span class="kw">fn</span> <span class="ident">deref</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="kw-2">&amp;</span><span class="ident">DeviceResponseCommon</span> {
+    <span class="kw">fn</span> <span class="ident">deref</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-&gt;</span> <span class="kw-2">&amp;</span><span class="ident">DeviceResponseCommon</span> {
         <span class="kw-2">&amp;</span><span class="self">self</span>.<span class="ident">common</span>
     }
 }
@@ -2054,7 +2055,7 @@
     <span class="kw">pub</span> <span class="ident">name</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">String</span><span class="op">&gt;</span>,
     <span class="kw">pub</span> <span class="ident">created_time</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">u64</span><span class="op">&gt;</span>,
     <span class="kw">pub</span> <span class="ident">last_access_time</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">u64</span><span class="op">&gt;</span>,
-    <span class="kw">pub</span> <span class="ident">scope</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">Vec</span><span class="op">&lt;</span><span class="ident">String</span><span class="op">&gt;</span><span class="op">&gt;</span>,
+    <span class="kw">pub</span> <span class="ident">scope</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">Vec</span><span class="op">&lt;</span><span class="ident">String</span><span class="op">&gt;&gt;</span>,
     <span class="kw">pub</span> <span class="ident">user_agent</span>: <span class="ident">String</span>,
     <span class="kw">pub</span> <span class="ident">os</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">String</span><span class="op">&gt;</span>,
 }

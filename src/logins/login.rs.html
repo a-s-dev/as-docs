@@ -1,4 +1,5 @@
-<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source to the Rust file `components/logins/src/login.rs`."><meta name="keywords" content="rust, rustlang, rust-lang"><title>login.rs.html -- source</title><link rel="stylesheet" type="text/css" href="../../normalize.css"><link rel="stylesheet" type="text/css" href="../../rustdoc.css" id="mainThemeStyle"><link rel="stylesheet" type="text/css" href="../../dark.css"><link rel="stylesheet" type="text/css" href="../../light.css" id="themeStyle"><script src="../../storage.js"></script><noscript><link rel="stylesheet" href="../../noscript.css"></noscript><link rel="shortcut icon" href="../../favicon.ico"><style type="text/css">#crate-search{background-image:url("../../down-arrow.svg");}</style></head><body class="rustdoc source"><!--[if lte IE 8]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="sidebar"><div class="sidebar-menu">&#9776;</div><a href='../../logins/index.html'><div class='logo-container'><img src='../../rust-logo.png' alt='logo'></div></a></nav><div class="theme-picker"><button id="theme-picker" aria-label="Pick another theme!"><img src="../../brush.svg" width="18" alt="Pick another theme!"></button><div id="theme-choices"></div></div><script src="../../theme.js"></script><nav class="sub"><form class="search-form"><div class="search-container"><div><select id="crate-search"><option value="All crates">All crates</option></select><input class="search-input" name="search" disabled autocomplete="off" spellcheck="false" placeholder="Click or press ‘S’ to search, ‘?’ for more options…" type="search"></div><a id="settings-menu" href="../../settings.html"><img src="../../wheel.svg" width="18" alt="Change settings"></a></div></form></nav><section id="main" class="content"><pre class="line-numbers"><span id="1">   1</span>
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source to the Rust file `components/logins/src/login.rs`."><meta name="keywords" content="rust, rustlang, rust-lang"><title>login.rs.html -- source</title><link rel="stylesheet" type="text/css" href="../../normalize.css"><link rel="stylesheet" type="text/css" href="../../rustdoc.css" id="mainThemeStyle"><link rel="stylesheet" type="text/css" href="../../light.css"  id="themeStyle"><link rel="stylesheet" type="text/css" href="../../dark.css" disabled ><link rel="stylesheet" type="text/css" href="../../ayu.css" disabled ><script src="../../storage.js"></script><noscript><link rel="stylesheet" href="../../noscript.css"></noscript><link rel="shortcut icon" href="../../favicon.ico"><style type="text/css">#crate-search{background-image:url("../../down-arrow.svg");}</style></head><body class="rustdoc source"><!--[if lte IE 8]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="sidebar"><div class="sidebar-menu">&#9776;</div><a href='../../logins/index.html'><div class='logo-container rust-logo'><img src='../../rust-logo.png' alt='logo'></div></a></nav><div class="theme-picker"><button id="theme-picker" aria-label="Pick another theme!"><img src="../../brush.svg" width="18" alt="Pick another theme!"></button><div id="theme-choices"></div></div><script src="../../theme.js"></script><nav class="sub"><form class="search-form"><div class="search-container"><div><select id="crate-search"><option value="All crates">All crates</option></select><input class="search-input" name="search" disabled autocomplete="off" spellcheck="false" placeholder="Click or press ‘S’ to search, ‘?’ for more options…" type="search"></div><span class="help-button">?</span>
+                <a id="settings-menu" href="../../settings.html"><img src="../../wheel.svg" width="18" alt="Change settings"></a></div></form></nav><section id="main" class="content"><pre class="line-numbers"><span id="1">   1</span>
 <span id="2">   2</span>
 <span id="3">   3</span>
 <span id="4">   4</span>
@@ -1750,7 +1751,7 @@
     <span class="kw">pub</span> <span class="ident">times_used</span>: <span class="ident">i64</span>,
 }
 
-<span class="kw">fn</span> <span class="ident">deserialize_timestamp</span><span class="op">&lt;</span><span class="lifetime">&#39;de</span>, <span class="ident">D</span><span class="op">&gt;</span>(<span class="ident">deserializer</span>: <span class="ident">D</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">std</span>::<span class="ident">result</span>::<span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">i64</span>, <span class="ident">D</span>::<span class="ident">Error</span><span class="op">&gt;</span>
+<span class="kw">fn</span> <span class="ident">deserialize_timestamp</span><span class="op">&lt;</span><span class="lifetime">&#39;de</span>, <span class="ident">D</span><span class="op">&gt;</span>(<span class="ident">deserializer</span>: <span class="ident">D</span>) <span class="op">-&gt;</span> <span class="ident">std</span>::<span class="ident">result</span>::<span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">i64</span>, <span class="ident">D</span>::<span class="ident">Error</span><span class="op">&gt;</span>
 <span class="kw">where</span>
     <span class="ident">D</span>: <span class="ident">serde</span>::<span class="ident">de</span>::<span class="ident">Deserializer</span><span class="op">&lt;</span><span class="lifetime">&#39;de</span><span class="op">&gt;</span>,
 {
@@ -1762,24 +1763,24 @@
     <span class="prelude-val">Ok</span>(<span class="ident">i64</span>::<span class="ident">deserialize</span>(<span class="ident">deserializer</span>).<span class="ident">unwrap_or_default</span>().<span class="ident">max</span>(<span class="number">0</span>))
 }
 
-<span class="kw">fn</span> <span class="ident">string_or_default</span>(<span class="ident">row</span>: <span class="kw-2">&amp;</span><span class="ident">Row</span><span class="op">&lt;</span><span class="lifetime">&#39;_</span><span class="op">&gt;</span>, <span class="ident">col</span>: <span class="kw-2">&amp;</span><span class="ident">str</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">String</span><span class="op">&gt;</span> {
-    <span class="prelude-val">Ok</span>(<span class="ident">row</span>.<span class="ident">get</span>::<span class="op">&lt;</span><span class="kw">_</span>, <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">String</span><span class="op">&gt;</span><span class="op">&gt;</span>(<span class="ident">col</span>)<span class="question-mark">?</span>.<span class="ident">unwrap_or_default</span>())
+<span class="kw">fn</span> <span class="ident">string_or_default</span>(<span class="ident">row</span>: <span class="kw-2">&amp;</span><span class="ident">Row</span><span class="op">&lt;</span><span class="lifetime">&#39;_</span><span class="op">&gt;</span>, <span class="ident">col</span>: <span class="kw-2">&amp;</span><span class="ident">str</span>) <span class="op">-&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">String</span><span class="op">&gt;</span> {
+    <span class="prelude-val">Ok</span>(<span class="ident">row</span>.<span class="ident">get</span>::<span class="op">&lt;</span><span class="kw">_</span>, <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">String</span><span class="op">&gt;&gt;</span>(<span class="ident">col</span>)<span class="question-mark">?</span>.<span class="ident">unwrap_or_default</span>())
 }
 
 <span class="kw">impl</span> <span class="ident">Login</span> {
     <span class="attribute">#[<span class="ident">inline</span>]</span>
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">guid</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="kw-2">&amp;</span><span class="ident">Guid</span> {
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">guid</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-&gt;</span> <span class="kw-2">&amp;</span><span class="ident">Guid</span> {
         <span class="kw-2">&amp;</span><span class="self">self</span>.<span class="ident">guid</span>
     }
 
     <span class="attribute">#[<span class="ident">inline</span>]</span>
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">guid_str</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="kw-2">&amp;</span><span class="ident">str</span> {
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">guid_str</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-&gt;</span> <span class="kw-2">&amp;</span><span class="ident">str</span> {
         <span class="self">self</span>.<span class="ident">guid</span>.<span class="ident">as_str</span>()
     }
 
     <span class="doccomment">/// Checks whether the Login is valid, without attempting to fix any fields.</span>
     <span class="doccomment">/// Returns an error if invalid data is found, even if it could have been fixed.</span>
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">check_valid</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span>()<span class="op">&gt;</span> {
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">check_valid</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span>()<span class="op">&gt;</span> {
         <span class="self">self</span>.<span class="ident">validate_and_fixup</span>(<span class="bool-val">false</span>)<span class="question-mark">?</span>;
         <span class="prelude-val">Ok</span>(())
     }
@@ -1788,39 +1789,39 @@
     <span class="doccomment">/// This consumes `self` to make it easy for callers to unconditionally</span>
     <span class="doccomment">/// replace a Login with an owned fixed-up version, preventing them from</span>
     <span class="doccomment">/// using one that is invalid.</span>
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">fixup</span>(<span class="self">self</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="self">Self</span><span class="op">&gt;</span> {
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">fixup</span>(<span class="self">self</span>) <span class="op">-&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="self">Self</span><span class="op">&gt;</span> {
         <span class="kw">match</span> <span class="self">self</span>.<span class="ident">maybe_fixup</span>()<span class="question-mark">?</span> {
-            <span class="prelude-val">None</span> <span class="op">=</span><span class="op">&gt;</span> <span class="prelude-val">Ok</span>(<span class="self">self</span>),
-            <span class="prelude-val">Some</span>(<span class="ident">login</span>) <span class="op">=</span><span class="op">&gt;</span> <span class="prelude-val">Ok</span>(<span class="ident">login</span>),
+            <span class="prelude-val">None</span> <span class="op">=&gt;</span> <span class="prelude-val">Ok</span>(<span class="self">self</span>),
+            <span class="prelude-val">Some</span>(<span class="ident">login</span>) <span class="op">=&gt;</span> <span class="prelude-val">Ok</span>(<span class="ident">login</span>),
         }
     }
 
     <span class="doccomment">/// Like `fixup()` above, but takes `self` by reference and returns</span>
     <span class="doccomment">/// an Option for the fixed-up version, allowing the caller to make</span>
     <span class="doccomment">/// more choices about what to do next.</span>
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">maybe_fixup</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="self">Self</span><span class="op">&gt;</span><span class="op">&gt;</span> {
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">maybe_fixup</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="self">Self</span><span class="op">&gt;&gt;</span> {
         <span class="self">self</span>.<span class="ident">validate_and_fixup</span>(<span class="bool-val">true</span>)
     }
 
     <span class="doccomment">/// Internal helper for validation and fixups of an &quot;origin&quot; stored as</span>
     <span class="doccomment">/// a string.</span>
-    <span class="kw">fn</span> <span class="ident">validate_and_fixup_origin</span>(<span class="ident">origin</span>: <span class="kw-2">&amp;</span><span class="ident">str</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">String</span><span class="op">&gt;</span><span class="op">&gt;</span> {
+    <span class="kw">fn</span> <span class="ident">validate_and_fixup_origin</span>(<span class="ident">origin</span>: <span class="kw-2">&amp;</span><span class="ident">str</span>) <span class="op">-&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">String</span><span class="op">&gt;&gt;</span> {
         <span class="comment">// Check we can parse the origin, then use the normalized version of it.</span>
         <span class="kw">match</span> <span class="ident">Url</span>::<span class="ident">parse</span>(<span class="kw-2">&amp;</span><span class="ident">origin</span>) {
-            <span class="prelude-val">Ok</span>(<span class="kw-2">mut</span> <span class="ident">u</span>) <span class="op">=</span><span class="op">&gt;</span> {
+            <span class="prelude-val">Ok</span>(<span class="kw-2">mut</span> <span class="ident">u</span>) <span class="op">=&gt;</span> {
                 <span class="comment">// Presumably this is a faster path than always setting?</span>
-                <span class="kw">if</span> <span class="ident">u</span>.<span class="ident">path</span>() <span class="op">!</span><span class="op">=</span> <span class="string">&quot;/&quot;</span>
-                    <span class="op">|</span><span class="op">|</span> <span class="ident">u</span>.<span class="ident">fragment</span>().<span class="ident">is_some</span>()
-                    <span class="op">|</span><span class="op">|</span> <span class="ident">u</span>.<span class="ident">query</span>().<span class="ident">is_some</span>()
-                    <span class="op">|</span><span class="op">|</span> <span class="ident">u</span>.<span class="ident">username</span>() <span class="op">!</span><span class="op">=</span> <span class="string">&quot;/&quot;</span>
-                    <span class="op">|</span><span class="op">|</span> <span class="ident">u</span>.<span class="ident">password</span>().<span class="ident">is_some</span>()
+                <span class="kw">if</span> <span class="ident">u</span>.<span class="ident">path</span>() <span class="op">!=</span> <span class="string">&quot;/&quot;</span>
+                    <span class="op">||</span> <span class="ident">u</span>.<span class="ident">fragment</span>().<span class="ident">is_some</span>()
+                    <span class="op">||</span> <span class="ident">u</span>.<span class="ident">query</span>().<span class="ident">is_some</span>()
+                    <span class="op">||</span> <span class="ident">u</span>.<span class="ident">username</span>() <span class="op">!=</span> <span class="string">&quot;/&quot;</span>
+                    <span class="op">||</span> <span class="ident">u</span>.<span class="ident">password</span>().<span class="ident">is_some</span>()
                 {
                     <span class="comment">// Not identical - we only want the origin part, so kill</span>
                     <span class="comment">// any other parts which may exist.</span>
                     <span class="comment">// But first special case `file://` URLs which always</span>
                     <span class="comment">// resolve to `file://`</span>
-                    <span class="kw">if</span> <span class="ident">u</span>.<span class="ident">scheme</span>() <span class="op">=</span><span class="op">=</span> <span class="string">&quot;file&quot;</span> {
-                        <span class="kw">return</span> <span class="prelude-val">Ok</span>(<span class="kw">if</span> <span class="ident">origin</span> <span class="op">=</span><span class="op">=</span> <span class="string">&quot;file://&quot;</span> {
+                    <span class="kw">if</span> <span class="ident">u</span>.<span class="ident">scheme</span>() <span class="op">==</span> <span class="string">&quot;file&quot;</span> {
+                        <span class="kw">return</span> <span class="prelude-val">Ok</span>(<span class="kw">if</span> <span class="ident">origin</span> <span class="op">==</span> <span class="string">&quot;file://&quot;</span> {
                             <span class="prelude-val">None</span>
                         } <span class="kw">else</span> {
                             <span class="prelude-val">Some</span>(<span class="string">&quot;file://&quot;</span>.<span class="ident">into</span>())
@@ -1836,14 +1837,14 @@
                     <span class="kw">if</span> <span class="ident">href</span>.<span class="ident">ends_with</span>(<span class="string">&#39;/&#39;</span>) {
                         <span class="ident">href</span>.<span class="ident">pop</span>().<span class="ident">expect</span>(<span class="string">&quot;url must have a length&quot;</span>);
                     }
-                    <span class="kw">if</span> <span class="ident">origin</span> <span class="op">!</span><span class="op">=</span> <span class="ident">href</span> {
+                    <span class="kw">if</span> <span class="ident">origin</span> <span class="op">!=</span> <span class="ident">href</span> {
                         <span class="comment">// Needs to be fixed up.</span>
                         <span class="kw">return</span> <span class="prelude-val">Ok</span>(<span class="prelude-val">Some</span>(<span class="ident">href</span>));
                     }
                 }
                 <span class="prelude-val">Ok</span>(<span class="prelude-val">None</span>)
             }
-            <span class="prelude-val">Err</span>(<span class="kw">_</span>) <span class="op">=</span><span class="op">&gt;</span> {
+            <span class="prelude-val">Err</span>(<span class="kw">_</span>) <span class="op">=&gt;</span> {
                 <span class="comment">// We can&#39;t fixup completely invalid records, so always throw.</span>
                 <span class="macro">throw</span><span class="macro">!</span>(<span class="ident">InvalidLogin</span>::<span class="ident">IllegalFieldValue</span> {
                     <span class="ident">field_info</span>: <span class="string">&quot;Origin is Malformed&quot;</span>.<span class="ident">into</span>()
@@ -1853,14 +1854,14 @@
     }
 
     <span class="doccomment">/// Internal helper for doing validation and fixups.</span>
-    <span class="kw">fn</span> <span class="ident">validate_and_fixup</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">fixup</span>: <span class="ident">bool</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="self">Self</span><span class="op">&gt;</span><span class="op">&gt;</span> {
+    <span class="kw">fn</span> <span class="ident">validate_and_fixup</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">fixup</span>: <span class="ident">bool</span>) <span class="op">-&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="self">Self</span><span class="op">&gt;&gt;</span> {
         <span class="comment">// XXX TODO: we&#39;ve definitely got more validation and fixups to add here!</span>
 
         <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">maybe_fixed</span> <span class="op">=</span> <span class="prelude-val">None</span>;
 
         <span class="doccomment">/// A little helper to magic a Some(self.clone()) into existence when needed.</span>
         <span class="macro">macro_rules</span><span class="macro">!</span> <span class="ident">get_fixed_or_throw</span> {
-            (<span class="macro-nonterminal">$</span><span class="macro-nonterminal">err</span>:<span class="ident">expr</span>) <span class="op">=</span><span class="op">&gt;</span> {
+            (<span class="macro-nonterminal">$</span><span class="macro-nonterminal">err</span>:<span class="ident">expr</span>) <span class="op">=&gt;</span> {
                 <span class="comment">// This is a block expression returning a local variable,</span>
                 <span class="comment">// entirely so we can give it an explicit type declaration.</span>
                 {
@@ -1869,7 +1870,7 @@
                     }
                     <span class="ident">log</span>::<span class="macro">warn</span><span class="macro">!</span>(<span class="string">&quot;Fixing login record {}: {:?}&quot;</span>, <span class="self">self</span>.<span class="ident">guid</span>, <span class="macro-nonterminal">$</span><span class="macro-nonterminal">err</span>);
                     <span class="kw">let</span> <span class="ident">fixed</span>: <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">Login</span><span class="op">&gt;</span> <span class="op">=</span>
-                        <span class="prelude-val">Ok</span>(<span class="ident">maybe_fixed</span>.<span class="ident">get_or_insert_with</span>(<span class="op">|</span><span class="op">|</span> <span class="self">self</span>.<span class="ident">clone</span>()));
+                        <span class="prelude-val">Ok</span>(<span class="ident">maybe_fixed</span>.<span class="ident">get_or_insert_with</span>(<span class="op">||</span> <span class="self">self</span>.<span class="ident">clone</span>()));
                     <span class="ident">fixed</span>
                 }
             };
@@ -1883,11 +1884,11 @@
             <span class="macro">throw</span><span class="macro">!</span>(<span class="ident">InvalidLogin</span>::<span class="ident">EmptyPassword</span>);
         }
 
-        <span class="kw">if</span> <span class="self">self</span>.<span class="ident">form_submit_url</span>.<span class="ident">is_some</span>() <span class="kw-2">&amp;</span><span class="op">&amp;</span> <span class="self">self</span>.<span class="ident">http_realm</span>.<span class="ident">is_some</span>() {
+        <span class="kw">if</span> <span class="self">self</span>.<span class="ident">form_submit_url</span>.<span class="ident">is_some</span>() <span class="op">&amp;&amp;</span> <span class="self">self</span>.<span class="ident">http_realm</span>.<span class="ident">is_some</span>() {
             <span class="macro">get_fixed_or_throw</span><span class="macro">!</span>(<span class="ident">InvalidLogin</span>::<span class="ident">BothTargets</span>)<span class="question-mark">?</span>.<span class="ident">http_realm</span> <span class="op">=</span> <span class="prelude-val">None</span>;
         }
 
-        <span class="kw">if</span> <span class="self">self</span>.<span class="ident">form_submit_url</span>.<span class="ident">is_none</span>() <span class="kw-2">&amp;</span><span class="op">&amp;</span> <span class="self">self</span>.<span class="ident">http_realm</span>.<span class="ident">is_none</span>() {
+        <span class="kw">if</span> <span class="self">self</span>.<span class="ident">form_submit_url</span>.<span class="ident">is_none</span>() <span class="op">&amp;&amp;</span> <span class="self">self</span>.<span class="ident">http_realm</span>.<span class="ident">is_none</span>() {
             <span class="macro">throw</span><span class="macro">!</span>(<span class="ident">InvalidLogin</span>::<span class="ident">NoTarget</span>);
         }
 
@@ -1919,9 +1920,9 @@
 
             <span class="comment">// Newlines are invalid in Desktop with the exception of the username</span>
             <span class="comment">// and password fields.</span>
-            <span class="kw">if</span> <span class="ident">field_name</span> <span class="op">!</span><span class="op">=</span> <span class="kw-2">&amp;</span><span class="string">&quot;username&quot;</span>
-                <span class="kw-2">&amp;</span><span class="op">&amp;</span> <span class="ident">field_name</span> <span class="op">!</span><span class="op">=</span> <span class="kw-2">&amp;</span><span class="string">&quot;password&quot;</span>
-                <span class="kw-2">&amp;</span><span class="op">&amp;</span> (<span class="ident">field_value</span>.<span class="ident">contains</span>(<span class="string">&#39;\n&#39;</span>) <span class="op">|</span><span class="op">|</span> <span class="ident">field_value</span>.<span class="ident">contains</span>(<span class="string">&#39;\r&#39;</span>))
+            <span class="kw">if</span> <span class="ident">field_name</span> <span class="op">!=</span> <span class="kw-2">&amp;</span><span class="string">&quot;username&quot;</span>
+                <span class="op">&amp;&amp;</span> <span class="ident">field_name</span> <span class="op">!=</span> <span class="kw-2">&amp;</span><span class="string">&quot;password&quot;</span>
+                <span class="op">&amp;&amp;</span> (<span class="ident">field_value</span>.<span class="ident">contains</span>(<span class="string">&#39;\n&#39;</span>) <span class="op">||</span> <span class="ident">field_value</span>.<span class="ident">contains</span>(<span class="string">&#39;\r&#39;</span>))
             {
                 <span class="macro">throw</span><span class="macro">!</span>(<span class="ident">InvalidLogin</span>::<span class="ident">IllegalFieldValue</span> {
                     <span class="ident">field_info</span>: <span class="macro">format</span><span class="macro">!</span>(<span class="string">&quot;`{}` contains newline&quot;</span>, <span class="ident">field_name</span>)
@@ -1930,7 +1931,7 @@
         }
 
         <span class="comment">// Desktop doesn&#39;t like fields with the below patterns</span>
-        <span class="kw">if</span> <span class="self">self</span>.<span class="ident">username_field</span> <span class="op">=</span><span class="op">=</span> <span class="string">&quot;.&quot;</span> {
+        <span class="kw">if</span> <span class="self">self</span>.<span class="ident">username_field</span> <span class="op">==</span> <span class="string">&quot;.&quot;</span> {
             <span class="macro">throw</span><span class="macro">!</span>(<span class="ident">InvalidLogin</span>::<span class="ident">IllegalFieldValue</span> {
                 <span class="ident">field_info</span>: <span class="string">&quot;`usernameField` is a period&quot;</span>.<span class="ident">into</span>()
             });
@@ -1945,7 +1946,7 @@
         }
 
         <span class="kw">match</span> <span class="kw-2">&amp;</span><span class="ident">maybe_fixed</span>.<span class="ident">as_ref</span>().<span class="ident">unwrap_or</span>(<span class="self">self</span>).<span class="ident">form_submit_url</span> {
-            <span class="prelude-val">None</span> <span class="op">=</span><span class="op">&gt;</span> {
+            <span class="prelude-val">None</span> <span class="op">=&gt;</span> {
                 <span class="kw">if</span> <span class="op">!</span><span class="self">self</span>.<span class="ident">username_field</span>.<span class="ident">is_empty</span>() {
                     <span class="macro">get_fixed_or_throw</span><span class="macro">!</span>(<span class="ident">InvalidLogin</span>::<span class="ident">IllegalFieldValue</span> {
                         <span class="ident">field_info</span>: <span class="string">&quot;usernameField must be empty when formSubmitURL is null&quot;</span>.<span class="ident">into</span>()
@@ -1961,17 +1962,17 @@
                     .<span class="ident">clear</span>();
                 }
             }
-            <span class="prelude-val">Some</span>(<span class="ident">href</span>) <span class="op">=</span><span class="op">&gt;</span> {
+            <span class="prelude-val">Some</span>(<span class="ident">href</span>) <span class="op">=&gt;</span> {
                 <span class="comment">// &quot;&quot;, &quot;.&quot;, and &quot;javascript:&quot; are special cases documented at the top of this file.</span>
-                <span class="kw">if</span> <span class="ident">href</span> <span class="op">=</span><span class="op">=</span> <span class="string">&quot;.&quot;</span> {
+                <span class="kw">if</span> <span class="ident">href</span> <span class="op">==</span> <span class="string">&quot;.&quot;</span> {
                     <span class="comment">// A bit of a special case - if we are being asked to fixup, we replace</span>
                     <span class="comment">// &quot;.&quot; with an empty string - but if not fixing up we don&#39;t complain.</span>
                     <span class="kw">if</span> <span class="ident">fixup</span> {
                         <span class="ident">maybe_fixed</span>
-                            .<span class="ident">get_or_insert_with</span>(<span class="op">|</span><span class="op">|</span> <span class="self">self</span>.<span class="ident">clone</span>())
+                            .<span class="ident">get_or_insert_with</span>(<span class="op">||</span> <span class="self">self</span>.<span class="ident">clone</span>())
                             .<span class="ident">form_submit_url</span> <span class="op">=</span> <span class="prelude-val">Some</span>(<span class="string">&quot;&quot;</span>.<span class="ident">into</span>());
                     }
-                } <span class="kw">else</span> <span class="kw">if</span> <span class="ident">href</span> <span class="op">!</span><span class="op">=</span> <span class="string">&quot;&quot;</span> <span class="kw-2">&amp;</span><span class="op">&amp;</span> <span class="ident">href</span> <span class="op">!</span><span class="op">=</span> <span class="string">&quot;javascript:&quot;</span> {
+                } <span class="kw">else</span> <span class="kw">if</span> <span class="ident">href</span> <span class="op">!=</span> <span class="string">&quot;&quot;</span> <span class="op">&amp;&amp;</span> <span class="ident">href</span> <span class="op">!=</span> <span class="string">&quot;javascript:&quot;</span> {
                     <span class="kw">if</span> <span class="kw">let</span> <span class="prelude-val">Some</span>(<span class="ident">fixed</span>) <span class="op">=</span> <span class="ident">Login</span>::<span class="ident">validate_and_fixup_origin</span>(<span class="kw-2">&amp;</span><span class="ident">href</span>)<span class="question-mark">?</span> {
                         <span class="macro">get_fixed_or_throw</span><span class="macro">!</span>(<span class="ident">InvalidLogin</span>::<span class="ident">IllegalFieldValue</span> {
                             <span class="ident">field_info</span>: <span class="string">&quot;formActionOrigin is not normalized&quot;</span>.<span class="ident">into</span>()
@@ -1985,7 +1986,7 @@
         <span class="prelude-val">Ok</span>(<span class="ident">maybe_fixed</span>)
     }
 
-    <span class="kw">pub</span>(<span class="kw">crate</span>) <span class="kw">fn</span> <span class="ident">from_row</span>(<span class="ident">row</span>: <span class="kw-2">&amp;</span><span class="ident">Row</span><span class="op">&lt;</span><span class="lifetime">&#39;_</span><span class="op">&gt;</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">Login</span><span class="op">&gt;</span> {
+    <span class="kw">pub</span>(<span class="kw">crate</span>) <span class="kw">fn</span> <span class="ident">from_row</span>(<span class="ident">row</span>: <span class="kw-2">&amp;</span><span class="ident">Row</span><span class="op">&lt;</span><span class="lifetime">&#39;_</span><span class="op">&gt;</span>) <span class="op">-&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">Login</span><span class="op">&gt;</span> {
         <span class="kw">let</span> <span class="ident">login</span> <span class="op">=</span> <span class="ident">Login</span> {
             <span class="ident">guid</span>: <span class="ident">row</span>.<span class="ident">get</span>(<span class="string">&quot;guid&quot;</span>)<span class="question-mark">?</span>,
             <span class="ident">password</span>: <span class="ident">row</span>.<span class="ident">get</span>(<span class="string">&quot;password&quot;</span>)<span class="question-mark">?</span>,
@@ -2002,7 +2003,7 @@
             <span class="ident">time_created</span>: <span class="ident">row</span>.<span class="ident">get</span>(<span class="string">&quot;timeCreated&quot;</span>)<span class="question-mark">?</span>,
             <span class="comment">// Might be null</span>
             <span class="ident">time_last_used</span>: <span class="ident">row</span>
-                .<span class="ident">get</span>::<span class="op">&lt;</span><span class="kw">_</span>, <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">i64</span><span class="op">&gt;</span><span class="op">&gt;</span>(<span class="string">&quot;timeLastUsed&quot;</span>)<span class="question-mark">?</span>
+                .<span class="ident">get</span>::<span class="op">&lt;</span><span class="kw">_</span>, <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">i64</span><span class="op">&gt;&gt;</span>(<span class="string">&quot;timeLastUsed&quot;</span>)<span class="question-mark">?</span>
                 .<span class="ident">unwrap_or_default</span>(),
 
             <span class="ident">time_password_changed</span>: <span class="ident">row</span>.<span class="ident">get</span>(<span class="string">&quot;timePasswordChanged&quot;</span>)<span class="question-mark">?</span>,
@@ -2015,7 +2016,7 @@
 }
 
 <span class="kw">impl</span> <span class="ident">From</span><span class="op">&lt;</span><span class="ident">Login</span><span class="op">&gt;</span> <span class="kw">for</span> <span class="ident">PasswordInfo</span> {
-    <span class="kw">fn</span> <span class="ident">from</span>(<span class="ident">login</span>: <span class="ident">Login</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="self">Self</span> {
+    <span class="kw">fn</span> <span class="ident">from</span>(<span class="ident">login</span>: <span class="ident">Login</span>) <span class="op">-&gt;</span> <span class="self">Self</span> {
         <span class="self">Self</span> {
             <span class="ident">id</span>: <span class="ident">login</span>.<span class="ident">guid</span>.<span class="ident">into_string</span>(),
             <span class="ident">hostname</span>: <span class="ident">login</span>.<span class="ident">hostname</span>,
@@ -2034,7 +2035,7 @@
 }
 
 <span class="kw">impl</span> <span class="ident">From</span><span class="op">&lt;</span><span class="ident">PasswordInfo</span><span class="op">&gt;</span> <span class="kw">for</span> <span class="ident">Login</span> {
-    <span class="kw">fn</span> <span class="ident">from</span>(<span class="ident">info</span>: <span class="ident">PasswordInfo</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="self">Self</span> {
+    <span class="kw">fn</span> <span class="ident">from</span>(<span class="ident">info</span>: <span class="ident">PasswordInfo</span>) <span class="op">-&gt;</span> <span class="self">Self</span> {
         <span class="self">Self</span> {
             <span class="ident">guid</span>: <span class="ident">Guid</span>::<span class="ident">from_string</span>(<span class="ident">info</span>.<span class="ident">id</span>),
             <span class="ident">hostname</span>: <span class="ident">info</span>.<span class="ident">hostname</span>,
@@ -2061,11 +2062,11 @@
 
 <span class="kw">impl</span> <span class="ident">MirrorLogin</span> {
     <span class="attribute">#[<span class="ident">inline</span>]</span>
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">guid_str</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="kw-2">&amp;</span><span class="ident">str</span> {
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">guid_str</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-&gt;</span> <span class="kw-2">&amp;</span><span class="ident">str</span> {
         <span class="self">self</span>.<span class="ident">login</span>.<span class="ident">guid_str</span>()
     }
 
-    <span class="kw">pub</span>(<span class="kw">crate</span>) <span class="kw">fn</span> <span class="ident">from_row</span>(<span class="ident">row</span>: <span class="kw-2">&amp;</span><span class="ident">Row</span><span class="op">&lt;</span><span class="lifetime">&#39;_</span><span class="op">&gt;</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">MirrorLogin</span><span class="op">&gt;</span> {
+    <span class="kw">pub</span>(<span class="kw">crate</span>) <span class="kw">fn</span> <span class="ident">from_row</span>(<span class="ident">row</span>: <span class="kw-2">&amp;</span><span class="ident">Row</span><span class="op">&lt;</span><span class="lifetime">&#39;_</span><span class="op">&gt;</span>) <span class="op">-&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">MirrorLogin</span><span class="op">&gt;</span> {
         <span class="prelude-val">Ok</span>(<span class="ident">MirrorLogin</span> {
             <span class="ident">login</span>: <span class="ident">Login</span>::<span class="ident">from_row</span>(<span class="ident">row</span>)<span class="question-mark">?</span>,
             <span class="ident">is_overridden</span>: <span class="ident">row</span>.<span class="ident">get</span>(<span class="string">&quot;is_overridden&quot;</span>)<span class="question-mark">?</span>,
@@ -2085,12 +2086,12 @@
 
 <span class="kw">impl</span> <span class="ident">SyncStatus</span> {
     <span class="attribute">#[<span class="ident">inline</span>]</span>
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">from_u8</span>(<span class="ident">v</span>: <span class="ident">u8</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="self">Self</span><span class="op">&gt;</span> {
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">from_u8</span>(<span class="ident">v</span>: <span class="ident">u8</span>) <span class="op">-&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="self">Self</span><span class="op">&gt;</span> {
         <span class="kw">match</span> <span class="ident">v</span> {
-            <span class="number">0</span> <span class="op">=</span><span class="op">&gt;</span> <span class="prelude-val">Ok</span>(<span class="ident">SyncStatus</span>::<span class="ident">Synced</span>),
-            <span class="number">1</span> <span class="op">=</span><span class="op">&gt;</span> <span class="prelude-val">Ok</span>(<span class="ident">SyncStatus</span>::<span class="ident">Changed</span>),
-            <span class="number">2</span> <span class="op">=</span><span class="op">&gt;</span> <span class="prelude-val">Ok</span>(<span class="ident">SyncStatus</span>::<span class="ident">New</span>),
-            <span class="ident">v</span> <span class="op">=</span><span class="op">&gt;</span> <span class="macro">throw</span><span class="macro">!</span>(<span class="ident">ErrorKind</span>::<span class="ident">BadSyncStatus</span>(<span class="ident">v</span>)),
+            <span class="number">0</span> <span class="op">=&gt;</span> <span class="prelude-val">Ok</span>(<span class="ident">SyncStatus</span>::<span class="ident">Synced</span>),
+            <span class="number">1</span> <span class="op">=&gt;</span> <span class="prelude-val">Ok</span>(<span class="ident">SyncStatus</span>::<span class="ident">Changed</span>),
+            <span class="number">2</span> <span class="op">=&gt;</span> <span class="prelude-val">Ok</span>(<span class="ident">SyncStatus</span>::<span class="ident">New</span>),
+            <span class="ident">v</span> <span class="op">=&gt;</span> <span class="macro">throw</span><span class="macro">!</span>(<span class="ident">ErrorKind</span>::<span class="ident">BadSyncStatus</span>(<span class="ident">v</span>)),
         }
     }
 }
@@ -2105,11 +2106,11 @@
 
 <span class="kw">impl</span> <span class="ident">LocalLogin</span> {
     <span class="attribute">#[<span class="ident">inline</span>]</span>
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">guid_str</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="kw-2">&amp;</span><span class="ident">str</span> {
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">guid_str</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-&gt;</span> <span class="kw-2">&amp;</span><span class="ident">str</span> {
         <span class="self">self</span>.<span class="ident">login</span>.<span class="ident">guid_str</span>()
     }
 
-    <span class="kw">pub</span>(<span class="kw">crate</span>) <span class="kw">fn</span> <span class="ident">from_row</span>(<span class="ident">row</span>: <span class="kw-2">&amp;</span><span class="ident">Row</span><span class="op">&lt;</span><span class="lifetime">&#39;_</span><span class="op">&gt;</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">LocalLogin</span><span class="op">&gt;</span> {
+    <span class="kw">pub</span>(<span class="kw">crate</span>) <span class="kw">fn</span> <span class="ident">from_row</span>(<span class="ident">row</span>: <span class="kw-2">&amp;</span><span class="ident">Row</span><span class="op">&lt;</span><span class="lifetime">&#39;_</span><span class="op">&gt;</span>) <span class="op">-&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">LocalLogin</span><span class="op">&gt;</span> {
         <span class="prelude-val">Ok</span>(<span class="ident">LocalLogin</span> {
             <span class="ident">login</span>: <span class="ident">Login</span>::<span class="ident">from_row</span>(<span class="ident">row</span>)<span class="question-mark">?</span>,
             <span class="ident">sync_status</span>: <span class="ident">SyncStatus</span>::<span class="ident">from_u8</span>(<span class="ident">row</span>.<span class="ident">get</span>(<span class="string">&quot;sync_status&quot;</span>)<span class="question-mark">?</span>)<span class="question-mark">?</span>,
@@ -2120,31 +2121,31 @@
 }
 
 <span class="macro">macro_rules</span><span class="macro">!</span> <span class="ident">impl_login</span> {
-    (<span class="macro-nonterminal">$</span><span class="macro-nonterminal">ty</span>:<span class="ident">ty</span> { $(<span class="macro-nonterminal">$</span><span class="macro-nonterminal">fields</span>:<span class="ident">tt</span>)<span class="op">*</span> }) <span class="op">=</span><span class="op">&gt;</span> {
+    (<span class="macro-nonterminal">$</span><span class="macro-nonterminal">ty</span>:<span class="ident">ty</span> { $(<span class="macro-nonterminal">$</span><span class="macro-nonterminal">fields</span>:<span class="ident">tt</span>)<span class="op">*</span> }) <span class="op">=&gt;</span> {
         <span class="kw">impl</span> <span class="ident">AsRef</span><span class="op">&lt;</span><span class="ident">Login</span><span class="op">&gt;</span> <span class="kw">for</span> <span class="macro-nonterminal">$</span><span class="macro-nonterminal">ty</span> {
             <span class="attribute">#[<span class="ident">inline</span>]</span>
-            <span class="kw">fn</span> <span class="ident">as_ref</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="kw-2">&amp;</span><span class="ident">Login</span> {
+            <span class="kw">fn</span> <span class="ident">as_ref</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-&gt;</span> <span class="kw-2">&amp;</span><span class="ident">Login</span> {
                 <span class="kw-2">&amp;</span><span class="self">self</span>.<span class="ident">login</span>
             }
         }
 
         <span class="kw">impl</span> <span class="ident">AsMut</span><span class="op">&lt;</span><span class="ident">Login</span><span class="op">&gt;</span> <span class="kw">for</span> <span class="macro-nonterminal">$</span><span class="macro-nonterminal">ty</span> {
             <span class="attribute">#[<span class="ident">inline</span>]</span>
-            <span class="kw">fn</span> <span class="ident">as_mut</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">Login</span> {
+            <span class="kw">fn</span> <span class="ident">as_mut</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>) <span class="op">-&gt;</span> <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">Login</span> {
                 <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>.<span class="ident">login</span>
             }
         }
 
         <span class="kw">impl</span> <span class="ident">From</span><span class="op">&lt;</span><span class="macro-nonterminal">$</span><span class="macro-nonterminal">ty</span><span class="op">&gt;</span> <span class="kw">for</span> <span class="ident">Login</span> {
             <span class="attribute">#[<span class="ident">inline</span>]</span>
-            <span class="kw">fn</span> <span class="ident">from</span>(<span class="ident">l</span>: <span class="macro-nonterminal">$</span><span class="macro-nonterminal">ty</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="self">Self</span> {
+            <span class="kw">fn</span> <span class="ident">from</span>(<span class="ident">l</span>: <span class="macro-nonterminal">$</span><span class="macro-nonterminal">ty</span>) <span class="op">-&gt;</span> <span class="self">Self</span> {
                 <span class="ident">l</span>.<span class="ident">login</span>
             }
         }
 
         <span class="kw">impl</span> <span class="ident">From</span><span class="op">&lt;</span><span class="ident">Login</span><span class="op">&gt;</span> <span class="kw">for</span> <span class="macro-nonterminal">$</span><span class="macro-nonterminal">ty</span> {
             <span class="attribute">#[<span class="ident">inline</span>]</span>
-            <span class="kw">fn</span> <span class="ident">from</span>(<span class="ident">login</span>: <span class="ident">Login</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="self">Self</span> {
+            <span class="kw">fn</span> <span class="ident">from</span>(<span class="ident">login</span>: <span class="ident">Login</span>) <span class="op">-&gt;</span> <span class="self">Self</span> {
                 <span class="self">Self</span> { <span class="ident">login</span>, $(<span class="macro-nonterminal">$</span><span class="macro-nonterminal">fields</span>)<span class="op">*</span> }
             }
         }
@@ -2173,12 +2174,12 @@
 
 <span class="kw">impl</span> <span class="ident">SyncLoginData</span> {
     <span class="attribute">#[<span class="ident">inline</span>]</span>
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">guid_str</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="kw-2">&amp;</span><span class="ident">str</span> {
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">guid_str</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-&gt;</span> <span class="kw-2">&amp;</span><span class="ident">str</span> {
         <span class="kw-2">&amp;</span><span class="self">self</span>.<span class="ident">guid</span>.<span class="ident">as_str</span>()
     }
 
     <span class="attribute">#[<span class="ident">inline</span>]</span>
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">guid</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="kw-2">&amp;</span><span class="ident">Guid</span> {
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">guid</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-&gt;</span> <span class="kw-2">&amp;</span><span class="ident">Guid</span> {
         <span class="kw-2">&amp;</span><span class="self">self</span>.<span class="ident">guid</span>
     }
 
@@ -2187,7 +2188,7 @@
     <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">from_payload</span>(
         <span class="ident">payload</span>: <span class="ident">sync15</span>::<span class="ident">Payload</span>,
         <span class="ident">ts</span>: <span class="ident">ServerTimestamp</span>,
-    ) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">std</span>::<span class="ident">result</span>::<span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="self">Self</span>, <span class="ident">serde_json</span>::<span class="ident">Error</span><span class="op">&gt;</span> {
+    ) <span class="op">-&gt;</span> <span class="ident">std</span>::<span class="ident">result</span>::<span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="self">Self</span>, <span class="ident">serde_json</span>::<span class="ident">Error</span><span class="op">&gt;</span> {
         <span class="kw">let</span> <span class="ident">guid</span> <span class="op">=</span> <span class="ident">payload</span>.<span class="ident">id</span>.<span class="ident">clone</span>();
         <span class="kw">let</span> <span class="ident">login</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">Login</span><span class="op">&gt;</span> <span class="op">=</span> <span class="kw">if</span> <span class="ident">payload</span>.<span class="ident">is_tombstone</span>() {
             <span class="prelude-val">None</span>
@@ -2207,9 +2208,9 @@
 }
 
 <span class="macro">macro_rules</span><span class="macro">!</span> <span class="ident">impl_login_setter</span> {
-    (<span class="macro-nonterminal">$</span><span class="macro-nonterminal">setter_name</span>:<span class="ident">ident</span>, <span class="macro-nonterminal">$</span><span class="macro-nonterminal">field</span>:<span class="ident">ident</span>, <span class="macro-nonterminal">$</span><span class="macro-nonterminal">Login</span>:<span class="ident">ty</span>) <span class="op">=</span><span class="op">&gt;</span> {
+    (<span class="macro-nonterminal">$</span><span class="macro-nonterminal">setter_name</span>:<span class="ident">ident</span>, <span class="macro-nonterminal">$</span><span class="macro-nonterminal">field</span>:<span class="ident">ident</span>, <span class="macro-nonterminal">$</span><span class="macro-nonterminal">Login</span>:<span class="ident">ty</span>) <span class="op">=&gt;</span> {
         <span class="kw">impl</span> <span class="ident">SyncLoginData</span> {
-            <span class="kw">pub</span>(<span class="kw">crate</span>) <span class="kw">fn</span> <span class="macro-nonterminal">$</span><span class="macro-nonterminal">setter_name</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>, <span class="ident">record</span>: <span class="macro-nonterminal">$</span><span class="macro-nonterminal">Login</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span>()<span class="op">&gt;</span> {
+            <span class="kw">pub</span>(<span class="kw">crate</span>) <span class="kw">fn</span> <span class="macro-nonterminal">$</span><span class="macro-nonterminal">setter_name</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>, <span class="ident">record</span>: <span class="macro-nonterminal">$</span><span class="macro-nonterminal">Login</span>) <span class="op">-&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span>()<span class="op">&gt;</span> {
                 <span class="comment">// TODO: We probably shouldn&#39;t panic in this function!</span>
                 <span class="kw">if</span> <span class="self">self</span>.<span class="macro-nonterminal">$</span><span class="macro-nonterminal">field</span>.<span class="ident">is_some</span>() {
                     <span class="comment">// Shouldn&#39;t be possible (only could happen if UNIQUE fails in sqlite, or if we</span>
@@ -2221,7 +2222,7 @@
                     );
                 }
 
-                <span class="kw">if</span> <span class="self">self</span>.<span class="ident">guid_str</span>() <span class="op">!</span><span class="op">=</span> <span class="ident">record</span>.<span class="ident">guid_str</span>() {
+                <span class="kw">if</span> <span class="self">self</span>.<span class="ident">guid_str</span>() <span class="op">!=</span> <span class="ident">record</span>.<span class="ident">guid_str</span>() {
                     <span class="comment">// This is almost certainly a bug in our code.</span>
                     <span class="macro">panic</span><span class="macro">!</span>(
                         <span class="string">&quot;Wrong guid on login in {}: {:?} != {:?}&quot;</span>,
@@ -2263,7 +2264,7 @@
 }
 
 <span class="macro">macro_rules</span><span class="macro">!</span> <span class="ident">merge_field</span> {
-    (<span class="macro-nonterminal">$</span><span class="macro-nonterminal">merged</span>:<span class="ident">ident</span>, <span class="macro-nonterminal">$</span><span class="macro-nonterminal">b</span>:<span class="ident">ident</span>, <span class="macro-nonterminal">$</span><span class="macro-nonterminal">prefer_b</span>:<span class="ident">expr</span>, <span class="macro-nonterminal">$</span><span class="macro-nonterminal">field</span>:<span class="ident">ident</span>) <span class="op">=</span><span class="op">&gt;</span> {
+    (<span class="macro-nonterminal">$</span><span class="macro-nonterminal">merged</span>:<span class="ident">ident</span>, <span class="macro-nonterminal">$</span><span class="macro-nonterminal">b</span>:<span class="ident">ident</span>, <span class="macro-nonterminal">$</span><span class="macro-nonterminal">prefer_b</span>:<span class="ident">expr</span>, <span class="macro-nonterminal">$</span><span class="macro-nonterminal">field</span>:<span class="ident">ident</span>) <span class="op">=&gt;</span> {
         <span class="kw">if</span> <span class="kw">let</span> <span class="prelude-val">Some</span>(<span class="macro-nonterminal">$</span><span class="macro-nonterminal">field</span>) <span class="op">=</span> <span class="macro-nonterminal">$</span><span class="macro-nonterminal">b</span>.<span class="macro-nonterminal">$</span><span class="macro-nonterminal">field</span>.<span class="ident">take</span>() {
             <span class="kw">if</span> <span class="macro-nonterminal">$</span><span class="macro-nonterminal">merged</span>.<span class="macro-nonterminal">$</span><span class="macro-nonterminal">field</span>.<span class="ident">is_some</span>() {
                 <span class="ident">log</span>::<span class="macro">warn</span><span class="macro">!</span>(<span class="string">&quot;Collision merging login field {}&quot;</span>, <span class="macro">stringify</span><span class="macro">!</span>(<span class="macro-nonterminal">$</span><span class="macro-nonterminal">field</span>));
@@ -2279,7 +2280,7 @@
 
 <span class="kw">impl</span> <span class="ident">LoginDelta</span> {
     <span class="attribute">#[<span class="ident">allow</span>(<span class="ident">clippy</span>::<span class="ident">cognitive_complexity</span>)]</span> <span class="comment">// Looks like clippy considers this after macro-expansion...</span>
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">merge</span>(<span class="self">self</span>, <span class="kw-2">mut</span> <span class="ident">b</span>: <span class="ident">LoginDelta</span>, <span class="ident">b_is_newer</span>: <span class="ident">bool</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">LoginDelta</span> {
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">merge</span>(<span class="self">self</span>, <span class="kw-2">mut</span> <span class="ident">b</span>: <span class="ident">LoginDelta</span>, <span class="ident">b_is_newer</span>: <span class="ident">bool</span>) <span class="op">-&gt;</span> <span class="ident">LoginDelta</span> {
         <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">merged</span> <span class="op">=</span> <span class="self">self</span>;
         <span class="macro">merge_field</span><span class="macro">!</span>(<span class="ident">merged</span>, <span class="ident">b</span>, <span class="ident">b_is_newer</span>, <span class="ident">hostname</span>);
         <span class="macro">merge_field</span><span class="macro">!</span>(<span class="ident">merged</span>, <span class="ident">b</span>, <span class="ident">b_is_newer</span>, <span class="ident">password</span>);
@@ -2295,14 +2296,14 @@
         <span class="macro">merge_field</span><span class="macro">!</span>(<span class="ident">merged</span>, <span class="ident">b</span>, <span class="ident">b_is_newer</span>, <span class="ident">username_field</span>);
 
         <span class="comment">// commutative fields</span>
-        <span class="ident">merged</span>.<span class="ident">times_used</span> <span class="op">+</span><span class="op">=</span> <span class="ident">b</span>.<span class="ident">times_used</span>;
+        <span class="ident">merged</span>.<span class="ident">times_used</span> <span class="op">+=</span> <span class="ident">b</span>.<span class="ident">times_used</span>;
 
         <span class="ident">merged</span>
     }
 }
 
 <span class="macro">macro_rules</span><span class="macro">!</span> <span class="ident">apply_field</span> {
-    (<span class="macro-nonterminal">$</span><span class="macro-nonterminal">login</span>:<span class="ident">ident</span>, <span class="macro-nonterminal">$</span><span class="macro-nonterminal">delta</span>:<span class="ident">ident</span>, <span class="macro-nonterminal">$</span><span class="macro-nonterminal">field</span>:<span class="ident">ident</span>) <span class="op">=</span><span class="op">&gt;</span> {
+    (<span class="macro-nonterminal">$</span><span class="macro-nonterminal">login</span>:<span class="ident">ident</span>, <span class="macro-nonterminal">$</span><span class="macro-nonterminal">delta</span>:<span class="ident">ident</span>, <span class="macro-nonterminal">$</span><span class="macro-nonterminal">field</span>:<span class="ident">ident</span>) <span class="op">=&gt;</span> {
         <span class="kw">if</span> <span class="kw">let</span> <span class="prelude-val">Some</span>(<span class="macro-nonterminal">$</span><span class="macro-nonterminal">field</span>) <span class="op">=</span> <span class="macro-nonterminal">$</span><span class="macro-nonterminal">delta</span>.<span class="macro-nonterminal">$</span><span class="macro-nonterminal">field</span>.<span class="ident">take</span>() {
             <span class="macro-nonterminal">$</span><span class="macro-nonterminal">login</span>.<span class="macro-nonterminal">$</span><span class="macro-nonterminal">field</span> <span class="op">=</span> <span class="macro-nonterminal">$</span><span class="macro-nonterminal">field</span>.<span class="ident">into</span>();
         }
@@ -2332,33 +2333,33 @@
             <span class="self">self</span>.<span class="ident">form_submit_url</span> <span class="op">=</span> <span class="kw">if</span> <span class="ident">url</span>.<span class="ident">is_empty</span>() { <span class="prelude-val">None</span> } <span class="kw">else</span> { <span class="prelude-val">Some</span>(<span class="ident">url</span>) };
         }
 
-        <span class="self">self</span>.<span class="ident">times_used</span> <span class="op">+</span><span class="op">=</span> <span class="ident">delta</span>.<span class="ident">times_used</span>;
+        <span class="self">self</span>.<span class="ident">times_used</span> <span class="op">+=</span> <span class="ident">delta</span>.<span class="ident">times_used</span>;
     }
 
-    <span class="kw">pub</span>(<span class="kw">crate</span>) <span class="kw">fn</span> <span class="ident">delta</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">older</span>: <span class="kw-2">&amp;</span><span class="ident">Login</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">LoginDelta</span> {
+    <span class="kw">pub</span>(<span class="kw">crate</span>) <span class="kw">fn</span> <span class="ident">delta</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">older</span>: <span class="kw-2">&amp;</span><span class="ident">Login</span>) <span class="op">-&gt;</span> <span class="ident">LoginDelta</span> {
         <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">delta</span> <span class="op">=</span> <span class="ident">LoginDelta</span>::<span class="ident">default</span>();
 
-        <span class="kw">if</span> <span class="self">self</span>.<span class="ident">form_submit_url</span> <span class="op">!</span><span class="op">=</span> <span class="ident">older</span>.<span class="ident">form_submit_url</span> {
+        <span class="kw">if</span> <span class="self">self</span>.<span class="ident">form_submit_url</span> <span class="op">!=</span> <span class="ident">older</span>.<span class="ident">form_submit_url</span> {
             <span class="ident">delta</span>.<span class="ident">form_submit_url</span> <span class="op">=</span> <span class="prelude-val">Some</span>(<span class="self">self</span>.<span class="ident">form_submit_url</span>.<span class="ident">clone</span>().<span class="ident">unwrap_or_default</span>());
         }
 
-        <span class="kw">if</span> <span class="self">self</span>.<span class="ident">http_realm</span> <span class="op">!</span><span class="op">=</span> <span class="ident">older</span>.<span class="ident">http_realm</span> {
+        <span class="kw">if</span> <span class="self">self</span>.<span class="ident">http_realm</span> <span class="op">!=</span> <span class="ident">older</span>.<span class="ident">http_realm</span> {
             <span class="ident">delta</span>.<span class="ident">http_realm</span> <span class="op">=</span> <span class="prelude-val">Some</span>(<span class="self">self</span>.<span class="ident">http_realm</span>.<span class="ident">clone</span>().<span class="ident">unwrap_or_default</span>());
         }
 
-        <span class="kw">if</span> <span class="self">self</span>.<span class="ident">hostname</span> <span class="op">!</span><span class="op">=</span> <span class="ident">older</span>.<span class="ident">hostname</span> {
+        <span class="kw">if</span> <span class="self">self</span>.<span class="ident">hostname</span> <span class="op">!=</span> <span class="ident">older</span>.<span class="ident">hostname</span> {
             <span class="ident">delta</span>.<span class="ident">hostname</span> <span class="op">=</span> <span class="prelude-val">Some</span>(<span class="self">self</span>.<span class="ident">hostname</span>.<span class="ident">clone</span>());
         }
-        <span class="kw">if</span> <span class="self">self</span>.<span class="ident">username</span> <span class="op">!</span><span class="op">=</span> <span class="ident">older</span>.<span class="ident">username</span> {
+        <span class="kw">if</span> <span class="self">self</span>.<span class="ident">username</span> <span class="op">!=</span> <span class="ident">older</span>.<span class="ident">username</span> {
             <span class="ident">delta</span>.<span class="ident">username</span> <span class="op">=</span> <span class="prelude-val">Some</span>(<span class="self">self</span>.<span class="ident">username</span>.<span class="ident">clone</span>());
         }
-        <span class="kw">if</span> <span class="self">self</span>.<span class="ident">password</span> <span class="op">!</span><span class="op">=</span> <span class="ident">older</span>.<span class="ident">password</span> {
+        <span class="kw">if</span> <span class="self">self</span>.<span class="ident">password</span> <span class="op">!=</span> <span class="ident">older</span>.<span class="ident">password</span> {
             <span class="ident">delta</span>.<span class="ident">password</span> <span class="op">=</span> <span class="prelude-val">Some</span>(<span class="self">self</span>.<span class="ident">password</span>.<span class="ident">clone</span>());
         }
-        <span class="kw">if</span> <span class="self">self</span>.<span class="ident">password_field</span> <span class="op">!</span><span class="op">=</span> <span class="ident">older</span>.<span class="ident">password_field</span> {
+        <span class="kw">if</span> <span class="self">self</span>.<span class="ident">password_field</span> <span class="op">!=</span> <span class="ident">older</span>.<span class="ident">password_field</span> {
             <span class="ident">delta</span>.<span class="ident">password_field</span> <span class="op">=</span> <span class="prelude-val">Some</span>(<span class="self">self</span>.<span class="ident">password_field</span>.<span class="ident">clone</span>());
         }
-        <span class="kw">if</span> <span class="self">self</span>.<span class="ident">username_field</span> <span class="op">!</span><span class="op">=</span> <span class="ident">older</span>.<span class="ident">username_field</span> {
+        <span class="kw">if</span> <span class="self">self</span>.<span class="ident">username_field</span> <span class="op">!=</span> <span class="ident">older</span>.<span class="ident">username_field</span> {
             <span class="ident">delta</span>.<span class="ident">username_field</span> <span class="op">=</span> <span class="prelude-val">Some</span>(<span class="self">self</span>.<span class="ident">username_field</span>.<span class="ident">clone</span>());
         }
 
@@ -2371,19 +2372,19 @@
         <span class="comment">// `time_password_changed`. Doing this properly would probably require</span>
         <span class="comment">// a scheme analogous to Desktop&#39;s weak-reupload system, so I&#39;m punting</span>
         <span class="comment">// on it for now.</span>
-        <span class="kw">if</span> <span class="self">self</span>.<span class="ident">time_created</span> <span class="op">&gt;</span> <span class="number">0</span> <span class="kw-2">&amp;</span><span class="op">&amp;</span> <span class="self">self</span>.<span class="ident">time_created</span> <span class="op">!</span><span class="op">=</span> <span class="ident">older</span>.<span class="ident">time_created</span> {
+        <span class="kw">if</span> <span class="self">self</span>.<span class="ident">time_created</span> <span class="op">&gt;</span> <span class="number">0</span> <span class="op">&amp;&amp;</span> <span class="self">self</span>.<span class="ident">time_created</span> <span class="op">!=</span> <span class="ident">older</span>.<span class="ident">time_created</span> {
             <span class="ident">delta</span>.<span class="ident">time_created</span> <span class="op">=</span> <span class="prelude-val">Some</span>(<span class="self">self</span>.<span class="ident">time_created</span>);
         }
-        <span class="kw">if</span> <span class="self">self</span>.<span class="ident">time_last_used</span> <span class="op">&gt;</span> <span class="number">0</span> <span class="kw-2">&amp;</span><span class="op">&amp;</span> <span class="self">self</span>.<span class="ident">time_last_used</span> <span class="op">!</span><span class="op">=</span> <span class="ident">older</span>.<span class="ident">time_last_used</span> {
+        <span class="kw">if</span> <span class="self">self</span>.<span class="ident">time_last_used</span> <span class="op">&gt;</span> <span class="number">0</span> <span class="op">&amp;&amp;</span> <span class="self">self</span>.<span class="ident">time_last_used</span> <span class="op">!=</span> <span class="ident">older</span>.<span class="ident">time_last_used</span> {
             <span class="ident">delta</span>.<span class="ident">time_last_used</span> <span class="op">=</span> <span class="prelude-val">Some</span>(<span class="self">self</span>.<span class="ident">time_last_used</span>);
         }
         <span class="kw">if</span> <span class="self">self</span>.<span class="ident">time_password_changed</span> <span class="op">&gt;</span> <span class="number">0</span>
-            <span class="kw-2">&amp;</span><span class="op">&amp;</span> <span class="self">self</span>.<span class="ident">time_password_changed</span> <span class="op">!</span><span class="op">=</span> <span class="ident">older</span>.<span class="ident">time_password_changed</span>
+            <span class="op">&amp;&amp;</span> <span class="self">self</span>.<span class="ident">time_password_changed</span> <span class="op">!=</span> <span class="ident">older</span>.<span class="ident">time_password_changed</span>
         {
             <span class="ident">delta</span>.<span class="ident">time_password_changed</span> <span class="op">=</span> <span class="prelude-val">Some</span>(<span class="self">self</span>.<span class="ident">time_password_changed</span>);
         }
 
-        <span class="kw">if</span> <span class="self">self</span>.<span class="ident">times_used</span> <span class="op">&gt;</span> <span class="number">0</span> <span class="kw-2">&amp;</span><span class="op">&amp;</span> <span class="self">self</span>.<span class="ident">times_used</span> <span class="op">!</span><span class="op">=</span> <span class="ident">older</span>.<span class="ident">times_used</span> {
+        <span class="kw">if</span> <span class="self">self</span>.<span class="ident">times_used</span> <span class="op">&gt;</span> <span class="number">0</span> <span class="op">&amp;&amp;</span> <span class="self">self</span>.<span class="ident">times_used</span> <span class="op">!=</span> <span class="ident">older</span>.<span class="ident">times_used</span> {
             <span class="ident">delta</span>.<span class="ident">times_used</span> <span class="op">=</span> <span class="self">self</span>.<span class="ident">times_used</span> <span class="op">-</span> <span class="ident">older</span>.<span class="ident">times_used</span>;
         }
 
@@ -2442,7 +2443,7 @@
     }
 
     <span class="attribute">#[<span class="ident">test</span>]</span>
-    <span class="kw">fn</span> <span class="ident">test_url_fixups</span>() <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span>()<span class="op">&gt;</span> {
+    <span class="kw">fn</span> <span class="ident">test_url_fixups</span>() <span class="op">-&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span>()<span class="op">&gt;</span> {
         <span class="comment">// Start with URLs which are all valid and already normalized.</span>
         <span class="kw">for</span> <span class="ident">input</span> <span class="kw">in</span> <span class="kw-2">&amp;</span>[
             <span class="comment">// The list of valid hostnames documented at the top of this file.</span>

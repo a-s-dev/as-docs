@@ -1,3 +1,3 @@
 (function() {var implementors = {};
-implementors["sync_manager"] = [{"text":"impl <a class=\"trait\" href=\"sync15/clients/trait.CommandProcessor.html\" title=\"trait sync15::clients::CommandProcessor\">CommandProcessor</a> for <a class=\"struct\" href=\"sync_manager/manager/struct.SyncClient.html\" title=\"struct sync_manager::manager::SyncClient\">SyncClient</a>","synthetic":false,"types":["sync_manager::manager::SyncClient"]}];
+implementors["sync_manager"] = [{"text":"impl CommandProcessor for SyncClient","synthetic":false,"types":[]}];
 if (window.register_implementors) {window.register_implementors(implementors);} else {window.pending_implementors = implementors;}})()

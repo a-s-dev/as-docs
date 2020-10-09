@@ -1,4 +1,5 @@
-<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source to the Rust file `components/support/rc_crypto/nss/nss_sys/src/bindings/pk11pub.rs`."><meta name="keywords" content="rust, rustlang, rust-lang"><title>pk11pub.rs.html -- source</title><link rel="stylesheet" type="text/css" href="../../../normalize.css"><link rel="stylesheet" type="text/css" href="../../../rustdoc.css" id="mainThemeStyle"><link rel="stylesheet" type="text/css" href="../../../dark.css"><link rel="stylesheet" type="text/css" href="../../../light.css" id="themeStyle"><script src="../../../storage.js"></script><noscript><link rel="stylesheet" href="../../../noscript.css"></noscript><link rel="shortcut icon" href="../../../favicon.ico"><style type="text/css">#crate-search{background-image:url("../../../down-arrow.svg");}</style></head><body class="rustdoc source"><!--[if lte IE 8]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="sidebar"><div class="sidebar-menu">&#9776;</div><a href='../../../nss_sys/index.html'><div class='logo-container'><img src='../../../rust-logo.png' alt='logo'></div></a></nav><div class="theme-picker"><button id="theme-picker" aria-label="Pick another theme!"><img src="../../../brush.svg" width="18" alt="Pick another theme!"></button><div id="theme-choices"></div></div><script src="../../../theme.js"></script><nav class="sub"><form class="search-form"><div class="search-container"><div><select id="crate-search"><option value="All crates">All crates</option></select><input class="search-input" name="search" disabled autocomplete="off" spellcheck="false" placeholder="Click or press ‘S’ to search, ‘?’ for more options…" type="search"></div><a id="settings-menu" href="../../../settings.html"><img src="../../../wheel.svg" width="18" alt="Change settings"></a></div></form></nav><section id="main" class="content"><pre class="line-numbers"><span id="1">  1</span>
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source to the Rust file `components/support/rc_crypto/nss/nss_sys/src/bindings/pk11pub.rs`."><meta name="keywords" content="rust, rustlang, rust-lang"><title>pk11pub.rs.html -- source</title><link rel="stylesheet" type="text/css" href="../../../normalize.css"><link rel="stylesheet" type="text/css" href="../../../rustdoc.css" id="mainThemeStyle"><link rel="stylesheet" type="text/css" href="../../../light.css"  id="themeStyle"><link rel="stylesheet" type="text/css" href="../../../dark.css" disabled ><link rel="stylesheet" type="text/css" href="../../../ayu.css" disabled ><script src="../../../storage.js"></script><noscript><link rel="stylesheet" href="../../../noscript.css"></noscript><link rel="shortcut icon" href="../../../favicon.ico"><style type="text/css">#crate-search{background-image:url("../../../down-arrow.svg");}</style></head><body class="rustdoc source"><!--[if lte IE 8]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="sidebar"><div class="sidebar-menu">&#9776;</div><a href='../../../nss_sys/index.html'><div class='logo-container rust-logo'><img src='../../../rust-logo.png' alt='logo'></div></a></nav><div class="theme-picker"><button id="theme-picker" aria-label="Pick another theme!"><img src="../../../brush.svg" width="18" alt="Pick another theme!"></button><div id="theme-choices"></div></div><script src="../../../theme.js"></script><nav class="sub"><form class="search-form"><div class="search-container"><div><select id="crate-search"><option value="All crates">All crates</option></select><input class="search-input" name="search" disabled autocomplete="off" spellcheck="false" placeholder="Click or press ‘S’ to search, ‘?’ for more options…" type="search"></div><span class="help-button">?</span>
+                <a id="settings-menu" href="../../../settings.html"><img src="../../../wheel.svg" width="18" alt="Change settings"></a></div></form></nav><section id="main" class="content"><pre class="line-numbers"><span id="1">  1</span>
 <span id="2">  2</span>
 <span id="3">  3</span>
 <span id="4">  4</span>
@@ -146,8 +147,8 @@
 
 <span class="kw">extern</span> <span class="string">&quot;C&quot;</span> {
     <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">PK11_FreeSlot</span>(<span class="ident">slot</span>: <span class="kw-2">*</span><span class="kw-2">mut</span> <span class="ident">PK11SlotInfo</span>);
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">PK11_GetInternalSlot</span>() <span class="op">-</span><span class="op">&gt;</span> <span class="kw-2">*</span><span class="kw-2">mut</span> <span class="ident">PK11SlotInfo</span>;
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">PK11_GenerateRandom</span>(<span class="ident">data</span>: <span class="kw-2">*</span><span class="kw-2">mut</span> <span class="ident">c_uchar</span>, <span class="ident">len</span>: <span class="ident">c_int</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">SECStatus</span>;
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">PK11_GetInternalSlot</span>() <span class="op">-&gt;</span> <span class="kw-2">*</span><span class="kw-2">mut</span> <span class="ident">PK11SlotInfo</span>;
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">PK11_GenerateRandom</span>(<span class="ident">data</span>: <span class="kw-2">*</span><span class="kw-2">mut</span> <span class="ident">c_uchar</span>, <span class="ident">len</span>: <span class="ident">c_int</span>) <span class="op">-&gt;</span> <span class="ident">SECStatus</span>;
     <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">PK11_FreeSymKey</span>(<span class="ident">key</span>: <span class="kw-2">*</span><span class="kw-2">mut</span> <span class="ident">PK11SymKey</span>);
     <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">PK11_ImportSymKey</span>(
         <span class="ident">slot</span>: <span class="kw-2">*</span><span class="kw-2">mut</span> <span class="ident">PK11SlotInfo</span>,
@@ -156,7 +157,7 @@
         <span class="ident">operation</span>: <span class="ident">CK_ATTRIBUTE_TYPE</span>,
         <span class="ident">key</span>: <span class="kw-2">*</span><span class="kw-2">mut</span> <span class="ident">SECItem</span>,
         <span class="ident">wincx</span>: <span class="kw-2">*</span><span class="kw-2">mut</span> <span class="ident">c_void</span>,
-    ) <span class="op">-</span><span class="op">&gt;</span> <span class="kw-2">*</span><span class="kw-2">mut</span> <span class="ident">PK11SymKey</span>;
+    ) <span class="op">-&gt;</span> <span class="kw-2">*</span><span class="kw-2">mut</span> <span class="ident">PK11SymKey</span>;
     <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">PK11_Derive</span>(
         <span class="ident">baseKey</span>: <span class="kw-2">*</span><span class="kw-2">mut</span> <span class="ident">PK11SymKey</span>,
         <span class="ident">mechanism</span>: <span class="ident">CK_MECHANISM_TYPE</span>,
@@ -164,7 +165,7 @@
         <span class="ident">target</span>: <span class="ident">CK_MECHANISM_TYPE</span>,
         <span class="ident">operation</span>: <span class="ident">CK_ATTRIBUTE_TYPE</span>,
         <span class="ident">keySize</span>: <span class="ident">c_int</span>,
-    ) <span class="op">-</span><span class="op">&gt;</span> <span class="kw-2">*</span><span class="kw-2">mut</span> <span class="ident">PK11SymKey</span>;
+    ) <span class="op">-&gt;</span> <span class="kw-2">*</span><span class="kw-2">mut</span> <span class="ident">PK11SymKey</span>;
     <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">PK11_PubDeriveWithKDF</span>(
         <span class="ident">privKey</span>: <span class="kw-2">*</span><span class="kw-2">mut</span> <span class="ident">SECKEYPrivateKey</span>,
         <span class="ident">pubKey</span>: <span class="kw-2">*</span><span class="kw-2">mut</span> <span class="ident">SECKEYPublicKey</span>,
@@ -178,9 +179,9 @@
         <span class="ident">kdf</span>: <span class="ident">CK_ULONG</span>,
         <span class="ident">sharedData</span>: <span class="kw-2">*</span><span class="kw-2">mut</span> <span class="ident">SECItem</span>,
         <span class="ident">wincx</span>: <span class="kw-2">*</span><span class="kw-2">mut</span> <span class="ident">c_void</span>,
-    ) <span class="op">-</span><span class="op">&gt;</span> <span class="kw-2">*</span><span class="kw-2">mut</span> <span class="ident">PK11SymKey</span>;
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">PK11_ExtractKeyValue</span>(<span class="ident">symKey</span>: <span class="kw-2">*</span><span class="kw-2">mut</span> <span class="ident">PK11SymKey</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">SECStatus</span>;
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">PK11_GetKeyData</span>(<span class="ident">symKey</span>: <span class="kw-2">*</span><span class="kw-2">mut</span> <span class="ident">PK11SymKey</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="kw-2">*</span><span class="kw-2">mut</span> <span class="ident">SECItem</span>;
+    ) <span class="op">-&gt;</span> <span class="kw-2">*</span><span class="kw-2">mut</span> <span class="ident">PK11SymKey</span>;
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">PK11_ExtractKeyValue</span>(<span class="ident">symKey</span>: <span class="kw-2">*</span><span class="kw-2">mut</span> <span class="ident">PK11SymKey</span>) <span class="op">-&gt;</span> <span class="ident">SECStatus</span>;
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">PK11_GetKeyData</span>(<span class="ident">symKey</span>: <span class="kw-2">*</span><span class="kw-2">mut</span> <span class="ident">PK11SymKey</span>) <span class="op">-&gt;</span> <span class="kw-2">*</span><span class="kw-2">mut</span> <span class="ident">SECItem</span>;
     <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">PK11_GenerateKeyPair</span>(
         <span class="ident">slot</span>: <span class="kw-2">*</span><span class="kw-2">mut</span> <span class="ident">PK11SlotInfo</span>,
         <span class="ident">type_</span>: <span class="ident">CK_MECHANISM_TYPE</span>,
@@ -189,12 +190,12 @@
         <span class="ident">isPerm</span>: <span class="ident">PRBool</span>,
         <span class="ident">isSensitive</span>: <span class="ident">PRBool</span>,
         <span class="ident">wincx</span>: <span class="kw-2">*</span><span class="kw-2">mut</span> <span class="ident">c_void</span>,
-    ) <span class="op">-</span><span class="op">&gt;</span> <span class="kw-2">*</span><span class="kw-2">mut</span> <span class="ident">SECKEYPrivateKey</span>;
+    ) <span class="op">-&gt;</span> <span class="kw-2">*</span><span class="kw-2">mut</span> <span class="ident">SECKEYPrivateKey</span>;
     <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">PK11_FindKeyByKeyID</span>(
         <span class="ident">slot</span>: <span class="kw-2">*</span><span class="kw-2">mut</span> <span class="ident">PK11SlotInfo</span>,
         <span class="ident">keyID</span>: <span class="kw-2">*</span><span class="kw-2">mut</span> <span class="ident">SECItem</span>,
         <span class="ident">wincx</span>: <span class="kw-2">*</span><span class="kw-2">mut</span> <span class="ident">c_void</span>,
-    ) <span class="op">-</span><span class="op">&gt;</span> <span class="kw-2">*</span><span class="kw-2">mut</span> <span class="ident">SECKEYPrivateKey</span>;
+    ) <span class="op">-&gt;</span> <span class="kw-2">*</span><span class="kw-2">mut</span> <span class="ident">SECKEYPrivateKey</span>;
     <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">PK11_Decrypt</span>(
         <span class="ident">symkey</span>: <span class="kw-2">*</span><span class="kw-2">mut</span> <span class="ident">PK11SymKey</span>,
         <span class="ident">mechanism</span>: <span class="ident">CK_MECHANISM_TYPE</span>,
@@ -204,7 +205,7 @@
         <span class="ident">maxLen</span>: <span class="ident">c_uint</span>,
         <span class="ident">enc</span>: <span class="kw-2">*</span><span class="kw">const</span> <span class="ident">c_uchar</span>,
         <span class="ident">encLen</span>: <span class="ident">c_uint</span>,
-    ) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">SECStatus</span>;
+    ) <span class="op">-&gt;</span> <span class="ident">SECStatus</span>;
     <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">PK11_Encrypt</span>(
         <span class="ident">symKey</span>: <span class="kw-2">*</span><span class="kw-2">mut</span> <span class="ident">PK11SymKey</span>,
         <span class="ident">mechanism</span>: <span class="ident">CK_MECHANISM_TYPE</span>,
@@ -214,7 +215,7 @@
         <span class="ident">maxLen</span>: <span class="ident">c_uint</span>,
         <span class="ident">data</span>: <span class="kw-2">*</span><span class="kw">const</span> <span class="ident">c_uchar</span>,
         <span class="ident">dataLen</span>: <span class="ident">c_uint</span>,
-    ) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">SECStatus</span>;
+    ) <span class="op">-&gt;</span> <span class="ident">SECStatus</span>;
     <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">PK11_VerifyWithMechanism</span>(
         <span class="ident">key</span>: <span class="kw-2">*</span><span class="kw-2">mut</span> <span class="ident">SECKEYPublicKey</span>,
         <span class="ident">mechanism</span>: <span class="ident">CK_MECHANISM_TYPE</span>,
@@ -222,42 +223,42 @@
         <span class="ident">sig</span>: <span class="kw-2">*</span><span class="kw">const</span> <span class="ident">SECItem</span>,
         <span class="ident">hash</span>: <span class="kw-2">*</span><span class="kw">const</span> <span class="ident">SECItem</span>,
         <span class="ident">wincx</span>: <span class="kw-2">*</span><span class="kw-2">mut</span> <span class="ident">c_void</span>,
-    ) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">SECStatus</span>;
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">PK11_MapSignKeyType</span>(<span class="ident">keyType</span>: <span class="ident">u32</span> <span class="comment">/* KeyType */</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">CK_MECHANISM_TYPE</span>;
+    ) <span class="op">-&gt;</span> <span class="ident">SECStatus</span>;
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">PK11_MapSignKeyType</span>(<span class="ident">keyType</span>: <span class="ident">u32</span> <span class="comment">/* KeyType */</span>) <span class="op">-&gt;</span> <span class="ident">CK_MECHANISM_TYPE</span>;
     <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">PK11_DestroyContext</span>(<span class="ident">context</span>: <span class="kw-2">*</span><span class="kw-2">mut</span> <span class="ident">PK11Context</span>, <span class="ident">freeit</span>: <span class="ident">PRBool</span>);
     <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">PK11_CreateContextBySymKey</span>(
         <span class="ident">type_</span>: <span class="ident">CK_MECHANISM_TYPE</span>,
         <span class="ident">operation</span>: <span class="ident">CK_ATTRIBUTE_TYPE</span>,
         <span class="ident">symKey</span>: <span class="kw-2">*</span><span class="kw-2">mut</span> <span class="ident">PK11SymKey</span>,
         <span class="ident">param</span>: <span class="kw-2">*</span><span class="kw-2">mut</span> <span class="ident">SECItem</span>,
-    ) <span class="op">-</span><span class="op">&gt;</span> <span class="kw-2">*</span><span class="kw-2">mut</span> <span class="ident">PK11Context</span>;
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">PK11_DigestBegin</span>(<span class="ident">cx</span>: <span class="kw-2">*</span><span class="kw-2">mut</span> <span class="ident">PK11Context</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">SECStatus</span>;
+    ) <span class="op">-&gt;</span> <span class="kw-2">*</span><span class="kw-2">mut</span> <span class="ident">PK11Context</span>;
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">PK11_DigestBegin</span>(<span class="ident">cx</span>: <span class="kw-2">*</span><span class="kw-2">mut</span> <span class="ident">PK11Context</span>) <span class="op">-&gt;</span> <span class="ident">SECStatus</span>;
     <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">PK11_HashBuf</span>(
         <span class="ident">hashAlg</span>: <span class="ident">u32</span>, <span class="comment">/* SECOidTag */</span>
         <span class="ident">out</span>: <span class="kw-2">*</span><span class="kw-2">mut</span> <span class="ident">c_uchar</span>,
         <span class="ident">in_</span>: <span class="kw-2">*</span><span class="kw">const</span> <span class="ident">c_uchar</span>,
         <span class="ident">len</span>: <span class="ident">PRInt32</span>,
-    ) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">SECStatus</span>;
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">PK11_DigestOp</span>(<span class="ident">context</span>: <span class="kw-2">*</span><span class="kw-2">mut</span> <span class="ident">PK11Context</span>, <span class="ident">in_</span>: <span class="kw-2">*</span><span class="kw">const</span> <span class="ident">c_uchar</span>, <span class="ident">len</span>: <span class="ident">c_uint</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">SECStatus</span>;
+    ) <span class="op">-&gt;</span> <span class="ident">SECStatus</span>;
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">PK11_DigestOp</span>(<span class="ident">context</span>: <span class="kw-2">*</span><span class="kw-2">mut</span> <span class="ident">PK11Context</span>, <span class="ident">in_</span>: <span class="kw-2">*</span><span class="kw">const</span> <span class="ident">c_uchar</span>, <span class="ident">len</span>: <span class="ident">c_uint</span>) <span class="op">-&gt;</span> <span class="ident">SECStatus</span>;
     <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">PK11_DigestFinal</span>(
         <span class="ident">context</span>: <span class="kw-2">*</span><span class="kw-2">mut</span> <span class="ident">PK11Context</span>,
         <span class="ident">data</span>: <span class="kw-2">*</span><span class="kw-2">mut</span> <span class="ident">c_uchar</span>,
         <span class="ident">outLen</span>: <span class="kw-2">*</span><span class="kw-2">mut</span> <span class="ident">c_uint</span>,
         <span class="ident">length</span>: <span class="ident">c_uint</span>,
-    ) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">SECStatus</span>;
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">PK11_DestroyGenericObject</span>(<span class="ident">object</span>: <span class="kw-2">*</span><span class="kw-2">mut</span> <span class="ident">PK11GenericObject</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">SECStatus</span>;
+    ) <span class="op">-&gt;</span> <span class="ident">SECStatus</span>;
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">PK11_DestroyGenericObject</span>(<span class="ident">object</span>: <span class="kw-2">*</span><span class="kw-2">mut</span> <span class="ident">PK11GenericObject</span>) <span class="op">-&gt;</span> <span class="ident">SECStatus</span>;
     <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">PK11_CreateGenericObject</span>(
         <span class="ident">slot</span>: <span class="kw-2">*</span><span class="kw-2">mut</span> <span class="ident">PK11SlotInfo</span>,
         <span class="ident">pTemplate</span>: <span class="kw-2">*</span><span class="kw">const</span> <span class="ident">CK_ATTRIBUTE</span>,
         <span class="ident">count</span>: <span class="ident">c_int</span>,
         <span class="ident">token</span>: <span class="ident">PRBool</span>,
-    ) <span class="op">-</span><span class="op">&gt;</span> <span class="kw-2">*</span><span class="kw-2">mut</span> <span class="ident">PK11GenericObject</span>;
+    ) <span class="op">-&gt;</span> <span class="kw-2">*</span><span class="kw-2">mut</span> <span class="ident">PK11GenericObject</span>;
     <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">PK11_ReadRawAttribute</span>(
         <span class="ident">type_</span>: <span class="ident">u32</span>, <span class="comment">/* PK11ObjectType */</span>
         <span class="ident">object</span>: <span class="kw-2">*</span><span class="kw-2">mut</span> <span class="ident">c_void</span>,
         <span class="ident">attr</span>: <span class="ident">CK_ATTRIBUTE_TYPE</span>,
         <span class="ident">item</span>: <span class="kw-2">*</span><span class="kw-2">mut</span> <span class="ident">SECItem</span>,
-    ) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">SECStatus</span>;
+    ) <span class="op">-&gt;</span> <span class="ident">SECStatus</span>;
     <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">PK11_CreatePBEV2AlgorithmID</span>(
         <span class="ident">pbeAlgTag</span>: <span class="ident">u32</span>,    <span class="comment">/* SECOidTag */</span>
         <span class="ident">cipherAlgTag</span>: <span class="ident">u32</span>, <span class="comment">/* SECOidTag */</span>
@@ -265,7 +266,7 @@
         <span class="ident">keyLength</span>: <span class="ident">c_int</span>,
         <span class="ident">iteration</span>: <span class="ident">c_int</span>,
         <span class="ident">salt</span>: <span class="kw-2">*</span><span class="kw-2">mut</span> <span class="ident">SECItem</span>,
-    ) <span class="op">-</span><span class="op">&gt;</span> <span class="kw-2">*</span><span class="kw-2">mut</span> <span class="ident">SECAlgorithmID</span>;
+    ) <span class="op">-&gt;</span> <span class="kw-2">*</span><span class="kw-2">mut</span> <span class="ident">SECAlgorithmID</span>;
 
     <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">PK11_PBEKeyGen</span>(
         <span class="ident">slot</span>: <span class="kw-2">*</span><span class="kw-2">mut</span> <span class="ident">PK11SlotInfo</span>,
@@ -273,7 +274,7 @@
         <span class="ident">pwitem</span>: <span class="kw-2">*</span><span class="kw-2">mut</span> <span class="ident">SECItem</span>,
         <span class="ident">faulty3DES</span>: <span class="ident">PRBool</span>,
         <span class="ident">wincx</span>: <span class="kw-2">*</span><span class="kw-2">mut</span> <span class="ident">c_void</span>,
-    ) <span class="op">-</span><span class="op">&gt;</span> <span class="kw-2">*</span><span class="kw-2">mut</span> <span class="ident">PK11SymKey</span>;
+    ) <span class="op">-&gt;</span> <span class="kw-2">*</span><span class="kw-2">mut</span> <span class="ident">PK11SymKey</span>;
 }
 </pre></div>
 </section><section id="search" class="content hidden"></section><section class="footer"></section><script>window.rootPath = "../../../";window.currentCrate = "nss_sys";</script><script src="../../../main.js"></script><script src="../../../source-script.js"></script><script src="../../../source-files.js"></script><script defer src="../../../search-index.js"></script></body></html>

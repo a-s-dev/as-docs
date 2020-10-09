@@ -1,3 +1,3 @@
 (function() {var implementors = {};
-implementors["sync15"] = [{"text":"impl <a class=\"trait\" href=\"https://doc.rust-lang.org/nightly/std/io/trait.Write.html\" title=\"trait std::io::Write\">Write</a> for <a class=\"struct\" href=\"sync15/clients/ser/struct.WriteCount.html\" title=\"struct sync15::clients::ser::WriteCount\">WriteCount</a>","synthetic":false,"types":["sync15::clients::ser::WriteCount"]}];
+implementors["sync15"] = [{"text":"impl Write for WriteCount","synthetic":false,"types":[]}];
 if (window.register_implementors) {window.register_implementors(implementors);} else {window.pending_implementors = implementors;}})()

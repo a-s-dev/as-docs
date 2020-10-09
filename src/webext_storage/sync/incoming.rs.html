@@ -1,4 +1,5 @@
-<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source to the Rust file `components/webext-storage/src/sync/incoming.rs`."><meta name="keywords" content="rust, rustlang, rust-lang"><title>incoming.rs.html -- source</title><link rel="stylesheet" type="text/css" href="../../../normalize.css"><link rel="stylesheet" type="text/css" href="../../../rustdoc.css" id="mainThemeStyle"><link rel="stylesheet" type="text/css" href="../../../dark.css"><link rel="stylesheet" type="text/css" href="../../../light.css" id="themeStyle"><script src="../../../storage.js"></script><noscript><link rel="stylesheet" href="../../../noscript.css"></noscript><link rel="shortcut icon" href="../../../favicon.ico"><style type="text/css">#crate-search{background-image:url("../../../down-arrow.svg");}</style></head><body class="rustdoc source"><!--[if lte IE 8]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="sidebar"><div class="sidebar-menu">&#9776;</div><a href='../../../webext_storage/index.html'><div class='logo-container'><img src='../../../rust-logo.png' alt='logo'></div></a></nav><div class="theme-picker"><button id="theme-picker" aria-label="Pick another theme!"><img src="../../../brush.svg" width="18" alt="Pick another theme!"></button><div id="theme-choices"></div></div><script src="../../../theme.js"></script><nav class="sub"><form class="search-form"><div class="search-container"><div><select id="crate-search"><option value="All crates">All crates</option></select><input class="search-input" name="search" disabled autocomplete="off" spellcheck="false" placeholder="Click or press ‘S’ to search, ‘?’ for more options…" type="search"></div><a id="settings-menu" href="../../../settings.html"><img src="../../../wheel.svg" width="18" alt="Change settings"></a></div></form></nav><section id="main" class="content"><pre class="line-numbers"><span id="1">  1</span>
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source to the Rust file `components/webext-storage/src/sync/incoming.rs`."><meta name="keywords" content="rust, rustlang, rust-lang"><title>incoming.rs.html -- source</title><link rel="stylesheet" type="text/css" href="../../../normalize.css"><link rel="stylesheet" type="text/css" href="../../../rustdoc.css" id="mainThemeStyle"><link rel="stylesheet" type="text/css" href="../../../light.css"  id="themeStyle"><link rel="stylesheet" type="text/css" href="../../../dark.css" disabled ><link rel="stylesheet" type="text/css" href="../../../ayu.css" disabled ><script src="../../../storage.js"></script><noscript><link rel="stylesheet" href="../../../noscript.css"></noscript><link rel="shortcut icon" href="../../../favicon.ico"><style type="text/css">#crate-search{background-image:url("../../../down-arrow.svg");}</style></head><body class="rustdoc source"><!--[if lte IE 8]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="sidebar"><div class="sidebar-menu">&#9776;</div><a href='../../../webext_storage/index.html'><div class='logo-container rust-logo'><img src='../../../rust-logo.png' alt='logo'></div></a></nav><div class="theme-picker"><button id="theme-picker" aria-label="Pick another theme!"><img src="../../../brush.svg" width="18" alt="Pick another theme!"></button><div id="theme-choices"></div></div><script src="../../../theme.js"></script><nav class="sub"><form class="search-form"><div class="search-container"><div><select id="crate-search"><option value="All crates">All crates</option></select><input class="search-input" name="search" disabled autocomplete="off" spellcheck="false" placeholder="Click or press ‘S’ to search, ‘?’ for more options…" type="search"></div><span class="help-button">?</span>
+                <a id="settings-menu" href="../../../settings.html"><img src="../../../wheel.svg" width="18" alt="Change settings"></a></div></form></nav><section id="main" class="content"><pre class="line-numbers"><span id="1">  1</span>
 <span id="2">  2</span>
 <span id="3">  3</span>
 <span id="4">  4</span>
@@ -836,7 +837,7 @@
 
 <span class="comment">// A little helper to create a StorageChanges object when we are creating</span>
 <span class="comment">// a new value with multiple keys that doesn&#39;t exist locally.</span>
-<span class="kw">fn</span> <span class="ident">changes_for_new_incoming</span>(<span class="ident">new</span>: <span class="kw-2">&amp;</span><span class="ident">JsonMap</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">StorageChanges</span> {
+<span class="kw">fn</span> <span class="ident">changes_for_new_incoming</span>(<span class="ident">new</span>: <span class="kw-2">&amp;</span><span class="ident">JsonMap</span>) <span class="op">-&gt;</span> <span class="ident">StorageChanges</span> {
     <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">result</span> <span class="op">=</span> <span class="ident">StorageChanges</span>::<span class="ident">with_capacity</span>(<span class="ident">new</span>.<span class="ident">len</span>());
     <span class="kw">for</span> (<span class="ident">key</span>, <span class="ident">val</span>) <span class="kw">in</span> <span class="ident">new</span>.<span class="ident">iter</span>() {
         <span class="ident">result</span>.<span class="ident">push</span>(<span class="ident">StorageValueChange</span> {
@@ -851,13 +852,13 @@
 <span class="comment">// This module deals exclusively with the Map inside a JsonValue::Object().</span>
 <span class="comment">// This helper reads such a Map from a SQL row, ignoring anything which is</span>
 <span class="comment">// either invalid JSON or a different JSON type.</span>
-<span class="kw">fn</span> <span class="ident">json_map_from_row</span>(<span class="ident">row</span>: <span class="kw-2">&amp;</span><span class="ident">Row</span><span class="op">&lt;</span><span class="lifetime">&#39;_</span><span class="op">&gt;</span>, <span class="ident">col</span>: <span class="kw-2">&amp;</span><span class="ident">str</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">DataState</span><span class="op">&gt;</span> {
-    <span class="kw">let</span> <span class="ident">s</span> <span class="op">=</span> <span class="ident">row</span>.<span class="ident">get</span>::<span class="op">&lt;</span><span class="kw">_</span>, <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">String</span><span class="op">&gt;</span><span class="op">&gt;</span>(<span class="ident">col</span>)<span class="question-mark">?</span>;
+<span class="kw">fn</span> <span class="ident">json_map_from_row</span>(<span class="ident">row</span>: <span class="kw-2">&amp;</span><span class="ident">Row</span><span class="op">&lt;</span><span class="lifetime">&#39;_</span><span class="op">&gt;</span>, <span class="ident">col</span>: <span class="kw-2">&amp;</span><span class="ident">str</span>) <span class="op">-&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">DataState</span><span class="op">&gt;</span> {
+    <span class="kw">let</span> <span class="ident">s</span> <span class="op">=</span> <span class="ident">row</span>.<span class="ident">get</span>::<span class="op">&lt;</span><span class="kw">_</span>, <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">String</span><span class="op">&gt;&gt;</span>(<span class="ident">col</span>)<span class="question-mark">?</span>;
     <span class="prelude-val">Ok</span>(<span class="kw">match</span> <span class="ident">s</span> {
-        <span class="prelude-val">None</span> <span class="op">=</span><span class="op">&gt;</span> <span class="ident">DataState</span>::<span class="ident">Deleted</span>,
-        <span class="prelude-val">Some</span>(<span class="ident">s</span>) <span class="op">=</span><span class="op">&gt;</span> <span class="kw">match</span> <span class="ident">serde_json</span>::<span class="ident">from_str</span>(<span class="kw-2">&amp;</span><span class="ident">s</span>) {
-            <span class="prelude-val">Ok</span>(<span class="ident">serde_json</span>::<span class="ident">Value</span>::<span class="ident">Object</span>(<span class="ident">m</span>)) <span class="op">=</span><span class="op">&gt;</span> <span class="ident">DataState</span>::<span class="ident">Exists</span>(<span class="ident">m</span>),
-            <span class="kw">_</span> <span class="op">=</span><span class="op">&gt;</span> {
+        <span class="prelude-val">None</span> <span class="op">=&gt;</span> <span class="ident">DataState</span>::<span class="ident">Deleted</span>,
+        <span class="prelude-val">Some</span>(<span class="ident">s</span>) <span class="op">=&gt;</span> <span class="kw">match</span> <span class="ident">serde_json</span>::<span class="ident">from_str</span>(<span class="kw-2">&amp;</span><span class="ident">s</span>) {
+            <span class="prelude-val">Ok</span>(<span class="ident">serde_json</span>::<span class="ident">Value</span>::<span class="ident">Object</span>(<span class="ident">m</span>)) <span class="op">=&gt;</span> <span class="ident">DataState</span>::<span class="ident">Exists</span>(<span class="ident">m</span>),
+            <span class="kw">_</span> <span class="op">=&gt;</span> {
                 <span class="comment">// We don&#39;t want invalid json or wrong types to kill syncing.</span>
                 <span class="comment">// It should be impossible as we never write anything which</span>
                 <span class="comment">// could cause it, but we can&#39;t really log the bad data as there</span>
@@ -876,7 +877,7 @@
     <span class="ident">tx</span>: <span class="kw-2">&amp;</span><span class="ident">Transaction</span><span class="op">&lt;</span><span class="lifetime">&#39;_</span><span class="op">&gt;</span>,
     <span class="ident">incoming_payloads</span>: <span class="ident">Vec</span><span class="op">&lt;</span><span class="ident">Payload</span><span class="op">&gt;</span>,
     <span class="ident">signal</span>: <span class="kw-2">&amp;</span><span class="kw">dyn</span> <span class="ident">Interruptee</span>,
-) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span>()<span class="op">&gt;</span> {
+) <span class="op">-&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span>()<span class="op">&gt;</span> {
     <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">incoming_records</span> <span class="op">=</span> <span class="ident">Vec</span>::<span class="ident">with_capacity</span>(<span class="ident">incoming_payloads</span>.<span class="ident">len</span>());
     <span class="kw">for</span> <span class="ident">payload</span> <span class="kw">in</span> <span class="ident">incoming_payloads</span> {
         <span class="ident">incoming_records</span>.<span class="ident">push</span>(<span class="ident">payload</span>.<span class="ident">into_record</span>::<span class="op">&lt;</span><span class="ident">Record</span><span class="op">&gt;</span>()<span class="question-mark">?</span>);
@@ -885,7 +886,7 @@
         <span class="kw-2">&amp;</span><span class="ident">incoming_records</span>,
         <span class="comment">// We bind 3 params per chunk.</span>
         <span class="ident">sql_support</span>::<span class="ident">default_max_variable_number</span>() <span class="op">/</span> <span class="number">3</span>,
-        <span class="op">|</span><span class="ident">chunk</span>, <span class="kw">_</span><span class="op">|</span> <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span>()<span class="op">&gt;</span> {
+        <span class="op">|</span><span class="ident">chunk</span>, <span class="kw">_</span><span class="op">|</span> <span class="op">-&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span>()<span class="op">&gt;</span> {
             <span class="kw">let</span> <span class="ident">sql</span> <span class="op">=</span> <span class="macro">format</span><span class="macro">!</span>(
                 <span class="string">&quot;INSERT OR REPLACE INTO temp.storage_sync_staging
                 (guid, ext_id, data)
@@ -950,7 +951,7 @@
 
 <span class="doccomment">/// Get the items we need to process from the staging table. Return details about</span>
 <span class="doccomment">/// the item and the state of that item, ready for processing.</span>
-<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">get_incoming</span>(<span class="ident">conn</span>: <span class="kw-2">&amp;</span><span class="ident">Connection</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">Vec</span><span class="op">&lt;</span>(<span class="ident">IncomingItem</span>, <span class="ident">IncomingState</span>)<span class="op">&gt;</span><span class="op">&gt;</span> {
+<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">get_incoming</span>(<span class="ident">conn</span>: <span class="kw-2">&amp;</span><span class="ident">Connection</span>) <span class="op">-&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">Vec</span><span class="op">&lt;</span>(<span class="ident">IncomingItem</span>, <span class="ident">IncomingState</span>)<span class="op">&gt;&gt;</span> {
     <span class="kw">let</span> <span class="ident">sql</span> <span class="op">=</span> <span class="string">&quot;
         SELECT
             s.guid as guid,
@@ -963,7 +964,7 @@
         LEFT JOIN storage_sync_mirror m ON m.guid = s.guid
         LEFT JOIN storage_sync_data l on l.ext_id = s.ext_id;&quot;</span>;
 
-    <span class="kw">fn</span> <span class="ident">from_row</span>(<span class="ident">row</span>: <span class="kw-2">&amp;</span><span class="ident">Row</span><span class="op">&lt;</span><span class="lifetime">&#39;_</span><span class="op">&gt;</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span>(<span class="ident">IncomingItem</span>, <span class="ident">IncomingState</span>)<span class="op">&gt;</span> {
+    <span class="kw">fn</span> <span class="ident">from_row</span>(<span class="ident">row</span>: <span class="kw-2">&amp;</span><span class="ident">Row</span><span class="op">&lt;</span><span class="lifetime">&#39;_</span><span class="op">&gt;</span>) <span class="op">-&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span>(<span class="ident">IncomingItem</span>, <span class="ident">IncomingState</span>)<span class="op">&gt;</span> {
         <span class="kw">let</span> <span class="ident">guid</span> <span class="op">=</span> <span class="ident">row</span>.<span class="ident">get</span>(<span class="string">&quot;guid&quot;</span>)<span class="question-mark">?</span>;
         <span class="kw">let</span> <span class="ident">ext_id</span> <span class="op">=</span> <span class="ident">row</span>.<span class="ident">get</span>(<span class="string">&quot;ext_id&quot;</span>)<span class="question-mark">?</span>;
         <span class="kw">let</span> <span class="ident">incoming</span> <span class="op">=</span> <span class="ident">json_map_from_row</span>(<span class="ident">row</span>, <span class="string">&quot;s_data&quot;</span>)<span class="question-mark">?</span>;
@@ -972,16 +973,16 @@
         <span class="kw">let</span> <span class="ident">local_exists</span> <span class="op">=</span> <span class="ident">row</span>.<span class="ident">get</span>(<span class="string">&quot;l_exists&quot;</span>)<span class="question-mark">?</span>;
 
         <span class="kw">let</span> <span class="ident">state</span> <span class="op">=</span> <span class="kw">match</span> (<span class="ident">local_exists</span>, <span class="ident">mirror_exists</span>) {
-            (<span class="bool-val">false</span>, <span class="bool-val">false</span>) <span class="op">=</span><span class="op">&gt;</span> <span class="ident">IncomingState</span>::<span class="ident">IncomingOnly</span> { <span class="ident">incoming</span> },
-            (<span class="bool-val">true</span>, <span class="bool-val">false</span>) <span class="op">=</span><span class="op">&gt;</span> <span class="ident">IncomingState</span>::<span class="ident">HasLocal</span> {
+            (<span class="bool-val">false</span>, <span class="bool-val">false</span>) <span class="op">=&gt;</span> <span class="ident">IncomingState</span>::<span class="ident">IncomingOnly</span> { <span class="ident">incoming</span> },
+            (<span class="bool-val">true</span>, <span class="bool-val">false</span>) <span class="op">=&gt;</span> <span class="ident">IncomingState</span>::<span class="ident">HasLocal</span> {
                 <span class="ident">incoming</span>,
                 <span class="ident">local</span>: <span class="ident">json_map_from_row</span>(<span class="ident">row</span>, <span class="string">&quot;l_data&quot;</span>)<span class="question-mark">?</span>,
             },
-            (<span class="bool-val">false</span>, <span class="bool-val">true</span>) <span class="op">=</span><span class="op">&gt;</span> <span class="ident">IncomingState</span>::<span class="ident">NotLocal</span> {
+            (<span class="bool-val">false</span>, <span class="bool-val">true</span>) <span class="op">=&gt;</span> <span class="ident">IncomingState</span>::<span class="ident">NotLocal</span> {
                 <span class="ident">incoming</span>,
                 <span class="ident">mirror</span>: <span class="ident">json_map_from_row</span>(<span class="ident">row</span>, <span class="string">&quot;m_data&quot;</span>)<span class="question-mark">?</span>,
             },
-            (<span class="bool-val">true</span>, <span class="bool-val">true</span>) <span class="op">=</span><span class="op">&gt;</span> <span class="ident">IncomingState</span>::<span class="ident">Everywhere</span> {
+            (<span class="bool-val">true</span>, <span class="bool-val">true</span>) <span class="op">=&gt;</span> <span class="ident">IncomingState</span>::<span class="ident">Everywhere</span> {
                 <span class="ident">incoming</span>,
                 <span class="ident">mirror</span>: <span class="ident">json_map_from_row</span>(<span class="ident">row</span>, <span class="string">&quot;m_data&quot;</span>)<span class="question-mark">?</span>,
                 <span class="ident">local</span>: <span class="ident">json_map_from_row</span>(<span class="ident">row</span>, <span class="string">&quot;l_data&quot;</span>)<span class="question-mark">?</span>,
@@ -1015,20 +1016,20 @@
 }
 
 <span class="doccomment">/// Takes the state of an item and returns the action we should take for it.</span>
-<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">plan_incoming</span>(<span class="ident">s</span>: <span class="ident">IncomingState</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">IncomingAction</span> {
+<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">plan_incoming</span>(<span class="ident">s</span>: <span class="ident">IncomingState</span>) <span class="op">-&gt;</span> <span class="ident">IncomingAction</span> {
     <span class="kw">match</span> <span class="ident">s</span> {
         <span class="ident">IncomingState</span>::<span class="ident">Everywhere</span> {
             <span class="ident">incoming</span>,
             <span class="ident">local</span>,
             <span class="ident">mirror</span>,
-        } <span class="op">=</span><span class="op">&gt;</span> {
+        } <span class="op">=&gt;</span> {
             <span class="comment">// All records exist - but do they all have data?</span>
             <span class="kw">match</span> (<span class="ident">incoming</span>, <span class="ident">local</span>, <span class="ident">mirror</span>) {
                 (
                     <span class="ident">DataState</span>::<span class="ident">Exists</span>(<span class="ident">incoming_data</span>),
                     <span class="ident">DataState</span>::<span class="ident">Exists</span>(<span class="ident">local_data</span>),
                     <span class="ident">DataState</span>::<span class="ident">Exists</span>(<span class="ident">mirror_data</span>),
-                ) <span class="op">=</span><span class="op">&gt;</span> {
+                ) <span class="op">=&gt;</span> {
                     <span class="comment">// all records have data - 3-way merge.</span>
                     <span class="ident">merge</span>(<span class="ident">incoming_data</span>, <span class="ident">local_data</span>, <span class="prelude-val">Some</span>(<span class="ident">mirror_data</span>))
                 }
@@ -1036,18 +1037,18 @@
                     <span class="ident">DataState</span>::<span class="ident">Exists</span>(<span class="ident">incoming_data</span>),
                     <span class="ident">DataState</span>::<span class="ident">Exists</span>(<span class="ident">local_data</span>),
                     <span class="ident">DataState</span>::<span class="ident">Deleted</span>,
-                ) <span class="op">=</span><span class="op">&gt;</span> {
+                ) <span class="op">=&gt;</span> {
                     <span class="comment">// No parent, so first time seeing this remotely - 2-way merge</span>
                     <span class="ident">merge</span>(<span class="ident">incoming_data</span>, <span class="ident">local_data</span>, <span class="prelude-val">None</span>)
                 }
-                (<span class="ident">DataState</span>::<span class="ident">Exists</span>(<span class="ident">incoming_data</span>), <span class="ident">DataState</span>::<span class="ident">Deleted</span>, <span class="kw">_</span>) <span class="op">=</span><span class="op">&gt;</span> {
+                (<span class="ident">DataState</span>::<span class="ident">Exists</span>(<span class="ident">incoming_data</span>), <span class="ident">DataState</span>::<span class="ident">Deleted</span>, <span class="kw">_</span>) <span class="op">=&gt;</span> {
                     <span class="comment">// Incoming data, removed locally. Server wins.</span>
                     <span class="ident">IncomingAction</span>::<span class="ident">TakeRemote</span> {
                         <span class="ident">changes</span>: <span class="ident">changes_for_new_incoming</span>(<span class="kw-2">&amp;</span><span class="ident">incoming_data</span>),
                         <span class="ident">data</span>: <span class="ident">incoming_data</span>,
                     }
                 }
-                (<span class="ident">DataState</span>::<span class="ident">Deleted</span>, <span class="ident">DataState</span>::<span class="ident">Exists</span>(<span class="ident">local_data</span>), <span class="ident">DataState</span>::<span class="ident">Exists</span>(<span class="ident">mirror</span>)) <span class="op">=</span><span class="op">&gt;</span> {
+                (<span class="ident">DataState</span>::<span class="ident">Deleted</span>, <span class="ident">DataState</span>::<span class="ident">Exists</span>(<span class="ident">local_data</span>), <span class="ident">DataState</span>::<span class="ident">Exists</span>(<span class="ident">mirror</span>)) <span class="op">=&gt;</span> {
                     <span class="comment">// Deleted remotely.</span>
                     <span class="comment">// Treat this as a delete of every key that we</span>
                     <span class="comment">// know was present at the time.</span>
@@ -1063,7 +1064,7 @@
                         }
                     }
                 }
-                (<span class="ident">DataState</span>::<span class="ident">Deleted</span>, <span class="ident">DataState</span>::<span class="ident">Exists</span>(<span class="ident">local_data</span>), <span class="ident">DataState</span>::<span class="ident">Deleted</span>) <span class="op">=</span><span class="op">&gt;</span> {
+                (<span class="ident">DataState</span>::<span class="ident">Deleted</span>, <span class="ident">DataState</span>::<span class="ident">Exists</span>(<span class="ident">local_data</span>), <span class="ident">DataState</span>::<span class="ident">Deleted</span>) <span class="op">=&gt;</span> {
                     <span class="comment">// Perhaps another client created and then deleted</span>
                     <span class="comment">// the whole object for this extension since the</span>
                     <span class="comment">// last time we synced.</span>
@@ -1075,25 +1076,25 @@
                         <span class="ident">changes</span>: <span class="ident">StorageChanges</span>::<span class="ident">new</span>(),
                     }
                 }
-                (<span class="ident">DataState</span>::<span class="ident">Deleted</span>, <span class="ident">DataState</span>::<span class="ident">Deleted</span>, <span class="kw">_</span>) <span class="op">=</span><span class="op">&gt;</span> {
+                (<span class="ident">DataState</span>::<span class="ident">Deleted</span>, <span class="ident">DataState</span>::<span class="ident">Deleted</span>, <span class="kw">_</span>) <span class="op">=&gt;</span> {
                     <span class="comment">// We agree with the remote (regardless of what we</span>
                     <span class="comment">// have mirrored).</span>
                     <span class="ident">IncomingAction</span>::<span class="ident">Same</span>
                 }
             }
         }
-        <span class="ident">IncomingState</span>::<span class="ident">HasLocal</span> { <span class="ident">incoming</span>, <span class="ident">local</span> } <span class="op">=</span><span class="op">&gt;</span> {
+        <span class="ident">IncomingState</span>::<span class="ident">HasLocal</span> { <span class="ident">incoming</span>, <span class="ident">local</span> } <span class="op">=&gt;</span> {
             <span class="comment">// So we have a local record and an incoming/staging record, but *not* a</span>
             <span class="comment">// mirror record. This means some other device has synced this for</span>
             <span class="comment">// the first time and we are yet to do the same.</span>
             <span class="kw">match</span> (<span class="ident">incoming</span>, <span class="ident">local</span>) {
-                (<span class="ident">DataState</span>::<span class="ident">Exists</span>(<span class="ident">incoming_data</span>), <span class="ident">DataState</span>::<span class="ident">Exists</span>(<span class="ident">local_data</span>)) <span class="op">=</span><span class="op">&gt;</span> {
+                (<span class="ident">DataState</span>::<span class="ident">Exists</span>(<span class="ident">incoming_data</span>), <span class="ident">DataState</span>::<span class="ident">Exists</span>(<span class="ident">local_data</span>)) <span class="op">=&gt;</span> {
                     <span class="comment">// This means the extension exists locally and remotely</span>
                     <span class="comment">// but this is the first time we&#39;ve synced it. That&#39;s no problem, it&#39;s</span>
                     <span class="comment">// just a 2-way merge...</span>
                     <span class="ident">merge</span>(<span class="ident">incoming_data</span>, <span class="ident">local_data</span>, <span class="prelude-val">None</span>)
                 }
-                (<span class="ident">DataState</span>::<span class="ident">Deleted</span>, <span class="ident">DataState</span>::<span class="ident">Exists</span>(<span class="ident">local_data</span>)) <span class="op">=</span><span class="op">&gt;</span> {
+                (<span class="ident">DataState</span>::<span class="ident">Deleted</span>, <span class="ident">DataState</span>::<span class="ident">Exists</span>(<span class="ident">local_data</span>)) <span class="op">=&gt;</span> {
                     <span class="comment">// We&#39;ve data locally, but there&#39;s an incoming deletion.</span>
                     <span class="comment">// We would normally remove keys that we knew were</span>
                     <span class="comment">// present on the server, but we don&#39;t know what</span>
@@ -1103,40 +1104,40 @@
                         <span class="ident">changes</span>: <span class="ident">StorageChanges</span>::<span class="ident">new</span>(),
                     }
                 }
-                (<span class="ident">DataState</span>::<span class="ident">Exists</span>(<span class="ident">incoming_data</span>), <span class="ident">DataState</span>::<span class="ident">Deleted</span>) <span class="op">=</span><span class="op">&gt;</span> {
+                (<span class="ident">DataState</span>::<span class="ident">Exists</span>(<span class="ident">incoming_data</span>), <span class="ident">DataState</span>::<span class="ident">Deleted</span>) <span class="op">=&gt;</span> {
                     <span class="comment">// No data locally, but some is incoming - take it.</span>
                     <span class="ident">IncomingAction</span>::<span class="ident">TakeRemote</span> {
                         <span class="ident">changes</span>: <span class="ident">changes_for_new_incoming</span>(<span class="kw-2">&amp;</span><span class="ident">incoming_data</span>),
                         <span class="ident">data</span>: <span class="ident">incoming_data</span>,
                     }
                 }
-                (<span class="ident">DataState</span>::<span class="ident">Deleted</span>, <span class="ident">DataState</span>::<span class="ident">Deleted</span>) <span class="op">=</span><span class="op">&gt;</span> {
+                (<span class="ident">DataState</span>::<span class="ident">Deleted</span>, <span class="ident">DataState</span>::<span class="ident">Deleted</span>) <span class="op">=&gt;</span> {
                     <span class="comment">// Nothing anywhere - odd, but OK.</span>
                     <span class="ident">IncomingAction</span>::<span class="ident">Same</span>
                 }
             }
         }
-        <span class="ident">IncomingState</span>::<span class="ident">NotLocal</span> { <span class="ident">incoming</span>, .. } <span class="op">=</span><span class="op">&gt;</span> {
+        <span class="ident">IncomingState</span>::<span class="ident">NotLocal</span> { <span class="ident">incoming</span>, .. } <span class="op">=&gt;</span> {
             <span class="comment">// No local data but there&#39;s mirror and an incoming record.</span>
             <span class="comment">// This means a local deletion is being replaced by, or just re-doing</span>
             <span class="comment">// the incoming record.</span>
             <span class="kw">match</span> <span class="ident">incoming</span> {
-                <span class="ident">DataState</span>::<span class="ident">Exists</span>(<span class="ident">data</span>) <span class="op">=</span><span class="op">&gt;</span> <span class="ident">IncomingAction</span>::<span class="ident">TakeRemote</span> {
+                <span class="ident">DataState</span>::<span class="ident">Exists</span>(<span class="ident">data</span>) <span class="op">=&gt;</span> <span class="ident">IncomingAction</span>::<span class="ident">TakeRemote</span> {
                     <span class="ident">changes</span>: <span class="ident">changes_for_new_incoming</span>(<span class="kw-2">&amp;</span><span class="ident">data</span>),
                     <span class="ident">data</span>,
                 },
-                <span class="ident">DataState</span>::<span class="ident">Deleted</span> <span class="op">=</span><span class="op">&gt;</span> <span class="ident">IncomingAction</span>::<span class="ident">Same</span>,
+                <span class="ident">DataState</span>::<span class="ident">Deleted</span> <span class="op">=&gt;</span> <span class="ident">IncomingAction</span>::<span class="ident">Same</span>,
             }
         }
-        <span class="ident">IncomingState</span>::<span class="ident">IncomingOnly</span> { <span class="ident">incoming</span> } <span class="op">=</span><span class="op">&gt;</span> {
+        <span class="ident">IncomingState</span>::<span class="ident">IncomingOnly</span> { <span class="ident">incoming</span> } <span class="op">=&gt;</span> {
             <span class="comment">// Only the staging record exists - this means it&#39;s the first time</span>
             <span class="comment">// we&#39;ve ever seen it. No conflict possible, just take the remote.</span>
             <span class="kw">match</span> <span class="ident">incoming</span> {
-                <span class="ident">DataState</span>::<span class="ident">Exists</span>(<span class="ident">data</span>) <span class="op">=</span><span class="op">&gt;</span> <span class="ident">IncomingAction</span>::<span class="ident">TakeRemote</span> {
+                <span class="ident">DataState</span>::<span class="ident">Exists</span>(<span class="ident">data</span>) <span class="op">=&gt;</span> <span class="ident">IncomingAction</span>::<span class="ident">TakeRemote</span> {
                     <span class="ident">changes</span>: <span class="ident">changes_for_new_incoming</span>(<span class="kw-2">&amp;</span><span class="ident">data</span>),
                     <span class="ident">data</span>,
                 },
-                <span class="ident">DataState</span>::<span class="ident">Deleted</span> <span class="op">=</span><span class="op">&gt;</span> <span class="ident">IncomingAction</span>::<span class="ident">DeleteLocally</span> {
+                <span class="ident">DataState</span>::<span class="ident">Deleted</span> <span class="op">=&gt;</span> <span class="ident">IncomingAction</span>::<span class="ident">DeleteLocally</span> {
                     <span class="ident">changes</span>: <span class="ident">StorageChanges</span>::<span class="ident">new</span>(),
                 },
             }
@@ -1144,7 +1145,7 @@
     }
 }
 
-<span class="kw">fn</span> <span class="ident">insert_changes</span>(<span class="ident">tx</span>: <span class="kw-2">&amp;</span><span class="ident">Transaction</span><span class="op">&lt;</span><span class="lifetime">&#39;_</span><span class="op">&gt;</span>, <span class="ident">ext_id</span>: <span class="kw-2">&amp;</span><span class="ident">str</span>, <span class="ident">changes</span>: <span class="kw-2">&amp;</span><span class="ident">StorageChanges</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span>()<span class="op">&gt;</span> {
+<span class="kw">fn</span> <span class="ident">insert_changes</span>(<span class="ident">tx</span>: <span class="kw-2">&amp;</span><span class="ident">Transaction</span><span class="op">&lt;</span><span class="lifetime">&#39;_</span><span class="op">&gt;</span>, <span class="ident">ext_id</span>: <span class="kw-2">&amp;</span><span class="ident">str</span>, <span class="ident">changes</span>: <span class="kw-2">&amp;</span><span class="ident">StorageChanges</span>) <span class="op">-&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span>()<span class="op">&gt;</span> {
     <span class="ident">tx</span>.<span class="ident">execute_named_cached</span>(
         <span class="string">&quot;INSERT INTO temp.storage_sync_applied (ext_id, changes)
             VALUES (:ext_id, :changes)&quot;</span>,
@@ -1161,13 +1162,13 @@
     <span class="ident">tx</span>: <span class="kw-2">&amp;</span><span class="ident">Transaction</span><span class="op">&lt;</span><span class="lifetime">&#39;_</span><span class="op">&gt;</span>,
     <span class="ident">actions</span>: <span class="ident">Vec</span><span class="op">&lt;</span>(<span class="ident">IncomingItem</span>, <span class="ident">IncomingAction</span>)<span class="op">&gt;</span>,
     <span class="ident">signal</span>: <span class="kw-2">&amp;</span><span class="kw">dyn</span> <span class="ident">Interruptee</span>,
-) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span>()<span class="op">&gt;</span> {
+) <span class="op">-&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span>()<span class="op">&gt;</span> {
     <span class="kw">for</span> (<span class="ident">item</span>, <span class="ident">action</span>) <span class="kw">in</span> <span class="ident">actions</span> {
         <span class="ident">signal</span>.<span class="ident">err_if_interrupted</span>()<span class="question-mark">?</span>;
 
         <span class="ident">log</span>::<span class="macro">trace</span><span class="macro">!</span>(<span class="string">&quot;action for &#39;{}&#39;: {:?}&quot;</span>, <span class="ident">item</span>.<span class="ident">ext_id</span>, <span class="ident">action</span>);
         <span class="kw">match</span> <span class="ident">action</span> {
-            <span class="ident">IncomingAction</span>::<span class="ident">DeleteLocally</span> { <span class="ident">changes</span> } <span class="op">=</span><span class="op">&gt;</span> {
+            <span class="ident">IncomingAction</span>::<span class="ident">DeleteLocally</span> { <span class="ident">changes</span> } <span class="op">=&gt;</span> {
                 <span class="comment">// Can just nuke it entirely.</span>
                 <span class="ident">tx</span>.<span class="ident">execute_named_cached</span>(
                     <span class="string">&quot;DELETE FROM storage_sync_data WHERE ext_id = :ext_id&quot;</span>,
@@ -1176,7 +1177,7 @@
                 <span class="ident">insert_changes</span>(<span class="ident">tx</span>, <span class="kw-2">&amp;</span><span class="ident">item</span>.<span class="ident">ext_id</span>, <span class="kw-2">&amp;</span><span class="ident">changes</span>)<span class="question-mark">?</span>;
             }
             <span class="comment">// We want to update the local record with &#39;data&#39; and after this update the item no longer is considered dirty.</span>
-            <span class="ident">IncomingAction</span>::<span class="ident">TakeRemote</span> { <span class="ident">data</span>, <span class="ident">changes</span> } <span class="op">=</span><span class="op">&gt;</span> {
+            <span class="ident">IncomingAction</span>::<span class="ident">TakeRemote</span> { <span class="ident">data</span>, <span class="ident">changes</span> } <span class="op">=&gt;</span> {
                 <span class="ident">tx</span>.<span class="ident">execute_named_cached</span>(
                     <span class="string">&quot;INSERT OR REPLACE INTO storage_sync_data(ext_id, data, sync_change_counter)
                         VALUES (:ext_id, :data, 0)&quot;</span>,
@@ -1190,7 +1191,7 @@
 
             <span class="comment">// We merged this data, so need to update locally but still consider</span>
             <span class="comment">// it dirty because the merged data must be uploaded.</span>
-            <span class="ident">IncomingAction</span>::<span class="ident">Merge</span> { <span class="ident">data</span>, <span class="ident">changes</span> } <span class="op">=</span><span class="op">&gt;</span> {
+            <span class="ident">IncomingAction</span>::<span class="ident">Merge</span> { <span class="ident">data</span>, <span class="ident">changes</span> } <span class="op">=&gt;</span> {
                 <span class="ident">tx</span>.<span class="ident">execute_named_cached</span>(
                     <span class="string">&quot;UPDATE storage_sync_data SET data = :data, sync_change_counter = sync_change_counter + 1 WHERE ext_id = :ext_id&quot;</span>,
                     <span class="kw-2">&amp;</span>[
@@ -1203,7 +1204,7 @@
 
             <span class="comment">// Both local and remote ended up the same - only need to nuke the</span>
             <span class="comment">// change counter.</span>
-            <span class="ident">IncomingAction</span>::<span class="ident">Same</span> <span class="op">=</span><span class="op">&gt;</span> {
+            <span class="ident">IncomingAction</span>::<span class="ident">Same</span> <span class="op">=&gt;</span> {
                 <span class="ident">tx</span>.<span class="ident">execute_named_cached</span>(
                     <span class="string">&quot;UPDATE storage_sync_data SET sync_change_counter = 0 WHERE ext_id = :ext_id&quot;</span>,
                     <span class="kw-2">&amp;</span>[(<span class="string">&quot;:ext_id&quot;</span>, <span class="kw-2">&amp;</span><span class="ident">item</span>.<span class="ident">ext_id</span>)],
@@ -1226,13 +1227,13 @@
     <span class="kw">use</span> <span class="ident">sync15_traits</span>::<span class="ident">Payload</span>;
 
     <span class="comment">// select simple int</span>
-    <span class="kw">fn</span> <span class="ident">ssi</span>(<span class="ident">conn</span>: <span class="kw-2">&amp;</span><span class="ident">Connection</span>, <span class="ident">stmt</span>: <span class="kw-2">&amp;</span><span class="ident">str</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">u32</span> {
+    <span class="kw">fn</span> <span class="ident">ssi</span>(<span class="ident">conn</span>: <span class="kw-2">&amp;</span><span class="ident">Connection</span>, <span class="ident">stmt</span>: <span class="kw-2">&amp;</span><span class="ident">str</span>) <span class="op">-&gt;</span> <span class="ident">u32</span> {
         <span class="ident">conn</span>.<span class="ident">try_query_one</span>(<span class="ident">stmt</span>, <span class="kw-2">&amp;</span>[], <span class="bool-val">true</span>)
             .<span class="ident">expect</span>(<span class="string">&quot;must work&quot;</span>)
             .<span class="ident">unwrap_or_default</span>()
     }
 
-    <span class="kw">fn</span> <span class="ident">array_to_incoming</span>(<span class="kw-2">mut</span> <span class="ident">array</span>: <span class="ident">Value</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">Vec</span><span class="op">&lt;</span><span class="ident">Payload</span><span class="op">&gt;</span> {
+    <span class="kw">fn</span> <span class="ident">array_to_incoming</span>(<span class="kw-2">mut</span> <span class="ident">array</span>: <span class="ident">Value</span>) <span class="op">-&gt;</span> <span class="ident">Vec</span><span class="op">&lt;</span><span class="ident">Payload</span><span class="op">&gt;</span> {
         <span class="kw">let</span> <span class="ident">jv</span> <span class="op">=</span> <span class="ident">array</span>.<span class="ident">as_array_mut</span>().<span class="ident">expect</span>(<span class="string">&quot;you must pass a json array&quot;</span>);
         <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">result</span> <span class="op">=</span> <span class="ident">Vec</span>::<span class="ident">with_capacity</span>(<span class="ident">jv</span>.<span class="ident">len</span>());
         <span class="kw">for</span> <span class="ident">elt</span> <span class="kw">in</span> <span class="ident">jv</span> {
@@ -1243,33 +1244,33 @@
 
     <span class="comment">// Can&#39;t find a way to import these from crate::sync::tests...</span>
     <span class="macro">macro_rules</span><span class="macro">!</span> <span class="ident">map</span> {
-        ($(<span class="macro-nonterminal">$</span><span class="macro-nonterminal">map</span>:<span class="ident">tt</span>)<span class="op">+</span>) <span class="op">=</span><span class="op">&gt;</span> {
+        ($(<span class="macro-nonterminal">$</span><span class="macro-nonterminal">map</span>:<span class="ident">tt</span>)<span class="op">+</span>) <span class="op">=&gt;</span> {
             <span class="macro">json</span><span class="macro">!</span>($(<span class="macro-nonterminal">$</span><span class="macro-nonterminal">map</span>)<span class="op">+</span>).<span class="ident">as_object</span>().<span class="ident">unwrap</span>().<span class="ident">clone</span>()
         };
     }
     <span class="macro">macro_rules</span><span class="macro">!</span> <span class="ident">change</span> {
-        (<span class="macro-nonterminal">$</span><span class="macro-nonterminal">key</span>:<span class="ident">literal</span>, <span class="prelude-val">None</span>, <span class="prelude-val">None</span>) <span class="op">=</span><span class="op">&gt;</span> {
+        (<span class="macro-nonterminal">$</span><span class="macro-nonterminal">key</span>:<span class="ident">literal</span>, <span class="prelude-val">None</span>, <span class="prelude-val">None</span>) <span class="op">=&gt;</span> {
             <span class="ident">StorageValueChange</span> {
                 <span class="ident">key</span>: <span class="macro-nonterminal">$</span><span class="macro-nonterminal">key</span>.<span class="ident">to_string</span>(),
                 <span class="ident">old_value</span>: <span class="prelude-val">None</span>,
                 <span class="ident">new_value</span>: <span class="prelude-val">None</span>,
             };
         };
-        (<span class="macro-nonterminal">$</span><span class="macro-nonterminal">key</span>:<span class="ident">literal</span>, <span class="macro-nonterminal">$</span><span class="macro-nonterminal">old</span>:<span class="ident">tt</span>, <span class="prelude-val">None</span>) <span class="op">=</span><span class="op">&gt;</span> {
+        (<span class="macro-nonterminal">$</span><span class="macro-nonterminal">key</span>:<span class="ident">literal</span>, <span class="macro-nonterminal">$</span><span class="macro-nonterminal">old</span>:<span class="ident">tt</span>, <span class="prelude-val">None</span>) <span class="op">=&gt;</span> {
             <span class="ident">StorageValueChange</span> {
                 <span class="ident">key</span>: <span class="macro-nonterminal">$</span><span class="macro-nonterminal">key</span>.<span class="ident">to_string</span>(),
                 <span class="ident">old_value</span>: <span class="prelude-val">Some</span>(<span class="macro">json</span><span class="macro">!</span>(<span class="macro-nonterminal">$</span><span class="macro-nonterminal">old</span>)),
                 <span class="ident">new_value</span>: <span class="prelude-val">None</span>,
             };
         };
-        (<span class="macro-nonterminal">$</span><span class="macro-nonterminal">key</span>:<span class="ident">literal</span>, <span class="prelude-val">None</span>, <span class="macro-nonterminal">$</span><span class="macro-nonterminal">new</span>:<span class="ident">tt</span>) <span class="op">=</span><span class="op">&gt;</span> {
+        (<span class="macro-nonterminal">$</span><span class="macro-nonterminal">key</span>:<span class="ident">literal</span>, <span class="prelude-val">None</span>, <span class="macro-nonterminal">$</span><span class="macro-nonterminal">new</span>:<span class="ident">tt</span>) <span class="op">=&gt;</span> {
             <span class="ident">StorageValueChange</span> {
                 <span class="ident">key</span>: <span class="macro-nonterminal">$</span><span class="macro-nonterminal">key</span>.<span class="ident">to_string</span>(),
                 <span class="ident">old_value</span>: <span class="prelude-val">None</span>,
                 <span class="ident">new_value</span>: <span class="prelude-val">Some</span>(<span class="macro">json</span><span class="macro">!</span>(<span class="macro-nonterminal">$</span><span class="macro-nonterminal">new</span>)),
             };
         };
-        (<span class="macro-nonterminal">$</span><span class="macro-nonterminal">key</span>:<span class="ident">literal</span>, <span class="macro-nonterminal">$</span><span class="macro-nonterminal">old</span>:<span class="ident">tt</span>, <span class="macro-nonterminal">$</span><span class="macro-nonterminal">new</span>:<span class="ident">tt</span>) <span class="op">=</span><span class="op">&gt;</span> {
+        (<span class="macro-nonterminal">$</span><span class="macro-nonterminal">key</span>:<span class="ident">literal</span>, <span class="macro-nonterminal">$</span><span class="macro-nonterminal">old</span>:<span class="ident">tt</span>, <span class="macro-nonterminal">$</span><span class="macro-nonterminal">new</span>:<span class="ident">tt</span>) <span class="op">=&gt;</span> {
             <span class="ident">StorageValueChange</span> {
                 <span class="ident">key</span>: <span class="macro-nonterminal">$</span><span class="macro-nonterminal">key</span>.<span class="ident">to_string</span>(),
                 <span class="ident">old_value</span>: <span class="prelude-val">Some</span>(<span class="macro">json</span><span class="macro">!</span>(<span class="macro-nonterminal">$</span><span class="macro-nonterminal">old</span>)),
@@ -1278,7 +1279,7 @@
         };
     }
     <span class="macro">macro_rules</span><span class="macro">!</span> <span class="ident">changes</span> {
-        ( $( <span class="macro-nonterminal">$</span><span class="macro-nonterminal">change</span>:<span class="ident">expr</span> ),<span class="op">*</span> ) <span class="op">=</span><span class="op">&gt;</span> {
+        ( $( <span class="macro-nonterminal">$</span><span class="macro-nonterminal">change</span>:<span class="ident">expr</span> ),<span class="op">*</span> ) <span class="op">=&gt;</span> {
             {
                 <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">changes</span> <span class="op">=</span> <span class="ident">StorageChanges</span>::<span class="ident">new</span>();
                 $(
@@ -1290,7 +1291,7 @@
     }
 
     <span class="attribute">#[<span class="ident">test</span>]</span>
-    <span class="kw">fn</span> <span class="ident">test_incoming_populates_staging</span>() <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span>()<span class="op">&gt;</span> {
+    <span class="kw">fn</span> <span class="ident">test_incoming_populates_staging</span>() <span class="op">-&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span>()<span class="op">&gt;</span> {
         <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">db</span> <span class="op">=</span> <span class="ident">new_syncable_mem_db</span>();
         <span class="kw">let</span> <span class="ident">tx</span> <span class="op">=</span> <span class="ident">db</span>.<span class="ident">transaction</span>()<span class="question-mark">?</span>;
 
@@ -1312,7 +1313,7 @@
     }
 
     <span class="attribute">#[<span class="ident">test</span>]</span>
-    <span class="kw">fn</span> <span class="ident">test_fetch_incoming_state</span>() <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span>()<span class="op">&gt;</span> {
+    <span class="kw">fn</span> <span class="ident">test_fetch_incoming_state</span>() <span class="op">-&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span>()<span class="op">&gt;</span> {
         <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">db</span> <span class="op">=</span> <span class="ident">new_syncable_mem_db</span>();
         <span class="kw">let</span> <span class="ident">tx</span> <span class="op">=</span> <span class="ident">db</span>.<span class="ident">transaction</span>()<span class="question-mark">?</span>;
 
@@ -1376,7 +1377,7 @@
 
     <span class="comment">// Like test_fetch_incoming_state, but check NULLs are handled correctly.</span>
     <span class="attribute">#[<span class="ident">test</span>]</span>
-    <span class="kw">fn</span> <span class="ident">test_fetch_incoming_state_nulls</span>() <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span>()<span class="op">&gt;</span> {
+    <span class="kw">fn</span> <span class="ident">test_fetch_incoming_state_nulls</span>() <span class="op">-&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span>()<span class="op">&gt;</span> {
         <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">db</span> <span class="op">=</span> <span class="ident">new_syncable_mem_db</span>();
         <span class="kw">let</span> <span class="ident">tx</span> <span class="op">=</span> <span class="ident">db</span>.<span class="ident">transaction</span>()<span class="question-mark">?</span>;
 
@@ -1443,7 +1444,7 @@
         <span class="ident">sync_change_counter</span>: <span class="ident">i32</span>,
     }
 
-    <span class="kw">fn</span> <span class="ident">get_local_item</span>(<span class="ident">conn</span>: <span class="kw-2">&amp;</span><span class="ident">Connection</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">LocalItem</span><span class="op">&gt;</span> {
+    <span class="kw">fn</span> <span class="ident">get_local_item</span>(<span class="ident">conn</span>: <span class="kw-2">&amp;</span><span class="ident">Connection</span>) <span class="op">-&gt;</span> <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">LocalItem</span><span class="op">&gt;</span> {
         <span class="ident">conn</span>.<span class="ident">try_query_row</span>::<span class="op">&lt;</span><span class="kw">_</span>, <span class="ident">Error</span>, <span class="kw">_</span><span class="op">&gt;</span>(
             <span class="string">&quot;SELECT data, sync_change_counter FROM storage_sync_data WHERE ext_id = &#39;ext_id&#39;&quot;</span>,
             <span class="kw-2">&amp;</span>[],
@@ -1460,7 +1461,7 @@
         .<span class="ident">expect</span>(<span class="string">&quot;query should work&quot;</span>)
     }
 
-    <span class="kw">fn</span> <span class="ident">get_applied_item_changes</span>(<span class="ident">conn</span>: <span class="kw-2">&amp;</span><span class="ident">Connection</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">StorageChanges</span><span class="op">&gt;</span> {
+    <span class="kw">fn</span> <span class="ident">get_applied_item_changes</span>(<span class="ident">conn</span>: <span class="kw-2">&amp;</span><span class="ident">Connection</span>) <span class="op">-&gt;</span> <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">StorageChanges</span><span class="op">&gt;</span> {
         <span class="comment">// no custom deserialize for storagechanges and we only need it for</span>
         <span class="comment">// tests, so do it manually.</span>
         <span class="ident">conn</span>.<span class="ident">try_query_row</span>::<span class="op">&lt;</span><span class="kw">_</span>, <span class="ident">Error</span>, <span class="kw">_</span><span class="op">&gt;</span>(
@@ -1494,7 +1495,7 @@
     }
 
     <span class="attribute">#[<span class="ident">test</span>]</span>
-    <span class="kw">fn</span> <span class="ident">test_apply_actions</span>() <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span>()<span class="op">&gt;</span> {
+    <span class="kw">fn</span> <span class="ident">test_apply_actions</span>() <span class="op">-&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span>()<span class="op">&gt;</span> {
         <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">db</span> <span class="op">=</span> <span class="ident">new_syncable_mem_db</span>();
 
         <span class="comment">// DeleteLocally - row should be entirely removed.</span>

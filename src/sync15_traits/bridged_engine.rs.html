@@ -1,4 +1,5 @@
-<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source to the Rust file `components/support/sync15-traits/src/bridged_engine.rs`."><meta name="keywords" content="rust, rustlang, rust-lang"><title>bridged_engine.rs.html -- source</title><link rel="stylesheet" type="text/css" href="../../normalize.css"><link rel="stylesheet" type="text/css" href="../../rustdoc.css" id="mainThemeStyle"><link rel="stylesheet" type="text/css" href="../../dark.css"><link rel="stylesheet" type="text/css" href="../../light.css" id="themeStyle"><script src="../../storage.js"></script><noscript><link rel="stylesheet" href="../../noscript.css"></noscript><link rel="shortcut icon" href="../../favicon.ico"><style type="text/css">#crate-search{background-image:url("../../down-arrow.svg");}</style></head><body class="rustdoc source"><!--[if lte IE 8]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="sidebar"><div class="sidebar-menu">&#9776;</div><a href='../../sync15_traits/index.html'><div class='logo-container'><img src='../../rust-logo.png' alt='logo'></div></a></nav><div class="theme-picker"><button id="theme-picker" aria-label="Pick another theme!"><img src="../../brush.svg" width="18" alt="Pick another theme!"></button><div id="theme-choices"></div></div><script src="../../theme.js"></script><nav class="sub"><form class="search-form"><div class="search-container"><div><select id="crate-search"><option value="All crates">All crates</option></select><input class="search-input" name="search" disabled autocomplete="off" spellcheck="false" placeholder="Click or press ‘S’ to search, ‘?’ for more options…" type="search"></div><a id="settings-menu" href="../../settings.html"><img src="../../wheel.svg" width="18" alt="Change settings"></a></div></form></nav><section id="main" class="content"><pre class="line-numbers"><span id="1">  1</span>
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source to the Rust file `components/support/sync15-traits/src/bridged_engine.rs`."><meta name="keywords" content="rust, rustlang, rust-lang"><title>bridged_engine.rs.html -- source</title><link rel="stylesheet" type="text/css" href="../../normalize.css"><link rel="stylesheet" type="text/css" href="../../rustdoc.css" id="mainThemeStyle"><link rel="stylesheet" type="text/css" href="../../light.css"  id="themeStyle"><link rel="stylesheet" type="text/css" href="../../dark.css" disabled ><link rel="stylesheet" type="text/css" href="../../ayu.css" disabled ><script src="../../storage.js"></script><noscript><link rel="stylesheet" href="../../noscript.css"></noscript><link rel="shortcut icon" href="../../favicon.ico"><style type="text/css">#crate-search{background-image:url("../../down-arrow.svg");}</style></head><body class="rustdoc source"><!--[if lte IE 8]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="sidebar"><div class="sidebar-menu">&#9776;</div><a href='../../sync15_traits/index.html'><div class='logo-container rust-logo'><img src='../../rust-logo.png' alt='logo'></div></a></nav><div class="theme-picker"><button id="theme-picker" aria-label="Pick another theme!"><img src="../../brush.svg" width="18" alt="Pick another theme!"></button><div id="theme-choices"></div></div><script src="../../theme.js"></script><nav class="sub"><form class="search-form"><div class="search-container"><div><select id="crate-search"><option value="All crates">All crates</option></select><input class="search-input" name="search" disabled autocomplete="off" spellcheck="false" placeholder="Click or press ‘S’ to search, ‘?’ for more options…" type="search"></div><span class="help-button">?</span>
+                <a id="settings-menu" href="../../settings.html"><img src="../../wheel.svg" width="18" alt="Change settings"></a></div></form></nav><section id="main" class="content"><pre class="line-numbers"><span id="1">  1</span>
 <span id="2">  2</span>
 <span id="3">  3</span>
 <span id="4">  4</span>
@@ -226,21 +227,21 @@
     <span class="doccomment">/// Returns the last sync time, in milliseconds, for this engine&#39;s</span>
     <span class="doccomment">/// collection. This is called before each sync, to determine the lower</span>
     <span class="doccomment">/// bound for new records to fetch from the server.</span>
-    <span class="kw">fn</span> <span class="ident">last_sync</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">i64</span>, <span class="self">Self</span>::<span class="ident">Error</span><span class="op">&gt;</span>;
+    <span class="kw">fn</span> <span class="ident">last_sync</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">i64</span>, <span class="self">Self</span>::<span class="ident">Error</span><span class="op">&gt;</span>;
 
     <span class="doccomment">/// Sets the last sync time, in milliseconds. This is called throughout</span>
     <span class="doccomment">/// the sync, to fast-forward the stored last sync time to match the</span>
     <span class="doccomment">/// timestamp on the uploaded records.</span>
-    <span class="kw">fn</span> <span class="ident">set_last_sync</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">last_sync_millis</span>: <span class="ident">i64</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span>(), <span class="self">Self</span>::<span class="ident">Error</span><span class="op">&gt;</span>;
+    <span class="kw">fn</span> <span class="ident">set_last_sync</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">last_sync_millis</span>: <span class="ident">i64</span>) <span class="op">-&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span>(), <span class="self">Self</span>::<span class="ident">Error</span><span class="op">&gt;</span>;
 
     <span class="doccomment">/// Returns the sync ID for this engine&#39;s collection. This is only used in</span>
     <span class="doccomment">/// tests.</span>
-    <span class="kw">fn</span> <span class="ident">sync_id</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">String</span><span class="op">&gt;</span>, <span class="self">Self</span>::<span class="ident">Error</span><span class="op">&gt;</span>;
+    <span class="kw">fn</span> <span class="ident">sync_id</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">String</span><span class="op">&gt;</span>, <span class="self">Self</span>::<span class="ident">Error</span><span class="op">&gt;</span>;
 
     <span class="doccomment">/// Resets the sync ID for this engine&#39;s collection, returning the new ID.</span>
     <span class="doccomment">/// As a side effect, implementations should reset all local Sync state,</span>
     <span class="doccomment">/// as in `reset`.</span>
-    <span class="kw">fn</span> <span class="ident">reset_sync_id</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">String</span>, <span class="self">Self</span>::<span class="ident">Error</span><span class="op">&gt;</span>;
+    <span class="kw">fn</span> <span class="ident">reset_sync_id</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">String</span>, <span class="self">Self</span>::<span class="ident">Error</span><span class="op">&gt;</span>;
 
     <span class="doccomment">/// Ensures that the locally stored sync ID for this engine&#39;s collection</span>
     <span class="doccomment">/// matches the `new_sync_id` from the server. If the two don&#39;t match,</span>
@@ -249,41 +250,41 @@
     <span class="doccomment">/// `new_sync_id`, or a different one if the engine wants to force other</span>
     <span class="doccomment">/// devices to reset their Sync state for this collection the next time they</span>
     <span class="doccomment">/// sync.</span>
-    <span class="kw">fn</span> <span class="ident">ensure_current_sync_id</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">new_sync_id</span>: <span class="kw-2">&amp;</span><span class="ident">str</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">String</span>, <span class="self">Self</span>::<span class="ident">Error</span><span class="op">&gt;</span>;
+    <span class="kw">fn</span> <span class="ident">ensure_current_sync_id</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">new_sync_id</span>: <span class="kw-2">&amp;</span><span class="ident">str</span>) <span class="op">-&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">String</span>, <span class="self">Self</span>::<span class="ident">Error</span><span class="op">&gt;</span>;
 
     <span class="doccomment">/// Indicates that the engine is about to start syncing. This is called</span>
     <span class="doccomment">/// once per sync, and always before `store_incoming`.</span>
-    <span class="kw">fn</span> <span class="ident">sync_started</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span>(), <span class="self">Self</span>::<span class="ident">Error</span><span class="op">&gt;</span>;
+    <span class="kw">fn</span> <span class="ident">sync_started</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span>(), <span class="self">Self</span>::<span class="ident">Error</span><span class="op">&gt;</span>;
 
     <span class="doccomment">/// Stages a batch of incoming Sync records. This is called multiple</span>
     <span class="doccomment">/// times per sync, once for each batch. Implementations can use the</span>
     <span class="doccomment">/// signal to check if the operation was aborted, and cancel any</span>
     <span class="doccomment">/// pending work.</span>
-    <span class="kw">fn</span> <span class="ident">store_incoming</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">incoming_cleartexts</span>: <span class="kw-2">&amp;</span>[<span class="ident">IncomingEnvelope</span>]) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span>(), <span class="self">Self</span>::<span class="ident">Error</span><span class="op">&gt;</span>;
+    <span class="kw">fn</span> <span class="ident">store_incoming</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">incoming_cleartexts</span>: <span class="kw-2">&amp;</span>[<span class="ident">IncomingEnvelope</span>]) <span class="op">-&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span>(), <span class="self">Self</span>::<span class="ident">Error</span><span class="op">&gt;</span>;
 
     <span class="doccomment">/// Applies all staged records, reconciling changes on both sides and</span>
     <span class="doccomment">/// resolving conflicts. Returns a list of records to upload.</span>
-    <span class="kw">fn</span> <span class="ident">apply</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">ApplyResults</span>, <span class="self">Self</span>::<span class="ident">Error</span><span class="op">&gt;</span>;
+    <span class="kw">fn</span> <span class="ident">apply</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">ApplyResults</span>, <span class="self">Self</span>::<span class="ident">Error</span><span class="op">&gt;</span>;
 
     <span class="doccomment">/// Indicates that the given record IDs were uploaded successfully to the</span>
     <span class="doccomment">/// server. This is called multiple times per sync, once for each batch</span>
     <span class="doccomment">/// upload.</span>
-    <span class="kw">fn</span> <span class="ident">set_uploaded</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">server_modified_millis</span>: <span class="ident">i64</span>, <span class="ident">ids</span>: <span class="kw-2">&amp;</span>[<span class="ident">Guid</span>]) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span>(), <span class="self">Self</span>::<span class="ident">Error</span><span class="op">&gt;</span>;
+    <span class="kw">fn</span> <span class="ident">set_uploaded</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">server_modified_millis</span>: <span class="ident">i64</span>, <span class="ident">ids</span>: <span class="kw-2">&amp;</span>[<span class="ident">Guid</span>]) <span class="op">-&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span>(), <span class="self">Self</span>::<span class="ident">Error</span><span class="op">&gt;</span>;
 
     <span class="doccomment">/// Indicates that all records have been uploaded. At this point, any record</span>
     <span class="doccomment">/// IDs marked for upload that haven&#39;t been passed to `set_uploaded`, can be</span>
     <span class="doccomment">/// assumed to have failed: for example, because the server rejected a record</span>
     <span class="doccomment">/// with an invalid TTL or sort index.</span>
-    <span class="kw">fn</span> <span class="ident">sync_finished</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span>(), <span class="self">Self</span>::<span class="ident">Error</span><span class="op">&gt;</span>;
+    <span class="kw">fn</span> <span class="ident">sync_finished</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span>(), <span class="self">Self</span>::<span class="ident">Error</span><span class="op">&gt;</span>;
 
     <span class="doccomment">/// Resets all local Sync state, including any change flags, mirrors, and</span>
     <span class="doccomment">/// the last sync time, such that the next sync is treated as a first sync</span>
     <span class="doccomment">/// with all new local data. Does not erase any local user data.</span>
-    <span class="kw">fn</span> <span class="ident">reset</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span>(), <span class="self">Self</span>::<span class="ident">Error</span><span class="op">&gt;</span>;
+    <span class="kw">fn</span> <span class="ident">reset</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span>(), <span class="self">Self</span>::<span class="ident">Error</span><span class="op">&gt;</span>;
 
     <span class="doccomment">/// Erases all local user data for this collection, and any Sync metadata.</span>
     <span class="doccomment">/// This method is destructive, and unused for most collections.</span>
-    <span class="kw">fn</span> <span class="ident">wipe</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span>(), <span class="self">Self</span>::<span class="ident">Error</span><span class="op">&gt;</span>;
+    <span class="kw">fn</span> <span class="ident">wipe</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span>(), <span class="self">Self</span>::<span class="ident">Error</span><span class="op">&gt;</span>;
 }
 
 <span class="attribute">#[<span class="ident">derive</span>(<span class="ident">Clone</span>, <span class="ident">Debug</span>, <span class="ident">Default</span>)]</span>
@@ -297,7 +298,7 @@
 }
 
 <span class="kw">impl</span> <span class="ident">ApplyResults</span> {
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">new</span>(<span class="ident">envelopes</span>: <span class="ident">Vec</span><span class="op">&lt;</span><span class="ident">OutgoingEnvelope</span><span class="op">&gt;</span>, <span class="ident">num_reconciled</span>: <span class="kw">impl</span> <span class="ident">Into</span><span class="op">&lt;</span><span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">usize</span><span class="op">&gt;</span><span class="op">&gt;</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="self">Self</span> {
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">new</span>(<span class="ident">envelopes</span>: <span class="ident">Vec</span><span class="op">&lt;</span><span class="ident">OutgoingEnvelope</span><span class="op">&gt;</span>, <span class="ident">num_reconciled</span>: <span class="kw">impl</span> <span class="ident">Into</span><span class="op">&lt;</span><span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">usize</span><span class="op">&gt;&gt;</span>) <span class="op">-&gt;</span> <span class="self">Self</span> {
         <span class="self">Self</span> {
             <span class="ident">envelopes</span>,
             <span class="ident">num_reconciled</span>: <span class="ident">num_reconciled</span>.<span class="ident">into</span>(),
@@ -306,8 +307,8 @@
 }
 
 <span class="comment">// Shorthand for engines that don&#39;t care.</span>
-<span class="kw">impl</span> <span class="ident">From</span><span class="op">&lt;</span><span class="ident">Vec</span><span class="op">&lt;</span><span class="ident">OutgoingEnvelope</span><span class="op">&gt;</span><span class="op">&gt;</span> <span class="kw">for</span> <span class="ident">ApplyResults</span> {
-    <span class="kw">fn</span> <span class="ident">from</span>(<span class="ident">envelopes</span>: <span class="ident">Vec</span><span class="op">&lt;</span><span class="ident">OutgoingEnvelope</span><span class="op">&gt;</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="self">Self</span> {
+<span class="kw">impl</span> <span class="ident">From</span><span class="op">&lt;</span><span class="ident">Vec</span><span class="op">&lt;</span><span class="ident">OutgoingEnvelope</span><span class="op">&gt;&gt;</span> <span class="kw">for</span> <span class="ident">ApplyResults</span> {
+    <span class="kw">fn</span> <span class="ident">from</span>(<span class="ident">envelopes</span>: <span class="ident">Vec</span><span class="op">&lt;</span><span class="ident">OutgoingEnvelope</span><span class="op">&gt;</span>) <span class="op">-&gt;</span> <span class="self">Self</span> {
         <span class="self">Self</span> {
             <span class="ident">envelopes</span>,
             <span class="ident">num_reconciled</span>: <span class="prelude-val">None</span>,
@@ -345,9 +346,9 @@
     <span class="doccomment">/// Parses and returns the record payload from this envelope. Returns an</span>
     <span class="doccomment">/// error if the envelope&#39;s cleartext isn&#39;t valid JSON, or the payload is</span>
     <span class="doccomment">/// invalid.</span>
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">payload</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">Payload</span>, <span class="ident">PayloadError</span><span class="op">&gt;</span> {
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">payload</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">Payload</span>, <span class="ident">PayloadError</span><span class="op">&gt;</span> {
         <span class="kw">let</span> <span class="ident">payload</span>: <span class="ident">Payload</span> <span class="op">=</span> <span class="ident">serde_json</span>::<span class="ident">from_str</span>(<span class="kw-2">&amp;</span><span class="self">self</span>.<span class="ident">cleartext</span>)<span class="question-mark">?</span>;
-        <span class="kw">if</span> <span class="ident">payload</span>.<span class="ident">id</span> <span class="op">!</span><span class="op">=</span> <span class="self">self</span>.<span class="ident">id</span> {
+        <span class="kw">if</span> <span class="ident">payload</span>.<span class="ident">id</span> <span class="op">!=</span> <span class="self">self</span>.<span class="ident">id</span> {
             <span class="kw">return</span> <span class="prelude-val">Err</span>(<span class="ident">PayloadError</span>::<span class="ident">MismatchedId</span> {
                 <span class="ident">envelope</span>: <span class="self">self</span>.<span class="ident">id</span>.<span class="ident">clone</span>(),
                 <span class="ident">payload</span>: <span class="ident">payload</span>.<span class="ident">id</span>,
@@ -372,7 +373,7 @@
 }
 
 <span class="kw">impl</span> <span class="ident">From</span><span class="op">&lt;</span><span class="ident">Payload</span><span class="op">&gt;</span> <span class="kw">for</span> <span class="ident">OutgoingEnvelope</span> {
-    <span class="kw">fn</span> <span class="ident">from</span>(<span class="kw-2">mut</span> <span class="ident">payload</span>: <span class="ident">Payload</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="self">Self</span> {
+    <span class="kw">fn</span> <span class="ident">from</span>(<span class="kw-2">mut</span> <span class="ident">payload</span>: <span class="ident">Payload</span>) <span class="op">-&gt;</span> <span class="self">Self</span> {
         <span class="kw">let</span> <span class="ident">id</span> <span class="op">=</span> <span class="ident">payload</span>.<span class="ident">id</span>.<span class="ident">clone</span>();
         <span class="comment">// Remove auto field data from OutgoingEnvelope payload</span>
         <span class="kw">let</span> <span class="ident">ttl</span> <span class="op">=</span> <span class="ident">payload</span>.<span class="ident">take_auto_field</span>(<span class="string">&quot;ttl&quot;</span>);
@@ -398,16 +399,16 @@
 <span class="kw">impl</span> <span class="ident">Error</span> <span class="kw">for</span> <span class="ident">PayloadError</span> {}
 
 <span class="kw">impl</span> <span class="ident">From</span><span class="op">&lt;</span><span class="ident">serde_json</span>::<span class="ident">Error</span><span class="op">&gt;</span> <span class="kw">for</span> <span class="ident">PayloadError</span> {
-    <span class="kw">fn</span> <span class="ident">from</span>(<span class="ident">err</span>: <span class="ident">serde_json</span>::<span class="ident">Error</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">PayloadError</span> {
+    <span class="kw">fn</span> <span class="ident">from</span>(<span class="ident">err</span>: <span class="ident">serde_json</span>::<span class="ident">Error</span>) <span class="op">-&gt;</span> <span class="ident">PayloadError</span> {
         <span class="ident">PayloadError</span>::<span class="ident">Invalid</span>(<span class="ident">err</span>)
     }
 }
 
 <span class="kw">impl</span> <span class="ident">fmt</span>::<span class="ident">Display</span> <span class="kw">for</span> <span class="ident">PayloadError</span> {
-    <span class="kw">fn</span> <span class="ident">fmt</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">f</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">fmt</span>::<span class="ident">Formatter</span><span class="op">&lt;</span><span class="lifetime">&#39;_</span><span class="op">&gt;</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">fmt</span>::<span class="prelude-ty">Result</span> {
+    <span class="kw">fn</span> <span class="ident">fmt</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">f</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">fmt</span>::<span class="ident">Formatter</span><span class="op">&lt;</span><span class="lifetime">&#39;_</span><span class="op">&gt;</span>) <span class="op">-&gt;</span> <span class="ident">fmt</span>::<span class="prelude-ty">Result</span> {
         <span class="kw">match</span> <span class="self">self</span> {
-            <span class="ident">PayloadError</span>::<span class="ident">Invalid</span>(<span class="ident">err</span>) <span class="op">=</span><span class="op">&gt;</span> <span class="ident">err</span>.<span class="ident">fmt</span>(<span class="ident">f</span>),
-            <span class="ident">PayloadError</span>::<span class="ident">MismatchedId</span> { <span class="ident">envelope</span>, <span class="ident">payload</span> } <span class="op">=</span><span class="op">&gt;</span> <span class="macro">write</span><span class="macro">!</span>(
+            <span class="ident">PayloadError</span>::<span class="ident">Invalid</span>(<span class="ident">err</span>) <span class="op">=&gt;</span> <span class="ident">err</span>.<span class="ident">fmt</span>(<span class="ident">f</span>),
+            <span class="ident">PayloadError</span>::<span class="ident">MismatchedId</span> { <span class="ident">envelope</span>, <span class="ident">payload</span> } <span class="op">=&gt;</span> <span class="macro">write</span><span class="macro">!</span>(
                 <span class="ident">f</span>,
                 <span class="string">&quot;ID `{}` in envelope doesn&#39;t match `{}` in payload&quot;</span>,
                 <span class="ident">envelope</span>, <span class="ident">payload</span>
