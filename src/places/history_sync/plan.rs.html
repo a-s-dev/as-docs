@@ -1050,15 +1050,6 @@
 <span id="1049">1049</span>
 <span id="1050">1050</span>
 <span id="1051">1051</span>
-<span id="1052">1052</span>
-<span id="1053">1053</span>
-<span id="1054">1054</span>
-<span id="1055">1055</span>
-<span id="1056">1056</span>
-<span id="1057">1057</span>
-<span id="1058">1058</span>
-<span id="1059">1059</span>
-<span id="1060">1060</span>
 </pre><div class="example-wrap"><pre class="rust ">
 <span class="comment">/* This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
@@ -1423,10 +1414,10 @@
             <span class="ident">visits</span>: <span class="macro">vec</span><span class="macro">!</span>[],
         };
 
-        <span class="macro">assert</span><span class="macro">!</span>(<span class="kw">match</span> <span class="ident">plan_incoming_record</span>(<span class="kw-2">&amp;</span><span class="ident">conn</span>, <span class="ident">record</span>, <span class="number">10</span>) {
-            <span class="ident">IncomingPlan</span>::<span class="ident">Invalid</span>(<span class="kw">_</span>) <span class="op">=&gt;</span> <span class="bool-val">true</span>,
-            <span class="kw">_</span> <span class="op">=&gt;</span> <span class="bool-val">false</span>,
-        });
+        <span class="macro">assert</span><span class="macro">!</span>(<span class="macro">matches</span><span class="macro">!</span>(
+            <span class="ident">plan_incoming_record</span>(<span class="kw-2">&amp;</span><span class="ident">conn</span>, <span class="ident">record</span>, <span class="number">10</span>),
+            <span class="ident">IncomingPlan</span>::<span class="ident">Invalid</span>(<span class="kw">_</span>)
+        ));
         <span class="prelude-val">Ok</span>(())
     }
 
@@ -1443,10 +1434,10 @@
             <span class="ident">visits</span>: <span class="macro">vec</span><span class="macro">!</span>[],
         };
 
-        <span class="macro">assert</span><span class="macro">!</span>(<span class="kw">match</span> <span class="ident">plan_incoming_record</span>(<span class="kw-2">&amp;</span><span class="ident">conn</span>, <span class="ident">record</span>, <span class="number">10</span>) {
-            <span class="ident">IncomingPlan</span>::<span class="ident">Invalid</span>(<span class="kw">_</span>) <span class="op">=&gt;</span> <span class="bool-val">true</span>,
-            <span class="kw">_</span> <span class="op">=&gt;</span> <span class="bool-val">false</span>,
-        });
+        <span class="macro">assert</span><span class="macro">!</span>(<span class="macro">matches</span><span class="macro">!</span>(
+            <span class="ident">plan_incoming_record</span>(<span class="kw-2">&amp;</span><span class="ident">conn</span>, <span class="ident">record</span>, <span class="number">10</span>),
+            <span class="ident">IncomingPlan</span>::<span class="ident">Invalid</span>(<span class="kw">_</span>)
+        ));
         <span class="prelude-val">Ok</span>(())
     }
 
@@ -1467,10 +1458,7 @@
             <span class="ident">visits</span>,
         };
 
-        <span class="macro">assert</span><span class="macro">!</span>(<span class="kw">match</span> <span class="ident">plan_incoming_record</span>(<span class="kw-2">&amp;</span><span class="ident">conn</span>, <span class="ident">record</span>, <span class="number">10</span>) {
-            <span class="ident">IncomingPlan</span>::<span class="ident">Apply</span> { .. } <span class="op">=&gt;</span> <span class="bool-val">true</span>,
-            <span class="kw">_</span> <span class="op">=&gt;</span> <span class="bool-val">false</span>,
-        });
+        <span class="macro">assert</span><span class="macro">!</span>(<span class="macro">matches</span><span class="macro">!</span>(<span class="ident">plan_incoming_record</span>(<span class="kw-2">&amp;</span><span class="ident">conn</span>, <span class="ident">record</span>, <span class="number">10</span>), <span class="ident">IncomingPlan</span>::<span class="ident">Apply</span>{..}));
         <span class="prelude-val">Ok</span>(())
     }
 
@@ -1504,10 +1492,10 @@
             <span class="ident">visits</span>,
         };
         <span class="comment">// We should have reconciled it.</span>
-        <span class="macro">assert</span><span class="macro">!</span>(<span class="kw">match</span> <span class="ident">plan_incoming_record</span>(<span class="kw-2">&amp;</span><span class="ident">conn</span>, <span class="ident">record</span>, <span class="number">10</span>) {
-            <span class="ident">IncomingPlan</span>::<span class="ident">Reconciled</span> <span class="op">=&gt;</span> <span class="bool-val">true</span>,
-            <span class="kw">_</span> <span class="op">=&gt;</span> <span class="bool-val">false</span>,
-        });
+        <span class="macro">assert</span><span class="macro">!</span>(<span class="macro">matches</span><span class="macro">!</span>(
+            <span class="ident">plan_incoming_record</span>(<span class="kw-2">&amp;</span><span class="ident">conn</span>, <span class="ident">record</span>, <span class="number">10</span>),
+            <span class="ident">IncomingPlan</span>::<span class="ident">Reconciled</span>
+        ));
         <span class="prelude-val">Ok</span>(())
     }
 
@@ -1536,10 +1524,7 @@
         };
         <span class="comment">// Even though there are no visits we should record that it will be</span>
         <span class="comment">// applied with the guid change.</span>
-        <span class="macro">assert</span><span class="macro">!</span>(<span class="kw">match</span> <span class="ident">plan_incoming_record</span>(<span class="kw-2">&amp;</span><span class="ident">conn</span>, <span class="ident">record</span>, <span class="number">10</span>) {
-            <span class="ident">IncomingPlan</span>::<span class="ident">Apply</span> { .. } <span class="op">=&gt;</span> <span class="bool-val">true</span>,
-            <span class="kw">_</span> <span class="op">=&gt;</span> <span class="bool-val">false</span>,
-        });
+        <span class="macro">assert</span><span class="macro">!</span>(<span class="macro">matches</span><span class="macro">!</span>(<span class="ident">plan_incoming_record</span>(<span class="kw-2">&amp;</span><span class="ident">conn</span>, <span class="ident">record</span>, <span class="number">10</span>), <span class="ident">IncomingPlan</span>::<span class="ident">Apply</span>{..}));
     }
 
     <span class="comment">// These &quot;dupe&quot; tests all do the full application of the plan and checks</span>
@@ -1807,10 +1792,7 @@
         <span class="kw">let</span> <span class="ident">plan</span> <span class="op">=</span> <span class="ident">plan_incoming_record</span>(<span class="kw-2">&amp;</span><span class="ident">db</span>, <span class="ident">record</span>, <span class="number">10</span>);
         <span class="comment">// We expect &quot;Reconciled&quot; because after skipping the invalid visit</span>
         <span class="comment">// we found nothing to apply.</span>
-        <span class="macro">assert</span><span class="macro">!</span>(<span class="kw">match</span> <span class="ident">plan</span> {
-            <span class="ident">IncomingPlan</span>::<span class="ident">Reconciled</span> <span class="op">=&gt;</span> <span class="bool-val">true</span>,
-            <span class="kw">_</span> <span class="op">=&gt;</span> <span class="bool-val">false</span>,
-        });
+        <span class="macro">assert</span><span class="macro">!</span>(<span class="macro">matches</span><span class="macro">!</span>(<span class="ident">plan</span>, <span class="ident">IncomingPlan</span>::<span class="ident">Reconciled</span>));
         <span class="prelude-val">Ok</span>(())
     }
 

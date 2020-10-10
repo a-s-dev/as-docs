@@ -393,15 +393,6 @@
 <span id="392">392</span>
 <span id="393">393</span>
 <span id="394">394</span>
-<span id="395">395</span>
-<span id="396">396</span>
-<span id="397">397</span>
-<span id="398">398</span>
-<span id="399">399</span>
-<span id="400">400</span>
-<span id="401">401</span>
-<span id="402">402</span>
-<span id="403">403</span>
 </pre><div class="example-wrap"><pre class="rust ">
 <span class="comment">/* This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
@@ -619,20 +610,11 @@
         <span class="ident">FirefoxAccount</span>::<span class="ident">with_config</span>(<span class="ident">config</span>)
     }
 
-    <span class="macro">macro_rules</span><span class="macro">!</span> <span class="ident">assert_match</span> {
-        (<span class="macro-nonterminal">$</span><span class="macro-nonterminal">value</span>:<span class="ident">expr</span>, <span class="macro-nonterminal">$</span><span class="macro-nonterminal">pattern</span>:<span class="ident">pat</span>) <span class="op">=&gt;</span> {
-            <span class="macro">assert</span><span class="macro">!</span>(<span class="kw">match</span> <span class="macro-nonterminal">$</span><span class="macro-nonterminal">value</span> {
-                <span class="macro-nonterminal">$</span><span class="macro-nonterminal">pattern</span> <span class="op">=&gt;</span> <span class="bool-val">true</span>,
-                <span class="kw">_</span> <span class="op">=&gt;</span> <span class="bool-val">false</span>,
-            });
-        };
-    }
-
     <span class="attribute">#[<span class="ident">test</span>]</span>
     <span class="kw">fn</span> <span class="ident">test_migration_can_retry_after_network_errors</span>() {
         <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">fxa</span> <span class="op">=</span> <span class="ident">setup</span>();
 
-        <span class="macro">assert_match</span><span class="macro">!</span>(<span class="ident">fxa</span>.<span class="ident">is_in_migration_state</span>(), <span class="ident">MigrationState</span>::<span class="prelude-val">None</span>);
+        <span class="macro">assert</span><span class="macro">!</span>(<span class="macro">matches</span><span class="macro">!</span>(<span class="ident">fxa</span>.<span class="ident">is_in_migration_state</span>(), <span class="ident">MigrationState</span>::<span class="prelude-val">None</span>));
 
         <span class="comment">// Initial attempt fails with a server-side failure, which we can retry.</span>
         <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">client</span> <span class="op">=</span> <span class="ident">FxAClientMock</span>::<span class="ident">new</span>();
@@ -651,11 +633,11 @@
         <span class="kw">let</span> <span class="ident">err</span> <span class="op">=</span> <span class="ident">fxa</span>
             .<span class="ident">migrate_from_session_token</span>(<span class="string">&quot;session&quot;</span>, <span class="string">&quot;aabbcc&quot;</span>, <span class="string">&quot;ddeeff&quot;</span>, <span class="bool-val">true</span>)
             .<span class="ident">unwrap_err</span>();
-        <span class="macro">assert_match</span><span class="macro">!</span>(<span class="ident">err</span>.<span class="ident">kind</span>(), <span class="ident">ErrorKind</span>::<span class="ident">RemoteError</span> { <span class="ident">code</span>: <span class="number">500</span>, .. });
-        <span class="macro">assert_match</span><span class="macro">!</span>(
+        <span class="macro">assert</span><span class="macro">!</span>(<span class="macro">matches</span><span class="macro">!</span>(<span class="ident">err</span>.<span class="ident">kind</span>(), <span class="ident">ErrorKind</span>::<span class="ident">RemoteError</span> { <span class="ident">code</span>: <span class="number">500</span>, .. }));
+        <span class="macro">assert</span><span class="macro">!</span>(<span class="macro">matches</span><span class="macro">!</span>(
             <span class="ident">fxa</span>.<span class="ident">is_in_migration_state</span>(),
             <span class="ident">MigrationState</span>::<span class="ident">CopySessionToken</span>
-        );
+        ));
 
         <span class="comment">// Retrying can succeed.</span>
         <span class="comment">// It makes a lot of network requests, so we have a lot to mock!</span>
@@ -705,14 +687,14 @@
         <span class="ident">fxa</span>.<span class="ident">set_client</span>(<span class="ident">Arc</span>::<span class="ident">new</span>(<span class="ident">client</span>));
 
         <span class="ident">fxa</span>.<span class="ident">try_migration</span>().<span class="ident">unwrap</span>();
-        <span class="macro">assert_match</span><span class="macro">!</span>(<span class="ident">fxa</span>.<span class="ident">is_in_migration_state</span>(), <span class="ident">MigrationState</span>::<span class="prelude-val">None</span>);
+        <span class="macro">assert</span><span class="macro">!</span>(<span class="macro">matches</span><span class="macro">!</span>(<span class="ident">fxa</span>.<span class="ident">is_in_migration_state</span>(), <span class="ident">MigrationState</span>::<span class="prelude-val">None</span>));
     }
 
     <span class="attribute">#[<span class="ident">test</span>]</span>
     <span class="kw">fn</span> <span class="ident">test_migration_cannot_retry_after_other_errors</span>() {
         <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">fxa</span> <span class="op">=</span> <span class="ident">setup</span>();
 
-        <span class="macro">assert_match</span><span class="macro">!</span>(<span class="ident">fxa</span>.<span class="ident">is_in_migration_state</span>(), <span class="ident">MigrationState</span>::<span class="prelude-val">None</span>);
+        <span class="macro">assert</span><span class="macro">!</span>(<span class="macro">matches</span><span class="macro">!</span>(<span class="ident">fxa</span>.<span class="ident">is_in_migration_state</span>(), <span class="ident">MigrationState</span>::<span class="prelude-val">None</span>));
 
         <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">client</span> <span class="op">=</span> <span class="ident">FxAClientMock</span>::<span class="ident">new</span>();
         <span class="ident">client</span>
@@ -730,26 +712,26 @@
         <span class="kw">let</span> <span class="ident">err</span> <span class="op">=</span> <span class="ident">fxa</span>
             .<span class="ident">migrate_from_session_token</span>(<span class="string">&quot;session&quot;</span>, <span class="string">&quot;aabbcc&quot;</span>, <span class="string">&quot;ddeeff&quot;</span>, <span class="bool-val">true</span>)
             .<span class="ident">unwrap_err</span>();
-        <span class="macro">assert_match</span><span class="macro">!</span>(<span class="ident">err</span>.<span class="ident">kind</span>(), <span class="ident">ErrorKind</span>::<span class="ident">RemoteError</span> { <span class="ident">code</span>: <span class="number">400</span>, .. });
-        <span class="macro">assert_match</span><span class="macro">!</span>(<span class="ident">fxa</span>.<span class="ident">is_in_migration_state</span>(), <span class="ident">MigrationState</span>::<span class="prelude-val">None</span>);
+        <span class="macro">assert</span><span class="macro">!</span>(<span class="macro">matches</span><span class="macro">!</span>(<span class="ident">err</span>.<span class="ident">kind</span>(), <span class="ident">ErrorKind</span>::<span class="ident">RemoteError</span> { <span class="ident">code</span>: <span class="number">400</span>, .. }));
+        <span class="macro">assert</span><span class="macro">!</span>(<span class="macro">matches</span><span class="macro">!</span>(<span class="ident">fxa</span>.<span class="ident">is_in_migration_state</span>(), <span class="ident">MigrationState</span>::<span class="prelude-val">None</span>));
     }
 
     <span class="attribute">#[<span class="ident">test</span>]</span>
     <span class="kw">fn</span> <span class="ident">try_migration_fails_if_nothing_in_flight</span>() {
         <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">fxa</span> <span class="op">=</span> <span class="ident">setup</span>();
 
-        <span class="macro">assert_match</span><span class="macro">!</span>(<span class="ident">fxa</span>.<span class="ident">is_in_migration_state</span>(), <span class="ident">MigrationState</span>::<span class="prelude-val">None</span>);
+        <span class="macro">assert</span><span class="macro">!</span>(<span class="macro">matches</span><span class="macro">!</span>(<span class="ident">fxa</span>.<span class="ident">is_in_migration_state</span>(), <span class="ident">MigrationState</span>::<span class="prelude-val">None</span>));
 
         <span class="kw">let</span> <span class="ident">err</span> <span class="op">=</span> <span class="ident">fxa</span>.<span class="ident">try_migration</span>().<span class="ident">unwrap_err</span>();
-        <span class="macro">assert_match</span><span class="macro">!</span>(<span class="ident">err</span>.<span class="ident">kind</span>(), <span class="ident">ErrorKind</span>::<span class="ident">NoMigrationData</span>);
-        <span class="macro">assert_match</span><span class="macro">!</span>(<span class="ident">fxa</span>.<span class="ident">is_in_migration_state</span>(), <span class="ident">MigrationState</span>::<span class="prelude-val">None</span>);
+        <span class="macro">assert</span><span class="macro">!</span>(<span class="macro">matches</span><span class="macro">!</span>(<span class="ident">err</span>.<span class="ident">kind</span>(), <span class="ident">ErrorKind</span>::<span class="ident">NoMigrationData</span>));
+        <span class="macro">assert</span><span class="macro">!</span>(<span class="macro">matches</span><span class="macro">!</span>(<span class="ident">fxa</span>.<span class="ident">is_in_migration_state</span>(), <span class="ident">MigrationState</span>::<span class="prelude-val">None</span>));
     }
 
     <span class="attribute">#[<span class="ident">test</span>]</span>
     <span class="kw">fn</span> <span class="ident">test_migration_state_remembers_whether_to_copy_session_token</span>() {
         <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">fxa</span> <span class="op">=</span> <span class="ident">setup</span>();
 
-        <span class="macro">assert_match</span><span class="macro">!</span>(<span class="ident">fxa</span>.<span class="ident">is_in_migration_state</span>(), <span class="ident">MigrationState</span>::<span class="prelude-val">None</span>);
+        <span class="macro">assert</span><span class="macro">!</span>(<span class="macro">matches</span><span class="macro">!</span>(<span class="ident">fxa</span>.<span class="ident">is_in_migration_state</span>(), <span class="ident">MigrationState</span>::<span class="prelude-val">None</span>));
 
         <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">client</span> <span class="op">=</span> <span class="ident">FxAClientMock</span>::<span class="ident">new</span>();
         <span class="ident">client</span>
@@ -772,11 +754,11 @@
         <span class="kw">let</span> <span class="ident">err</span> <span class="op">=</span> <span class="ident">fxa</span>
             .<span class="ident">migrate_from_session_token</span>(<span class="string">&quot;session&quot;</span>, <span class="string">&quot;aabbcc&quot;</span>, <span class="string">&quot;ddeeff&quot;</span>, <span class="bool-val">false</span>)
             .<span class="ident">unwrap_err</span>();
-        <span class="macro">assert_match</span><span class="macro">!</span>(<span class="ident">err</span>.<span class="ident">kind</span>(), <span class="ident">ErrorKind</span>::<span class="ident">RemoteError</span> { <span class="ident">code</span>: <span class="number">500</span>, .. });
-        <span class="macro">assert_match</span><span class="macro">!</span>(
+        <span class="macro">assert</span><span class="macro">!</span>(<span class="macro">matches</span><span class="macro">!</span>(<span class="ident">err</span>.<span class="ident">kind</span>(), <span class="ident">ErrorKind</span>::<span class="ident">RemoteError</span> { <span class="ident">code</span>: <span class="number">500</span>, .. }));
+        <span class="macro">assert</span><span class="macro">!</span>(<span class="macro">matches</span><span class="macro">!</span>(
             <span class="ident">fxa</span>.<span class="ident">is_in_migration_state</span>(),
             <span class="ident">MigrationState</span>::<span class="ident">ReuseSessionToken</span>
-        );
+        ));
 
         <span class="comment">// Retrying should fail again in the same way (as opposed to, say, trying</span>
         <span class="comment">// to duplicate the sessionToken rather than reusing it).</span>
@@ -799,11 +781,11 @@
         <span class="ident">fxa</span>.<span class="ident">set_client</span>(<span class="ident">Arc</span>::<span class="ident">new</span>(<span class="ident">client</span>));
 
         <span class="kw">let</span> <span class="ident">err</span> <span class="op">=</span> <span class="ident">fxa</span>.<span class="ident">try_migration</span>().<span class="ident">unwrap_err</span>();
-        <span class="macro">assert_match</span><span class="macro">!</span>(<span class="ident">err</span>.<span class="ident">kind</span>(), <span class="ident">ErrorKind</span>::<span class="ident">RemoteError</span> { <span class="ident">code</span>: <span class="number">500</span>, .. });
-        <span class="macro">assert_match</span><span class="macro">!</span>(
+        <span class="macro">assert</span><span class="macro">!</span>(<span class="macro">matches</span><span class="macro">!</span>(<span class="ident">err</span>.<span class="ident">kind</span>(), <span class="ident">ErrorKind</span>::<span class="ident">RemoteError</span> { <span class="ident">code</span>: <span class="number">500</span>, .. }));
+        <span class="macro">assert</span><span class="macro">!</span>(<span class="macro">matches</span><span class="macro">!</span>(
             <span class="ident">fxa</span>.<span class="ident">is_in_migration_state</span>(),
             <span class="ident">MigrationState</span>::<span class="ident">ReuseSessionToken</span>
-        );
+        ));
     }
 }
 </pre></div>
