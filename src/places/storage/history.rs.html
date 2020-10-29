@@ -2930,6 +2930,12 @@
 <span id="2929">2929</span>
 <span id="2930">2930</span>
 <span id="2931">2931</span>
+<span id="2932">2932</span>
+<span id="2933">2933</span>
+<span id="2934">2934</span>
+<span id="2935">2935</span>
+<span id="2936">2936</span>
+<span id="2937">2937</span>
 </pre><div class="example-wrap"><pre class="rust ">
 <span class="comment">/* This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
@@ -4128,7 +4134,11 @@
     )<span class="question-mark">?</span>)
 }
 
-<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">get_top_frecent_site_infos</span>(<span class="ident">db</span>: <span class="kw-2">&amp;</span><span class="ident">PlacesDb</span>, <span class="ident">num_items</span>: <span class="ident">i32</span>) <span class="op">-&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">TopFrecentSiteInfos</span><span class="op">&gt;</span> {
+<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">get_top_frecent_site_infos</span>(
+    <span class="ident">db</span>: <span class="kw-2">&amp;</span><span class="ident">PlacesDb</span>,
+    <span class="ident">num_items</span>: <span class="ident">i32</span>,
+    <span class="ident">frecency_threshold</span>: <span class="ident">i64</span>,
+) <span class="op">-&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">TopFrecentSiteInfos</span><span class="op">&gt;</span> {
     <span class="comment">// Get the complement of the visit types that should be excluded.</span>
     <span class="kw">let</span> <span class="ident">allowed_types</span> <span class="op">=</span> <span class="ident">VisitTransitionSet</span>::<span class="ident">for_specific</span>(<span class="kw-2">&amp;</span>[
         <span class="ident">VisitTransition</span>::<span class="ident">Download</span>,
@@ -4149,7 +4159,8 @@
             WHERE h.id = v.place_id
               AND (SUBSTR(h.url, 1, 6) == &#39;https:&#39; OR SUBSTR(h.url, 1, 5) == &#39;http:&#39;)
               AND (h.last_visit_date_local + h.last_visit_date_remote) != 0
-              AND ((1 &lt;&lt; v.visit_type) &amp; :allowed_types) != 0 AND
+              AND ((1 &lt;&lt; v.visit_type) &amp; :allowed_types) != 0
+              AND h.frecency &gt;= :frecency_threshold AND
               NOT h.hidden
         )
         ORDER BY h.frecency DESC
@@ -4157,6 +4168,7 @@
         <span class="ident">rusqlite</span>::<span class="macro">named_params</span><span class="macro">!</span> {
             <span class="string">&quot;:limit&quot;</span>: <span class="ident">num_items</span>,
             <span class="string">&quot;:allowed_types&quot;</span>: <span class="ident">allowed_types</span>,
+            <span class="string">&quot;:frecency_threshold&quot;</span>: <span class="ident">frecency_threshold</span>,
         },
         <span class="ident">TopFrecentSiteInfo</span>::<span class="ident">from_row</span>,
     )<span class="question-mark">?</span>;
