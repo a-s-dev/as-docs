@@ -1,1 +1,1 @@
-initSidebarItems({"constant":[["CREATE_SCHEMA_SQL",""],["CREATE_SYNC_TEMP_TABLES_SQL",""],["VERSION",""]],"fn":[["create",""],["create_empty_sync_temp_tables",""],["get_current_schema_version",""],["init",""]]});
+initSidebarItems({"constant":[["CREATE_SCHEMA_SQL",""],["CREATE_SYNC_TEMP_TABLES_SQL",""],["VERSION",""]],"fn":[["create",""],["create_empty_sync_temp_tables",""],["get_current_schema_version",""],["init",""],["upgrade",""]]});

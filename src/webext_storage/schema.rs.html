@@ -150,6 +150,97 @@
 <span id="149">149</span>
 <span id="150">150</span>
 <span id="151">151</span>
+<span id="152">152</span>
+<span id="153">153</span>
+<span id="154">154</span>
+<span id="155">155</span>
+<span id="156">156</span>
+<span id="157">157</span>
+<span id="158">158</span>
+<span id="159">159</span>
+<span id="160">160</span>
+<span id="161">161</span>
+<span id="162">162</span>
+<span id="163">163</span>
+<span id="164">164</span>
+<span id="165">165</span>
+<span id="166">166</span>
+<span id="167">167</span>
+<span id="168">168</span>
+<span id="169">169</span>
+<span id="170">170</span>
+<span id="171">171</span>
+<span id="172">172</span>
+<span id="173">173</span>
+<span id="174">174</span>
+<span id="175">175</span>
+<span id="176">176</span>
+<span id="177">177</span>
+<span id="178">178</span>
+<span id="179">179</span>
+<span id="180">180</span>
+<span id="181">181</span>
+<span id="182">182</span>
+<span id="183">183</span>
+<span id="184">184</span>
+<span id="185">185</span>
+<span id="186">186</span>
+<span id="187">187</span>
+<span id="188">188</span>
+<span id="189">189</span>
+<span id="190">190</span>
+<span id="191">191</span>
+<span id="192">192</span>
+<span id="193">193</span>
+<span id="194">194</span>
+<span id="195">195</span>
+<span id="196">196</span>
+<span id="197">197</span>
+<span id="198">198</span>
+<span id="199">199</span>
+<span id="200">200</span>
+<span id="201">201</span>
+<span id="202">202</span>
+<span id="203">203</span>
+<span id="204">204</span>
+<span id="205">205</span>
+<span id="206">206</span>
+<span id="207">207</span>
+<span id="208">208</span>
+<span id="209">209</span>
+<span id="210">210</span>
+<span id="211">211</span>
+<span id="212">212</span>
+<span id="213">213</span>
+<span id="214">214</span>
+<span id="215">215</span>
+<span id="216">216</span>
+<span id="217">217</span>
+<span id="218">218</span>
+<span id="219">219</span>
+<span id="220">220</span>
+<span id="221">221</span>
+<span id="222">222</span>
+<span id="223">223</span>
+<span id="224">224</span>
+<span id="225">225</span>
+<span id="226">226</span>
+<span id="227">227</span>
+<span id="228">228</span>
+<span id="229">229</span>
+<span id="230">230</span>
+<span id="231">231</span>
+<span id="232">232</span>
+<span id="233">233</span>
+<span id="234">234</span>
+<span id="235">235</span>
+<span id="236">236</span>
+<span id="237">237</span>
+<span id="238">238</span>
+<span id="239">239</span>
+<span id="240">240</span>
+<span id="241">241</span>
+<span id="242">242</span>
 </pre><div class="example-wrap"><pre class="rust ">
 <span class="comment">/* This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
@@ -168,7 +259,7 @@
 <span class="kw">use</span> <span class="ident">rusqlite</span>::{<span class="ident">Connection</span>, <span class="ident">NO_PARAMS</span>};
 <span class="kw">use</span> <span class="ident">sql_support</span>::<span class="ident">ConnExt</span>;
 
-<span class="kw">const</span> <span class="ident">VERSION</span>: <span class="ident">i64</span> <span class="op">=</span> <span class="number">1</span>; <span class="comment">// let&#39;s avoid bumping this and migrating for now!</span>
+<span class="kw">const</span> <span class="ident">VERSION</span>: <span class="ident">i64</span> <span class="op">=</span> <span class="number">2</span>;
 
 <span class="kw">const</span> <span class="ident">CREATE_SCHEMA_SQL</span>: <span class="kw-2">&amp;</span><span class="ident">str</span> <span class="op">=</span> <span class="macro">include_str</span><span class="macro">!</span>(<span class="string">&quot;../sql/create_schema.sql&quot;</span>);
 <span class="kw">const</span> <span class="ident">CREATE_SYNC_TEMP_TABLES_SQL</span>: <span class="kw-2">&amp;</span><span class="ident">str</span> <span class="op">=</span> <span class="macro">include_str</span><span class="macro">!</span>(<span class="string">&quot;../sql/create_sync_temp_tables.sql&quot;</span>);
@@ -183,7 +274,7 @@
         <span class="ident">create</span>(<span class="ident">db</span>)<span class="question-mark">?</span>;
     } <span class="kw">else</span> <span class="kw">if</span> <span class="ident">user_version</span> <span class="op">!=</span> <span class="ident">VERSION</span> {
         <span class="kw">if</span> <span class="ident">user_version</span> <span class="op">&lt;</span> <span class="ident">VERSION</span> {
-            <span class="macro">panic</span><span class="macro">!</span>(<span class="string">&quot;no migrations yet!&quot;</span>);
+            <span class="ident">upgrade</span>(<span class="ident">db</span>, <span class="ident">user_version</span>)<span class="question-mark">?</span>;
         } <span class="kw">else</span> {
             <span class="ident">log</span>::<span class="macro">warn</span><span class="macro">!</span>(
                 <span class="string">&quot;Loaded future schema version {} (we only understand version {}). \
@@ -209,6 +300,29 @@
         <span class="ident">NO_PARAMS</span>,
     )<span class="question-mark">?</span>;
 
+    <span class="prelude-val">Ok</span>(())
+}
+
+<span class="kw">fn</span> <span class="ident">upgrade</span>(<span class="ident">db</span>: <span class="kw-2">&amp;</span><span class="ident">Connection</span>, <span class="ident">from</span>: <span class="ident">i64</span>) <span class="op">-&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span>()<span class="op">&gt;</span> {
+    <span class="ident">log</span>::<span class="macro">debug</span><span class="macro">!</span>(<span class="string">&quot;Upgrading schema from {} to {}&quot;</span>, <span class="ident">from</span>, <span class="ident">VERSION</span>);
+    <span class="kw">if</span> <span class="ident">from</span> <span class="op">==</span> <span class="ident">VERSION</span> {
+        <span class="kw">return</span> <span class="prelude-val">Ok</span>(());
+    }
+    <span class="comment">// Places has a cute `migration` helper we can consider using if we get</span>
+    <span class="comment">// a few complicated updates, but let&#39;s KISS for now.</span>
+    <span class="kw">if</span> <span class="ident">from</span> <span class="op">==</span> <span class="number">1</span> {
+        <span class="comment">// We changed a not null constraint</span>
+        <span class="ident">log</span>::<span class="macro">debug</span><span class="macro">!</span>(<span class="string">&quot;Upgrading schema from 1 to 2&quot;</span>);
+        <span class="ident">db</span>.<span class="ident">execute_batch</span>(<span class="string">&quot;ALTER TABLE storage_sync_mirror RENAME TO old_mirror;&quot;</span>)<span class="question-mark">?</span>;
+        <span class="comment">// just re-run the full schema commands to recreate the able.</span>
+        <span class="ident">db</span>.<span class="ident">execute_batch</span>(<span class="ident">CREATE_SCHEMA_SQL</span>)<span class="question-mark">?</span>;
+        <span class="ident">db</span>.<span class="ident">execute_batch</span>(
+            <span class="string">&quot;INSERT OR IGNORE INTO storage_sync_mirror(guid, ext_id, data)
+             SELECT guid, ext_id, data FROM old_mirror;&quot;</span>,
+        )<span class="question-mark">?</span>;
+        <span class="ident">db</span>.<span class="ident">execute_batch</span>(<span class="string">&quot;DROP TABLE old_mirror;&quot;</span>)<span class="question-mark">?</span>;
+        <span class="ident">db</span>.<span class="ident">execute_batch</span>(<span class="string">&quot;PRAGMA user_version = 2;&quot;</span>)<span class="question-mark">?</span>;
+    }
     <span class="prelude-val">Ok</span>(())
 }
 
@@ -261,6 +375,7 @@
 <span class="kw">mod</span> <span class="ident">tests</span> {
     <span class="kw">use</span> <span class="kw">super</span>::<span class="kw-2">*</span>;
     <span class="kw">use</span> <span class="kw">crate</span>::<span class="ident">db</span>::<span class="ident">test</span>::<span class="ident">new_mem_db</span>;
+    <span class="kw">use</span> <span class="ident">rusqlite</span>::<span class="ident">Error</span>;
 
     <span class="attribute">#[<span class="ident">test</span>]</span>
     <span class="kw">fn</span> <span class="ident">test_create_schema_twice</span>() {
@@ -300,6 +415,73 @@
             )
             .<span class="ident">expect</span>(<span class="string">&quot;query should work&quot;</span>);
         <span class="macro">assert_eq</span><span class="macro">!</span>(<span class="ident">count</span>, <span class="number">0</span>, <span class="string">&quot;should be no rows&quot;</span>);
+    }
+
+    <span class="attribute">#[<span class="ident">test</span>]</span>
+    <span class="kw">fn</span> <span class="ident">test_upgrade_1_2</span>() <span class="op">-&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span>()<span class="op">&gt;</span> {
+        <span class="kw">let</span> <span class="kw">_</span> <span class="op">=</span> <span class="ident">env_logger</span>::<span class="ident">try_init</span>();
+        <span class="comment">// This is the table definition of the table we are migrating away</span>
+        <span class="comment">// from - note the NOT NULL on ext_id, which no longer exists.</span>
+        <span class="kw">let</span> <span class="ident">old_create_table</span> <span class="op">=</span> <span class="string">&quot;CREATE TABLE IF NOT EXISTS storage_sync_mirror (
+            guid TEXT NOT NULL PRIMARY KEY,
+            ext_id TEXT NOT NULL UNIQUE,
+            data TEXT
+        );&quot;</span>;
+        <span class="comment">// Create a named in-memory database.</span>
+        <span class="kw">let</span> <span class="ident">db</span> <span class="op">=</span> <span class="ident">new_mem_db</span>();
+        <span class="ident">db</span>.<span class="ident">execute_batch</span>(<span class="string">&quot;DROP TABLE storage_sync_mirror;&quot;</span>)<span class="question-mark">?</span>;
+        <span class="ident">db</span>.<span class="ident">execute_batch</span>(<span class="ident">old_create_table</span>)<span class="question-mark">?</span>;
+
+        <span class="ident">db</span>.<span class="ident">execute_batch</span>(
+            <span class="string">&quot;INSERT INTO storage_sync_mirror(guid, ext_id, data)
+             VALUES
+                (&#39;guid-1&#39;, &#39;ext-id-1&#39;, &#39;data-1&#39;),
+                (&#39;guid-2&#39;, &#39;ext-id-2&#39;, &#39;data-2&#39;)&quot;</span>,
+        )<span class="question-mark">?</span>;
+
+        <span class="ident">db</span>.<span class="ident">execute_batch</span>(<span class="string">&quot;PRAGMA user_version = 1&quot;</span>)<span class="question-mark">?</span>;
+
+        <span class="comment">// We are back to what a v1 database looks like. Make sure the NOT NULL</span>
+        <span class="comment">// constraint is honoured.</span>
+        <span class="macro">assert</span><span class="macro">!</span>(<span class="ident">db</span>
+            .<span class="ident">execute_batch</span>(
+                <span class="string">&quot;INSERT INTO storage_sync_mirror(guid, ext_id, data)
+                 VALUES (&#39;guid-3&#39;, NULL, NULL);&quot;</span>
+            )
+            .<span class="ident">is_err</span>());
+
+        <span class="comment">// Ugrade</span>
+        <span class="ident">upgrade</span>(<span class="kw-2">&amp;</span><span class="ident">db</span>, <span class="number">1</span>)<span class="question-mark">?</span>;
+
+        <span class="macro">assert_eq</span><span class="macro">!</span>(<span class="ident">get_current_schema_version</span>(<span class="kw-2">&amp;</span><span class="ident">db</span>)<span class="question-mark">?</span>, <span class="ident">VERSION</span>);
+
+        <span class="comment">// Should be able to insert the new row.</span>
+        <span class="ident">db</span>.<span class="ident">execute_batch</span>(
+            <span class="string">&quot;INSERT INTO storage_sync_mirror(guid, ext_id, data)
+             VALUES (&#39;guid-3&#39;, NULL, NULL);&quot;</span>,
+        )<span class="question-mark">?</span>;
+
+        <span class="kw">let</span> <span class="ident">get_id_data</span> <span class="op">=</span> <span class="op">|</span><span class="ident">guid</span>: <span class="kw-2">&amp;</span><span class="ident">str</span><span class="op">|</span> <span class="op">-&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span>(<span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">String</span><span class="op">&gt;</span>, <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">String</span><span class="op">&gt;</span>)<span class="op">&gt;</span> {
+            <span class="kw">let</span> (<span class="ident">ext_id</span>, <span class="ident">data</span>) <span class="op">=</span> <span class="ident">db</span>
+                .<span class="ident">try_query_row</span>::<span class="op">&lt;</span><span class="kw">_</span>, <span class="ident">Error</span>, <span class="kw">_</span><span class="op">&gt;</span>(
+                    <span class="string">&quot;SELECT ext_id, data FROM storage_sync_mirror WHERE guid = :guid&quot;</span>,
+                    <span class="kw-2">&amp;</span>[(<span class="string">&quot;:guid&quot;</span>, <span class="kw-2">&amp;</span><span class="ident">guid</span>.<span class="ident">to_string</span>())],
+                    <span class="op">|</span><span class="ident">row</span><span class="op">|</span> <span class="prelude-val">Ok</span>((<span class="ident">row</span>.<span class="ident">get</span>(<span class="number">0</span>)<span class="question-mark">?</span>, <span class="ident">row</span>.<span class="ident">get</span>(<span class="number">1</span>)<span class="question-mark">?</span>)),
+                    <span class="bool-val">true</span>,
+                )<span class="question-mark">?</span>
+                .<span class="ident">expect</span>(<span class="string">&quot;row should exist.&quot;</span>);
+            <span class="prelude-val">Ok</span>((<span class="ident">ext_id</span>, <span class="ident">data</span>))
+        };
+        <span class="macro">assert_eq</span><span class="macro">!</span>(
+            <span class="ident">get_id_data</span>(<span class="string">&quot;guid-1&quot;</span>)<span class="question-mark">?</span>,
+            (<span class="prelude-val">Some</span>(<span class="string">&quot;ext-id-1&quot;</span>.<span class="ident">to_string</span>()), <span class="prelude-val">Some</span>(<span class="string">&quot;data-1&quot;</span>.<span class="ident">to_string</span>()))
+        );
+        <span class="macro">assert_eq</span><span class="macro">!</span>(
+            <span class="ident">get_id_data</span>(<span class="string">&quot;guid-2&quot;</span>)<span class="question-mark">?</span>,
+            (<span class="prelude-val">Some</span>(<span class="string">&quot;ext-id-2&quot;</span>.<span class="ident">to_string</span>()), <span class="prelude-val">Some</span>(<span class="string">&quot;data-2&quot;</span>.<span class="ident">to_string</span>()))
+        );
+        <span class="macro">assert_eq</span><span class="macro">!</span>(<span class="ident">get_id_data</span>(<span class="string">&quot;guid-3&quot;</span>)<span class="question-mark">?</span>, (<span class="prelude-val">None</span>, <span class="prelude-val">None</span>));
+        <span class="prelude-val">Ok</span>(())
     }
 }
 </pre></div>

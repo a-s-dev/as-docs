@@ -806,6 +806,65 @@
 <span id="805">805</span>
 <span id="806">806</span>
 <span id="807">807</span>
+<span id="808">808</span>
+<span id="809">809</span>
+<span id="810">810</span>
+<span id="811">811</span>
+<span id="812">812</span>
+<span id="813">813</span>
+<span id="814">814</span>
+<span id="815">815</span>
+<span id="816">816</span>
+<span id="817">817</span>
+<span id="818">818</span>
+<span id="819">819</span>
+<span id="820">820</span>
+<span id="821">821</span>
+<span id="822">822</span>
+<span id="823">823</span>
+<span id="824">824</span>
+<span id="825">825</span>
+<span id="826">826</span>
+<span id="827">827</span>
+<span id="828">828</span>
+<span id="829">829</span>
+<span id="830">830</span>
+<span id="831">831</span>
+<span id="832">832</span>
+<span id="833">833</span>
+<span id="834">834</span>
+<span id="835">835</span>
+<span id="836">836</span>
+<span id="837">837</span>
+<span id="838">838</span>
+<span id="839">839</span>
+<span id="840">840</span>
+<span id="841">841</span>
+<span id="842">842</span>
+<span id="843">843</span>
+<span id="844">844</span>
+<span id="845">845</span>
+<span id="846">846</span>
+<span id="847">847</span>
+<span id="848">848</span>
+<span id="849">849</span>
+<span id="850">850</span>
+<span id="851">851</span>
+<span id="852">852</span>
+<span id="853">853</span>
+<span id="854">854</span>
+<span id="855">855</span>
+<span id="856">856</span>
+<span id="857">857</span>
+<span id="858">858</span>
+<span id="859">859</span>
+<span id="860">860</span>
+<span id="861">861</span>
+<span id="862">862</span>
+<span id="863">863</span>
+<span id="864">864</span>
+<span id="865">865</span>
+<span id="866">866</span>
 </pre><div class="example-wrap"><pre class="rust ">
 <span class="comment">/* This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
@@ -815,7 +874,10 @@
 <span class="comment">// working out a plan for them, updating the local data and mirror, etc.</span>
 
 <span class="kw">use</span> <span class="ident">interrupt_support</span>::<span class="ident">Interruptee</span>;
-<span class="kw">use</span> <span class="ident">rusqlite</span>::{<span class="ident">types</span>::<span class="ident">ToSql</span>, <span class="ident">Connection</span>, <span class="ident">Row</span>, <span class="ident">Transaction</span>};
+<span class="kw">use</span> <span class="ident">rusqlite</span>::{
+    <span class="ident">types</span>::{<span class="ident">Null</span>, <span class="ident">ToSql</span>},
+    <span class="ident">Connection</span>, <span class="ident">Row</span>, <span class="ident">Transaction</span>,
+};
 <span class="kw">use</span> <span class="ident">sql_support</span>::<span class="ident">ConnExt</span>;
 <span class="kw">use</span> <span class="ident">sync15_traits</span>::<span class="ident">Payload</span>;
 <span class="kw">use</span> <span class="ident">sync_guid</span>::<span class="ident">Guid</span> <span class="kw">as</span> <span class="ident">SyncGuid</span>;
@@ -823,7 +885,7 @@
 <span class="kw">use</span> <span class="kw">crate</span>::<span class="ident">api</span>::{<span class="ident">StorageChanges</span>, <span class="ident">StorageValueChange</span>};
 <span class="kw">use</span> <span class="kw">crate</span>::<span class="ident">error</span>::<span class="kw-2">*</span>;
 
-<span class="kw">use</span> <span class="kw">super</span>::{<span class="ident">merge</span>, <span class="ident">remove_matching_keys</span>, <span class="ident">JsonMap</span>, <span class="ident">Record</span>};
+<span class="kw">use</span> <span class="kw">super</span>::{<span class="ident">merge</span>, <span class="ident">remove_matching_keys</span>, <span class="ident">JsonMap</span>, <span class="ident">Record</span>, <span class="ident">RecordData</span>};
 
 <span class="doccomment">/// The state data can be in. Could be represented as Option&lt;JsonMap&gt;, but this</span>
 <span class="doccomment">/// is clearer and independent of how the data is stored.</span>
@@ -897,8 +959,19 @@
             <span class="kw">for</span> <span class="ident">record</span> <span class="kw">in</span> <span class="ident">chunk</span> {
                 <span class="ident">signal</span>.<span class="ident">err_if_interrupted</span>()<span class="question-mark">?</span>;
                 <span class="ident">params</span>.<span class="ident">push</span>(<span class="kw-2">&amp;</span><span class="ident">record</span>.<span class="ident">guid</span> <span class="kw">as</span> <span class="kw-2">&amp;</span><span class="kw">dyn</span> <span class="ident">ToSql</span>);
-                <span class="ident">params</span>.<span class="ident">push</span>(<span class="kw-2">&amp;</span><span class="ident">record</span>.<span class="ident">ext_id</span>);
-                <span class="ident">params</span>.<span class="ident">push</span>(<span class="kw-2">&amp;</span><span class="ident">record</span>.<span class="ident">data</span>);
+                <span class="kw">match</span> <span class="kw-2">&amp;</span><span class="ident">record</span>.<span class="ident">data</span> {
+                    <span class="ident">RecordData</span>::<span class="ident">Data</span> {
+                        <span class="kw-2">ref</span> <span class="ident">ext_id</span>,
+                        <span class="kw-2">ref</span> <span class="ident">data</span>,
+                    } <span class="op">=&gt;</span> {
+                        <span class="ident">params</span>.<span class="ident">push</span>(<span class="ident">ext_id</span>);
+                        <span class="ident">params</span>.<span class="ident">push</span>(<span class="ident">data</span>);
+                    }
+                    <span class="ident">RecordData</span>::<span class="ident">Tombstone</span> <span class="op">=&gt;</span> {
+                        <span class="ident">params</span>.<span class="ident">push</span>(<span class="kw-2">&amp;</span><span class="ident">Null</span>);
+                        <span class="ident">params</span>.<span class="ident">push</span>(<span class="kw-2">&amp;</span><span class="ident">Null</span>);
+                    }
+                }
             }
             <span class="ident">tx</span>.<span class="ident">execute</span>(<span class="kw-2">&amp;</span><span class="ident">sql</span>, <span class="kw-2">&amp;</span><span class="ident">params</span>)<span class="question-mark">?</span>;
             <span class="prelude-val">Ok</span>(())
@@ -907,21 +980,21 @@
     <span class="prelude-val">Ok</span>(())
 }
 
-<span class="doccomment">/// Details about an incoming item.</span>
-<span class="attribute">#[<span class="ident">derive</span>(<span class="ident">Debug</span>, <span class="ident">PartialEq</span>)]</span>
-<span class="kw">pub</span> <span class="kw">struct</span> <span class="ident">IncomingItem</span> {
-    <span class="ident">guid</span>: <span class="ident">SyncGuid</span>,
-    <span class="ident">ext_id</span>: <span class="ident">String</span>,
-}
-
 <span class="doccomment">/// The &quot;state&quot; we find ourselves in when considering an incoming/staging</span>
-<span class="doccomment">/// record. This &quot;state&quot; is the input to calculating the IncomingAction.</span>
+<span class="doccomment">/// record. This &quot;state&quot; is the input to calculating the IncomingAction and</span>
+<span class="doccomment">/// carries all the data we need to make the required local changes.</span>
 <span class="attribute">#[<span class="ident">derive</span>(<span class="ident">Debug</span>, <span class="ident">PartialEq</span>)]</span>
 <span class="kw">pub</span> <span class="kw">enum</span> <span class="ident">IncomingState</span> {
     <span class="doccomment">/// There&#39;s an incoming item, but data for that extension doesn&#39;t exist</span>
     <span class="doccomment">/// either in our local data store or in the local mirror. IOW, this is the</span>
     <span class="doccomment">/// very first time we&#39;ve seen this extension.</span>
-    <span class="ident">IncomingOnly</span> { <span class="ident">incoming</span>: <span class="ident">DataState</span> },
+    <span class="ident">IncomingOnlyData</span> { <span class="ident">ext_id</span>: <span class="ident">String</span>, <span class="ident">data</span>: <span class="ident">JsonMap</span> },
+
+    <span class="doccomment">/// An incoming tombstone that doesn&#39;t exist locally. Because tombstones</span>
+    <span class="doccomment">/// don&#39;t carry the ext-id, it means it&#39;s not in our mirror. We are just</span>
+    <span class="doccomment">/// going to ignore it, but we track the state for consistency.</span>
+    <span class="ident">IncomingOnlyTombstone</span>,
+
     <span class="doccomment">/// There&#39;s an incoming item and we have data for the same extension in</span>
     <span class="doccomment">/// our local store - but not in our mirror. This should be relatively</span>
     <span class="doccomment">/// uncommon as it means:</span>
@@ -930,6 +1003,7 @@
     <span class="doccomment">/// * This is the first sync for this profile since both those events</span>
     <span class="doccomment">///   happened.</span>
     <span class="ident">HasLocal</span> {
+        <span class="ident">ext_id</span>: <span class="ident">String</span>,
         <span class="ident">incoming</span>: <span class="ident">DataState</span>,
         <span class="ident">local</span>: <span class="ident">DataState</span>,
     },
@@ -937,12 +1011,14 @@
     <span class="doccomment">/// the mirror. The addon probably doesn&#39;t exist locally, or if it does,</span>
     <span class="doccomment">/// the last time we synced we synced the deletion of all data.</span>
     <span class="ident">NotLocal</span> {
+        <span class="ident">ext_id</span>: <span class="ident">String</span>,
         <span class="ident">incoming</span>: <span class="ident">DataState</span>,
         <span class="ident">mirror</span>: <span class="ident">DataState</span>,
     },
     <span class="doccomment">/// This will be the most common &quot;incoming&quot; case - there&#39;s data incoming,</span>
     <span class="doccomment">/// in the mirror and in the local store for an addon.</span>
     <span class="ident">Everywhere</span> {
+        <span class="ident">ext_id</span>: <span class="ident">String</span>,
         <span class="ident">incoming</span>: <span class="ident">DataState</span>,
         <span class="ident">mirror</span>: <span class="ident">DataState</span>,
         <span class="ident">local</span>: <span class="ident">DataState</span>,
@@ -951,44 +1027,64 @@
 
 <span class="doccomment">/// Get the items we need to process from the staging table. Return details about</span>
 <span class="doccomment">/// the item and the state of that item, ready for processing.</span>
-<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">get_incoming</span>(<span class="ident">conn</span>: <span class="kw-2">&amp;</span><span class="ident">Connection</span>) <span class="op">-&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">Vec</span><span class="op">&lt;</span>(<span class="ident">IncomingItem</span>, <span class="ident">IncomingState</span>)<span class="op">&gt;&gt;</span> {
+<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">get_incoming</span>(<span class="ident">conn</span>: <span class="kw-2">&amp;</span><span class="ident">Connection</span>) <span class="op">-&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">Vec</span><span class="op">&lt;</span>(<span class="ident">SyncGuid</span>, <span class="ident">IncomingState</span>)<span class="op">&gt;&gt;</span> {
     <span class="kw">let</span> <span class="ident">sql</span> <span class="op">=</span> <span class="string">&quot;
         SELECT
             s.guid as guid,
-            m.guid IS NOT NULL as m_exists,
-            l.ext_id IS NOT NULL as l_exists,
-            s.ext_id,
+            l.ext_id as l_ext_id,
+            m.ext_id as m_ext_id,
+            s.ext_id as s_ext_id,
             s.data as s_data, m.data as m_data, l.data as l_data,
             l.sync_change_counter
         FROM temp.storage_sync_staging s
         LEFT JOIN storage_sync_mirror m ON m.guid = s.guid
-        LEFT JOIN storage_sync_data l on l.ext_id = s.ext_id;&quot;</span>;
+        LEFT JOIN storage_sync_data l on l.ext_id IN (m.ext_id, s.ext_id);&quot;</span>;
 
-    <span class="kw">fn</span> <span class="ident">from_row</span>(<span class="ident">row</span>: <span class="kw-2">&amp;</span><span class="ident">Row</span><span class="op">&lt;</span><span class="lifetime">&#39;_</span><span class="op">&gt;</span>) <span class="op">-&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span>(<span class="ident">IncomingItem</span>, <span class="ident">IncomingState</span>)<span class="op">&gt;</span> {
+    <span class="kw">fn</span> <span class="ident">from_row</span>(<span class="ident">row</span>: <span class="kw-2">&amp;</span><span class="ident">Row</span><span class="op">&lt;</span><span class="lifetime">&#39;_</span><span class="op">&gt;</span>) <span class="op">-&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span>(<span class="ident">SyncGuid</span>, <span class="ident">IncomingState</span>)<span class="op">&gt;</span> {
         <span class="kw">let</span> <span class="ident">guid</span> <span class="op">=</span> <span class="ident">row</span>.<span class="ident">get</span>(<span class="string">&quot;guid&quot;</span>)<span class="question-mark">?</span>;
-        <span class="kw">let</span> <span class="ident">ext_id</span> <span class="op">=</span> <span class="ident">row</span>.<span class="ident">get</span>(<span class="string">&quot;ext_id&quot;</span>)<span class="question-mark">?</span>;
+        <span class="comment">// This is complicated because the staging row doesn&#39;t hold the ext_id.</span>
+        <span class="comment">// However, both the local table and the mirror do.</span>
+        <span class="kw">let</span> <span class="ident">mirror_ext_id</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">String</span><span class="op">&gt;</span> <span class="op">=</span> <span class="ident">row</span>.<span class="ident">get</span>(<span class="string">&quot;m_ext_id&quot;</span>)<span class="question-mark">?</span>;
+        <span class="kw">let</span> <span class="ident">local_ext_id</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">String</span><span class="op">&gt;</span> <span class="op">=</span> <span class="ident">row</span>.<span class="ident">get</span>(<span class="string">&quot;l_ext_id&quot;</span>)<span class="question-mark">?</span>;
+        <span class="kw">let</span> <span class="ident">staged_ext_id</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">String</span><span class="op">&gt;</span> <span class="op">=</span> <span class="ident">row</span>.<span class="ident">get</span>(<span class="string">&quot;s_ext_id&quot;</span>)<span class="question-mark">?</span>;
         <span class="kw">let</span> <span class="ident">incoming</span> <span class="op">=</span> <span class="ident">json_map_from_row</span>(<span class="ident">row</span>, <span class="string">&quot;s_data&quot;</span>)<span class="question-mark">?</span>;
 
-        <span class="kw">let</span> <span class="ident">mirror_exists</span> <span class="op">=</span> <span class="ident">row</span>.<span class="ident">get</span>(<span class="string">&quot;m_exists&quot;</span>)<span class="question-mark">?</span>;
-        <span class="kw">let</span> <span class="ident">local_exists</span> <span class="op">=</span> <span class="ident">row</span>.<span class="ident">get</span>(<span class="string">&quot;l_exists&quot;</span>)<span class="question-mark">?</span>;
-
-        <span class="kw">let</span> <span class="ident">state</span> <span class="op">=</span> <span class="kw">match</span> (<span class="ident">local_exists</span>, <span class="ident">mirror_exists</span>) {
-            (<span class="bool-val">false</span>, <span class="bool-val">false</span>) <span class="op">=&gt;</span> <span class="ident">IncomingState</span>::<span class="ident">IncomingOnly</span> { <span class="ident">incoming</span> },
-            (<span class="bool-val">true</span>, <span class="bool-val">false</span>) <span class="op">=&gt;</span> <span class="ident">IncomingState</span>::<span class="ident">HasLocal</span> {
+        <span class="comment">// We find the state by examining which tables the ext-id exists in,</span>
+        <span class="comment">// using whether that column is null as a proxy for that.</span>
+        <span class="kw">let</span> <span class="ident">state</span> <span class="op">=</span> <span class="kw">match</span> (<span class="ident">local_ext_id</span>, <span class="ident">mirror_ext_id</span>) {
+            (<span class="prelude-val">None</span>, <span class="prelude-val">None</span>) <span class="op">=&gt;</span> {
+                <span class="kw">match</span> <span class="ident">staged_ext_id</span> {
+                    <span class="prelude-val">Some</span>(<span class="ident">ext_id</span>) <span class="op">=&gt;</span> {
+                        <span class="kw">let</span> <span class="ident">data</span> <span class="op">=</span> <span class="kw">match</span> <span class="ident">incoming</span> {
+                            <span class="comment">// incoming record with missing data that&#39;s not a</span>
+                            <span class="comment">// tombstone shouldn&#39;t happen, but we can cope by</span>
+                            <span class="comment">// pretending it was an empty json map.</span>
+                            <span class="ident">DataState</span>::<span class="ident">Deleted</span> <span class="op">=&gt;</span> <span class="ident">JsonMap</span>::<span class="ident">new</span>(),
+                            <span class="ident">DataState</span>::<span class="ident">Exists</span>(<span class="ident">data</span>) <span class="op">=&gt;</span> <span class="ident">data</span>,
+                        };
+                        <span class="ident">IncomingState</span>::<span class="ident">IncomingOnlyData</span> { <span class="ident">ext_id</span>, <span class="ident">data</span> }
+                    }
+                    <span class="prelude-val">None</span> <span class="op">=&gt;</span> <span class="ident">IncomingState</span>::<span class="ident">IncomingOnlyTombstone</span>,
+                }
+            }
+            (<span class="prelude-val">Some</span>(<span class="ident">ext_id</span>), <span class="prelude-val">None</span>) <span class="op">=&gt;</span> <span class="ident">IncomingState</span>::<span class="ident">HasLocal</span> {
+                <span class="ident">ext_id</span>,
                 <span class="ident">incoming</span>,
                 <span class="ident">local</span>: <span class="ident">json_map_from_row</span>(<span class="ident">row</span>, <span class="string">&quot;l_data&quot;</span>)<span class="question-mark">?</span>,
             },
-            (<span class="bool-val">false</span>, <span class="bool-val">true</span>) <span class="op">=&gt;</span> <span class="ident">IncomingState</span>::<span class="ident">NotLocal</span> {
+            (<span class="prelude-val">None</span>, <span class="prelude-val">Some</span>(<span class="ident">ext_id</span>)) <span class="op">=&gt;</span> <span class="ident">IncomingState</span>::<span class="ident">NotLocal</span> {
+                <span class="ident">ext_id</span>,
                 <span class="ident">incoming</span>,
                 <span class="ident">mirror</span>: <span class="ident">json_map_from_row</span>(<span class="ident">row</span>, <span class="string">&quot;m_data&quot;</span>)<span class="question-mark">?</span>,
             },
-            (<span class="bool-val">true</span>, <span class="bool-val">true</span>) <span class="op">=&gt;</span> <span class="ident">IncomingState</span>::<span class="ident">Everywhere</span> {
+            (<span class="prelude-val">Some</span>(<span class="ident">ext_id</span>), <span class="prelude-val">Some</span>(<span class="kw">_</span>)) <span class="op">=&gt;</span> <span class="ident">IncomingState</span>::<span class="ident">Everywhere</span> {
+                <span class="ident">ext_id</span>,
                 <span class="ident">incoming</span>,
                 <span class="ident">mirror</span>: <span class="ident">json_map_from_row</span>(<span class="ident">row</span>, <span class="string">&quot;m_data&quot;</span>)<span class="question-mark">?</span>,
                 <span class="ident">local</span>: <span class="ident">json_map_from_row</span>(<span class="ident">row</span>, <span class="string">&quot;l_data&quot;</span>)<span class="question-mark">?</span>,
             },
         };
-        <span class="prelude-val">Ok</span>((<span class="ident">IncomingItem</span> { <span class="ident">guid</span>, <span class="ident">ext_id</span> }, <span class="ident">state</span>))
+        <span class="prelude-val">Ok</span>((<span class="ident">guid</span>, <span class="ident">state</span>))
     }
 
     <span class="prelude-val">Ok</span>(<span class="ident">conn</span>.<span class="ident">conn</span>().<span class="ident">query_rows_and_then_named</span>(<span class="ident">sql</span>, <span class="kw-2">&amp;</span>[], <span class="ident">from_row</span>)<span class="question-mark">?</span>)
@@ -1000,25 +1096,33 @@
 <span class="attribute">#[<span class="ident">derive</span>(<span class="ident">Debug</span>, <span class="ident">PartialEq</span>)]</span>
 <span class="kw">pub</span> <span class="kw">enum</span> <span class="ident">IncomingAction</span> {
     <span class="doccomment">/// We should locally delete the data for this record</span>
-    <span class="ident">DeleteLocally</span> { <span class="ident">changes</span>: <span class="ident">StorageChanges</span> },
+    <span class="ident">DeleteLocally</span> {
+        <span class="ident">ext_id</span>: <span class="ident">String</span>,
+        <span class="ident">changes</span>: <span class="ident">StorageChanges</span>,
+    },
     <span class="doccomment">/// We will take the remote.</span>
     <span class="ident">TakeRemote</span> {
+        <span class="ident">ext_id</span>: <span class="ident">String</span>,
         <span class="ident">data</span>: <span class="ident">JsonMap</span>,
         <span class="ident">changes</span>: <span class="ident">StorageChanges</span>,
     },
     <span class="doccomment">/// We merged this data - this is what we came up with.</span>
     <span class="ident">Merge</span> {
+        <span class="ident">ext_id</span>: <span class="ident">String</span>,
         <span class="ident">data</span>: <span class="ident">JsonMap</span>,
         <span class="ident">changes</span>: <span class="ident">StorageChanges</span>,
     },
     <span class="doccomment">/// Entry exists locally and it&#39;s the same as the incoming record.</span>
-    <span class="ident">Same</span>,
+    <span class="ident">Same</span> { <span class="ident">ext_id</span>: <span class="ident">String</span> },
+    <span class="doccomment">/// Incoming tombstone for an item we&#39;ve never seen.</span>
+    <span class="ident">Nothing</span>,
 }
 
 <span class="doccomment">/// Takes the state of an item and returns the action we should take for it.</span>
 <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">plan_incoming</span>(<span class="ident">s</span>: <span class="ident">IncomingState</span>) <span class="op">-&gt;</span> <span class="ident">IncomingAction</span> {
     <span class="kw">match</span> <span class="ident">s</span> {
         <span class="ident">IncomingState</span>::<span class="ident">Everywhere</span> {
+            <span class="ident">ext_id</span>,
             <span class="ident">incoming</span>,
             <span class="ident">local</span>,
             <span class="ident">mirror</span>,
@@ -1031,7 +1135,7 @@
                     <span class="ident">DataState</span>::<span class="ident">Exists</span>(<span class="ident">mirror_data</span>),
                 ) <span class="op">=&gt;</span> {
                     <span class="comment">// all records have data - 3-way merge.</span>
-                    <span class="ident">merge</span>(<span class="ident">incoming_data</span>, <span class="ident">local_data</span>, <span class="prelude-val">Some</span>(<span class="ident">mirror_data</span>))
+                    <span class="ident">merge</span>(<span class="ident">ext_id</span>, <span class="ident">incoming_data</span>, <span class="ident">local_data</span>, <span class="prelude-val">Some</span>(<span class="ident">mirror_data</span>))
                 }
                 (
                     <span class="ident">DataState</span>::<span class="ident">Exists</span>(<span class="ident">incoming_data</span>),
@@ -1039,11 +1143,12 @@
                     <span class="ident">DataState</span>::<span class="ident">Deleted</span>,
                 ) <span class="op">=&gt;</span> {
                     <span class="comment">// No parent, so first time seeing this remotely - 2-way merge</span>
-                    <span class="ident">merge</span>(<span class="ident">incoming_data</span>, <span class="ident">local_data</span>, <span class="prelude-val">None</span>)
+                    <span class="ident">merge</span>(<span class="ident">ext_id</span>, <span class="ident">incoming_data</span>, <span class="ident">local_data</span>, <span class="prelude-val">None</span>)
                 }
                 (<span class="ident">DataState</span>::<span class="ident">Exists</span>(<span class="ident">incoming_data</span>), <span class="ident">DataState</span>::<span class="ident">Deleted</span>, <span class="kw">_</span>) <span class="op">=&gt;</span> {
                     <span class="comment">// Incoming data, removed locally. Server wins.</span>
                     <span class="ident">IncomingAction</span>::<span class="ident">TakeRemote</span> {
+                        <span class="ident">ext_id</span>,
                         <span class="ident">changes</span>: <span class="ident">changes_for_new_incoming</span>(<span class="kw-2">&amp;</span><span class="ident">incoming_data</span>),
                         <span class="ident">data</span>: <span class="ident">incoming_data</span>,
                     }
@@ -1056,9 +1161,10 @@
                     <span class="kw">if</span> <span class="ident">result</span>.<span class="ident">is_empty</span>() {
                         <span class="comment">// If there were no more keys left, we can</span>
                         <span class="comment">// delete our version too.</span>
-                        <span class="ident">IncomingAction</span>::<span class="ident">DeleteLocally</span> { <span class="ident">changes</span> }
+                        <span class="ident">IncomingAction</span>::<span class="ident">DeleteLocally</span> { <span class="ident">ext_id</span>, <span class="ident">changes</span> }
                     } <span class="kw">else</span> {
                         <span class="ident">IncomingAction</span>::<span class="ident">Merge</span> {
+                            <span class="ident">ext_id</span>,
                             <span class="ident">data</span>: <span class="ident">result</span>,
                             <span class="ident">changes</span>,
                         }
@@ -1072,6 +1178,7 @@
                     <span class="comment">// knew was present. Unfortunately, we don&#39;t know</span>
                     <span class="comment">// any keys that were present, so we delete no keys.</span>
                     <span class="ident">IncomingAction</span>::<span class="ident">Merge</span> {
+                        <span class="ident">ext_id</span>,
                         <span class="ident">data</span>: <span class="ident">local_data</span>,
                         <span class="ident">changes</span>: <span class="ident">StorageChanges</span>::<span class="ident">new</span>(),
                     }
@@ -1079,11 +1186,15 @@
                 (<span class="ident">DataState</span>::<span class="ident">Deleted</span>, <span class="ident">DataState</span>::<span class="ident">Deleted</span>, <span class="kw">_</span>) <span class="op">=&gt;</span> {
                     <span class="comment">// We agree with the remote (regardless of what we</span>
                     <span class="comment">// have mirrored).</span>
-                    <span class="ident">IncomingAction</span>::<span class="ident">Same</span>
+                    <span class="ident">IncomingAction</span>::<span class="ident">Same</span> { <span class="ident">ext_id</span> }
                 }
             }
         }
-        <span class="ident">IncomingState</span>::<span class="ident">HasLocal</span> { <span class="ident">incoming</span>, <span class="ident">local</span> } <span class="op">=&gt;</span> {
+        <span class="ident">IncomingState</span>::<span class="ident">HasLocal</span> {
+            <span class="ident">ext_id</span>,
+            <span class="ident">incoming</span>,
+            <span class="ident">local</span>,
+        } <span class="op">=&gt;</span> {
             <span class="comment">// So we have a local record and an incoming/staging record, but *not* a</span>
             <span class="comment">// mirror record. This means some other device has synced this for</span>
             <span class="comment">// the first time and we are yet to do the same.</span>
@@ -1092,7 +1203,7 @@
                     <span class="comment">// This means the extension exists locally and remotely</span>
                     <span class="comment">// but this is the first time we&#39;ve synced it. That&#39;s no problem, it&#39;s</span>
                     <span class="comment">// just a 2-way merge...</span>
-                    <span class="ident">merge</span>(<span class="ident">incoming_data</span>, <span class="ident">local_data</span>, <span class="prelude-val">None</span>)
+                    <span class="ident">merge</span>(<span class="ident">ext_id</span>, <span class="ident">incoming_data</span>, <span class="ident">local_data</span>, <span class="prelude-val">None</span>)
                 }
                 (<span class="ident">DataState</span>::<span class="ident">Deleted</span>, <span class="ident">DataState</span>::<span class="ident">Exists</span>(<span class="ident">local_data</span>)) <span class="op">=&gt;</span> {
                     <span class="comment">// We&#39;ve data locally, but there&#39;s an incoming deletion.</span>
@@ -1100,6 +1211,7 @@
                     <span class="comment">// present on the server, but we don&#39;t know what</span>
                     <span class="comment">// was on the server, so we don&#39;t remove anything.</span>
                     <span class="ident">IncomingAction</span>::<span class="ident">Merge</span> {
+                        <span class="ident">ext_id</span>,
                         <span class="ident">data</span>: <span class="ident">local_data</span>,
                         <span class="ident">changes</span>: <span class="ident">StorageChanges</span>::<span class="ident">new</span>(),
                     }
@@ -1107,40 +1219,45 @@
                 (<span class="ident">DataState</span>::<span class="ident">Exists</span>(<span class="ident">incoming_data</span>), <span class="ident">DataState</span>::<span class="ident">Deleted</span>) <span class="op">=&gt;</span> {
                     <span class="comment">// No data locally, but some is incoming - take it.</span>
                     <span class="ident">IncomingAction</span>::<span class="ident">TakeRemote</span> {
+                        <span class="ident">ext_id</span>,
                         <span class="ident">changes</span>: <span class="ident">changes_for_new_incoming</span>(<span class="kw-2">&amp;</span><span class="ident">incoming_data</span>),
                         <span class="ident">data</span>: <span class="ident">incoming_data</span>,
                     }
                 }
                 (<span class="ident">DataState</span>::<span class="ident">Deleted</span>, <span class="ident">DataState</span>::<span class="ident">Deleted</span>) <span class="op">=&gt;</span> {
                     <span class="comment">// Nothing anywhere - odd, but OK.</span>
-                    <span class="ident">IncomingAction</span>::<span class="ident">Same</span>
+                    <span class="ident">IncomingAction</span>::<span class="ident">Same</span> { <span class="ident">ext_id</span> }
                 }
             }
         }
-        <span class="ident">IncomingState</span>::<span class="ident">NotLocal</span> { <span class="ident">incoming</span>, .. } <span class="op">=&gt;</span> {
+        <span class="ident">IncomingState</span>::<span class="ident">NotLocal</span> {
+            <span class="ident">ext_id</span>, <span class="ident">incoming</span>, ..
+        } <span class="op">=&gt;</span> {
             <span class="comment">// No local data but there&#39;s mirror and an incoming record.</span>
             <span class="comment">// This means a local deletion is being replaced by, or just re-doing</span>
             <span class="comment">// the incoming record.</span>
             <span class="kw">match</span> <span class="ident">incoming</span> {
                 <span class="ident">DataState</span>::<span class="ident">Exists</span>(<span class="ident">data</span>) <span class="op">=&gt;</span> <span class="ident">IncomingAction</span>::<span class="ident">TakeRemote</span> {
+                    <span class="ident">ext_id</span>,
                     <span class="ident">changes</span>: <span class="ident">changes_for_new_incoming</span>(<span class="kw-2">&amp;</span><span class="ident">data</span>),
                     <span class="ident">data</span>,
                 },
-                <span class="ident">DataState</span>::<span class="ident">Deleted</span> <span class="op">=&gt;</span> <span class="ident">IncomingAction</span>::<span class="ident">Same</span>,
+                <span class="ident">DataState</span>::<span class="ident">Deleted</span> <span class="op">=&gt;</span> <span class="ident">IncomingAction</span>::<span class="ident">Same</span> { <span class="ident">ext_id</span> },
             }
         }
-        <span class="ident">IncomingState</span>::<span class="ident">IncomingOnly</span> { <span class="ident">incoming</span> } <span class="op">=&gt;</span> {
-            <span class="comment">// Only the staging record exists - this means it&#39;s the first time</span>
-            <span class="comment">// we&#39;ve ever seen it. No conflict possible, just take the remote.</span>
-            <span class="kw">match</span> <span class="ident">incoming</span> {
-                <span class="ident">DataState</span>::<span class="ident">Exists</span>(<span class="ident">data</span>) <span class="op">=&gt;</span> <span class="ident">IncomingAction</span>::<span class="ident">TakeRemote</span> {
-                    <span class="ident">changes</span>: <span class="ident">changes_for_new_incoming</span>(<span class="kw-2">&amp;</span><span class="ident">data</span>),
-                    <span class="ident">data</span>,
-                },
-                <span class="ident">DataState</span>::<span class="ident">Deleted</span> <span class="op">=&gt;</span> <span class="ident">IncomingAction</span>::<span class="ident">DeleteLocally</span> {
-                    <span class="ident">changes</span>: <span class="ident">StorageChanges</span>::<span class="ident">new</span>(),
-                },
+        <span class="ident">IncomingState</span>::<span class="ident">IncomingOnlyData</span> { <span class="ident">ext_id</span>, <span class="ident">data</span> } <span class="op">=&gt;</span> {
+            <span class="comment">// Only the staging record exists and it&#39;s not a tombstone.</span>
+            <span class="comment">// This means it&#39;s the first time we&#39;ve ever seen it. No</span>
+            <span class="comment">// conflict possible, just take the remote.</span>
+            <span class="ident">IncomingAction</span>::<span class="ident">TakeRemote</span> {
+                <span class="ident">ext_id</span>,
+                <span class="ident">changes</span>: <span class="ident">changes_for_new_incoming</span>(<span class="kw-2">&amp;</span><span class="ident">data</span>),
+                <span class="ident">data</span>,
             }
+        }
+        <span class="ident">IncomingState</span>::<span class="ident">IncomingOnlyTombstone</span> <span class="op">=&gt;</span> {
+            <span class="comment">// Only the staging record exists and it is a tombstone - nothing to do.</span>
+            <span class="ident">IncomingAction</span>::<span class="ident">Nothing</span>
         }
     }
 }
@@ -1160,57 +1277,67 @@
 <span class="comment">// Apply the actions necessary to fully process the incoming items.</span>
 <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">apply_actions</span>(
     <span class="ident">tx</span>: <span class="kw-2">&amp;</span><span class="ident">Transaction</span><span class="op">&lt;</span><span class="lifetime">&#39;_</span><span class="op">&gt;</span>,
-    <span class="ident">actions</span>: <span class="ident">Vec</span><span class="op">&lt;</span>(<span class="ident">IncomingItem</span>, <span class="ident">IncomingAction</span>)<span class="op">&gt;</span>,
+    <span class="ident">actions</span>: <span class="ident">Vec</span><span class="op">&lt;</span>(<span class="ident">SyncGuid</span>, <span class="ident">IncomingAction</span>)<span class="op">&gt;</span>,
     <span class="ident">signal</span>: <span class="kw-2">&amp;</span><span class="kw">dyn</span> <span class="ident">Interruptee</span>,
 ) <span class="op">-&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span>()<span class="op">&gt;</span> {
     <span class="kw">for</span> (<span class="ident">item</span>, <span class="ident">action</span>) <span class="kw">in</span> <span class="ident">actions</span> {
         <span class="ident">signal</span>.<span class="ident">err_if_interrupted</span>()<span class="question-mark">?</span>;
 
-        <span class="ident">log</span>::<span class="macro">trace</span><span class="macro">!</span>(<span class="string">&quot;action for &#39;{}&#39;: {:?}&quot;</span>, <span class="ident">item</span>.<span class="ident">ext_id</span>, <span class="ident">action</span>);
+        <span class="ident">log</span>::<span class="macro">trace</span><span class="macro">!</span>(<span class="string">&quot;action for &#39;{:?}&#39;: {:?}&quot;</span>, <span class="ident">item</span>, <span class="ident">action</span>);
         <span class="kw">match</span> <span class="ident">action</span> {
-            <span class="ident">IncomingAction</span>::<span class="ident">DeleteLocally</span> { <span class="ident">changes</span> } <span class="op">=&gt;</span> {
+            <span class="ident">IncomingAction</span>::<span class="ident">DeleteLocally</span> { <span class="ident">ext_id</span>, <span class="ident">changes</span> } <span class="op">=&gt;</span> {
                 <span class="comment">// Can just nuke it entirely.</span>
                 <span class="ident">tx</span>.<span class="ident">execute_named_cached</span>(
                     <span class="string">&quot;DELETE FROM storage_sync_data WHERE ext_id = :ext_id&quot;</span>,
-                    <span class="kw-2">&amp;</span>[(<span class="string">&quot;:ext_id&quot;</span>, <span class="kw-2">&amp;</span><span class="ident">item</span>.<span class="ident">ext_id</span>)],
+                    <span class="kw-2">&amp;</span>[(<span class="string">&quot;:ext_id&quot;</span>, <span class="kw-2">&amp;</span><span class="ident">ext_id</span>)],
                 )<span class="question-mark">?</span>;
-                <span class="ident">insert_changes</span>(<span class="ident">tx</span>, <span class="kw-2">&amp;</span><span class="ident">item</span>.<span class="ident">ext_id</span>, <span class="kw-2">&amp;</span><span class="ident">changes</span>)<span class="question-mark">?</span>;
+                <span class="ident">insert_changes</span>(<span class="ident">tx</span>, <span class="kw-2">&amp;</span><span class="ident">ext_id</span>, <span class="kw-2">&amp;</span><span class="ident">changes</span>)<span class="question-mark">?</span>;
             }
             <span class="comment">// We want to update the local record with &#39;data&#39; and after this update the item no longer is considered dirty.</span>
-            <span class="ident">IncomingAction</span>::<span class="ident">TakeRemote</span> { <span class="ident">data</span>, <span class="ident">changes</span> } <span class="op">=&gt;</span> {
+            <span class="ident">IncomingAction</span>::<span class="ident">TakeRemote</span> {
+                <span class="ident">ext_id</span>,
+                <span class="ident">data</span>,
+                <span class="ident">changes</span>,
+            } <span class="op">=&gt;</span> {
                 <span class="ident">tx</span>.<span class="ident">execute_named_cached</span>(
                     <span class="string">&quot;INSERT OR REPLACE INTO storage_sync_data(ext_id, data, sync_change_counter)
                         VALUES (:ext_id, :data, 0)&quot;</span>,
                     <span class="kw-2">&amp;</span>[
-                        (<span class="string">&quot;:ext_id&quot;</span>, <span class="kw-2">&amp;</span><span class="ident">item</span>.<span class="ident">ext_id</span>),
+                        (<span class="string">&quot;:ext_id&quot;</span>, <span class="kw-2">&amp;</span><span class="ident">ext_id</span>),
                         (<span class="string">&quot;:data&quot;</span>, <span class="kw-2">&amp;</span><span class="ident">serde_json</span>::<span class="ident">Value</span>::<span class="ident">Object</span>(<span class="ident">data</span>)),
                     ],
                 )<span class="question-mark">?</span>;
-                <span class="ident">insert_changes</span>(<span class="ident">tx</span>, <span class="kw-2">&amp;</span><span class="ident">item</span>.<span class="ident">ext_id</span>, <span class="kw-2">&amp;</span><span class="ident">changes</span>)<span class="question-mark">?</span>;
+                <span class="ident">insert_changes</span>(<span class="ident">tx</span>, <span class="kw-2">&amp;</span><span class="ident">ext_id</span>, <span class="kw-2">&amp;</span><span class="ident">changes</span>)<span class="question-mark">?</span>;
             }
 
             <span class="comment">// We merged this data, so need to update locally but still consider</span>
             <span class="comment">// it dirty because the merged data must be uploaded.</span>
-            <span class="ident">IncomingAction</span>::<span class="ident">Merge</span> { <span class="ident">data</span>, <span class="ident">changes</span> } <span class="op">=&gt;</span> {
+            <span class="ident">IncomingAction</span>::<span class="ident">Merge</span> {
+                <span class="ident">ext_id</span>,
+                <span class="ident">data</span>,
+                <span class="ident">changes</span>,
+            } <span class="op">=&gt;</span> {
                 <span class="ident">tx</span>.<span class="ident">execute_named_cached</span>(
                     <span class="string">&quot;UPDATE storage_sync_data SET data = :data, sync_change_counter = sync_change_counter + 1 WHERE ext_id = :ext_id&quot;</span>,
                     <span class="kw-2">&amp;</span>[
-                        (<span class="string">&quot;:ext_id&quot;</span>, <span class="kw-2">&amp;</span><span class="ident">item</span>.<span class="ident">ext_id</span>),
+                        (<span class="string">&quot;:ext_id&quot;</span>, <span class="kw-2">&amp;</span><span class="ident">ext_id</span>),
                         (<span class="string">&quot;:data&quot;</span>, <span class="kw-2">&amp;</span><span class="ident">serde_json</span>::<span class="ident">Value</span>::<span class="ident">Object</span>(<span class="ident">data</span>)),
                     ]
                 )<span class="question-mark">?</span>;
-                <span class="ident">insert_changes</span>(<span class="ident">tx</span>, <span class="kw-2">&amp;</span><span class="ident">item</span>.<span class="ident">ext_id</span>, <span class="kw-2">&amp;</span><span class="ident">changes</span>)<span class="question-mark">?</span>;
+                <span class="ident">insert_changes</span>(<span class="ident">tx</span>, <span class="kw-2">&amp;</span><span class="ident">ext_id</span>, <span class="kw-2">&amp;</span><span class="ident">changes</span>)<span class="question-mark">?</span>;
             }
 
             <span class="comment">// Both local and remote ended up the same - only need to nuke the</span>
             <span class="comment">// change counter.</span>
-            <span class="ident">IncomingAction</span>::<span class="ident">Same</span> <span class="op">=&gt;</span> {
+            <span class="ident">IncomingAction</span>::<span class="ident">Same</span> { <span class="ident">ext_id</span> } <span class="op">=&gt;</span> {
                 <span class="ident">tx</span>.<span class="ident">execute_named_cached</span>(
                     <span class="string">&quot;UPDATE storage_sync_data SET sync_change_counter = 0 WHERE ext_id = :ext_id&quot;</span>,
-                    <span class="kw-2">&amp;</span>[(<span class="string">&quot;:ext_id&quot;</span>, <span class="kw-2">&amp;</span><span class="ident">item</span>.<span class="ident">ext_id</span>)],
+                    <span class="kw-2">&amp;</span>[(<span class="string">&quot;:ext_id&quot;</span>, <span class="kw-2">&amp;</span><span class="ident">ext_id</span>)],
                 )<span class="question-mark">?</span>;
                 <span class="comment">// no changes to write</span>
             }
+            <span class="comment">// Literally nothing to do!</span>
+            <span class="ident">IncomingAction</span>::<span class="ident">Nothing</span> <span class="op">=&gt;</span> {}
         }
     }
     <span class="prelude-val">Ok</span>(())
@@ -1328,17 +1455,12 @@
 
         <span class="kw">let</span> <span class="ident">incoming</span> <span class="op">=</span> <span class="ident">get_incoming</span>(<span class="kw-2">&amp;</span><span class="ident">tx</span>)<span class="question-mark">?</span>;
         <span class="macro">assert_eq</span><span class="macro">!</span>(<span class="ident">incoming</span>.<span class="ident">len</span>(), <span class="number">1</span>);
-        <span class="macro">assert_eq</span><span class="macro">!</span>(
-            <span class="ident">incoming</span>[<span class="number">0</span>].<span class="number">0</span>,
-            <span class="ident">IncomingItem</span> {
-                <span class="ident">guid</span>: <span class="ident">SyncGuid</span>::<span class="ident">new</span>(<span class="string">&quot;guid&quot;</span>),
-                <span class="ident">ext_id</span>: <span class="string">&quot;ext_id&quot;</span>.<span class="ident">into</span>()
-            }
-        );
+        <span class="macro">assert_eq</span><span class="macro">!</span>(<span class="ident">incoming</span>[<span class="number">0</span>].<span class="number">0</span>, <span class="ident">SyncGuid</span>::<span class="ident">new</span>(<span class="string">&quot;guid&quot;</span>),);
         <span class="macro">assert_eq</span><span class="macro">!</span>(
             <span class="ident">incoming</span>[<span class="number">0</span>].<span class="number">1</span>,
-            <span class="ident">IncomingState</span>::<span class="ident">IncomingOnly</span> {
-                <span class="ident">incoming</span>: <span class="ident">DataState</span>::<span class="ident">Exists</span>(<span class="macro">map</span><span class="macro">!</span>({<span class="string">&quot;foo&quot;</span>: <span class="string">&quot;bar&quot;</span>})),
+            <span class="ident">IncomingState</span>::<span class="ident">IncomingOnlyData</span> {
+                <span class="ident">ext_id</span>: <span class="string">&quot;ext_id&quot;</span>.<span class="ident">to_string</span>(),
+                <span class="ident">data</span>: <span class="macro">map</span><span class="macro">!</span>({<span class="string">&quot;foo&quot;</span>: <span class="string">&quot;bar&quot;</span>}),
             }
         );
 
@@ -1355,6 +1477,7 @@
         <span class="macro">assert_eq</span><span class="macro">!</span>(
             <span class="ident">incoming</span>[<span class="number">0</span>].<span class="number">1</span>,
             <span class="ident">IncomingState</span>::<span class="ident">NotLocal</span> {
+                <span class="ident">ext_id</span>: <span class="string">&quot;ext_id&quot;</span>.<span class="ident">to_string</span>(),
                 <span class="ident">incoming</span>: <span class="ident">DataState</span>::<span class="ident">Exists</span>(<span class="macro">map</span><span class="macro">!</span>({<span class="string">&quot;foo&quot;</span>: <span class="string">&quot;bar&quot;</span>})),
                 <span class="ident">mirror</span>: <span class="ident">DataState</span>::<span class="ident">Exists</span>(<span class="macro">map</span><span class="macro">!</span>({<span class="string">&quot;foo&quot;</span>: <span class="string">&quot;new&quot;</span>})),
             }
@@ -1367,6 +1490,7 @@
         <span class="macro">assert_eq</span><span class="macro">!</span>(
             <span class="ident">incoming</span>[<span class="number">0</span>].<span class="number">1</span>,
             <span class="ident">IncomingState</span>::<span class="ident">Everywhere</span> {
+                <span class="ident">ext_id</span>: <span class="string">&quot;ext_id&quot;</span>.<span class="ident">to_string</span>(),
                 <span class="ident">incoming</span>: <span class="ident">DataState</span>::<span class="ident">Exists</span>(<span class="macro">map</span><span class="macro">!</span>({<span class="string">&quot;foo&quot;</span>: <span class="string">&quot;bar&quot;</span>})),
                 <span class="ident">local</span>: <span class="ident">DataState</span>::<span class="ident">Exists</span>(<span class="macro">map</span><span class="macro">!</span>({<span class="string">&quot;foo&quot;</span>: <span class="string">&quot;local&quot;</span>})),
                 <span class="ident">mirror</span>: <span class="ident">DataState</span>::<span class="ident">Exists</span>(<span class="macro">map</span><span class="macro">!</span>({<span class="string">&quot;foo&quot;</span>: <span class="string">&quot;new&quot;</span>})),
@@ -1381,41 +1505,31 @@
         <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">db</span> <span class="op">=</span> <span class="ident">new_syncable_mem_db</span>();
         <span class="kw">let</span> <span class="ident">tx</span> <span class="op">=</span> <span class="ident">db</span>.<span class="ident">transaction</span>()<span class="question-mark">?</span>;
 
-        <span class="comment">// Start with an item just in staging.</span>
+        <span class="comment">// Start with a tombstone just in staging.</span>
         <span class="ident">tx</span>.<span class="ident">execute</span>(
             <span class="string">r#&quot;
             INSERT INTO temp.storage_sync_staging (guid, ext_id, data)
-            VALUES (&#39;guid&#39;, &#39;ext_id&#39;, NULL)
+            VALUES (&#39;guid&#39;, NULL, NULL)
         &quot;#</span>,
             <span class="ident">NO_PARAMS</span>,
         )<span class="question-mark">?</span>;
 
         <span class="kw">let</span> <span class="ident">incoming</span> <span class="op">=</span> <span class="ident">get_incoming</span>(<span class="kw-2">&amp;</span><span class="ident">tx</span>)<span class="question-mark">?</span>;
         <span class="macro">assert_eq</span><span class="macro">!</span>(<span class="ident">incoming</span>.<span class="ident">len</span>(), <span class="number">1</span>);
-        <span class="macro">assert_eq</span><span class="macro">!</span>(
-            <span class="ident">incoming</span>[<span class="number">0</span>].<span class="number">1</span>,
-            <span class="ident">IncomingState</span>::<span class="ident">IncomingOnly</span> {
-                <span class="ident">incoming</span>: <span class="ident">DataState</span>::<span class="ident">Deleted</span>
-            }
-        );
+        <span class="macro">assert_eq</span><span class="macro">!</span>(<span class="ident">incoming</span>[<span class="number">0</span>].<span class="number">1</span>, <span class="ident">IncomingState</span>::<span class="ident">IncomingOnlyTombstone</span>,);
 
-        <span class="comment">// Add the same item to the mirror.</span>
+        <span class="comment">// Add the same item to the mirror (can&#39;t store an ext_id for a</span>
+        <span class="comment">// tombstone in the mirror as incoming tombstones never have it)</span>
         <span class="ident">tx</span>.<span class="ident">execute</span>(
             <span class="string">r#&quot;
             INSERT INTO storage_sync_mirror (guid, ext_id, data)
-            VALUES (&#39;guid&#39;, &#39;ext_id&#39;, NULL)
+            VALUES (&#39;guid&#39;, NULL, NULL)
         &quot;#</span>,
             <span class="ident">NO_PARAMS</span>,
         )<span class="question-mark">?</span>;
         <span class="kw">let</span> <span class="ident">incoming</span> <span class="op">=</span> <span class="ident">get_incoming</span>(<span class="kw-2">&amp;</span><span class="ident">tx</span>)<span class="question-mark">?</span>;
         <span class="macro">assert_eq</span><span class="macro">!</span>(<span class="ident">incoming</span>.<span class="ident">len</span>(), <span class="number">1</span>);
-        <span class="macro">assert_eq</span><span class="macro">!</span>(
-            <span class="ident">incoming</span>[<span class="number">0</span>].<span class="number">1</span>,
-            <span class="ident">IncomingState</span>::<span class="ident">NotLocal</span> {
-                <span class="ident">incoming</span>: <span class="ident">DataState</span>::<span class="ident">Deleted</span>,
-                <span class="ident">mirror</span>: <span class="ident">DataState</span>::<span class="ident">Deleted</span>,
-            }
-        );
+        <span class="macro">assert_eq</span><span class="macro">!</span>(<span class="ident">incoming</span>[<span class="number">0</span>].<span class="number">1</span>, <span class="ident">IncomingState</span>::<span class="ident">IncomingOnlyTombstone</span>);
 
         <span class="ident">tx</span>.<span class="ident">execute</span>(
             <span class="string">r#&quot;
@@ -1428,11 +1542,10 @@
         <span class="macro">assert_eq</span><span class="macro">!</span>(<span class="ident">incoming</span>.<span class="ident">len</span>(), <span class="number">1</span>);
         <span class="macro">assert_eq</span><span class="macro">!</span>(
             <span class="ident">incoming</span>[<span class="number">0</span>].<span class="number">1</span>,
-            <span class="ident">IncomingState</span>::<span class="ident">Everywhere</span> {
-                <span class="ident">incoming</span>: <span class="ident">DataState</span>::<span class="ident">Deleted</span>,
-                <span class="ident">local</span>: <span class="ident">DataState</span>::<span class="ident">Deleted</span>,
-                <span class="ident">mirror</span>: <span class="ident">DataState</span>::<span class="ident">Deleted</span>,
-            }
+            <span class="comment">// IncomingOnly* seems a little odd, but it is because we can&#39;t</span>
+            <span class="comment">// tie the tombstones together due to the lack of any ext-id/guid</span>
+            <span class="comment">// mapping in this case.</span>
+            <span class="ident">IncomingState</span>::<span class="ident">IncomingOnlyTombstone</span>
         );
         <span class="prelude-val">Ok</span>(())
     }
@@ -1487,11 +1600,8 @@
     }
 
     <span class="kw">fn</span> <span class="ident">do_apply_action</span>(<span class="ident">tx</span>: <span class="kw-2">&amp;</span><span class="ident">Transaction</span><span class="op">&lt;</span><span class="lifetime">&#39;_</span><span class="op">&gt;</span>, <span class="ident">action</span>: <span class="ident">IncomingAction</span>) {
-        <span class="kw">let</span> <span class="ident">item</span> <span class="op">=</span> <span class="ident">IncomingItem</span> {
-            <span class="ident">guid</span>: <span class="ident">SyncGuid</span>::<span class="ident">new</span>(<span class="string">&quot;guid&quot;</span>),
-            <span class="ident">ext_id</span>: <span class="string">&quot;ext_id&quot;</span>.<span class="ident">into</span>(),
-        };
-        <span class="ident">apply_actions</span>(<span class="ident">tx</span>, <span class="macro">vec</span><span class="macro">!</span>[(<span class="ident">item</span>, <span class="ident">action</span>)], <span class="kw-2">&amp;</span><span class="ident">NeverInterrupts</span>).<span class="ident">expect</span>(<span class="string">&quot;should apply&quot;</span>);
+        <span class="kw">let</span> <span class="ident">guid</span> <span class="op">=</span> <span class="ident">SyncGuid</span>::<span class="ident">new</span>(<span class="string">&quot;guid&quot;</span>);
+        <span class="ident">apply_actions</span>(<span class="ident">tx</span>, <span class="macro">vec</span><span class="macro">!</span>[(<span class="ident">guid</span>, <span class="ident">action</span>)], <span class="kw-2">&amp;</span><span class="ident">NeverInterrupts</span>).<span class="ident">expect</span>(<span class="string">&quot;should apply&quot;</span>);
     }
 
     <span class="attribute">#[<span class="ident">test</span>]</span>
@@ -1509,6 +1619,7 @@
         <span class="ident">do_apply_action</span>(
             <span class="kw-2">&amp;</span><span class="ident">tx</span>,
             <span class="ident">IncomingAction</span>::<span class="ident">DeleteLocally</span> {
+                <span class="ident">ext_id</span>: <span class="string">&quot;ext_id&quot;</span>.<span class="ident">to_string</span>(),
                 <span class="ident">changes</span>: <span class="ident">changes</span>.<span class="ident">clone</span>(),
             },
         );
@@ -1537,6 +1648,7 @@
         <span class="ident">do_apply_action</span>(
             <span class="kw-2">&amp;</span><span class="ident">tx</span>,
             <span class="ident">IncomingAction</span>::<span class="ident">TakeRemote</span> {
+                <span class="ident">ext_id</span>: <span class="string">&quot;ext_id&quot;</span>.<span class="ident">to_string</span>(),
                 <span class="ident">data</span>: <span class="macro">map</span><span class="macro">!</span>({<span class="string">&quot;foo&quot;</span>: <span class="string">&quot;remote&quot;</span>}),
                 <span class="ident">changes</span>: <span class="ident">changes</span>.<span class="ident">clone</span>(),
             },
@@ -1571,6 +1683,7 @@
         <span class="ident">do_apply_action</span>(
             <span class="kw-2">&amp;</span><span class="ident">tx</span>,
             <span class="ident">IncomingAction</span>::<span class="ident">Merge</span> {
+                <span class="ident">ext_id</span>: <span class="string">&quot;ext_id&quot;</span>.<span class="ident">to_string</span>(),
                 <span class="ident">data</span>: <span class="macro">map</span><span class="macro">!</span>({<span class="string">&quot;foo&quot;</span>: <span class="string">&quot;remote&quot;</span>}),
                 <span class="ident">changes</span>: <span class="ident">changes</span>.<span class="ident">clone</span>(),
             },
@@ -1600,7 +1713,12 @@
                 <span class="ident">sync_change_counter</span>: <span class="number">1</span>
             })
         );
-        <span class="ident">do_apply_action</span>(<span class="kw-2">&amp;</span><span class="ident">tx</span>, <span class="ident">IncomingAction</span>::<span class="ident">Same</span>);
+        <span class="ident">do_apply_action</span>(
+            <span class="kw-2">&amp;</span><span class="ident">tx</span>,
+            <span class="ident">IncomingAction</span>::<span class="ident">Same</span> {
+                <span class="ident">ext_id</span>: <span class="string">&quot;ext_id&quot;</span>.<span class="ident">to_string</span>(),
+            },
+        );
         <span class="macro">assert_eq</span><span class="macro">!</span>(
             <span class="ident">get_local_item</span>(<span class="kw-2">&amp;</span><span class="ident">tx</span>),
             <span class="prelude-val">Some</span>(<span class="ident">LocalItem</span> {

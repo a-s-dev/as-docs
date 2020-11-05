@@ -401,6 +401,81 @@
 <span id="400">400</span>
 <span id="401">401</span>
 <span id="402">402</span>
+<span id="403">403</span>
+<span id="404">404</span>
+<span id="405">405</span>
+<span id="406">406</span>
+<span id="407">407</span>
+<span id="408">408</span>
+<span id="409">409</span>
+<span id="410">410</span>
+<span id="411">411</span>
+<span id="412">412</span>
+<span id="413">413</span>
+<span id="414">414</span>
+<span id="415">415</span>
+<span id="416">416</span>
+<span id="417">417</span>
+<span id="418">418</span>
+<span id="419">419</span>
+<span id="420">420</span>
+<span id="421">421</span>
+<span id="422">422</span>
+<span id="423">423</span>
+<span id="424">424</span>
+<span id="425">425</span>
+<span id="426">426</span>
+<span id="427">427</span>
+<span id="428">428</span>
+<span id="429">429</span>
+<span id="430">430</span>
+<span id="431">431</span>
+<span id="432">432</span>
+<span id="433">433</span>
+<span id="434">434</span>
+<span id="435">435</span>
+<span id="436">436</span>
+<span id="437">437</span>
+<span id="438">438</span>
+<span id="439">439</span>
+<span id="440">440</span>
+<span id="441">441</span>
+<span id="442">442</span>
+<span id="443">443</span>
+<span id="444">444</span>
+<span id="445">445</span>
+<span id="446">446</span>
+<span id="447">447</span>
+<span id="448">448</span>
+<span id="449">449</span>
+<span id="450">450</span>
+<span id="451">451</span>
+<span id="452">452</span>
+<span id="453">453</span>
+<span id="454">454</span>
+<span id="455">455</span>
+<span id="456">456</span>
+<span id="457">457</span>
+<span id="458">458</span>
+<span id="459">459</span>
+<span id="460">460</span>
+<span id="461">461</span>
+<span id="462">462</span>
+<span id="463">463</span>
+<span id="464">464</span>
+<span id="465">465</span>
+<span id="466">466</span>
+<span id="467">467</span>
+<span id="468">468</span>
+<span id="469">469</span>
+<span id="470">470</span>
+<span id="471">471</span>
+<span id="472">472</span>
+<span id="473">473</span>
+<span id="474">474</span>
+<span id="475">475</span>
+<span id="476">476</span>
+<span id="477">477</span>
 </pre><div class="example-wrap"><pre class="rust ">
 <span class="comment">/* This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
@@ -416,6 +491,7 @@
 <span class="kw">use</span> <span class="kw">crate</span>::<span class="ident">api</span>::{<span class="ident">StorageChanges</span>, <span class="ident">StorageValueChange</span>};
 <span class="kw">use</span> <span class="kw">crate</span>::<span class="ident">db</span>::<span class="ident">StorageDb</span>;
 <span class="kw">use</span> <span class="kw">crate</span>::<span class="ident">error</span>::<span class="kw-2">*</span>;
+<span class="kw">use</span> <span class="ident">serde</span>::{<span class="ident">Deserialize</span>, <span class="ident">Deserializer</span>};
 <span class="kw">use</span> <span class="ident">serde_derive</span>::<span class="kw-2">*</span>;
 <span class="kw">use</span> <span class="ident">sql_support</span>::<span class="ident">ConnExt</span>;
 <span class="kw">use</span> <span class="ident">sync_guid</span>::<span class="ident">Guid</span> <span class="kw">as</span> <span class="ident">SyncGuid</span>;
@@ -427,10 +503,30 @@
 
 <span class="kw">pub</span> <span class="kw">const</span> <span class="ident">STORAGE_VERSION</span>: <span class="ident">usize</span> <span class="op">=</span> <span class="number">1</span>;
 
-<span class="doccomment">/// For use with `#[serde(skip_serializing_if = )]`</span>
-<span class="attribute">#[<span class="ident">inline</span>]</span>
-<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">is_default</span><span class="op">&lt;</span><span class="ident">T</span>: <span class="ident">PartialEq</span> <span class="op">+</span> <span class="ident">Default</span><span class="op">&gt;</span>(<span class="ident">v</span>: <span class="kw-2">&amp;</span><span class="ident">T</span>) <span class="op">-&gt;</span> <span class="ident">bool</span> {
-    <span class="kw-2">*</span><span class="ident">v</span> <span class="op">==</span> <span class="ident">T</span>::<span class="ident">default</span>()
+<span class="comment">// Note that we never use serde to serialize a tombstone, so it doesn&#39;t matter</span>
+<span class="comment">// how that looks - but we care about how a Record with RecordData::Data looks.</span>
+<span class="comment">// However, deserializing is trickier still - it seems tricky to tell serde</span>
+<span class="comment">// how to unpack a tombstone - if we used `Tombstone { deleted: bool }` and</span>
+<span class="comment">// enforced bool must only be ever true it might be possible, but that&#39;s quite</span>
+<span class="comment">// clumsy for the rest of the code. So we just capture serde&#39;s failure to</span>
+<span class="comment">// unpack it and treat it as a tombstone.</span>
+<span class="attribute">#[<span class="ident">derive</span>(<span class="ident">Debug</span>, <span class="ident">Serialize</span>, <span class="ident">Deserialize</span>, <span class="ident">PartialEq</span>)]</span>
+<span class="attribute">#[<span class="ident">serde</span>(<span class="ident">untagged</span>)]</span>
+<span class="kw">pub</span> <span class="kw">enum</span> <span class="ident">RecordData</span> {
+    <span class="ident">Data</span> {
+        <span class="attribute">#[<span class="ident">serde</span>(<span class="ident">rename</span> <span class="op">=</span> <span class="string">&quot;extId&quot;</span>)]</span>
+        <span class="ident">ext_id</span>: <span class="ident">String</span>,
+        <span class="ident">data</span>: <span class="ident">String</span>,
+    },
+    <span class="attribute">#[<span class="ident">serde</span>(<span class="ident">skip_deserializing</span>)]</span>
+    <span class="ident">Tombstone</span>,
+}
+
+<span class="kw">fn</span> <span class="ident">deserialize_record_data</span><span class="op">&lt;</span><span class="lifetime">&#39;de</span>, <span class="ident">D</span><span class="op">&gt;</span>(<span class="ident">deserializer</span>: <span class="ident">D</span>) <span class="op">-&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">RecordData</span>, <span class="ident">D</span>::<span class="ident">Error</span><span class="op">&gt;</span>
+<span class="kw">where</span>
+    <span class="ident">D</span>: <span class="ident">Deserializer</span><span class="op">&lt;</span><span class="lifetime">&#39;de</span><span class="op">&gt;</span>,
+{
+    <span class="prelude-val">Ok</span>(<span class="ident">RecordData</span>::<span class="ident">deserialize</span>(<span class="ident">deserializer</span>).<span class="ident">unwrap_or</span>(<span class="ident">RecordData</span>::<span class="ident">Tombstone</span>))
 }
 
 <span class="attribute">#[<span class="ident">derive</span>(<span class="ident">Debug</span>, <span class="ident">Serialize</span>, <span class="ident">Deserialize</span>)]</span>
@@ -438,15 +534,19 @@
 <span class="kw">pub</span> <span class="kw">struct</span> <span class="ident">Record</span> {
     <span class="attribute">#[<span class="ident">serde</span>(<span class="ident">rename</span> <span class="op">=</span> <span class="string">&quot;id&quot;</span>)]</span>
     <span class="ident">guid</span>: <span class="ident">SyncGuid</span>,
-    <span class="ident">ext_id</span>: <span class="ident">String</span>,
-    <span class="attribute">#[<span class="ident">serde</span>(<span class="ident">default</span>, <span class="ident">skip_serializing_if</span> <span class="op">=</span> <span class="string">&quot;is_default&quot;</span>)]</span>
-    <span class="ident">data</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">String</span><span class="op">&gt;</span>,
+    <span class="attribute">#[<span class="ident">serde</span>(<span class="ident">flatten</span>, <span class="ident">deserialize_with</span> <span class="op">=</span> <span class="string">&quot;deserialize_record_data&quot;</span>)]</span>
+    <span class="ident">data</span>: <span class="ident">RecordData</span>,
 }
 
 <span class="comment">// Perform a 2-way or 3-way merge, where the incoming value wins on confict.</span>
-<span class="kw">fn</span> <span class="ident">merge</span>(<span class="kw-2">mut</span> <span class="ident">other</span>: <span class="ident">JsonMap</span>, <span class="kw-2">mut</span> <span class="ident">ours</span>: <span class="ident">JsonMap</span>, <span class="ident">parent</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">JsonMap</span><span class="op">&gt;</span>) <span class="op">-&gt;</span> <span class="ident">IncomingAction</span> {
+<span class="kw">fn</span> <span class="ident">merge</span>(
+    <span class="ident">ext_id</span>: <span class="ident">String</span>,
+    <span class="kw-2">mut</span> <span class="ident">other</span>: <span class="ident">JsonMap</span>,
+    <span class="kw-2">mut</span> <span class="ident">ours</span>: <span class="ident">JsonMap</span>,
+    <span class="ident">parent</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">JsonMap</span><span class="op">&gt;</span>,
+) <span class="op">-&gt;</span> <span class="ident">IncomingAction</span> {
     <span class="kw">if</span> <span class="ident">other</span> <span class="op">==</span> <span class="ident">ours</span> {
-        <span class="kw">return</span> <span class="ident">IncomingAction</span>::<span class="ident">Same</span>;
+        <span class="kw">return</span> <span class="ident">IncomingAction</span>::<span class="ident">Same</span> { <span class="ident">ext_id</span> };
     }
     <span class="kw">let</span> <span class="ident">old_incoming</span> <span class="op">=</span> <span class="ident">other</span>.<span class="ident">clone</span>();
     <span class="comment">// worst case is keys in each are unique.</span>
@@ -525,11 +625,13 @@
 
     <span class="kw">if</span> <span class="ident">ours</span> <span class="op">==</span> <span class="ident">old_incoming</span> {
         <span class="ident">IncomingAction</span>::<span class="ident">TakeRemote</span> {
+            <span class="ident">ext_id</span>,
             <span class="ident">data</span>: <span class="ident">old_incoming</span>,
             <span class="ident">changes</span>,
         }
     } <span class="kw">else</span> {
         <span class="ident">IncomingAction</span>::<span class="ident">Merge</span> {
+            <span class="ident">ext_id</span>,
             <span class="ident">data</span>: <span class="ident">ours</span>,
             <span class="ident">changes</span>,
         }
@@ -595,6 +697,39 @@
     <span class="kw">use</span> <span class="kw">super</span>::<span class="kw-2">*</span>;
     <span class="kw">use</span> <span class="ident">serde_json</span>::<span class="ident">json</span>;
 
+    <span class="attribute">#[<span class="ident">test</span>]</span>
+    <span class="kw">fn</span> <span class="ident">test_serde_record_ser</span>() {
+        <span class="macro">assert_eq</span><span class="macro">!</span>(
+            <span class="ident">serde_json</span>::<span class="ident">to_string</span>(<span class="kw-2">&amp;</span><span class="ident">Record</span> {
+                <span class="ident">guid</span>: <span class="string">&quot;guid&quot;</span>.<span class="ident">into</span>(),
+                <span class="ident">data</span>: <span class="ident">RecordData</span>::<span class="ident">Data</span> {
+                    <span class="ident">ext_id</span>: <span class="string">&quot;ext_id&quot;</span>.<span class="ident">to_string</span>(),
+                    <span class="ident">data</span>: <span class="string">&quot;data&quot;</span>.<span class="ident">to_string</span>()
+                }
+            })
+            .<span class="ident">unwrap</span>(),
+            <span class="string">r#&quot;{&quot;id&quot;:&quot;guid&quot;,&quot;extId&quot;:&quot;ext_id&quot;,&quot;data&quot;:&quot;data&quot;}&quot;#</span>
+        );
+    }
+
+    <span class="attribute">#[<span class="ident">test</span>]</span>
+    <span class="kw">fn</span> <span class="ident">test_serde_record_de</span>() {
+        <span class="kw">let</span> <span class="ident">p</span>: <span class="ident">Record</span> <span class="op">=</span> <span class="ident">serde_json</span>::<span class="ident">from_str</span>(<span class="string">r#&quot;{&quot;id&quot;:&quot;guid&quot;,&quot;deleted&quot;:true}&quot;#</span>).<span class="ident">unwrap</span>();
+        <span class="macro">assert_eq</span><span class="macro">!</span>(<span class="ident">p</span>.<span class="ident">data</span>, <span class="ident">RecordData</span>::<span class="ident">Tombstone</span>);
+        <span class="kw">let</span> <span class="ident">p</span>: <span class="ident">Record</span> <span class="op">=</span>
+            <span class="ident">serde_json</span>::<span class="ident">from_str</span>(<span class="string">r#&quot;{&quot;id&quot;:&quot;guid&quot;,&quot;extId&quot;: &quot;ext-id&quot;, &quot;data&quot;:&quot;foo&quot;}&quot;#</span>).<span class="ident">unwrap</span>();
+        <span class="macro">assert_eq</span><span class="macro">!</span>(
+            <span class="ident">p</span>.<span class="ident">data</span>,
+            <span class="ident">RecordData</span>::<span class="ident">Data</span> {
+                <span class="ident">ext_id</span>: <span class="string">&quot;ext-id&quot;</span>.<span class="ident">into</span>(),
+                <span class="ident">data</span>: <span class="string">&quot;foo&quot;</span>.<span class="ident">into</span>()
+            }
+        );
+        <span class="comment">// invalid are treated as tombstones.</span>
+        <span class="kw">let</span> <span class="ident">p</span>: <span class="ident">Record</span> <span class="op">=</span> <span class="ident">serde_json</span>::<span class="ident">from_str</span>(<span class="string">r#&quot;{&quot;id&quot;:&quot;guid&quot;}&quot;#</span>).<span class="ident">unwrap</span>();
+        <span class="macro">assert_eq</span><span class="macro">!</span>(<span class="ident">p</span>.<span class="ident">data</span>, <span class="ident">RecordData</span>::<span class="ident">Tombstone</span>);
+    }
+
     <span class="comment">// a macro for these tests - constructs a serde_json::Value::Object</span>
     <span class="macro">macro_rules</span><span class="macro">!</span> <span class="ident">map</span> {
         ($(<span class="macro-nonterminal">$</span><span class="macro-nonterminal">map</span>:<span class="ident">tt</span>)<span class="op">+</span>) <span class="op">=&gt;</span> {
@@ -652,19 +787,24 @@
         <span class="comment">// No conflict - identical local and remote.</span>
         <span class="macro">assert_eq</span><span class="macro">!</span>(
             <span class="ident">merge</span>(
+                <span class="string">&quot;ext-id&quot;</span>.<span class="ident">to_string</span>(),
                 <span class="macro">map</span><span class="macro">!</span>({<span class="string">&quot;one&quot;</span>: <span class="string">&quot;one&quot;</span>, <span class="string">&quot;two&quot;</span>: <span class="string">&quot;two&quot;</span>}),
                 <span class="macro">map</span><span class="macro">!</span>({<span class="string">&quot;two&quot;</span>: <span class="string">&quot;two&quot;</span>, <span class="string">&quot;one&quot;</span>: <span class="string">&quot;one&quot;</span>}),
                 <span class="prelude-val">Some</span>(<span class="macro">map</span><span class="macro">!</span>({<span class="string">&quot;parent_only&quot;</span>: <span class="string">&quot;parent&quot;</span>})),
             ),
-            <span class="ident">IncomingAction</span>::<span class="ident">Same</span>
+            <span class="ident">IncomingAction</span>::<span class="ident">Same</span> {
+                <span class="ident">ext_id</span>: <span class="string">&quot;ext-id&quot;</span>.<span class="ident">to_string</span>()
+            }
         );
         <span class="macro">assert_eq</span><span class="macro">!</span>(
             <span class="ident">merge</span>(
+                <span class="string">&quot;ext-id&quot;</span>.<span class="ident">to_string</span>(),
                 <span class="macro">map</span><span class="macro">!</span>({<span class="string">&quot;other_only&quot;</span>: <span class="string">&quot;other&quot;</span>, <span class="string">&quot;common&quot;</span>: <span class="string">&quot;common&quot;</span>}),
                 <span class="macro">map</span><span class="macro">!</span>({<span class="string">&quot;ours_only&quot;</span>: <span class="string">&quot;ours&quot;</span>, <span class="string">&quot;common&quot;</span>: <span class="string">&quot;common&quot;</span>}),
                 <span class="prelude-val">Some</span>(<span class="macro">map</span><span class="macro">!</span>({<span class="string">&quot;parent_only&quot;</span>: <span class="string">&quot;parent&quot;</span>, <span class="string">&quot;common&quot;</span>: <span class="string">&quot;old_common&quot;</span>})),
             ),
             <span class="ident">IncomingAction</span>::<span class="ident">Merge</span> {
+                <span class="ident">ext_id</span>: <span class="string">&quot;ext-id&quot;</span>.<span class="ident">to_string</span>(),
                 <span class="ident">data</span>: <span class="macro">map</span><span class="macro">!</span>({<span class="string">&quot;other_only&quot;</span>: <span class="string">&quot;other&quot;</span>, <span class="string">&quot;ours_only&quot;</span>: <span class="string">&quot;ours&quot;</span>, <span class="string">&quot;common&quot;</span>: <span class="string">&quot;common&quot;</span>}),
                 <span class="ident">changes</span>: <span class="macro">changes</span><span class="macro">!</span>[<span class="macro">change</span><span class="macro">!</span>(<span class="string">&quot;other_only&quot;</span>, <span class="prelude-val">None</span>, <span class="string">&quot;other&quot;</span>)],
             }
@@ -672,11 +812,13 @@
         <span class="comment">// Simple conflict - parent value is neither local nor incoming. incoming wins.</span>
         <span class="macro">assert_eq</span><span class="macro">!</span>(
             <span class="ident">merge</span>(
+                <span class="string">&quot;ext-id&quot;</span>.<span class="ident">to_string</span>(),
                 <span class="macro">map</span><span class="macro">!</span>({<span class="string">&quot;other_only&quot;</span>: <span class="string">&quot;other&quot;</span>, <span class="string">&quot;common&quot;</span>: <span class="string">&quot;incoming&quot;</span>}),
                 <span class="macro">map</span><span class="macro">!</span>({<span class="string">&quot;ours_only&quot;</span>: <span class="string">&quot;ours&quot;</span>, <span class="string">&quot;common&quot;</span>: <span class="string">&quot;local&quot;</span>}),
                 <span class="prelude-val">Some</span>(<span class="macro">map</span><span class="macro">!</span>({<span class="string">&quot;parent_only&quot;</span>: <span class="string">&quot;parent&quot;</span>, <span class="string">&quot;common&quot;</span>: <span class="string">&quot;parent&quot;</span>})),
             ),
             <span class="ident">IncomingAction</span>::<span class="ident">Merge</span> {
+                <span class="ident">ext_id</span>: <span class="string">&quot;ext-id&quot;</span>.<span class="ident">to_string</span>(),
                 <span class="ident">data</span>: <span class="macro">map</span><span class="macro">!</span>({<span class="string">&quot;other_only&quot;</span>: <span class="string">&quot;other&quot;</span>, <span class="string">&quot;ours_only&quot;</span>: <span class="string">&quot;ours&quot;</span>, <span class="string">&quot;common&quot;</span>: <span class="string">&quot;incoming&quot;</span>}),
                 <span class="ident">changes</span>: <span class="macro">changes</span><span class="macro">!</span>[
                     <span class="macro">change</span><span class="macro">!</span>(<span class="string">&quot;common&quot;</span>, <span class="string">&quot;local&quot;</span>, <span class="string">&quot;incoming&quot;</span>),
@@ -687,11 +829,13 @@
         <span class="comment">// Local change, no conflict.</span>
         <span class="macro">assert_eq</span><span class="macro">!</span>(
             <span class="ident">merge</span>(
+                <span class="string">&quot;ext-id&quot;</span>.<span class="ident">to_string</span>(),
                 <span class="macro">map</span><span class="macro">!</span>({<span class="string">&quot;other_only&quot;</span>: <span class="string">&quot;other&quot;</span>, <span class="string">&quot;common&quot;</span>: <span class="string">&quot;old_value&quot;</span>}),
                 <span class="macro">map</span><span class="macro">!</span>({<span class="string">&quot;ours_only&quot;</span>: <span class="string">&quot;ours&quot;</span>, <span class="string">&quot;common&quot;</span>: <span class="string">&quot;new_value&quot;</span>}),
                 <span class="prelude-val">Some</span>(<span class="macro">map</span><span class="macro">!</span>({<span class="string">&quot;parent_only&quot;</span>: <span class="string">&quot;parent&quot;</span>, <span class="string">&quot;common&quot;</span>: <span class="string">&quot;old_value&quot;</span>})),
             ),
             <span class="ident">IncomingAction</span>::<span class="ident">Merge</span> {
+                <span class="ident">ext_id</span>: <span class="string">&quot;ext-id&quot;</span>.<span class="ident">to_string</span>(),
                 <span class="ident">data</span>: <span class="macro">map</span><span class="macro">!</span>({<span class="string">&quot;other_only&quot;</span>: <span class="string">&quot;other&quot;</span>, <span class="string">&quot;ours_only&quot;</span>: <span class="string">&quot;ours&quot;</span>, <span class="string">&quot;common&quot;</span>: <span class="string">&quot;new_value&quot;</span>}),
                 <span class="ident">changes</span>: <span class="macro">changes</span><span class="macro">!</span>[<span class="macro">change</span><span class="macro">!</span>(<span class="string">&quot;other_only&quot;</span>, <span class="prelude-val">None</span>, <span class="string">&quot;other&quot;</span>)],
             }
@@ -699,11 +843,13 @@
         <span class="comment">// Field was removed remotely.</span>
         <span class="macro">assert_eq</span><span class="macro">!</span>(
             <span class="ident">merge</span>(
+                <span class="string">&quot;ext-id&quot;</span>.<span class="ident">to_string</span>(),
                 <span class="macro">map</span><span class="macro">!</span>({<span class="string">&quot;other_only&quot;</span>: <span class="string">&quot;other&quot;</span>}),
                 <span class="macro">map</span><span class="macro">!</span>({<span class="string">&quot;common&quot;</span>: <span class="string">&quot;old_value&quot;</span>}),
                 <span class="prelude-val">Some</span>(<span class="macro">map</span><span class="macro">!</span>({<span class="string">&quot;common&quot;</span>: <span class="string">&quot;old_value&quot;</span>})),
             ),
             <span class="ident">IncomingAction</span>::<span class="ident">TakeRemote</span> {
+                <span class="ident">ext_id</span>: <span class="string">&quot;ext-id&quot;</span>.<span class="ident">to_string</span>(),
                 <span class="ident">data</span>: <span class="macro">map</span><span class="macro">!</span>({<span class="string">&quot;other_only&quot;</span>: <span class="string">&quot;other&quot;</span>}),
                 <span class="ident">changes</span>: <span class="macro">changes</span><span class="macro">!</span>[
                     <span class="macro">change</span><span class="macro">!</span>(<span class="string">&quot;common&quot;</span>, <span class="string">&quot;old_value&quot;</span>, <span class="prelude-val">None</span>),
@@ -714,11 +860,13 @@
         <span class="comment">// Field was removed remotely but we added another one.</span>
         <span class="macro">assert_eq</span><span class="macro">!</span>(
             <span class="ident">merge</span>(
+                <span class="string">&quot;ext-id&quot;</span>.<span class="ident">to_string</span>(),
                 <span class="macro">map</span><span class="macro">!</span>({<span class="string">&quot;other_only&quot;</span>: <span class="string">&quot;other&quot;</span>}),
                 <span class="macro">map</span><span class="macro">!</span>({<span class="string">&quot;common&quot;</span>: <span class="string">&quot;old_value&quot;</span>, <span class="string">&quot;new_key&quot;</span>: <span class="string">&quot;new_value&quot;</span>}),
                 <span class="prelude-val">Some</span>(<span class="macro">map</span><span class="macro">!</span>({<span class="string">&quot;common&quot;</span>: <span class="string">&quot;old_value&quot;</span>})),
             ),
             <span class="ident">IncomingAction</span>::<span class="ident">Merge</span> {
+                <span class="ident">ext_id</span>: <span class="string">&quot;ext-id&quot;</span>.<span class="ident">to_string</span>(),
                 <span class="ident">data</span>: <span class="macro">map</span><span class="macro">!</span>({<span class="string">&quot;other_only&quot;</span>: <span class="string">&quot;other&quot;</span>, <span class="string">&quot;new_key&quot;</span>: <span class="string">&quot;new_value&quot;</span>}),
                 <span class="ident">changes</span>: <span class="macro">changes</span><span class="macro">!</span>[
                     <span class="macro">change</span><span class="macro">!</span>(<span class="string">&quot;common&quot;</span>, <span class="string">&quot;old_value&quot;</span>, <span class="prelude-val">None</span>),
@@ -729,11 +877,13 @@
         <span class="comment">// Field was removed both remotely and locally.</span>
         <span class="macro">assert_eq</span><span class="macro">!</span>(
             <span class="ident">merge</span>(
+                <span class="string">&quot;ext-id&quot;</span>.<span class="ident">to_string</span>(),
                 <span class="macro">map</span><span class="macro">!</span>({}),
                 <span class="macro">map</span><span class="macro">!</span>({<span class="string">&quot;new_key&quot;</span>: <span class="string">&quot;new_value&quot;</span>}),
                 <span class="prelude-val">Some</span>(<span class="macro">map</span><span class="macro">!</span>({<span class="string">&quot;common&quot;</span>: <span class="string">&quot;old_value&quot;</span>})),
             ),
             <span class="ident">IncomingAction</span>::<span class="ident">Merge</span> {
+                <span class="ident">ext_id</span>: <span class="string">&quot;ext-id&quot;</span>.<span class="ident">to_string</span>(),
                 <span class="ident">data</span>: <span class="macro">map</span><span class="macro">!</span>({<span class="string">&quot;new_key&quot;</span>: <span class="string">&quot;new_value&quot;</span>}),
                 <span class="ident">changes</span>: <span class="macro">changes</span><span class="macro">!</span>[],
             }

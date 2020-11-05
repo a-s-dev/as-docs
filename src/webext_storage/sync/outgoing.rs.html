@@ -156,6 +156,9 @@
 <span id="155">155</span>
 <span id="156">156</span>
 <span id="157">157</span>
+<span id="158">158</span>
+<span id="159">159</span>
+<span id="160">160</span>
 </pre><div class="example-wrap"><pre class="rust ">
 <span class="comment">/* This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
@@ -172,7 +175,7 @@
 
 <span class="kw">use</span> <span class="kw">crate</span>::<span class="ident">error</span>::<span class="kw-2">*</span>;
 
-<span class="kw">use</span> <span class="kw">super</span>::<span class="ident">Record</span>;
+<span class="kw">use</span> <span class="kw">super</span>::{<span class="ident">Record</span>, <span class="ident">RecordData</span>};
 
 <span class="kw">fn</span> <span class="ident">outgoing_from_row</span>(<span class="ident">row</span>: <span class="kw-2">&amp;</span><span class="ident">Row</span><span class="op">&lt;</span><span class="lifetime">&#39;_</span><span class="op">&gt;</span>) <span class="op">-&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">Payload</span><span class="op">&gt;</span> {
     <span class="kw">let</span> <span class="ident">guid</span>: <span class="ident">SyncGuid</span> <span class="op">=</span> <span class="ident">row</span>.<span class="ident">get</span>(<span class="string">&quot;guid&quot;</span>)<span class="question-mark">?</span>;
@@ -180,9 +183,11 @@
     <span class="kw">let</span> <span class="ident">raw_data</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">String</span><span class="op">&gt;</span> <span class="op">=</span> <span class="ident">row</span>.<span class="ident">get</span>(<span class="string">&quot;data&quot;</span>)<span class="question-mark">?</span>;
     <span class="kw">let</span> <span class="ident">payload</span> <span class="op">=</span> <span class="kw">match</span> <span class="ident">raw_data</span> {
         <span class="prelude-val">Some</span>(<span class="ident">raw_data</span>) <span class="op">=&gt;</span> <span class="ident">Payload</span>::<span class="ident">from_record</span>(<span class="ident">Record</span> {
-            <span class="ident">ext_id</span>,
             <span class="ident">guid</span>,
-            <span class="ident">data</span>: <span class="prelude-val">Some</span>(<span class="ident">raw_data</span>),
+            <span class="ident">data</span>: <span class="ident">RecordData</span>::<span class="ident">Data</span> {
+                <span class="ident">ext_id</span>,
+                <span class="ident">data</span>: <span class="ident">raw_data</span>,
+            },
         })<span class="question-mark">?</span>,
         <span class="prelude-val">None</span> <span class="op">=&gt;</span> <span class="ident">Payload</span>::<span class="ident">new_tombstone</span>(<span class="ident">guid</span>),
     };
@@ -219,8 +224,9 @@
         INSERT OR REPLACE INTO storage_sync_data (ext_id, data, sync_change_counter)
         SELECT ext_id, data, 0
         FROM storage_sync_staging s
-        WHERE NOT EXISTS(SELECT 1 FROM storage_sync_outgoing_staging o
-                         WHERE o.guid = s.guid);&quot;</span>;
+        WHERE ext_id IS NOT NULL
+        AND NOT EXISTS(SELECT 1 FROM storage_sync_outgoing_staging o
+                       WHERE o.guid = s.guid);&quot;</span>;
     <span class="ident">tx</span>.<span class="ident">execute_batch</span>(<span class="ident">sql</span>)<span class="question-mark">?</span>;
     <span class="prelude-val">Ok</span>(())
 }
